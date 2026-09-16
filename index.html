@@ -56,8 +56,16 @@ a{text-decoration:none;color:inherit;-webkit-tap-highlight-color:transparent;}
 button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit;-webkit-tap-highlight-color:transparent;}
 
 .wrap{width:100%;max-width:var(--maxw);margin:0 auto;padding:0 22px;}
-.logo-svg{display:block;flex:0 0 auto;}
 section{scroll-margin-top:calc(var(--header-h) + 20px);}
+
+/* Logo image used everywhere */
+.logo-img{
+  display:block;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  border-radius:inherit;
+}
 
 /* ============================================================
    HEADER
@@ -82,11 +90,14 @@ section{scroll-margin-top:calc(var(--header-h) + 20px);}
 }
 .brand{display:flex;align-items:center;gap:14px;text-align:left;}
 .brand-logo{
-  width:44px;height:44px;
+  width:46px;height:46px;
   border-radius:13px;
+  overflow:hidden;
   box-shadow:
-    0 10px 26px -10px rgba(212,175,55,.65),
-    0 0 0 1px rgba(212,175,55,.18) inset;
+    0 10px 26px -10px rgba(212,175,55,.75),
+    0 0 0 1px rgba(212,175,55,.35) inset,
+    0 0 0 2px rgba(255,255,255,.9);
+  flex:0 0 auto;
 }
 .brand-text{display:flex;flex-direction:column;line-height:1.05;}
 .brand-name{
@@ -252,11 +263,11 @@ section{scroll-margin-top:calc(var(--header-h) + 20px);}
 .hero p.lead b{color:var(--ink);font-weight:700;}
 
 /* ============================================================
-   ORBIT
+   ORBIT — 4 stat circles around central ABJ logo
    ============================================================ */
 .orbit{
   --item-size: 23%;
-  --center-size: 30%;
+  --center-size: 32%;
   --orbit-radius: 34%;
   --orbit-speed: 60s;
   position: relative;
@@ -272,7 +283,7 @@ section{scroll-margin-top:calc(var(--header-h) + 20px);}
   margin-top:calc(var(--orbit-radius) * -1);
   margin-left:calc(var(--orbit-radius) * -1);
   border-radius:50%;
-  border:1px dashed rgba(37,99,235,.14);
+  border:1px dashed rgba(37,99,235,.18);
   z-index:0;pointer-events:none;
 }
 .orbit-ring{
@@ -309,6 +320,8 @@ section{scroll-margin-top:calc(var(--header-h) + 20px);}
 .orbit:hover .orbit-counter{
   animation-play-state: paused;
 }
+
+/* ---------- CENTER — logo with spinning border + bubbles ---------- */
 .orbit-center{
   position:absolute;
   top:50%; left:50%;
@@ -316,49 +329,94 @@ section{scroll-margin-top:calc(var(--header-h) + 20px);}
   aspect-ratio:1 / 1;
   transform:translate(-50%, -50%);
   border-radius:50%;
-  display:grid;
-  place-items:center;
   z-index:3;
-  background:radial-gradient(circle at 50% 38%, #ffffff 0%, #f6faff 60%, #e6efff 100%);
-  box-shadow:
-    0 28px 60px -30px rgba(37,99,235,.55),
-    0 0 0 1px rgba(37,99,235,.10),
-    inset 0 1px 0 rgba(255,255,255,.95),
-    inset 0 -18px 30px -20px rgba(37,99,235,.20);
-  overflow:hidden;
+  isolation:isolate;
 }
+.orbit-center-inner{
+  position:relative;
+  width:100%;height:100%;
+  border-radius:50%;
+  overflow:hidden;
+  background:#2b2b4f;
+  box-shadow:
+    0 28px 60px -20px rgba(37,99,235,.55),
+    0 0 90px -20px rgba(212,175,55,.5),
+    inset 0 1px 0 rgba(255,255,255,.1);
+  animation:centerFloat 6s ease-in-out infinite;
+}
+@keyframes centerFloat{
+  0%,100%{transform:translateY(0) scale(1);}
+  50%{transform:translateY(-4px) scale(1.02);}
+}
+.orbit-center-inner img{
+  width:100%;height:100%;
+  object-fit:cover;
+  display:block;
+  border-radius:50%;
+}
+
+/* Rotating gold border ring */
 .orbit-center::before{
-  content:'';position:absolute;inset:-30%;
+  content:'';
+  position:absolute;
+  inset:-4px;
+  border-radius:50%;
+  padding:4px;
+  background:conic-gradient(from 0deg,
+    #f7e07a,
+    #d4af37 25%,
+    #8a6516 50%,
+    #d4af37 75%,
+    #f7e07a 100%);
+  -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor;
+  mask-composite:exclude;
+  animation:borderSpinGold 6s linear infinite;
+  z-index:2;
+  pointer-events:none;
+  filter:drop-shadow(0 0 12px rgba(212,175,55,.6));
+}
+@keyframes borderSpinGold{
+  from{transform:rotate(0deg);}
+  to  {transform:rotate(360deg);}
+}
+
+/* Expanding bubble rings */
+.bubble-ring{
+  position:absolute;
+  inset:0;
+  border-radius:50%;
+  border:2px solid rgba(212,175,55,.55);
+  pointer-events:none;
+  z-index:1;
+  animation:bubblePop 3.6s ease-out infinite;
+}
+.bubble-ring:nth-child(2){animation-delay:1.2s;}
+.bubble-ring:nth-child(3){animation-delay:2.4s;}
+@keyframes bubblePop{
+  0%{transform:scale(1);opacity:.85;}
+  100%{transform:scale(2.1);opacity:0;}
+}
+
+/* Secondary soft pulse behind */
+.orbit-center::after{
+  content:'';
+  position:absolute;
+  inset:-12%;
   border-radius:50%;
   background:radial-gradient(circle, rgba(212,175,55,.35), transparent 62%);
-  filter:blur(28px);
-  animation:centerGlow 6s ease-in-out infinite;
-  z-index:0;pointer-events:none;
+  filter:blur(22px);
+  animation:softPulse 4.5s ease-in-out infinite;
+  z-index:-1;
+  pointer-events:none;
 }
-@keyframes centerGlow{
-  0%,100%{opacity:.4;transform:scale(1);}
-  50%{opacity:.75;transform:scale(1.14);}
+@keyframes softPulse{
+  0%,100%{opacity:.5;transform:scale(1);}
+  50%{opacity:.9;transform:scale(1.15);}
 }
-.orbit-center::after{
-  content:'';position:absolute;inset:6%;
-  border-radius:50%;
-  border:1px solid rgba(37,99,235,.08);
-  pointer-events:none;z-index:2;
-}
-.orbit-logo{
-  position:relative;
-  width:62%;height:62%;
-  border-radius:22%;
-  box-shadow:
-    0 16px 34px -14px rgba(212,175,55,.6),
-    0 0 0 1px rgba(212,175,55,.18) inset;
-  z-index:1;
-  animation:orbitLogoPulse 5s ease-in-out infinite;
-}
-@keyframes orbitLogoPulse{
-  0%,100%{transform:scale(1);}
-  50%{transform:scale(1.05);}
-}
+
+/* ---------- Stat circles with attractive gradient backgrounds ---------- */
 .stat-card{
   position:relative;
   width:100%;height:100%;
@@ -368,11 +426,6 @@ section{scroll-margin-top:calc(var(--header-h) + 20px);}
   gap:2px;padding:12% 12%;
   text-align:center;overflow:hidden;
   isolation:isolate;
-  background:radial-gradient(circle at 50% 40%, #ffffff 0%, #f8fbff 62%, #eef4ff 100%);
-  box-shadow:
-    0 16px 36px -22px rgba(15,23,42,.42),
-    0 0 0 1px rgba(255,255,255,.9) inset,
-    0 0 0 1px rgba(37,99,235,.06);
   transition:
     translate .5s var(--bounce),
     scale .5s var(--bounce),
@@ -380,22 +433,51 @@ section{scroll-margin-top:calc(var(--header-h) + 20px);}
     box-shadow .45s var(--ease);
   will-change: translate, scale, rotate;
 }
-.sc-bg{
-  position:absolute;inset:-30%;
-  z-index:0;opacity:.34;
-  filter:blur(24px) saturate(1.35);
-  pointer-events:none;
-  transform:translateZ(0);
-  animation:scBgPulse 7s ease-in-out infinite;
+
+/* Card 1 — Gold / Amber (matches logo) */
+.orbit-item-1 .stat-card{
+  background:
+    radial-gradient(circle at 30% 25%, rgba(255,255,255,.5), transparent 55%),
+    linear-gradient(135deg,#fff8e1 0%,#fde9a8 55%,#e0b84a 100%);
+  box-shadow:
+    0 18px 40px -18px rgba(212,175,55,.85),
+    0 0 0 1.5px rgba(212,175,55,.4) inset,
+    0 0 0 1px rgba(255,255,255,.6) inset;
 }
-.sc-bg svg{width:100%;height:100%;display:block;}
-.orbit-item-2 .sc-bg{animation-delay:1.4s;}
-.orbit-item-3 .sc-bg{animation-delay:2.8s;}
-.orbit-item-4 .sc-bg{animation-delay:4.2s;}
-@keyframes scBgPulse{
-  0%,100%{opacity:.30;transform:scale(1);}
-  50%{opacity:.50;transform:scale(1.16);}
+
+/* Card 2 — Sky blue / Indigo */
+.orbit-item-2 .stat-card{
+  background:
+    radial-gradient(circle at 30% 25%, rgba(255,255,255,.55), transparent 55%),
+    linear-gradient(135deg,#e0f2ff 0%,#bfdbfe 50%,#6366f1 100%);
+  box-shadow:
+    0 18px 40px -18px rgba(99,102,241,.75),
+    0 0 0 1.5px rgba(99,102,241,.35) inset,
+    0 0 0 1px rgba(255,255,255,.6) inset;
 }
+
+/* Card 3 — Purple / Magenta */
+.orbit-item-3 .stat-card{
+  background:
+    radial-gradient(circle at 30% 25%, rgba(255,255,255,.55), transparent 55%),
+    linear-gradient(135deg,#f5e7ff 0%,#d8b4fe 50%,#9333ea 100%);
+  box-shadow:
+    0 18px 40px -18px rgba(147,51,234,.75),
+    0 0 0 1.5px rgba(147,51,234,.35) inset,
+    0 0 0 1px rgba(255,255,255,.6) inset;
+}
+
+/* Card 4 — Rose / Warm coral */
+.orbit-item-4 .stat-card{
+  background:
+    radial-gradient(circle at 30% 25%, rgba(255,255,255,.55), transparent 55%),
+    linear-gradient(135deg,#ffe4e6 0%,#fecaca 50%,#f43f5e 100%);
+  box-shadow:
+    0 18px 40px -18px rgba(244,63,94,.75),
+    0 0 0 1.5px rgba(244,63,94,.35) inset,
+    0 0 0 1px rgba(255,255,255,.6) inset;
+}
+
 .sc-icon{
   position:relative;z-index:1;
   display:grid;place-items:center;
@@ -403,41 +485,47 @@ section{scroll-margin-top:calc(var(--header-h) + 20px);}
   border-radius:11px;
   font-size:16px;
   margin-bottom:5px;
+  background:rgba(255,255,255,.75);
+  backdrop-filter:blur(6px);
+  -webkit-backdrop-filter:blur(6px);
+  box-shadow:0 6px 16px -8px rgba(0,0,0,.3);
   transition:transform .55s var(--bounce);
 }
-.orbit-item-1 .sc-icon{background:linear-gradient(135deg,#dbeafe,#bfdbfe);color:#1d4ed8;box-shadow:0 8px 18px -12px rgba(37,99,235,.85);}
-.orbit-item-2 .sc-icon{background:linear-gradient(135deg,#e0e7ff,#c7d2fe);color:#4f46e5;box-shadow:0 8px 18px -12px rgba(99,102,241,.85);}
-.orbit-item-3 .sc-icon{background:linear-gradient(135deg,#f3e8ff,#e9d5ff);color:#9333ea;box-shadow:0 8px 18px -12px rgba(168,85,247,.85);}
-.orbit-item-4 .sc-icon{background:linear-gradient(135deg,#fee2e2,#fecaca);color:#dc2626;box-shadow:0 8px 18px -12px rgba(239,68,68,.85);}
+.orbit-item-1 .sc-icon{color:#8a6516;}
+.orbit-item-2 .sc-icon{color:#1e40af;}
+.orbit-item-3 .sc-icon{color:#6b21a8;}
+.orbit-item-4 .sc-icon{color:#9f1239;}
+
 .sc-num{
   position:relative;z-index:1;
   font-size:clamp(17px,2.2vw,22px);
   font-weight:800;letter-spacing:-.8px;line-height:1.05;
-  background:linear-gradient(135deg,#2563eb 0%,#3b82f6 45%,#6366f1 100%);
-  -webkit-background-clip:text;background-clip:text;
-  -webkit-text-fill-color:transparent;
+  color:#0b1220;
+  text-shadow:0 1px 2px rgba(255,255,255,.5);
 }
-.orbit-item-2 .sc-num{background:linear-gradient(135deg,#4f46e5 0%,#6366f1 45%,#818cf8 100%);-webkit-background-clip:text;background-clip:text;}
-.orbit-item-3 .sc-num{background:linear-gradient(135deg,#7e22ce 0%,#a855f7 45%,#c084fc 100%);-webkit-background-clip:text;background-clip:text;}
-.orbit-item-4 .sc-num{background:linear-gradient(135deg,#b91c1c 0%,#ef4444 45%,#f87171 100%);-webkit-background-clip:text;background-clip:text;}
 .sc-label{
   position:relative;z-index:1;
-  font-size:9.5px;color:var(--muted);
-  font-weight:600;margin-top:4px;
+  font-size:9.5px;
+  color:#1e293b;
+  font-weight:700;
+  margin-top:4px;
   line-height:1.35;max-width:120px;
+  opacity:.85;
 }
+
+/* Hover effects */
 .orbit-item:hover .stat-card{
-  scale:1.06;
+  scale:1.08;
   box-shadow:
-    0 26px 54px -24px rgba(37,99,235,.7),
-    0 0 0 2px rgba(59,130,246,.32) inset,
-    0 0 0 1px rgba(37,99,235,.18);
+    0 30px 60px -20px rgba(15,23,42,.7),
+    0 0 0 2px rgba(255,255,255,.9) inset;
 }
-.orbit-item-1:hover .stat-card{ rotate:-4deg; }
-.orbit-item-2:hover .stat-card{ rotate:4deg; }
-.orbit-item-3:hover .stat-card{ rotate:-4deg; }
-.orbit-item-4:hover .stat-card{ rotate:4deg; }
-.orbit-item:hover .sc-icon{ transform:scale(1.15); }
+.orbit-item-1:hover .stat-card{ rotate:-5deg; }
+.orbit-item-2:hover .stat-card{ rotate:5deg; }
+.orbit-item-3:hover .stat-card{ rotate:-5deg; }
+.orbit-item-4:hover .stat-card{ rotate:5deg; }
+.orbit-item:hover .sc-icon{ transform:scale(1.18) rotate(-6deg); }
+
 .orbit-item-1 .sc-icon{animation:iconBob 4.2s ease-in-out infinite;}
 .orbit-item-2 .sc-icon{animation:iconBob 4.8s ease-in-out infinite .3s;}
 .orbit-item-3 .sc-icon{animation:iconBob 5.2s ease-in-out infinite .6s;}
@@ -466,7 +554,7 @@ section{scroll-margin-top:calc(var(--header-h) + 20px);}
 }
 
 /* ============================================================
-   CURRICULUM — PREMIUM REDESIGN
+   CURRICULUM
    ============================================================ */
 .cur-section{
   position:relative;
@@ -494,8 +582,6 @@ section{scroll-margin-top:calc(var(--header-h) + 20px);}
     0 40px 90px -55px rgba(15,23,42,.55),
     0 20px 60px -40px rgba(37,99,235,.35);
 }
-
-/* ---------- Semester switch — animated gradient border ---------- */
 .sem-switch{
   display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:28px;
 }
@@ -505,19 +591,15 @@ section{scroll-margin-top:calc(var(--header-h) + 20px);}
   padding:20px 24px;
   border-radius:22px;
   background:linear-gradient(135deg,#ffffff,#f8fbff);
-  border:none;
-  text-align:left;
+  border:none;text-align:left;
   transition:transform .4s var(--bounce), box-shadow .4s var(--ease);
   overflow:hidden;
   min-height:84px;
   isolation:isolate;
 }
 .sem-btn::before{
-  content:'';
-  position:absolute;
-  inset:0;
-  border-radius:22px;
-  padding:2px;
+  content:'';position:absolute;inset:0;
+  border-radius:22px;padding:2px;
   background:linear-gradient(135deg,#dbeafe,#e0e7ff,#f3e8ff);
   background-size:200% 200%;
   -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
@@ -528,21 +610,14 @@ section{scroll-margin-top:calc(var(--header-h) + 20px);}
   z-index:1;
 }
 .sem-btn::after{
-  content:'';
-  position:absolute;
-  inset:2px;
+  content:'';position:absolute;inset:2px;
   border-radius:20px;
   background:linear-gradient(135deg,#ffffff,#f8fbff);
   z-index:0;
   transition:background .4s var(--ease);
 }
 .sem-btn > *{position:relative;z-index:2;}
-
-.sem-btn:hover{
-  transform:translateY(-3px);
-  box-shadow:0 20px 44px -24px rgba(15,23,42,.4);
-}
-
+.sem-btn:hover{transform:translateY(-3px);box-shadow:0 20px 44px -24px rgba(15,23,42,.4);}
 .sem-btn.active{
   transform:translateY(-4px);
   box-shadow:
@@ -554,16 +629,11 @@ section{scroll-margin-top:calc(var(--header-h) + 20px);}
   background-size:200% 200%;
   animation:borderSpin 4s linear infinite;
 }
-.sem-btn.active::after{
-  background:linear-gradient(135deg,#ffffff,#f3f8ff);
-}
-
+.sem-btn.active::after{background:linear-gradient(135deg,#ffffff,#f3f8ff);}
 .sem-num{
   flex:0 0 auto;
-  font-size:34px;
-  font-weight:800;
-  letter-spacing:-2.5px;
-  line-height:1;
+  font-size:34px;font-weight:800;
+  letter-spacing:-2.5px;line-height:1;
   color:#cbd5e1;
   transition:color .4s var(--ease), transform .4s var(--bounce);
 }
@@ -581,11 +651,9 @@ section{scroll-margin-top:calc(var(--header-h) + 20px);}
 .sem-btn.active .sem-name{color:#1d4ed8;}
 .sem-sub{font-size:12px;color:var(--muted);margin-top:3px;font-weight:600;}
 
-/* ---------- Stream rail — 3D tilt pills ---------- */
 .stream-rail{
   display:flex;gap:12px;overflow-x:auto;padding:6px 6px 16px;
-  margin-bottom:24px;
-  scrollbar-width:thin;
+  margin-bottom:24px;scrollbar-width:thin;
   -webkit-overflow-scrolling:touch;
   scroll-snap-type:x proximity;
   perspective:800px;
@@ -595,11 +663,9 @@ section{scroll-margin-top:calc(var(--header-h) + 20px);}
 .stream-rail::-webkit-scrollbar-track{background:transparent;}
 
 .stream-pill{
-  flex:0 0 auto;
-  position:relative;
+  flex:0 0 auto;position:relative;
   display:flex;align-items:center;gap:10px;
-  padding:12px 18px;
-  border-radius:16px;
+  padding:12px 18px;border-radius:16px;
   background:linear-gradient(135deg,#ffffff,#f8fbff);
   border:1.5px solid var(--line);
   transition:
@@ -608,93 +674,67 @@ section{scroll-margin-top:calc(var(--header-h) + 20px);}
     border-color .3s var(--ease),
     background .3s var(--ease);
   animation:chipIn .5s var(--bounce) both;
-  min-height:48px;
-  scroll-snap-align:start;
-  cursor:pointer;
-  overflow:hidden;
+  min-height:48px;scroll-snap-align:start;
+  cursor:pointer;overflow:hidden;
 }
 .stream-pill::before{
-  content:'';
-  position:absolute;
-  inset:0;
+  content:'';position:absolute;inset:0;
   border-radius:16px;
   background:linear-gradient(135deg,rgba(59,130,246,.08),rgba(168,85,247,.08));
-  opacity:0;
-  transition:opacity .3s var(--ease);
+  opacity:0;transition:opacity .3s var(--ease);
 }
 .stream-pill > *{position:relative;z-index:1;}
-
 .stream-pill:hover{
   transform:translateY(-3px) rotateX(6deg);
   border-color:#c9d9f2;
   box-shadow:0 14px 28px -18px rgba(15,23,42,.5);
 }
 .stream-pill:hover::before{opacity:1;}
-
 .stream-pill.active{
   background:linear-gradient(135deg,#2563eb,#3b82f6);
-  border-color:transparent;
-  color:#fff;
+  border-color:transparent;color:#fff;
   transform:translateY(-2px) scale(1.02);
   box-shadow:
     0 20px 40px -18px rgba(37,99,235,.85),
     inset 0 1px 0 rgba(255,255,255,.18);
 }
 .stream-pill.active::before{opacity:0;}
-
 .stream-pill .s-ic{
-  font-size:18px;
-  line-height:1;
+  font-size:18px;line-height:1;
   transition:transform .5s var(--bounce);
 }
 .stream-pill:hover .s-ic{transform:scale(1.2) rotate(-6deg);}
-.stream-pill.active .s-ic{
-  animation:iconSpin 3s ease-in-out infinite;
-}
+.stream-pill.active .s-ic{animation:iconSpin 3s ease-in-out infinite;}
 @keyframes iconSpin{
   0%,100%{transform:rotate(0deg) scale(1);}
   50%{transform:rotate(12deg) scale(1.1);}
 }
 .stream-pill .s-name{
-  font-weight:700;
-  font-size:13.5px;
-  letter-spacing:-.1px;
-  white-space:nowrap;
+  font-weight:700;font-size:13.5px;letter-spacing:-.1px;white-space:nowrap;
 }
 .stream-pill .s-count{
-  font-size:10.5px;
-  font-weight:800;
+  font-size:10.5px;font-weight:800;
   background:rgba(15,23,42,.07);
   color:#475569;
-  padding:3px 9px;
-  border-radius:999px;
-  letter-spacing:.4px;
+  padding:3px 9px;border-radius:999px;letter-spacing:.4px;
   transition:all .3s var(--ease);
 }
-.stream-pill.active .s-count{
-  background:rgba(255,255,255,.24);
-  color:#fff;
-}
-
+.stream-pill.active .s-count{background:rgba(255,255,255,.24);color:#fff;}
 @keyframes chipIn{
   0%{opacity:0;transform:translateY(10px) scale(.9);}
   100%{opacity:1;transform:translateY(0) scale(1);}
 }
 
-/* ---------- Course stage ---------- */
 .course-stage{
   display:grid;
   grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
-  gap:14px;
-  min-height:80px;
+  gap:14px;min-height:80px;
   perspective:1000px;
 }
-
 .course-card{
   position:relative;
   display:flex;align-items:center;gap:14px;
-  padding:18px 20px;
-  border-radius:18px;
+  padding:18px 20px;border-radius:18px;
   background:linear-gradient(135deg,#ffffff 0%,#f8fbff 100%);
   border:1px solid var(--line);
   transition:
@@ -703,42 +743,30 @@ section{scroll-margin-top:calc(var(--header-h) + 20px);}
     border-color .35s var(--ease),
     background .35s var(--ease);
   animation:cardFlipIn .7s var(--bounce) both;
-  overflow:hidden;
-  cursor:pointer;
-  isolation:isolate;
+  overflow:hidden;cursor:pointer;isolation:isolate;
 }
-
-/* shine sweep */
 .course-card::before{
-  content:'';
-  position:absolute;
+  content:'';position:absolute;
   top:0; left:-120%;
   width:60%; height:100%;
   background:linear-gradient(120deg,transparent,rgba(255,255,255,.75),transparent);
   transform:skewX(-22deg);
   transition:left .7s var(--ease);
-  z-index:2;
-  pointer-events:none;
+  z-index:2;pointer-events:none;
 }
-
-/* colored accent bar */
 .course-card::after{
-  content:'';
-  position:absolute;
+  content:'';position:absolute;
   left:0; top:0; bottom:0;
   width:4px;
   background:linear-gradient(180deg,#3b82f6,#6366f1,#a855f7);
-  transform:scaleY(0);
-  transform-origin:top;
+  transform:scaleY(0);transform-origin:top;
   transition:transform .45s var(--ease);
   border-radius:18px 0 0 18px;
   z-index:3;
 }
-
 .course-card:hover{
   transform:translateY(-6px) scale(1.02);
-  border-color:transparent;
-  background:#fff;
+  border-color:transparent;background:#fff;
   box-shadow:
     0 28px 56px -26px rgba(37,99,235,.55),
     0 0 0 1px rgba(59,130,246,.25) inset,
@@ -746,15 +774,10 @@ section{scroll-margin-top:calc(var(--header-h) + 20px);}
 }
 .course-card:hover::before{left:140%;}
 .course-card:hover::after{transform:scaleY(1);}
-
 .cc-ic{
-  flex:0 0 44px;
-  width:44px;
-  height:44px;
-  border-radius:13px;
+  flex:0 0 44px;width:44px;height:44px;border-radius:13px;
   background:linear-gradient(135deg,#eaf1ff,#dbeafe);
-  display:grid;place-items:center;
-  font-size:20px;
+  display:grid;place-items:center;font-size:20px;
   transition:transform .6s var(--bounce), background .35s var(--ease);
   box-shadow:0 8px 18px -12px rgba(37,99,235,.6);
 }
@@ -762,47 +785,24 @@ section{scroll-margin-top:calc(var(--header-h) + 20px);}
   transform:rotate(-8deg) scale(1.15);
   background:linear-gradient(135deg,#dbeafe,#bfdbfe);
 }
-
-.cc-body{
-  min-width:0;
-  flex:1;
-}
+.cc-body{min-width:0;flex:1;}
 .cc-name{
-  font-size:14px;
-  font-weight:700;
-  color:var(--ink);
-  line-height:1.35;
-  overflow-wrap:anywhere;
+  font-size:14px;font-weight:700;color:var(--ink);
+  line-height:1.35;overflow-wrap:anywhere;
   transition:color .3s var(--ease);
 }
 .course-card:hover .cc-name{color:#1d4ed8;}
-
 .cc-meta{
-  font-size:10.5px;
-  font-weight:800;
-  color:#a7b6cd;
-  letter-spacing:1px;
-  margin-top:3px;
-  text-transform:uppercase;
+  font-size:10.5px;font-weight:800;color:#a7b6cd;
+  letter-spacing:1px;margin-top:3px;text-transform:uppercase;
   transition:color .3s var(--ease);
 }
 .course-card:hover .cc-meta{color:#3b82f6;}
-
 @keyframes cardFlipIn{
-  0%{
-    opacity:0;
-    transform:perspective(800px) rotateX(-25deg) translateY(20px) scale(.92);
-  }
-  60%{
-    opacity:1;
-    transform:perspective(800px) rotateX(4deg) translateY(-3px) scale(1.02);
-  }
-  100%{
-    opacity:1;
-    transform:perspective(800px) rotateX(0deg) translateY(0) scale(1);
-  }
+  0%{opacity:0;transform:perspective(800px) rotateX(-25deg) translateY(20px) scale(.92);}
+  60%{opacity:1;transform:perspective(800px) rotateX(4deg) translateY(-3px) scale(1.02);}
+  100%{opacity:1;transform:perspective(800px) rotateX(0deg) translateY(0) scale(1);}
 }
-
 @keyframes borderSpin{
   0%{background-position:0% 50%;}
   100%{background-position:200% 50%;}
@@ -839,10 +839,21 @@ section{scroll-margin-top:calc(var(--header-h) + 20px);}
 }
 .tst-top{display:flex;align-items:center;gap:13px;margin-bottom:14px;position:relative;z-index:1;}
 .tst-avatar{
-  width:46px;height:46px;border-radius:50%;flex:0 0 46px;
-  background:linear-gradient(140deg,#2b3a63,#131c31);
-  display:grid;place-items:center;color:#fff;font-size:12px;font-weight:800;letter-spacing:.4px;
-  box-shadow:0 8px 18px -8px rgba(15,23,42,.6);
+  width:52px;height:52px;
+  border-radius:50%;
+  flex:0 0 52px;
+  overflow:hidden;
+  background:#2b2b4f;
+  box-shadow:
+    0 8px 18px -8px rgba(15,23,42,.6),
+    0 0 0 2px rgba(212,175,55,.55),
+    0 0 0 3.5px rgba(255,255,255,.95);
+}
+.tst-avatar img{
+  width:100%;height:100%;
+  object-fit:cover;
+  display:block;
+  border-radius:50%;
 }
 .tst-who{min-width:0;flex:1;}
 .tst-from{font-size:14px;font-weight:700;overflow-wrap:anywhere;}
@@ -875,7 +886,6 @@ section{scroll-margin-top:calc(var(--header-h) + 20px);}
   transition:all .35s var(--ease);padding:0;
 }
 .dot.active{background:var(--blue);width:22px;}
-
 .tst-counter{
   text-align:center;font-size:12px;font-weight:700;
   letter-spacing:1.2px;color:var(--muted);margin-top:14px;
@@ -895,8 +905,7 @@ section{scroll-margin-top:calc(var(--header-h) + 20px);}
   box-shadow:
     0 40px 90px -40px rgba(37,99,235,.7),
     0 20px 60px -30px rgba(168,85,247,.5);
-  overflow:hidden;
-  isolation:isolate;
+  overflow:hidden;isolation:isolate;
 }
 .cta-inner{
   position:relative;
@@ -1035,10 +1044,14 @@ section{scroll-margin-top:calc(var(--header-h) + 20px);}
 }
 .footer-inner{position:relative;z-index:2;text-align:center;}
 .footer-logo{
-  width:88px;height:88px;margin:0 auto 22px;border-radius:24px;
+  width:100px;height:100px;
+  margin:0 auto 22px;
+  border-radius:26px;
+  overflow:hidden;
   box-shadow:
-    0 22px 44px -20px rgba(212,175,55,.55),
-    0 0 0 1px rgba(212,175,55,.16) inset;
+    0 22px 44px -20px rgba(212,175,55,.7),
+    0 0 0 3px rgba(255,255,255,.95),
+    0 0 0 5px rgba(212,175,55,.35);
   animation:logoFloat 5s ease-in-out infinite;
 }
 @keyframes logoFloat{
@@ -1101,11 +1114,11 @@ section{scroll-margin-top:calc(var(--header-h) + 20px);}
 .float-cta:hover{background:#1d4ed8;}
 
 /* ============================================================
-   MINI-APP VIDEO PLAYER — CLEAN REDESIGN
+   MINI-APP VIDEO PLAYER
    ============================================================ */
 .player-modal{
   position:fixed;inset:0;z-index:120;
-  background:rgba(5,9,18,.86);
+  background:rgba(5,9,18,.88);
   backdrop-filter:blur(20px);
   -webkit-backdrop-filter:blur(20px);
   display:grid;place-items:center;padding:16px;
@@ -1115,61 +1128,43 @@ section{scroll-margin-top:calc(var(--header-h) + 20px);}
   transition:opacity .38s var(--ease),visibility .38s var(--ease);
 }
 .player-modal.open{opacity:1;visibility:visible;}
-
-/* Ambient light behind the player */
 .player-modal::before{
-  content:'';
-  position:absolute;
-  width:min(900px, 90vw);
-  height:min(600px, 70vh);
+  content:'';position:absolute;
+  width:min(900px, 90vw);height:min(600px, 70vh);
   border-radius:50%;
   background:radial-gradient(circle, rgba(59,130,246,.28), transparent 65%);
-  filter:blur(80px);
-  pointer-events:none;
+  filter:blur(80px);pointer-events:none;
   animation:ambientPulse 8s ease-in-out infinite;
 }
 @keyframes ambientPulse{
   0%,100%{opacity:.5;transform:scale(1);}
   50%{opacity:.9;transform:scale(1.1);}
 }
-
 .player-shell{
   position:relative;
-  width:100%;max-width:960px;
-  max-height:92vh;
-  overflow-y:auto;
-  -webkit-overflow-scrolling:touch;
+  width:100%;max-width:960px;max-height:92vh;
+  overflow-y:auto;-webkit-overflow-scrolling:touch;
   background:
     radial-gradient(600px 320px at 50% -10%, rgba(59,130,246,.32), transparent 70%),
     linear-gradient(160deg,#0b1220 0%,#111c33 100%);
   border:1px solid rgba(96,165,250,.22);
-  border-radius:28px;
-  padding:22px;
+  border-radius:28px;padding:22px;
   box-shadow:
     0 50px 100px -40px rgba(0,0,0,.95),
     0 0 90px -25px rgba(37,99,235,.55),
     inset 0 1px 0 rgba(255,255,255,.06);
   transform:translateY(36px) scale(.94);
   opacity:0;
-  transition:
-    transform .55s var(--bounce),
-    opacity .4s var(--ease);
+  transition:transform .55s var(--bounce),opacity .4s var(--ease);
   z-index:1;
 }
-.player-modal.open .player-shell{
-  transform:translateY(0) scale(1);
-  opacity:1;
-}
-
-/* Custom scrollbar */
+.player-modal.open .player-shell{transform:translateY(0) scale(1);opacity:1;}
 .player-shell::-webkit-scrollbar{width:8px;}
 .player-shell::-webkit-scrollbar-track{background:transparent;}
 .player-shell::-webkit-scrollbar-thumb{
   background:linear-gradient(180deg,#3b82f6,#6366f1);
   border-radius:999px;
 }
-
-/* Header */
 .player-header{
   display:flex;align-items:flex-start;justify-content:space-between;
   gap:16px;padding:2px 4px 18px;
@@ -1189,15 +1184,10 @@ section{scroll-margin-top:calc(var(--header-h) + 20px);}
   50%{transform:translateY(-2px);}
 }
 .pn-title{
-  color:#fff;
-  font-size:clamp(14px,2.4vw,18px);
-  font-weight:800;
-  letter-spacing:-.3px;
-  line-height:1.35;
-  margin:0;
+  color:#fff;font-size:clamp(14px,2.4vw,18px);
+  font-weight:800;letter-spacing:-.3px;line-height:1.35;margin:0;
   display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;
-  overflow:hidden;
-  overflow-wrap:anywhere;
+  overflow:hidden;overflow-wrap:anywhere;
   background:linear-gradient(100deg,#ffffff 0%,#cbd5e1 55%,#ffffff 100%);
   background-size:200% auto;
   -webkit-background-clip:text;background-clip:text;
@@ -1208,15 +1198,13 @@ section{scroll-margin-top:calc(var(--header-h) + 20px);}
   0%{background-position:0% center;}
   100%{background-position:200% center;}
 }
-
 .player-close{
   width:40px;height:40px;border-radius:13px;flex:0 0 40px;
   background:rgba(255,255,255,.08);color:#fff;
   display:grid;place-items:center;font-size:16px;
   border:1px solid rgba(255,255,255,.14);
   transition:background .25s var(--ease),transform .35s var(--bounce),box-shadow .25s var(--ease);
-  position:relative;
-  z-index:10;
+  position:relative;z-index:10;
 }
 .player-close:hover{
   background:linear-gradient(135deg,#ef4444,#dc2626);
@@ -1224,13 +1212,9 @@ section{scroll-margin-top:calc(var(--header-h) + 20px);}
   box-shadow:0 12px 28px -10px rgba(239,68,68,.8);
 }
 .player-close:active{transform:rotate(90deg) scale(.96);}
-
-/* Video frame */
 .player-frame{
-  position:relative;width:100%;
-  aspect-ratio:16/9;
-  border-radius:20px;
-  overflow:hidden;
+  position:relative;width:100%;aspect-ratio:16/9;
+  border-radius:20px;overflow:hidden;
   background:#050a14;
   border:1px solid rgba(96,165,250,.28);
   box-shadow:
@@ -1255,87 +1239,80 @@ section{scroll-margin-top:calc(var(--header-h) + 20px);}
   mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
   -webkit-mask-composite:xor;
   mask-composite:exclude;
-  padding:2px;
-  opacity:.8;
+  padding:2px;opacity:.8;
   animation:borderSpin 8s linear infinite;
 }
-.player-frame iframe{
-  width:100%;height:100%;border:0;display:block;
-  position:relative;z-index:1;
-}
+.player-frame iframe{width:100%;height:100%;border:0;display:block;position:relative;z-index:1;}
 
-/* Placeholder */
+/* Placeholder — ABJ logo image as bg */
 .player-placeholder{
   position:absolute;inset:0;
   display:flex;flex-direction:column;
   align-items:center;justify-content:center;
   gap:18px;color:#fff;
   overflow:hidden;text-align:center;padding:20px;
-  background:
-    radial-gradient(520px 280px at 50% 42%, rgba(212,175,55,.20), transparent 72%),
-    radial-gradient(520px 280px at 50% 42%, rgba(37,99,235,.28), transparent 72%),
-    #071021;
+  background:#0b1220;
   z-index:0;
 }
-.pp-orb{
-  position:absolute;width:340px;height:340px;border-radius:50%;
-  background:radial-gradient(circle,rgba(212,175,55,.38),transparent 66%);
-  filter:blur(42px);
-  animation:orbFloat 9s ease-in-out infinite;
+/* Blurred logo image as background */
+.player-placeholder::before{
+  content:'';
+  position:absolute;inset:-20%;
+  background-image:url('logo.jpg');
+  background-size:cover;
+  background-position:center;
+  filter:blur(60px) saturate(1.4) brightness(0.7);
+  opacity:.7;
+  z-index:0;
+  animation:bgPan 20s ease-in-out infinite alternate;
 }
-@keyframes orbFloat{
-  0%,100%{transform:translate(-22px,12px) scale(1);}
-  50%{transform:translate(22px,-16px) scale(1.14);}
+@keyframes bgPan{
+  0%{transform:scale(1) translate(0,0);}
+  100%{transform:scale(1.15) translate(-3%,2%);}
 }
-.pp-logo{
+.pp-logo-wrap{
   position:relative;
-  width:clamp(110px,18vw,160px);
-  height:clamp(110px,18vw,160px);
-  border-radius:30px;
+  width:clamp(120px,20vw,180px);
+  aspect-ratio:1/1;
+  border-radius:32px;
+  overflow:hidden;
+  z-index:1;
   box-shadow:
-    0 34px 60px -22px rgba(0,0,0,.85),
-    0 0 0 1px rgba(212,175,55,.22),
-    0 0 70px -14px rgba(212,175,55,.4);
+    0 34px 60px -22px rgba(0,0,0,.9),
+    0 0 0 3px rgba(255,255,255,.95),
+    0 0 0 5px rgba(212,175,55,.5),
+    0 0 80px -14px rgba(212,175,55,.7);
   animation:logoFloat 4.5s ease-in-out infinite;
-  z-index:1;
 }
+.pp-logo-wrap img{width:100%;height:100%;object-fit:cover;display:block;}
 .pp-text{
-  position:relative;
-  font-weight:800;
-  font-size:clamp(14px,2vw,17px);
-  letter-spacing:.2px;
-  z-index:1;
+  position:relative;font-weight:800;
+  font-size:clamp(14px,2vw,17px);letter-spacing:.2px;
+  z-index:1;text-shadow:0 2px 10px rgba(0,0,0,.6);
 }
 .pp-sub{
   position:relative;
   font-size:clamp(11.5px,1.6vw,13px);
-  color:rgba(255,255,255,.55);
-  z-index:1;
+  color:rgba(255,255,255,.75);
+  z-index:1;text-shadow:0 2px 8px rgba(0,0,0,.6);
 }
 
-/* Playlist */
 .player-list{
   display:grid;
   grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
-  gap:12px;
-  padding:24px 4px 6px;
+  gap:12px;padding:24px 4px 6px;
   margin-top:16px;
   border-top:1px solid rgba(255,255,255,.08);
   position:relative;
 }
 .player-list::before{
   content:'Lessons';
-  position:absolute;
-  top:-10px;left:4px;
-  padding:0 10px;
-  background:#0b1220;
+  position:absolute;top:-10px;left:4px;
+  padding:0 10px;background:#0b1220;
   color:rgba(255,255,255,.5);
-  font-size:10.5px;
-  font-weight:800;
-  letter-spacing:1.6px;
-  text-transform:uppercase;
+  font-size:10.5px;font-weight:800;
+  letter-spacing:1.6px;text-transform:uppercase;
 }
-
 .pl-item{
   position:relative;
   display:flex;gap:13px;align-items:center;text-align:left;
@@ -1347,9 +1324,7 @@ section{scroll-margin-top:calc(var(--header-h) + 20px);}
     border-color .28s var(--ease),
     transform .4s var(--bounce),
     box-shadow .3s var(--ease);
-  cursor:pointer;
-  min-height:76px;
-  overflow:hidden;
+  cursor:pointer;min-height:76px;overflow:hidden;
   animation:plItemIn .5s var(--bounce) both;
 }
 .pl-item:nth-child(1){animation-delay:.05s;}
@@ -1360,19 +1335,14 @@ section{scroll-margin-top:calc(var(--header-h) + 20px);}
   from{opacity:0;transform:translateY(12px);}
   to{opacity:1;transform:none;}
 }
-
 .pl-item::before{
-  content:'';
-  position:absolute;
-  inset:0;
+  content:'';position:absolute;inset:0;
   border-radius:16px;
   background:linear-gradient(135deg,rgba(59,130,246,.15),rgba(168,85,247,.1));
-  opacity:0;
-  transition:opacity .3s var(--ease);
+  opacity:0;transition:opacity .3s var(--ease);
   pointer-events:none;
 }
 .pl-item > *{position:relative;z-index:1;}
-
 .pl-item:hover{
   background:rgba(255,255,255,.09);
   transform:translateY(-4px) scale(1.015);
@@ -1380,7 +1350,6 @@ section{scroll-margin-top:calc(var(--header-h) + 20px);}
   box-shadow:0 18px 36px -22px rgba(59,130,246,.7);
 }
 .pl-item:hover::before{opacity:1;}
-
 .pl-item.active{
   background:linear-gradient(120deg,rgba(37,99,235,.32),rgba(59,130,246,.2));
   border-color:rgba(96,165,250,.6);
@@ -1390,48 +1359,33 @@ section{scroll-margin-top:calc(var(--header-h) + 20px);}
 }
 .pl-item.active::after{
   content:'▸ Playing';
-  position:absolute;
-  top:8px;right:10px;
-  font-size:9.5px;
-  font-weight:800;
-  letter-spacing:1px;
+  position:absolute;top:8px;right:10px;
+  font-size:9.5px;font-weight:800;letter-spacing:1px;
   text-transform:uppercase;
   color:#bfdbfe;
   background:rgba(59,130,246,.3);
-  padding:3px 8px;
-  border-radius:999px;
+  padding:3px 8px;border-radius:999px;
 }
-
 .pl-thumb{
   position:relative;
   width:88px;height:56px;flex:0 0 88px;
-  border-radius:12px;
-  overflow:hidden;
+  border-radius:12px;overflow:hidden;
   background:#111c33;
   display:grid;place-items:center;
   border:1px solid rgba(255,255,255,.08);
   transition:transform .4s var(--bounce);
 }
-.pl-thumb img{
-  width:100%;height:100%;
-  object-fit:cover;
-  transition:transform .4s var(--ease);
-}
+.pl-thumb img{width:100%;height:100%;object-fit:cover;transition:transform .4s var(--ease);}
 .pl-item:hover .pl-thumb img{transform:scale(1.08);}
-
-.pl-ph{
-  font-weight:800;font-size:18px;color:#60a5fa;
-}
+.pl-ph{font-weight:800;font-size:18px;color:#60a5fa;}
 .pl-play{
   position:absolute;inset:0;
   display:grid;place-items:center;
   background:radial-gradient(circle, rgba(0,0,0,.55), rgba(0,0,0,.2));
-  opacity:0;
-  transition:opacity .28s var(--ease);
+  opacity:0;transition:opacity .28s var(--ease);
 }
 .pl-play::before{
-  content:'';
-  width:38px;height:38px;
+  content:'';width:38px;height:38px;
   border-radius:50%;
   background:linear-gradient(135deg,#3b82f6,#2563eb);
   position:absolute;
@@ -1444,12 +1398,9 @@ section{scroll-margin-top:calc(var(--header-h) + 20px);}
 .pl-item:hover .pl-play::before,
 .pl-item.active .pl-play::before{transform:scale(1);}
 .pl-play svg{
-  position:relative;
-  width:20px;height:20px;color:#fff;
-  margin-left:2px;
-  z-index:1;
+  position:relative;width:20px;height:20px;color:#fff;
+  margin-left:2px;z-index:1;
 }
-
 .pl-info{min-width:0;flex:1;}
 .pl-title{
   color:#fff;font-size:13px;font-weight:700;line-height:1.4;
@@ -1459,44 +1410,28 @@ section{scroll-margin-top:calc(var(--header-h) + 20px);}
 .pl-tag{
   display:inline-block;
   color:rgba(255,255,255,.5);
-  font-size:10px;
-  font-weight:800;
-  letter-spacing:1px;
-  text-transform:uppercase;
+  font-size:10px;font-weight:800;
+  letter-spacing:1px;text-transform:uppercase;
   margin-top:5px;
   background:rgba(255,255,255,.06);
-  padding:2px 8px;
-  border-radius:999px;
+  padding:2px 8px;border-radius:999px;
 }
 
-/* Loading overlay when switching videos */
 .player-frame.loading::after{
-  content:'';
-  position:absolute;
-  inset:0;
+  content:'';position:absolute;inset:0;
   background:rgba(5,9,18,.65);
   backdrop-filter:blur(4px);
-  z-index:4;
-  animation:fadeIn .25s ease both;
+  z-index:4;animation:fadeIn .25s ease both;
 }
-.player-frame.loading .loading-spinner{
-  display:grid;
-}
+.player-frame.loading .loading-spinner{display:grid;}
 .loading-spinner{
-  position:absolute;
-  top:50%;left:50%;
+  position:absolute;top:50%;left:50%;
   transform:translate(-50%,-50%);
-  z-index:5;
-  display:none;
-  place-items:center;
+  z-index:5;display:none;place-items:center;
   width:56px;height:56px;
 }
 .loading-spinner::before,
-.loading-spinner::after{
-  content:'';
-  position:absolute;
-  border-radius:50%;
-}
+.loading-spinner::after{content:'';position:absolute;border-radius:50%;}
 .loading-spinner::before{
   width:56px;height:56px;
   border:3px solid rgba(59,130,246,.2);
@@ -1509,16 +1444,11 @@ section{scroll-margin-top:calc(var(--header-h) + 20px);}
   background:linear-gradient(135deg,#3b82f6,#a855f7);
   box-shadow:0 0 18px 2px rgba(59,130,246,.8);
 }
-@keyframes spin{
-  to{transform:rotate(360deg);}
-}
-@keyframes fadeIn{
-  from{opacity:0;}
-  to{opacity:1;}
-}
+@keyframes spin{to{transform:rotate(360deg);}}
+@keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
 
 /* ============================================================
-   REVEAL ANIMATION
+   REVEAL
    ============================================================ */
 .reveal{opacity:0;transform:translateY(26px);transition:opacity .75s var(--ease),transform .75s var(--ease);}
 .reveal.in{opacity:1;transform:none;}
@@ -1545,30 +1475,27 @@ section{scroll-margin-top:calc(var(--header-h) + 20px);}
   .cur-shell{padding:24px;}
   .course-stage{grid-template-columns:repeat(auto-fill,minmax(220px,1fr));}
 }
-
 @media (max-width:900px){
   .orbit{
     --item-size: 24%;
-    --center-size: 30%;
+    --center-size: 32%;
     --orbit-radius: 34%;
   }
   .tst-arrow.prev{left:-6px;}
   .tst-arrow.next{right:-6px;}
 }
-
 @media (max-width:720px){
   .orbit{
     --item-size: 26%;
-    --center-size: 28%;
+    --center-size: 30%;
     --orbit-radius: 34%;
     width: clamp(300px, 88vw, 480px);
   }
 }
-
 @media (max-width:640px){
   :root{--header-h:70px;}
   .wrap{padding:0 18px;}
-  .brand-logo{width:40px;height:40px;border-radius:12px;}
+  .brand-logo{width:42px;height:42px;border-radius:12px;}
   .brand-name{font-size:15px;letter-spacing:1.6px;}
   .brand-moto{font-size:8.5px;letter-spacing:1.5px;}
 
@@ -1577,10 +1504,9 @@ section{scroll-margin-top:calc(var(--header-h) + 20px);}
   .hero p.lead{margin-bottom:44px;}
   .section{padding:60px 0;}
   .section-head{margin-bottom:36px;}
-
   .orbit{
     --item-size: 28%;
-    --center-size: 26%;
+    --center-size: 28%;
     --orbit-radius: 34%;
     margin-bottom: 44px;
   }
@@ -1607,6 +1533,7 @@ section{scroll-margin-top:calc(var(--header-h) + 20px);}
   .tst-arrow svg{width:15px;height:15px;}
   .tst-card{padding:24px 20px;}
   .tst-text{font-size:14.5px;}
+  .tst-avatar{width:48px;height:48px;flex:0 0 48px;}
 
   .float-cta{right:12px;padding:13px 18px;font-size:13.5px;}
   .float-cta{right:calc(12px + env(safe-area-inset-right));bottom:calc(12px + env(safe-area-inset-bottom));}
@@ -1626,16 +1553,15 @@ section{scroll-margin-top:calc(var(--header-h) + 20px);}
 
   .footer{padding:60px 0 52px;padding-bottom:calc(52px + env(safe-area-inset-bottom));}
   .footer p{font-size:14.5px;}
-  .footer-logo{width:76px;height:76px;border-radius:20px;}
+  .footer-logo{width:88px;height:88px;border-radius:22px;}
 
   .social{width:52px;height:52px;border-radius:16px;}
   .social svg{width:22px;height:22px;}
 }
-
 @media (max-width:480px){
   :root{--header-h:66px;}
   .wrap{padding:0 16px;}
-  .brand-logo{width:36px;height:36px;border-radius:11px;}
+  .brand-logo{width:38px;height:38px;border-radius:11px;}
   .brand-name{font-size:14px;letter-spacing:1.4px;}
   .brand-moto{font-size:8px;letter-spacing:1.2px;}
 
@@ -1647,16 +1573,14 @@ section{scroll-margin-top:calc(var(--header-h) + 20px);}
 
   .orbit{
     --item-size: 30%;
-    --center-size: 26%;
+    --center-size: 28%;
     --orbit-radius: 33%;
     width: clamp(280px, 94vw, 400px);
     margin-bottom: 38px;
   }
-  .orbit::before{border-color:rgba(37,99,235,.10);}
   .sc-icon{width:26px;height:26px;font-size:13px;border-radius:8px;margin-bottom:3px;}
   .sc-num{font-size:15px;}
   .sc-label{font-size:8.5px;max-width:90px;}
-  .orbit-logo{width:64%;height:64%;border-radius:20%;}
 
   .section-head h2{letter-spacing:-1px;}
   .section-head p{font-size:14.5px;}
@@ -1674,7 +1598,7 @@ section{scroll-margin-top:calc(var(--header-h) + 20px);}
 
   .tst-card{padding:22px 18px;border-radius:16px;}
   .tst-text{font-size:14px;line-height:1.7;}
-  .tst-avatar{width:42px;height:42px;flex:0 0 42px;font-size:11px;}
+  .tst-avatar{width:44px;height:44px;flex:0 0 44px;}
 
   .cta-inner{padding:38px 18px 36px;}
   .cta-badge{font-size:10.5px;padding:7px 13px;letter-spacing:1.3px;}
@@ -1685,7 +1609,7 @@ section{scroll-margin-top:calc(var(--header-h) + 20px);}
   .footer{padding:52px 0 46px;padding-bottom:calc(46px + env(safe-area-inset-bottom));}
   .footer h3{font-size:23px;}
   .footer p{font-size:14px;}
-  .footer-logo{width:68px;height:68px;border-radius:18px;margin-bottom:18px;}
+  .footer-logo{width:80px;height:80px;border-radius:20px;margin-bottom:18px;}
   .socials{gap:12px;}
   .social{width:48px;height:48px;border-radius:14px;}
   .social svg{width:21px;height:21px;}
@@ -1694,19 +1618,17 @@ section{scroll-margin-top:calc(var(--header-h) + 20px);}
   .player-frame{border-radius:16px;}
   .player-close{width:38px;height:38px;flex:0 0 38px;}
 }
-
 @media (max-width:360px){
   :root{--header-h:62px;}
   .wrap{padding:0 14px;}
-  .brand-logo{width:32px;height:32px;border-radius:10px;}
+  .brand-logo{width:34px;height:34px;border-radius:10px;}
   .brand-name{font-size:12.5px;letter-spacing:1.1px;}
   .brand-moto{display:none;}
   .hero h1{letter-spacing:-.8px;}
   .hero p.lead{font-size:14px;}
-
   .orbit{
     --item-size: 32%;
-    --center-size: 24%;
+    --center-size: 26%;
     --orbit-radius: 32%;
   }
   .sc-icon{width:24px;height:24px;font-size:12px;border-radius:7px;}
@@ -1729,14 +1651,13 @@ section{scroll-margin-top:calc(var(--header-h) + 20px);}
   .cta-title{letter-spacing:-.8px;}
 
   .footer h3{font-size:21px;}
-  .footer-logo{width:62px;height:62px;border-radius:16px;}
+  .footer-logo{width:72px;height:72px;border-radius:18px;}
   .social{width:46px;height:46px;border-radius:13px;}
   .social svg{width:20px;height:20px;}
 
   .float-cta{padding:12px 16px;font-size:13px;}
   .float-cta{right:calc(10px + env(safe-area-inset-right));bottom:calc(10px + env(safe-area-inset-bottom));}
 }
-
 @media (max-height:480px) and (orientation:landscape){
   .hero{padding:36px 0 30px;}
   .hero h1{font-size:32px;margin-bottom:14px;}
@@ -1752,35 +1673,13 @@ section{scroll-margin-top:calc(var(--header-h) + 20px);}
 
 <body>
 
-<!-- ============================================================
-     ABJ LOGO — SVG SYMBOL
-     ============================================================ -->
-<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
-  <defs>
-    <linearGradient id="abjGold" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%"  stop-color="#f7e07a"/>
-      <stop offset="35%" stop-color="#e0b84a"/>
-      <stop offset="70%" stop-color="#d4af37"/>
-      <stop offset="100%" stop-color="#8a6516"/>
-    </linearGradient>
-
-    <symbol id="abj-logo" viewBox="0 0 100 100">
-      <rect width="100" height="100" rx="22" fill="#2b2b4f"/>
-      <text x="50" y="63" text-anchor="middle"
-            font-family="'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
-            font-weight="800" font-size="42"
-            fill="url(#abjGold)" letter-spacing="-1.5">ABJ</text>
-    </symbol>
-  </defs>
-</svg>
-
 <!-- ========================= HEADER ========================= -->
 <header class="header" id="siteHeader">
   <div class="wrap header-inner">
     <a class="brand" href="#top" aria-label="ABJ Tutorial home">
-      <svg class="logo-svg brand-logo" viewBox="0 0 100 100" aria-hidden="true">
-        <use href="#abj-logo"/>
-      </svg>
+      <span class="brand-logo">
+        <img class="logo-img" src="logo.jpg" alt="ABJ Tutorial logo" />
+      </span>
       <span class="brand-text">
         <span class="brand-name">ABJ TUTORIAL</span>
         <span class="brand-moto">Empowering Tomorrow, Today.</span>
@@ -1814,9 +1713,6 @@ section{scroll-margin-top:calc(var(--header-h) + 20px);}
           <div class="orbit-item orbit-item-1">
             <div class="orbit-counter">
               <div class="stat-card">
-                <div class="sc-bg" aria-hidden="true">
-                  <svg viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice"><use href="#abj-logo"/></svg>
-                </div>
                 <div class="sc-icon" aria-hidden="true">🎓</div>
                 <div class="sc-num" data-count="2000" data-suffix="+">0</div>
                 <div class="sc-label">Students taught</div>
@@ -1827,9 +1723,6 @@ section{scroll-margin-top:calc(var(--header-h) + 20px);}
           <div class="orbit-item orbit-item-2">
             <div class="orbit-counter">
               <div class="stat-card">
-                <div class="sc-bg" aria-hidden="true">
-                  <svg viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice"><use href="#abj-logo"/></svg>
-                </div>
                 <div class="sc-icon" aria-hidden="true">📈</div>
                 <div class="sc-num" data-count="95" data-suffix="%">0</div>
                 <div class="sc-label">Above 3.0 GPA</div>
@@ -1840,9 +1733,6 @@ section{scroll-margin-top:calc(var(--header-h) + 20px);}
           <div class="orbit-item orbit-item-3">
             <div class="orbit-counter">
               <div class="stat-card">
-                <div class="sc-bg" aria-hidden="true">
-                  <svg viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice"><use href="#abj-logo"/></svg>
-                </div>
                 <div class="sc-icon" aria-hidden="true">🏆</div>
                 <div class="sc-num" data-count="99" data-suffix="%+">0</div>
                 <div class="sc-label">4.0 scorers @ Jimma</div>
@@ -1853,9 +1743,6 @@ section{scroll-margin-top:calc(var(--header-h) + 20px);}
           <div class="orbit-item orbit-item-4">
             <div class="orbit-counter">
               <div class="stat-card">
-                <div class="sc-bg" aria-hidden="true">
-                  <svg viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice"><use href="#abj-logo"/></svg>
-                </div>
                 <div class="sc-icon" aria-hidden="true">▶️</div>
                 <div class="sc-num" data-count="1" data-suffix="M+">0</div>
                 <div class="sc-label">YouTube views</div>
@@ -1864,10 +1751,14 @@ section{scroll-margin-top:calc(var(--header-h) + 20px);}
           </div>
         </div>
 
-        <div class="orbit-center">
-          <svg class="logo-svg orbit-logo" viewBox="0 0 100 100" aria-hidden="true">
-            <use href="#abj-logo"/>
-          </svg>
+        <!-- CENTER: logo image with spinning gold border + bubble rings -->
+        <div class="orbit-center" aria-hidden="true">
+          <span class="bubble-ring"></span>
+          <span class="bubble-ring"></span>
+          <span class="bubble-ring"></span>
+          <div class="orbit-center-inner">
+            <img src="logo.jpg" alt="ABJ Tutorial" />
+          </div>
         </div>
       </div>
 
@@ -1977,12 +1868,12 @@ section{scroll-margin-top:calc(var(--header-h) + 20px);}
 
 </main>
 
-<!-- ========================= FOOTER — CONTACT ========================= -->
+<!-- ========================= FOOTER ========================= -->
 <footer class="footer" id="contact">
   <div class="wrap footer-inner">
-    <svg class="logo-svg footer-logo" viewBox="0 0 100 100" aria-hidden="true">
-      <use href="#abj-logo"/>
-    </svg>
+    <div class="footer-logo">
+      <img class="logo-img" src="logo.jpg" alt="ABJ Tutorial logo" />
+    </div>
 
     <h3>Contact ABJ</h3>
 
@@ -2237,12 +2128,9 @@ function buildPlaylist(){
       if (newIdx === curVideo) return;
       curVideo = newIdx;
 
-      /* Show loading animation */
       playerFrame.classList.add('loading');
-      /* Small delay so the spinner registers visually */
       setTimeout(() => {
         renderPlayer();
-        /* Remove loading shortly after iframe begins to load */
         setTimeout(() => playerFrame.classList.remove('loading'), 350);
       }, 180);
     });
@@ -2253,10 +2141,9 @@ function renderPlaceholder(){
   playerFrame.innerHTML = `
     <div class="loading-spinner"></div>
     <div class="player-placeholder">
-      <div class="pp-orb"></div>
-      <svg class="logo-svg pp-logo" viewBox="0 0 100 100" aria-hidden="true">
-        <use href="#abj-logo"/>
-      </svg>
+      <div class="pp-logo-wrap">
+        <img src="logo.jpg" alt="ABJ Tutorial" />
+      </div>
       <div class="pp-text">Select a lesson to begin</div>
       <div class="pp-sub">Choose any video from the list below</div>
     </div>`;
@@ -2307,30 +2194,30 @@ function closePlayer(){
 document.getElementById('demoBtn').addEventListener('click', openPlayer);
 document.getElementById('playerClose').addEventListener('click', closePlayer);
 
-/* NOTE: Click-outside and Escape key have been intentionally disabled
-   so the only way to close the player is the X button. */
+/* Click-outside and Escape are intentionally disabled —
+   only the X button closes the player. */
 
 buildPlaylist();
 
 /* ============================================================
-   4. TESTIMONIALS — 15 items
+   4. TESTIMONIALS — 15 items, all with the ABJ logo avatar
    ============================================================ */
 const TESTIMONIALS = [
-  { avatar:"ABJ", from:"Girum T.", subject:"Maths", stars:5, text:"The step-by-step maths solutions were a total game-changer for me. I went from barely passing to scoring above 85 on every exam. The tutor explains every single line — no shortcuts, no confusion." },
-  { avatar:"ABJ", from:"Hana B.", subject:"Physics", stars:5, text:"I honestly hated Physics before I joined ABJ. Now motion and forces actually make sense. The visual explanations in the video tutorials are amazing — I finally understand what I'm calculating." },
-  { avatar:"ABJ", from:"Bereket A.", subject:"Chemistry", stars:5, text:"Organic chemistry used to be my nightmare. ABJ's summarized notes broke it down so simply that I finished the entire unit in one weekend. I scored the highest mark in my class." },
-  { avatar:"ABJ", from:"Selam G.", subject:"Biology", stars:5, text:"The biology notes are incredible — diagrams are clean and the explanations connect everything together. I used them for my mid-term and got 92%. I'm recommending ABJ to every freshman I know." },
-  { avatar:"ABJ", from:"Yonas H.", subject:"Civics", stars:5, text:"Civics felt boring until I watched the ABJ videos on deontological ethics. The real-world examples made everything click. I actually enjoyed studying for this exam for the first time." },
-  { avatar:"ABJ", from:"Meron K.", subject:"English", stars:5, text:"Communicative English was my weakest area. After following ABJ's lessons and doing the past exam questions, I improved my writing and comprehension dramatically. My confidence has grown so much." },
-  { avatar:"ABJ", from:"Dawit M.", subject:"Anthropology", stars:5, text:"Anthropology seemed like a lot to memorize, but ABJ's concise notes made it feel approachable. I could actually understand the concepts instead of just memorizing. Highly recommended." },
-  { avatar:"ABJ", from:"Feven S.", subject:"Psychology", stars:5, text:"The psychology lessons were some of the best I've ever had. The way the tutor connects theory to everyday life is brilliant. I now understand myself and others better — and I aced the exam." },
-  { avatar:"ABJ", from:"Henok D.", subject:"Geography", stars:5, text:"Geography is full of maps and long concepts, but ABJ's visual approach made it manageable. I studied the entire semester in two weeks with the summarized notes and passed with a strong grade." },
-  { avatar:"ABJ", from:"Bethlehem W.", subject:"Economics", stars:5, text:"Economics finally clicked when I saw the ABJ tutor break down market theory with real examples. The past exam solutions showed me exactly what to expect. I went from a C to an A." },
-  { avatar:"ABJ", from:"Nahom Z.", subject:"C++", stars:5, text:"C++ was terrifying as my first programming language. ABJ made it feel doable — from variables to loops, everything was explained clearly. I now write small programs on my own. Thank you ABJ!" },
-  { avatar:"ABJ", from:"Rediet A.", subject:"Logic", stars:5, text:"Logic and Critical Thinking was my favourite course this semester, thanks to ABJ. The arguments and fallacies are explained so well. It sharpened how I think about everything, not just exams." },
-  { avatar:"ABJ", from:"Kaleb F.", subject:"Applied Maths", stars:5, text:"Applied Mathematics I nearly broke me last year. I joined ABJ, followed the tutorials and past exams, and this time around I scored an A. Easily the best investment I've made in my studies." },
-  { avatar:"ABJ", from:"Sara L.", subject:"Global Trend", stars:5, text:"Global Trend felt disconnected from my life until ABJ connected it to current events. The lessons are engaging and the notes are incredibly well organized. I finally enjoy keeping up with the news." },
-  { avatar:"ABJ", from:"Mikiyas T.", subject:"Entrepreneurship", stars:5, text:"Entrepreneurship inspired me to actually start something. The ABJ tutor walks through real business ideas and pitch examples. I pitched my first idea to my class and got amazing feedback. Truly empowering." }
+  { from:"Girum T.", subject:"Maths", stars:5, text:"The step-by-step maths solutions were a total game-changer for me. I went from barely passing to scoring above 85 on every exam. The tutor explains every single line — no shortcuts, no confusion." },
+  { from:"Hana B.", subject:"Physics", stars:5, text:"I honestly hated Physics before I joined ABJ. Now motion and forces actually make sense. The visual explanations in the video tutorials are amazing — I finally understand what I'm calculating." },
+  { from:"Bereket A.", subject:"Chemistry", stars:5, text:"Organic chemistry used to be my nightmare. ABJ's summarized notes broke it down so simply that I finished the entire unit in one weekend. I scored the highest mark in my class." },
+  { from:"Selam G.", subject:"Biology", stars:5, text:"The biology notes are incredible — diagrams are clean and the explanations connect everything together. I used them for my mid-term and got 92%. I'm recommending ABJ to every freshman I know." },
+  { from:"Yonas H.", subject:"Civics", stars:5, text:"Civics felt boring until I watched the ABJ videos on deontological ethics. The real-world examples made everything click. I actually enjoyed studying for this exam for the first time." },
+  { from:"Meron K.", subject:"English", stars:5, text:"Communicative English was my weakest area. After following ABJ's lessons and doing the past exam questions, I improved my writing and comprehension dramatically. My confidence has grown so much." },
+  { from:"Dawit M.", subject:"Anthropology", stars:5, text:"Anthropology seemed like a lot to memorize, but ABJ's concise notes made it feel approachable. I could actually understand the concepts instead of just memorizing. Highly recommended." },
+  { from:"Feven S.", subject:"Psychology", stars:5, text:"The psychology lessons were some of the best I've ever had. The way the tutor connects theory to everyday life is brilliant. I now understand myself and others better — and I aced the exam." },
+  { from:"Henok D.", subject:"Geography", stars:5, text:"Geography is full of maps and long concepts, but ABJ's visual approach made it manageable. I studied the entire semester in two weeks with the summarized notes and passed with a strong grade." },
+  { from:"Bethlehem W.", subject:"Economics", stars:5, text:"Economics finally clicked when I saw the ABJ tutor break down market theory with real examples. The past exam solutions showed me exactly what to expect. I went from a C to an A." },
+  { from:"Nahom Z.", subject:"C++", stars:5, text:"C++ was terrifying as my first programming language. ABJ made it feel doable — from variables to loops, everything was explained clearly. I now write small programs on my own. Thank you ABJ!" },
+  { from:"Rediet A.", subject:"Logic", stars:5, text:"Logic and Critical Thinking was my favourite course this semester, thanks to ABJ. The arguments and fallacies are explained so well. It sharpened how I think about everything, not just exams." },
+  { from:"Kaleb F.", subject:"Applied Maths", stars:5, text:"Applied Mathematics I nearly broke me last year. I joined ABJ, followed the tutorials and past exams, and this time around I scored an A. Easily the best investment I've made in my studies." },
+  { from:"Sara L.", subject:"Global Trend", stars:5, text:"Global Trend felt disconnected from my life until ABJ connected it to current events. The lessons are engaging and the notes are incredibly well organized. I finally enjoy keeping up with the news." },
+  { from:"Mikiyas T.", subject:"Entrepreneurship", stars:5, text:"Entrepreneurship inspired me to actually start something. The ABJ tutor walks through real business ideas and pitch examples. I pitched my first idea to my class and got amazing feedback. Truly empowering." }
 ];
 
 const track    = document.getElementById('tstTrack');
@@ -2347,7 +2234,9 @@ TESTIMONIALS.forEach((t, i) => {
   slide.innerHTML = `
     <div class="tst-card">
       <div class="tst-top">
-        <div class="tst-avatar">${t.avatar}</div>
+        <div class="tst-avatar">
+          <img src="logo.jpg" alt="ABJ" />
+        </div>
         <div class="tst-who">
           <div class="tst-from">${t.from}</div>
           <span class="tst-subject">${t.subject}</span>
