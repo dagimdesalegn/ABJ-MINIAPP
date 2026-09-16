@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<meta name="theme-color" content="#ffffff" />
+<meta name="theme-color" content="#eef4ff" />
 <title>ABJ Tutorial — Empowering Tomorrow, Today</title>
 <meta name="description" content="ABJ Tutorial helps Ethiopian university freshmen prepare smarter with past exams, step-by-step solutions, concise notes and video lessons." />
 
@@ -34,6 +34,7 @@
   --shadow-lg:0 30px 70px -30px rgba(15,23,42,.35);
   --maxw:1120px;
   --ease:cubic-bezier(.4,0,.2,1);
+  --header-h:78px;
 }
 
 *,*::before,*::after{box-sizing:border-box;}
@@ -47,6 +48,7 @@ body{
   -webkit-font-smoothing:antialiased;
   overflow-x:hidden;
   width:100%;
+  padding-top:calc(var(--header-h) + env(safe-area-inset-top));
 }
 img{max-width:100%;display:block;}
 a{text-decoration:none;color:inherit;-webkit-tap-highlight-color:transparent;}
@@ -56,24 +58,30 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
 
 .logo-svg{display:block;flex:0 0 auto;}
 
+section{scroll-margin-top:calc(var(--header-h) + 20px);}
+
 /* ============================================================
-   HEADER — CLEAN, CENTERED, NO BORDER
+   HEADER
    ============================================================ */
 .header{
-  position:sticky;top:0;z-index:60;
-  background:rgba(255,255,255,.88);
+  position:fixed;
+  top:0;left:0;right:0;
+  z-index:60;
+  padding-top:env(safe-area-inset-top);
+  background:
+    radial-gradient(900px 200px at 50% -30%, #dbe9ff 0%, rgba(219,233,255,.55) 55%, rgba(219,233,255,0) 100%),
+    linear-gradient(180deg,#eef4ff 0%,#f5f9ff 55%,rgba(255,255,255,.94) 100%);
   backdrop-filter:blur(16px);
   -webkit-backdrop-filter:blur(16px);
-  padding-top:env(safe-area-inset-top);
+  transition:box-shadow .3s var(--ease);
 }
+.header.scrolled{box-shadow:0 12px 34px -22px rgba(15,23,42,.4);}
+
 .header-inner{
   display:flex;align-items:center;justify-content:center;
-  height:78px;
+  height:var(--header-h);
 }
-.brand{
-  display:flex;align-items:center;gap:14px;
-  text-align:left;
-}
+.brand{display:flex;align-items:center;gap:14px;text-align:left;}
 .brand-logo{
   width:44px;height:44px;
   border-radius:13px;
@@ -162,11 +170,11 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
 }
 
 /* ============================================================
-   HERO — CENTERED
+   HERO
    ============================================================ */
 .hero{
   position:relative;
-  padding:76px 0 60px;
+  padding:60px 0 80px;
   overflow:hidden;
   background:
     radial-gradient(900px 480px at 50% -10%, #eaf1ff 0%, rgba(234,241,255,0) 62%),
@@ -199,7 +207,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
 
 .hero-badge{
   display:inline-flex;align-items:center;gap:8px;
-  font-size:12px;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;
+  font-size:12px;font-weight:800;letter-spacing:1.6px;text-transform:uppercase;
   color:var(--blue);background:var(--blue-soft);
   padding:8px 16px;border-radius:999px;
   border:1px solid #d7e4fb;
@@ -253,71 +261,286 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
   font-size:clamp(15px,2.3vw,17.5px);
   color:var(--muted);
   max-width:62ch;
-  margin:0 auto 40px;
+  margin:0 auto 56px;
   line-height:1.75;
 }
 .hero p.lead b{color:var(--ink);font-weight:700;}
 
 /* ============================================================
-   HERO STATS — SIGNATURE BAND
+   ORBIT — FOUR STAT CIRCLES AROUND CENTRAL LOGO
    ============================================================ */
-.hero-stats{
-  position:relative;
+.orbit{
+  --item-size: 23%;
+  --center-size: 30%;
+  --orbit-radius: 34%;
+  --orbit-speed: 60s;
+
+  position: relative;
+  width: clamp(320px, 82vw, 580px);
+  aspect-ratio: 1 / 1;
+  margin: 0 auto 52px;
+}
+
+/* Faint dashed orbit path */
+.orbit::before{
+  content:'';
+  position:absolute;
+  top:50%; left:50%;
+  width:calc(var(--orbit-radius) * 2);
+  height:calc(var(--orbit-radius) * 2);
+  margin-top:calc(var(--orbit-radius) * -1);
+  margin-left:calc(var(--orbit-radius) * -1);
+  border-radius:50%;
+  border:1px dashed rgba(37,99,235,.14);
+  z-index:0;
+  pointer-events:none;
+}
+
+/* Rotating ring wrapper */
+.orbit-ring{
+  position:absolute;
+  inset:0;
+  transform-origin:50% 50%;
+  animation:orbitSpin var(--orbit-speed) linear infinite;
+  z-index:1;
+}
+
+@keyframes orbitSpin{
+  from{transform:rotate(0deg);}
+  to  {transform:rotate(360deg);}
+}
+
+/* Each orbit position */
+.orbit-item{
+  position:absolute;
+  width:var(--item-size);
+  aspect-ratio:1 / 1;
+  transform:translate(-50%, -50%);
+  transform-origin:50% 50%;
+}
+.orbit-item-1{ top: calc(50% - var(--orbit-radius)); left: 50%; }
+.orbit-item-2{ top: 50%; left: calc(50% + var(--orbit-radius)); }
+.orbit-item-3{ top: calc(50% + var(--orbit-radius)); left: 50%; }
+.orbit-item-4{ top: 50%; left: calc(50% - var(--orbit-radius)); }
+
+/* Counter-rotation so content stays upright */
+.orbit-counter{
+  width:100%;
+  height:100%;
+  transform-origin:50% 50%;
+  animation:orbitCounter var(--orbit-speed) linear infinite;
+}
+@keyframes orbitCounter{
+  from{transform:rotate(0deg);}
+  to  {transform:rotate(-360deg);}
+}
+
+/* Pause the whole orbit on hover to make stats readable */
+.orbit:hover .orbit-ring,
+.orbit:hover .orbit-counter{
+  animation-play-state: paused;
+}
+
+/* ---------- Central logo circle ---------- */
+.orbit-center{
+  position:absolute;
+  top:50%; left:50%;
+  width:var(--center-size);
+  aspect-ratio:1 / 1;
+  transform:translate(-50%, -50%);
+  border-radius:50%;
   display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:0;
-  max-width:860px;
-  margin:0 auto 42px;
-  padding:26px 10px;
-  border-radius:24px;
+  place-items:center;
+  z-index:3;
   background:
-    linear-gradient(135deg,#ffffff 0%,#f7faff 100%);
-  border:1px solid var(--line);
+    radial-gradient(circle at 50% 38%, #ffffff 0%, #f6faff 60%, #e6efff 100%);
   box-shadow:
-    0 30px 60px -40px rgba(15,23,42,.4),
-    0 14px 34px -22px rgba(37,99,235,.3);
+    0 28px 60px -30px rgba(37,99,235,.55),
+    0 0 0 1px rgba(37,99,235,.10),
+    inset 0 1px 0 rgba(255,255,255,.95),
+    inset 0 -18px 30px -20px rgba(37,99,235,.20);
   overflow:hidden;
 }
-.hero-stats::before{
+.orbit-center::before{
   content:'';
   position:absolute;
-  top:0;left:8%;right:8%;
-  height:2px;
-  background:linear-gradient(90deg,transparent,#3b82f6,#a855f7,transparent);
-  opacity:.6;
+  inset:-30%;
+  border-radius:50%;
+  background:radial-gradient(circle, rgba(212,175,55,.35), transparent 62%);
+  filter:blur(28px);
+  animation:centerGlow 6s ease-in-out infinite;
+  z-index:0;
+  pointer-events:none;
 }
-.hstat{
+@keyframes centerGlow{
+  0%,100%{opacity:.4;transform:scale(1);}
+  50%{opacity:.75;transform:scale(1.14);}
+}
+.orbit-center::after{
+  content:'';
+  position:absolute;
+  inset:6%;
+  border-radius:50%;
+  border:1px solid rgba(37,99,235,.08);
+  pointer-events:none;
+  z-index:2;
+}
+
+.orbit-logo{
   position:relative;
+  width:62%;
+  height:62%;
+  border-radius:22%;
+  box-shadow:
+    0 16px 34px -14px rgba(212,175,55,.6),
+    0 0 0 1px rgba(212,175,55,.18) inset;
+  z-index:1;
+  animation:orbitLogoPulse 5s ease-in-out infinite;
+}
+@keyframes orbitLogoPulse{
+  0%,100%{transform:scale(1);}
+  50%{transform:scale(1.05);}
+}
+
+/* ---------- Stat cards ---------- */
+.stat-card{
+  position:relative;
+  width:100%;
+  height:100%;
+  border-radius:50%;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:2px;
+  padding:12% 12%;
   text-align:center;
-  padding:6px 8px;
+  overflow:hidden;
+  isolation:isolate;
+  background:
+    radial-gradient(circle at 50% 40%, #ffffff 0%, #f8fbff 62%, #eef4ff 100%);
+  box-shadow:
+    0 16px 36px -22px rgba(15,23,42,.42),
+    0 0 0 1px rgba(255,255,255,.9) inset,
+    0 0 0 1px rgba(37,99,235,.06);
+  transition:
+    translate .5s cubic-bezier(.34,1.56,.64,1),
+    scale .5s cubic-bezier(.34,1.56,.64,1),
+    rotate .5s cubic-bezier(.34,1.56,.64,1),
+    box-shadow .45s var(--ease);
+  will-change: translate, scale, rotate;
 }
-.hstat + .hstat::before{
-  content:'';
+
+/* Blurred ABJ logo behind each circle */
+.sc-bg{
   position:absolute;
-  left:0;top:14%;bottom:14%;
-  width:1px;
-  background:linear-gradient(180deg,transparent,#e2eaf7,transparent);
+  inset:-30%;
+  z-index:0;
+  opacity:.34;
+  filter:blur(24px) saturate(1.35);
+  pointer-events:none;
+  transform:translateZ(0);
+  animation:scBgPulse 7s ease-in-out infinite;
 }
-.hstat-num{
-  font-size:clamp(22px,3.4vw,34px);
+.sc-bg svg{width:100%;height:100%;display:block;}
+.orbit-item-2 .sc-bg{animation-delay:1.4s;}
+.orbit-item-3 .sc-bg{animation-delay:2.8s;}
+.orbit-item-4 .sc-bg{animation-delay:4.2s;}
+
+@keyframes scBgPulse{
+  0%,100%{opacity:.30;transform:scale(1);}
+  50%{opacity:.50;transform:scale(1.16);}
+}
+
+.sc-icon{
+  position:relative;
+  z-index:1;
+  display:grid;
+  place-items:center;
+  width:32px;height:32px;
+  border-radius:11px;
+  font-size:16px;
+  margin-bottom:5px;
+  transition:transform .55s cubic-bezier(.34,1.56,.64,1);
+}
+.orbit-item-1 .sc-icon{
+  background:linear-gradient(135deg,#dbeafe,#bfdbfe);
+  color:#1d4ed8;
+  box-shadow:0 8px 18px -12px rgba(37,99,235,.85);
+}
+.orbit-item-2 .sc-icon{
+  background:linear-gradient(135deg,#e0e7ff,#c7d2fe);
+  color:#4f46e5;
+  box-shadow:0 8px 18px -12px rgba(99,102,241,.85);
+}
+.orbit-item-3 .sc-icon{
+  background:linear-gradient(135deg,#f3e8ff,#e9d5ff);
+  color:#9333ea;
+  box-shadow:0 8px 18px -12px rgba(168,85,247,.85);
+}
+.orbit-item-4 .sc-icon{
+  background:linear-gradient(135deg,#fee2e2,#fecaca);
+  color:#dc2626;
+  box-shadow:0 8px 18px -12px rgba(239,68,68,.85);
+}
+
+.sc-num{
+  position:relative;
+  z-index:1;
+  font-size:clamp(17px,2.2vw,22px);
   font-weight:800;
-  letter-spacing:-1.2px;
+  letter-spacing:-.8px;
   line-height:1.05;
   background:linear-gradient(135deg,#2563eb 0%,#3b82f6 45%,#6366f1 100%);
   -webkit-background-clip:text;background-clip:text;
   -webkit-text-fill-color:transparent;
-  animation:numGlow 5s ease-in-out infinite;
 }
-@keyframes numGlow{
-  0%,100%{filter:drop-shadow(0 0 0 rgba(59,130,246,0));}
-  50%{filter:drop-shadow(0 4px 14px rgba(59,130,246,.35));}
+.orbit-item-2 .sc-num{
+  background:linear-gradient(135deg,#4f46e5 0%,#6366f1 45%,#818cf8 100%);
+  -webkit-background-clip:text;background-clip:text;
 }
-.hstat-label{
-  font-size:12.5px;
+.orbit-item-3 .sc-num{
+  background:linear-gradient(135deg,#7e22ce 0%,#a855f7 45%,#c084fc 100%);
+  -webkit-background-clip:text;background-clip:text;
+}
+.orbit-item-4 .sc-num{
+  background:linear-gradient(135deg,#b91c1c 0%,#ef4444 45%,#f87171 100%);
+  -webkit-background-clip:text;background-clip:text;
+}
+
+.sc-label{
+  position:relative;
+  z-index:1;
+  font-size:9.5px;
   color:var(--muted);
   font-weight:600;
-  margin-top:8px;
-  line-height:1.4;
+  margin-top:4px;
+  line-height:1.35;
+  max-width:120px;
+}
+
+/* Hover — pause orbit + highlight the hovered card */
+.orbit-item:hover .stat-card{
+  scale:1.06;
+  box-shadow:
+    0 26px 54px -24px rgba(37,99,235,.7),
+    0 0 0 2px rgba(59,130,246,.32) inset,
+    0 0 0 1px rgba(37,99,235,.18);
+}
+.orbit-item-1:hover .stat-card{ rotate:-4deg; }
+.orbit-item-2:hover .stat-card{ rotate:4deg; }
+.orbit-item-3:hover .stat-card{ rotate:-4deg; }
+.orbit-item-4:hover .stat-card{ rotate:4deg; }
+.orbit-item:hover .sc-icon{ transform:scale(1.15); }
+
+/* Icon gentle bob (composes with anything else) */
+.orbit-item-1 .sc-icon{animation:iconBob 4.2s ease-in-out infinite;}
+.orbit-item-2 .sc-icon{animation:iconBob 4.8s ease-in-out infinite .3s;}
+.orbit-item-3 .sc-icon{animation:iconBob 5.2s ease-in-out infinite .6s;}
+.orbit-item-4 .sc-icon{animation:iconBob 4.5s ease-in-out infinite .9s;}
+@keyframes iconBob{
+  0%,100%{translate:0 0;}
+  50%{translate:0 -2px;}
 }
 
 /* ============================================================
@@ -334,7 +557,6 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
    SECTION
    ============================================================ */
 .section{padding:82px 0;}
-.section-soft{background:var(--soft);}
 .section-head{text-align:center;margin-bottom:46px;}
 .section-head h2{
   font-size:clamp(24px,5vw,40px);font-weight:800;letter-spacing:-1.2px;
@@ -516,25 +738,59 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
 /* ============================================================
    TESTIMONIALS
    ============================================================ */
-.tst-wrap{position:relative;max-width:720px;margin:0 auto;}
+.tst-section{
+  position:relative;
+  background:linear-gradient(180deg,#f7faff 0%,#ffffff 100%);
+  overflow:hidden;
+}
+.tst-section::before{
+  content:'';position:absolute;width:600px;height:600px;border-radius:50%;
+  background:radial-gradient(circle, rgba(99,102,241,.08), transparent 70%);
+  top:-300px;right:-160px;pointer-events:none;
+}
+.tst-wrap{position:relative;max-width:720px;margin:0 auto;z-index:2;}
 .tst-viewport{overflow:hidden;border-radius:var(--radius);padding:6px;}
 .tst-track{display:flex;transition:transform .55s var(--ease);}
 .tst-slide{flex:0 0 100%;padding:0 4px;}
 .tst-card{
   background:#fff;border:1px solid var(--line);border-radius:var(--radius);
   padding:30px 28px;box-shadow:var(--shadow);
+  position:relative;
+  overflow:hidden;
 }
-.tst-top{display:flex;align-items:center;gap:13px;margin-bottom:16px;}
+.tst-card::before{
+  content:'"';
+  position:absolute;
+  top:-30px;right:16px;
+  font-size:130px;
+  font-family:Georgia,serif;
+  color:var(--blue-soft);
+  line-height:1;
+  pointer-events:none;
+}
+.tst-top{display:flex;align-items:center;gap:13px;margin-bottom:14px;position:relative;z-index:1;}
 .tst-avatar{
   width:46px;height:46px;border-radius:50%;flex:0 0 46px;
   background:linear-gradient(140deg,#2b3a63,#131c31);
   display:grid;place-items:center;color:#fff;font-size:12px;font-weight:800;letter-spacing:.4px;
+  box-shadow:0 8px 18px -8px rgba(15,23,42,.6);
 }
+.tst-who{min-width:0;flex:1;}
 .tst-from{font-size:14px;font-weight:700;overflow-wrap:anywhere;}
-.tst-stars{color:#f5b301;font-size:13px;letter-spacing:2px;margin-top:2px;}
-.tst-text{font-size:15.5px;color:#334155;margin:0;line-height:1.75;}
-.tst-text::before{content:'“';}
-.tst-text::after{content:'”';}
+.tst-subject{
+  display:inline-block;
+  font-size:10.5px;
+  font-weight:800;
+  letter-spacing:1.1px;
+  text-transform:uppercase;
+  color:var(--blue);
+  background:var(--blue-soft);
+  padding:3px 9px;
+  border-radius:999px;
+  margin-top:4px;
+}
+.tst-stars{color:#f5b301;font-size:13px;letter-spacing:2px;margin-top:4px;}
+.tst-text{font-size:15.5px;color:#334155;margin:0;line-height:1.75;position:relative;z-index:1;}
 
 .tst-arrow{
   position:absolute;top:50%;transform:translateY(-50%);
@@ -550,21 +806,27 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
 .tst-arrow.next{right:-22px;}
 .tst-arrow svg{width:17px;height:17px;}
 
-.tst-dots{display:flex;justify-content:center;gap:8px;margin-top:26px;}
+.tst-dots{display:flex;justify-content:center;gap:6px;margin-top:26px;flex-wrap:wrap;max-width:520px;margin-left:auto;margin-right:auto;}
 .dot{
-  width:8px;height:8px;border-radius:999px;background:#d3dcea;
+  width:7px;height:7px;border-radius:999px;background:#d3dcea;
   transition:all .35s var(--ease);
   padding:0;
 }
-.dot.active{background:var(--blue);width:26px;}
+.dot.active{background:var(--blue);width:22px;}
+
+.tst-counter{
+  text-align:center;
+  font-size:12px;
+  font-weight:700;
+  letter-spacing:1.2px;
+  color:var(--muted);
+  margin-top:14px;
+}
 
 /* ============================================================
    CTA BAND
    ============================================================ */
-.cta-section{
-  position:relative;
-  padding:0 0 82px;
-}
+.cta-section{position:relative;padding:0 0 82px;}
 .cta-card{
   position:relative;
   border-radius:32px;
@@ -595,21 +857,10 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
   overflow:hidden;
 }
 
-.cta-orb{
-  position:absolute;border-radius:50%;filter:blur(50px);pointer-events:none;z-index:0;
-}
-.cta-orb.a{
-  width:280px;height:280px;background:rgba(59,130,246,.55);
-  top:-120px;left:-60px;animation:orbA 12s ease-in-out infinite;
-}
-.cta-orb.b{
-  width:240px;height:240px;background:rgba(168,85,247,.45);
-  bottom:-120px;right:-50px;animation:orbB 14s ease-in-out infinite;
-}
-.cta-orb.c{
-  width:180px;height:180px;background:rgba(14,165,233,.45);
-  top:40%;right:18%;animation:orbC 11s ease-in-out infinite;
-}
+.cta-orb{position:absolute;border-radius:50%;filter:blur(50px);pointer-events:none;z-index:0;}
+.cta-orb.a{width:280px;height:280px;background:rgba(59,130,246,.55);top:-120px;left:-60px;animation:orbA 12s ease-in-out infinite;}
+.cta-orb.b{width:240px;height:240px;background:rgba(168,85,247,.45);bottom:-120px;right:-50px;animation:orbB 14s ease-in-out infinite;}
+.cta-orb.c{width:180px;height:180px;background:rgba(14,165,233,.45);top:40%;right:18%;animation:orbC 11s ease-in-out infinite;}
 @keyframes orbA{
   0%,100%{transform:translate(0,0) scale(1);}
   50%{transform:translate(40px,30px) scale(1.15);}
@@ -724,7 +975,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
 .cta-btn .tg-ic svg{width:22px;height:22px;}
 
 /* ============================================================
-   FOOTER — CONTACT (WHITE)
+   FOOTER — CONTACT
    ============================================================ */
 .footer{
   position:relative;
@@ -942,19 +1193,8 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
   animation:logoFloat 4.5s ease-in-out infinite;
   z-index:1;
 }
-.pp-text{
-  position:relative;
-  font-weight:800;
-  font-size:clamp(14px,2vw,17px);
-  letter-spacing:.2px;
-  z-index:1;
-}
-.pp-sub{
-  position:relative;
-  font-size:clamp(11.5px,1.6vw,13px);
-  color:rgba(255,255,255,.55);
-  z-index:1;
-}
+.pp-text{position:relative;font-weight:800;font-size:clamp(14px,2vw,17px);letter-spacing:.2px;z-index:1;}
+.pp-sub{position:relative;font-size:clamp(11.5px,1.6vw,13px);color:rgba(255,255,255,.55);z-index:1;}
 
 .player-list{
   display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px;
@@ -971,11 +1211,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
   cursor:pointer;
   min-height:68px;
 }
-.pl-item:hover{
-  background:rgba(255,255,255,.09);
-  transform:translateY(-2px);
-  box-shadow:0 14px 30px -20px rgba(0,0,0,.8);
-}
+.pl-item:hover{background:rgba(255,255,255,.09);transform:translateY(-2px);box-shadow:0 14px 30px -20px rgba(0,0,0,.8);}
 .pl-item.active{
   background:linear-gradient(120deg,rgba(37,99,235,.28),rgba(59,130,246,.18));
   border-color:rgba(96,165,250,.55);
@@ -1022,6 +1258,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
   *{animation:none!important;transition:none!important;}
   .reveal{opacity:1;transform:none;}
   html{scroll-behavior:auto;}
+  .orbit-ring, .orbit-counter{animation:none !important;}
 }
 
 /* ============================================================
@@ -1029,7 +1266,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
    ============================================================ */
 @media (max-width:1024px){
   .wrap{padding:0 20px;}
-  .hero{padding:66px 0 50px;}
+  .hero{padding:52px 0 70px;}
   .section{padding:72px 0;}
   .cur-section{padding:80px 0 86px;}
   .cur-shell{padding:24px;}
@@ -1037,33 +1274,46 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
 }
 
 @media (max-width:900px){
-  .hero-stats{grid-template-columns:repeat(2,1fr);padding:22px 8px;gap:6px;}
-  .hstat:nth-child(3)::before{display:none;}
-  .hstat{padding:12px 6px;}
-  .hstat + .hstat::before{top:22%;bottom:22%;}
+  .orbit{
+    --item-size: 24%;
+    --center-size: 30%;
+    --orbit-radius: 34%;
+  }
   .tst-arrow.prev{left:-6px;}
   .tst-arrow.next{right:-6px;}
 }
 
+@media (max-width:720px){
+  .orbit{
+    --item-size: 26%;
+    --center-size: 28%;
+    --orbit-radius: 34%;
+    width: clamp(300px, 88vw, 480px);
+  }
+}
+
 @media (max-width:640px){
+  :root{--header-h:70px;}
   .wrap{padding:0 18px;}
-  .header-inner{height:70px;}
   .brand-logo{width:40px;height:40px;border-radius:12px;}
   .brand-name{font-size:15px;letter-spacing:1.6px;}
   .brand-moto{font-size:8.5px;letter-spacing:1.5px;}
-  .hero{padding:52px 0 40px;}
+
+  .hero{padding:40px 0 60px;}
   .hero h1{letter-spacing:-1.2px;}
+  .hero p.lead{margin-bottom:44px;}
   .section{padding:60px 0;}
   .section-head{margin-bottom:36px;}
 
-  .hero-stats{
-    grid-template-columns:repeat(2,1fr);
-    padding:20px 6px;
-    margin-bottom:34px;
-    border-radius:20px;
+  .orbit{
+    --item-size: 28%;
+    --center-size: 26%;
+    --orbit-radius: 34%;
+    margin-bottom: 44px;
   }
-  .hstat-num{font-size:26px;}
-  .hstat-label{font-size:11.5px;}
+  .sc-icon{width:28px;height:28px;font-size:14px;border-radius:9px;}
+  .sc-label{font-size:9px;}
+  .sc-num{font-size:17px;}
 
   .btn{padding:13px 22px;font-size:14.5px;}
   .btn-play{padding-left:14px;padding-right:26px;gap:11px;}
@@ -1110,22 +1360,30 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
 }
 
 @media (max-width:480px){
+  :root{--header-h:66px;}
   .wrap{padding:0 16px;}
-  .header-inner{height:66px;}
   .brand-logo{width:36px;height:36px;border-radius:11px;}
   .brand-name{font-size:14px;letter-spacing:1.4px;}
   .brand-moto{font-size:8px;letter-spacing:1.2px;}
 
-  .hero{padding:44px 0 34px;}
+  .hero{padding:34px 0 52px;}
   .hero h1{letter-spacing:-1px;max-width:100%;margin-bottom:12px;}
-  .hero p.lead{font-size:14.5px;margin-bottom:30px;}
+  .hero p.lead{font-size:14.5px;margin-bottom:38px;}
   .hero-badge{font-size:11px;padding:7px 13px;letter-spacing:1.2px;}
   .motto{letter-spacing:2.6px;margin-bottom:20px;}
 
-  .hero-stats{padding:18px 4px;margin-bottom:30px;border-radius:18px;}
-  .hstat{padding:10px 4px;}
-  .hstat-num{font-size:22px;letter-spacing:-1px;}
-  .hstat-label{font-size:11px;margin-top:6px;}
+  .orbit{
+    --item-size: 30%;
+    --center-size: 26%;
+    --orbit-radius: 33%;
+    width: clamp(280px, 94vw, 400px);
+    margin-bottom: 38px;
+  }
+  .orbit::before{border-color:rgba(37,99,235,.10);}
+  .sc-icon{width:26px;height:26px;font-size:13px;border-radius:8px;margin-bottom:3px;}
+  .sc-num{font-size:15px;}
+  .sc-label{font-size:8.5px;max-width:90px;}
+  .orbit-logo{width:64%;height:64%;border-radius:20%;}
 
   .section-head h2{letter-spacing:-1px;}
   .section-head p{font-size:14.5px;}
@@ -1163,19 +1421,27 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
 }
 
 @media (max-width:360px){
+  :root{--header-h:62px;}
   .wrap{padding:0 14px;}
+  .brand-logo{width:32px;height:32px;border-radius:10px;}
   .brand-name{font-size:12.5px;letter-spacing:1.1px;}
   .brand-moto{display:none;}
   .hero h1{letter-spacing:-.8px;}
   .hero p.lead{font-size:14px;}
+
+  .orbit{
+    --item-size: 32%;
+    --center-size: 24%;
+    --orbit-radius: 32%;
+  }
+  .sc-icon{width:24px;height:24px;font-size:12px;border-radius:7px;}
+  .sc-num{font-size:14px;}
+  .sc-label{font-size:8px;max-width:80px;}
+
   .btn{padding:12px 18px;font-size:13.5px;}
   .btn-play{padding-left:12px;padding-right:20px;gap:10px;}
   .play-ring{width:26px;height:26px;flex:0 0 26px;}
   .play-tri{border-left-width:8px;border-top-width:5px;border-bottom-width:5px;}
-
-  .hero-stats{padding:16px 4px;}
-  .hstat-num{font-size:20px;}
-  .hstat-label{font-size:10.5px;}
 
   .cur-shell{padding:12px;border-radius:18px;}
   .sem-btn{padding:14px 14px;border-radius:14px;}
@@ -1197,9 +1463,10 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
 }
 
 @media (max-height:480px) and (orientation:landscape){
-  .hero{padding:40px 0 30px;}
+  .hero{padding:36px 0 30px;}
   .hero h1{font-size:32px;margin-bottom:14px;}
   .hero p.lead{margin-bottom:22px;}
+  .orbit{width: clamp(240px, 55vw, 380px);}
   .player-shell{max-height:96vh;padding:12px;}
   .player-frame{max-height:60vh;margin:0 auto;}
   .player-list{padding:12px 2px 2px;}
@@ -1232,8 +1499,8 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
   </defs>
 </svg>
 
-<!-- ========================= HEADER — CLEAN, CENTERED ========================= -->
-<header class="header">
+<!-- ========================= HEADER ========================= -->
+<header class="header" id="siteHeader">
   <div class="wrap header-inner">
     <a class="brand" href="#top" aria-label="ABJ Tutorial home">
       <svg class="logo-svg brand-logo" viewBox="0 0 100 100" aria-hidden="true">
@@ -1254,7 +1521,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
     <div class="hero-glow" aria-hidden="true"></div>
 
     <div class="wrap hero-inner">
-      <span class="hero-badge reveal"><span class="dot"></span> Since 2023 · 2016 E.C.</span>
+      <span class="hero-badge reveal"><span class="dot"></span> Since 2023</span>
 
       <h1 class="reveal d1">Welcome to <span class="grad-text">ABJ Tutorial</span></h1>
 
@@ -1267,23 +1534,66 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
         and achieve higher results.
       </p>
 
-      <!-- Stats above the button -->
-      <div class="hero-stats reveal d3">
-        <div class="hstat">
-          <div class="hstat-num" data-count="1000" data-suffix="+">0</div>
-          <div class="hstat-label">Students taught<br>in a short time</div>
+      <!-- ORBIT — 4 stat circles orbit around central ABJ logo -->
+      <div class="orbit reveal d3" id="heroStats" aria-label="Key statistics">
+        <div class="orbit-ring">
+          <div class="orbit-item orbit-item-1">
+            <div class="orbit-counter">
+              <div class="stat-card">
+                <div class="sc-bg" aria-hidden="true">
+                  <svg viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice"><use href="#abj-logo"/></svg>
+                </div>
+                <div class="sc-icon" aria-hidden="true">🎓</div>
+                <div class="sc-num" data-count="2000" data-suffix="+">0</div>
+                <div class="sc-label">Students taught</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="orbit-item orbit-item-2">
+            <div class="orbit-counter">
+              <div class="stat-card">
+                <div class="sc-bg" aria-hidden="true">
+                  <svg viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice"><use href="#abj-logo"/></svg>
+                </div>
+                <div class="sc-icon" aria-hidden="true">📈</div>
+                <div class="sc-num" data-count="95" data-suffix="%">0</div>
+                <div class="sc-label">Above 3.0 GPA</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="orbit-item orbit-item-3">
+            <div class="orbit-counter">
+              <div class="stat-card">
+                <div class="sc-bg" aria-hidden="true">
+                  <svg viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice"><use href="#abj-logo"/></svg>
+                </div>
+                <div class="sc-icon" aria-hidden="true">🏆</div>
+                <div class="sc-num" data-count="99" data-suffix="%+">0</div>
+                <div class="sc-label">4.0 scorers @ Jimma</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="orbit-item orbit-item-4">
+            <div class="orbit-counter">
+              <div class="stat-card">
+                <div class="sc-bg" aria-hidden="true">
+                  <svg viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice"><use href="#abj-logo"/></svg>
+                </div>
+                <div class="sc-icon" aria-hidden="true">▶️</div>
+                <div class="sc-num" data-count="1" data-suffix="M+">0</div>
+                <div class="sc-label">YouTube views</div>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="hstat">
-          <div class="hstat-num" data-count="95" data-suffix="%">0</div>
-          <div class="hstat-label">Scored above<br>3.0 GPA</div>
-        </div>
-        <div class="hstat">
-          <div class="hstat-num" data-count="99" data-suffix="%+">0</div>
-          <div class="hstat-label">Of 4.0 scorers<br>at Jimma were ABJ</div>
-        </div>
-        <div class="hstat">
-          <div class="hstat-num" data-count="1" data-suffix="M+">0</div>
-          <div class="hstat-label">YouTube views<br>across our lessons</div>
+
+        <div class="orbit-center">
+          <svg class="logo-svg orbit-logo" viewBox="0 0 100 100" aria-hidden="true">
+            <use href="#abj-logo"/>
+          </svg>
         </div>
       </div>
 
@@ -1332,12 +1642,12 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
   </section>
 
   <!-- ========================= TESTIMONIALS ========================= -->
-  <section class="section" id="testimonials">
+  <section class="section tst-section" id="testimonials">
     <div class="wrap">
       <div class="section-head reveal">
         <span class="eyebrow">Real students</span>
         <h2>What Students Say About ABJ Tutorial</h2>
-        <p>Thousands of freshmen have already changed the way they study.</p>
+        <p>Hundreds of freshmen have already changed the way they study.</p>
       </div>
 
       <div class="tst-wrap reveal d1">
@@ -1356,6 +1666,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
         </button>
 
         <div class="tst-dots" id="tstDots"></div>
+        <div class="tst-counter" id="tstCounter">1 / 15</div>
       </div>
     </div>
   </section>
@@ -1715,29 +2026,74 @@ document.addEventListener('keydown', e => {
 buildPlaylist();
 
 /* ============================================================
-   4. TESTIMONIALS
+   4. TESTIMONIALS — 15 items, different subjects
    ============================================================ */
 const TESTIMONIALS = [
   {
-    avatar: "ABJ", from: "Forwarded from 🦋", stars: 5,
-    text: "Bemejemerya thank you so much I gained a lot of things from ABJ tutorial — the tutor, the questions and the exams were really great. It made me so confident. I'm very glad I joined!"
+    avatar: "ABJ", from: "Girum T.", subject: "Maths", stars: 5,
+    text: "The step-by-step maths solutions were a total game-changer for me. I went from barely passing to scoring above 85 on every exam. The tutor explains every single line — no shortcuts, no confusion."
   },
   {
-    avatar: "ABJ", from: "Forwarded from 아스텔", stars: 5,
-    text: "Your channel has been a game changer! You simplify complex subjects and make them understandable. Previous exams with answers helped me a lot. Keep up the great work! 😊"
+    avatar: "ABJ", from: "Hana B.", subject: "Physics", stars: 5,
+    text: "I honestly hated Physics before I joined ABJ. Now motion and forces actually make sense. The visual explanations in the video tutorials are amazing — I finally understand what I'm calculating."
   },
   {
-    avatar: "ABJ", from: "Forwarded from Freshman @ Jimma", stars: 5,
-    text: "I used to struggle with Physics and Maths. After following the step-by-step solutions here, everything finally clicked. I finished my first semester with a 3.7 GPA. Thank you ABJ!"
+    avatar: "ABJ", from: "Bereket A.", subject: "Chemistry", stars: 5,
+    text: "Organic chemistry used to be my nightmare. ABJ's summarized notes broke it down so simply that I finished the entire unit in one weekend. I scored the highest mark in my class."
   },
   {
-    avatar: "ABJ", from: "Forwarded from 📚 Study Group", stars: 5,
-    text: "The summarized text notes are gold. I could revise an entire unit in 20 minutes on the way to campus. Honestly the best investment I made this year."
+    avatar: "ABJ", from: "Selam G.", subject: "Biology", stars: 5,
+    text: "The biology notes are incredible — diagrams are clean and the explanations connect everything together. I used them for my mid-term and got 92%. I'm recommending ABJ to every freshman I know."
+  },
+  {
+    avatar: "ABJ", from: "Yonas H.", subject: "Civics", stars: 5,
+    text: "Civics felt boring until I watched the ABJ videos on deontological ethics. The real-world examples made everything click. I actually enjoyed studying for this exam for the first time."
+  },
+  {
+    avatar: "ABJ", from: "Meron K.", subject: "English", stars: 5,
+    text: "Communicative English was my weakest area. After following ABJ's lessons and doing the past exam questions, I improved my writing and comprehension dramatically. My confidence has grown so much."
+  },
+  {
+    avatar: "ABJ", from: "Dawit M.", subject: "Anthropology", stars: 5,
+    text: "Anthropology seemed like a lot to memorize, but ABJ's concise notes made it feel approachable. I could actually understand the concepts instead of just memorizing. Highly recommended."
+  },
+  {
+    avatar: "ABJ", from: "Feven S.", subject: "Psychology", stars: 5,
+    text: "The psychology lessons were some of the best I've ever had. The way the tutor connects theory to everyday life is brilliant. I now understand myself and others better — and I aced the exam."
+  },
+  {
+    avatar: "ABJ", from: "Henok D.", subject: "Geography", stars: 5,
+    text: "Geography is full of maps and long concepts, but ABJ's visual approach made it manageable. I studied the entire semester in two weeks with the summarized notes and passed with a strong grade."
+  },
+  {
+    avatar: "ABJ", from: "Bethlehem W.", subject: "Economics", stars: 5,
+    text: "Economics finally clicked when I saw the ABJ tutor break down market theory with real examples. The past exam solutions showed me exactly what to expect. I went from a C to an A."
+  },
+  {
+    avatar: "ABJ", from: "Nahom Z.", subject: "C++", stars: 5,
+    text: "C++ was terrifying as my first programming language. ABJ made it feel doable — from variables to loops, everything was explained clearly. I now write small programs on my own. Thank you ABJ!"
+  },
+  {
+    avatar: "ABJ", from: "Rediet A.", subject: "Logic", stars: 5,
+    text: "Logic and Critical Thinking was my favourite course this semester, thanks to ABJ. The arguments and fallacies are explained so well. It sharpened how I think about everything, not just exams."
+  },
+  {
+    avatar: "ABJ", from: "Kaleb F.", subject: "Applied Maths", stars: 5,
+    text: "Applied Mathematics I nearly broke me last year. I joined ABJ, followed the tutorials and past exams, and this time around I scored an A. Easily the best investment I've made in my studies."
+  },
+  {
+    avatar: "ABJ", from: "Sara L.", subject: "Global Trend", stars: 5,
+    text: "Global Trend felt disconnected from my life until ABJ connected it to current events. The lessons are engaging and the notes are incredibly well organized. I finally enjoy keeping up with the news."
+  },
+  {
+    avatar: "ABJ", from: "Mikiyas T.", subject: "Entrepreneurship", stars: 5,
+    text: "Entrepreneurship inspired me to actually start something. The ABJ tutor walks through real business ideas and pitch examples. I pitched my first idea to my class and got amazing feedback. Truly empowering."
   }
 ];
 
-const track   = document.getElementById('tstTrack');
-const dotsBox = document.getElementById('tstDots');
+const track    = document.getElementById('tstTrack');
+const dotsBox  = document.getElementById('tstDots');
+const counter  = document.getElementById('tstCounter');
 let index = 0;
 let autoTimer = null;
 
@@ -1750,8 +2106,9 @@ TESTIMONIALS.forEach((t, i) => {
     <div class="tst-card">
       <div class="tst-top">
         <div class="tst-avatar">${t.avatar}</div>
-        <div>
+        <div class="tst-who">
           <div class="tst-from">${t.from}</div>
+          <span class="tst-subject">${t.subject}</span>
           <div class="tst-stars" aria-label="${t.stars} out of 5 stars">${starRow(t.stars)}</div>
         </div>
       </div>
@@ -1767,11 +2124,16 @@ TESTIMONIALS.forEach((t, i) => {
   dotsBox.appendChild(dot);
 });
 
+function updateCounter(){
+  if (counter) counter.textContent = (index + 1) + ' / ' + TESTIMONIALS.length;
+}
+
 function goTo(i){
   const total = TESTIMONIALS.length;
   index = (i + total) % total;
   track.style.transform = `translateX(-${index * 100}%)`;
   [...dotsBox.children].forEach((d, k) => d.classList.toggle('active', k === index));
+  updateCounter();
 }
 function next(){ goTo(index + 1); }
 function prev(){ goTo(index - 1); }
@@ -1797,6 +2159,7 @@ tstWrap.addEventListener('touchend', e => {
   startAuto();
 }, {passive:true});
 
+updateCounter();
 startAuto();
 
 /* ============================================================
@@ -1805,7 +2168,7 @@ startAuto();
 function animateCount(el){
   const target = parseInt(el.dataset.count, 10);
   const suffix = el.dataset.suffix || '';
-  const duration = 1500;
+  const duration = 1600;
   const start = performance.now();
 
   function frame(now){
@@ -1821,7 +2184,8 @@ function animateCount(el){
    6. SCROLL REVEAL + STAT TRIGGER
    ============================================================ */
 const revealEls = document.querySelectorAll('.reveal');
-const statEls   = document.querySelectorAll('.hstat-num');
+const statEls   = document.querySelectorAll('.sc-num');
+const orbitEl   = document.getElementById('heroStats');
 let statsDone = false;
 
 const io = new IntersectionObserver((entries) => {
@@ -1845,14 +2209,18 @@ const statObserver = new IntersectionObserver((entries) => {
   });
 }, { threshold: 0.35 });
 
-if (statEls.length) statObserver.observe(statEls[0].closest('.hero-stats'));
+if (statEls.length && orbitEl) statObserver.observe(orbitEl);
 
 /* ============================================================
-   7. FLOATING CTA
+   7. FLOATING CTA + HEADER SHADOW
    ============================================================ */
-const floatCta = document.getElementById('floatCta');
+const floatCta   = document.getElementById('floatCta');
+const siteHeader = document.getElementById('siteHeader');
+
 window.addEventListener('scroll', () => {
-  floatCta.classList.toggle('show', window.scrollY > 520);
+  const y = window.scrollY;
+  floatCta.classList.toggle('show', y > 520);
+  siteHeader.classList.toggle('scrolled', y > 6);
 }, { passive:true });
 </script>
 
