@@ -80,14 +80,16 @@ body{margin:0;font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:li
 .settings{display:grid;gap:16px;max-width:560px;}
 .field{display:flex;flex-direction:column;gap:8px;}
 .field label{font-size:11.5px;font-weight:800;letter-spacing:1.3px;text-transform:uppercase;color:rgba(255,255,255,.6);}
-.field input{padding:14px 16px;border-radius:14px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);color:#fff;font-size:15px;font-weight:600;outline:none;}
-.field input:focus{border-color:var(--gold-1);background:rgba(255,255,255,.12);}
+.field input,.field textarea,.field select{padding:14px 16px;border-radius:14px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);color:#fff;font-size:15px;font-weight:600;outline:none;font-family:inherit;}
+.field input:focus,.field textarea:focus,.field select:focus{border-color:var(--gold-1);background:rgba(255,255,255,.12);}
+.field textarea{min-height:100px;resize:vertical;line-height:1.5;}
+.field select option{background:#0b1220;color:#fff;}
 
 .admin-list{display:grid;gap:10px;margin-top:22px;}
 .admin-row{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 18px;border-radius:14px;background:linear-gradient(135deg,rgba(255,255,255,.05),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.1);}
 .admin-row .who{min-width:0;flex:1;}
 .admin-row .who .u{font-weight:800;font-size:14px;letter-spacing:-.2px;}
-.admin-row .who .n{font-size:11.5px;font-weight:700;color:rgba(255,255,255,.55);margin-top:3px;}
+.admin-row .who .n{font-size:11.5px;font-weight:700;color:rgba(255,255,255,.55);margin-top:3px;overflow-wrap:anywhere;}
 .super-pill{display:inline-block;margin-left:8px;padding:2px 8px;border-radius:999px;font-size:9.5px;font-weight:800;letter-spacing:1.1px;text-transform:uppercase;background:linear-gradient(135deg,#f7e07a,#d4af37);color:#0b1220;}
 
 .toast{position:fixed;top:20px;right:20px;padding:14px 20px;border-radius:12px;font-weight:800;font-size:13.5px;color:#fff;box-shadow:0 20px 40px -14px rgba(0,0,0,.6);transform:translateY(-120%);transition:transform .35s var(--bounce);z-index:100;}
@@ -150,6 +152,8 @@ body{margin:0;font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:li
       <button class="tab active" data-tab="pending" type="button">⏳ Pending</button>
       <button class="tab" data-tab="approved" type="button">✅ Approved</button>
       <button class="tab" data-tab="rejected" type="button">❌ Rejected</button>
+      <button class="tab super-only" data-tab="videos" type="button" style="display:none">🎬 Videos</button>
+      <button class="tab super-only" data-tab="testimonials" type="button" style="display:none">💬 Testimonials</button>
       <button class="tab super-only" data-tab="admins" type="button" style="display:none">👥 Admins</button>
       <button class="tab super-only" data-tab="settings" type="button" style="display:none">⚙️ Settings</button>
     </div>
@@ -158,50 +162,75 @@ body{margin:0;font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:li
     <div class="tab-content" id="tab-approved"><div class="list" id="listApproved"></div></div>
     <div class="tab-content" id="tab-rejected"><div class="list" id="listRejected"></div></div>
 
+    <!-- VIDEOS -->
+    <div class="tab-content" id="tab-videos">
+      <div class="settings" style="max-width:640px">
+        <div class="field">
+          <label>Video Title</label>
+          <input type="text" id="vidTitle" placeholder="e.g. Maths Chapter 1 — Set Theory" maxlength="200" />
+        </div>
+        <div class="field">
+          <label>YouTube URL or Video ID</label>
+          <input type="text" id="vidUrl" placeholder="https://youtu.be/xxxx or xxxx" maxlength="500" />
+        </div>
+        <div class="field">
+          <label>Tag / Subject (short)</label>
+          <input type="text" id="vidTag" placeholder="Maths" maxlength="40" />
+        </div>
+        <button class="btn btn-add" id="addVideoBtn" type="button">+ Add Video</button>
+      </div>
+      <div class="admin-list" id="videoList"></div>
+    </div>
+
+    <!-- TESTIMONIALS -->
+    <div class="tab-content" id="tab-testimonials">
+      <div class="settings" style="max-width:640px">
+        <div class="field">
+          <label>Student Name</label>
+          <input type="text" id="tstName" placeholder="e.g. Girum T." maxlength="64" />
+        </div>
+        <div class="field">
+          <label>Subject</label>
+          <input type="text" id="tstSubject" placeholder="Maths" maxlength="64" />
+        </div>
+        <div class="field">
+          <label>Stars (1–5)</label>
+          <select id="tstStars">
+            <option value="5" selected>5 ★★★★★</option>
+            <option value="4">4 ★★★★</option>
+            <option value="3">3 ★★★</option>
+            <option value="2">2 ★★</option>
+            <option value="1">1 ★</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Testimonial Text</label>
+          <textarea id="tstText" placeholder="What the student said..." maxlength="1000"></textarea>
+        </div>
+        <button class="btn btn-add" id="addTstBtn" type="button">+ Add Testimonial</button>
+      </div>
+      <div class="admin-list" id="tstList"></div>
+    </div>
+
+    <!-- SETTINGS -->
     <div class="tab-content" id="tab-settings">
       <div class="settings">
-        <div class="field">
-          <label>Registration Fee (ETB)</label>
-          <input type="number" id="setFee" min="1" step="1" />
-        </div>
-        <div class="field">
-          <label>Telebirr Number</label>
-          <input type="text" id="setTelebirr" maxlength="32" />
-        </div>
-        <div class="field">
-          <label>CBE Account</label>
-          <input type="text" id="setCBE" maxlength="32" />
-        </div>
-        <div class="field">
-          <label>mPesa Number</label>
-          <input type="text" id="setMpesa" maxlength="32" />
-        </div>
-        <div class="field">
-          <label>Contact Telegram</label>
-          <input type="text" id="setContactUser" maxlength="64" />
-        </div>
-        <div class="field">
-          <label>Contact Phone</label>
-          <input type="text" id="setContactPhone" maxlength="32" />
-        </div>
+        <div class="field"><label>Registration Fee (ETB)</label><input type="number" id="setFee" min="1" step="1" /></div>
+        <div class="field"><label>Telebirr Number</label><input type="text" id="setTelebirr" maxlength="32" /></div>
+        <div class="field"><label>CBE Account</label><input type="text" id="setCBE" maxlength="32" /></div>
+        <div class="field"><label>mPesa Number</label><input type="text" id="setMpesa" maxlength="32" /></div>
+        <div class="field"><label>Contact Telegram</label><input type="text" id="setContactUser" maxlength="64" /></div>
+        <div class="field"><label>Contact Phone</label><input type="text" id="setContactPhone" maxlength="32" /></div>
         <button class="btn btn-gold" id="saveSettings" type="button" style="padding:14px;font-size:14px">Save Settings</button>
       </div>
     </div>
 
+    <!-- ADMINS -->
     <div class="tab-content" id="tab-admins">
       <div class="settings" style="max-width:640px">
-        <div class="field">
-          <label>New Admin Username</label>
-          <input type="text" id="newAdminUser" placeholder="e.g. dagim" maxlength="24" />
-        </div>
-        <div class="field">
-          <label>New Admin Full Name (optional)</label>
-          <input type="text" id="newAdminName" placeholder="Dagim Desalegn" maxlength="64" />
-        </div>
-        <div class="field">
-          <label>New Admin Password</label>
-          <input type="password" id="newAdminPass" placeholder="At least 6 characters" />
-        </div>
+        <div class="field"><label>New Admin Username</label><input type="text" id="newAdminUser" placeholder="e.g. dagim" maxlength="24" /></div>
+        <div class="field"><label>New Admin Full Name (optional)</label><input type="text" id="newAdminName" placeholder="Dagim Desalegn" maxlength="64" /></div>
+        <div class="field"><label>New Admin Password</label><input type="password" id="newAdminPass" placeholder="At least 6 characters" /></div>
         <button class="btn btn-add" id="addAdminBtn" type="button">+ Add Admin</button>
       </div>
       <div class="admin-list" id="adminList"></div>
@@ -229,7 +258,7 @@ const logoutBtn = document.getElementById('logoutBtn');
 const toast = document.getElementById('toast');
 const welcomeLine = document.getElementById('welcomeLine');
 
-/* -------- Auth -------- */
+/* ---------- AUTH ---------- */
 loginBtn.addEventListener('click', doLogin);
 adminPass.addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
 adminUser.addEventListener('keydown', e => { if (e.key === 'Enter') adminPass.focus(); });
@@ -250,9 +279,7 @@ async function doLogin(){
       loginError.classList.add('show');
       return;
     }
-    state.token = data.token;
-    state.role = data.role;
-    state.username = data.username;
+    state.token = data.token; state.role = data.role; state.username = data.username;
     sessionStorage.setItem('abj_admin_token', state.token);
     sessionStorage.setItem('abj_admin_role', state.role);
     sessionStorage.setItem('abj_admin_user', state.username);
@@ -266,9 +293,7 @@ async function doLogin(){
 }
 
 logoutBtn.addEventListener('click', () => {
-  sessionStorage.removeItem('abj_admin_token');
-  sessionStorage.removeItem('abj_admin_role');
-  sessionStorage.removeItem('abj_admin_user');
+  sessionStorage.clear();
   state.token = ''; state.role = ''; state.username = '';
   loginView.style.display = 'block';
   dashView.style.display = 'none';
@@ -289,7 +314,7 @@ function showDash(){
 
 if (state.token) showDash();
 
-/* -------- Tabs -------- */
+/* ---------- TABS ---------- */
 let currentTab = 'pending';
 document.querySelectorAll('.tab').forEach(tab => {
   tab.addEventListener('click', () => {
@@ -301,9 +326,12 @@ document.querySelectorAll('.tab').forEach(tab => {
     if (['pending', 'approved', 'rejected'].includes(currentTab)) loadTab(currentTab);
     if (currentTab === 'settings') loadSettings();
     if (currentTab === 'admins') loadAdmins();
+    if (currentTab === 'videos') loadVideos();
+    if (currentTab === 'testimonials') loadTestimonials();
   });
 });
 
+/* ---------- REGISTRATIONS ---------- */
 async function loadTab(status){
   const boxMap = { pending: 'listPending', approved: 'listApproved', rejected: 'listRejected' };
   const box = document.getElementById(boxMap[status]);
@@ -325,7 +353,7 @@ async function updateCounts(){
       fetch('/api/admin-list?status=approved', { headers: authHeaders() }).then(r => r.json()),
       fetch('/api/admin-list?status=rejected', { headers: authHeaders() }).then(r => r.json()),
     ]);
-    document.getElementById('stTotal').textContent = (p.items?.length || 0) + (a.items?.length || 0) + (r.items?.length || 0);
+    document.getElementById('stTotal').textContent = (p.items?.length||0) + (a.items?.length||0) + (r.items?.length||0);
     document.getElementById('stPending').textContent = p.items?.length || 0;
     document.getElementById('stApproved').textContent = a.items?.length || 0;
     document.getElementById('stRejected').textContent = r.items?.length || 0;
@@ -350,13 +378,10 @@ function render(box, status, items){
     const invite = r.invite_link
       ? `<a class="invite-link" href="${esc(r.invite_link)}" target="_blank" rel="noopener">🔗 ${esc(r.invite_link)}</a>` : '';
     const reason = r.rejection_reason
-      ? `<div style="margin-top:10px;padding:10px 14px;border-radius:10px;background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);font-size:13px;"><strong style="color:#f87171;">Rejection reason:</strong> ${esc(r.rejection_reason)}</div>` : '';
+      ? `<div style="margin-top:10px;padding:10px 14px;border-radius:10px;background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);font-size:13px;"><strong style="color:#f87171;">Reason:</strong> ${esc(r.rejection_reason)}</div>` : '';
     return `<div class="item">
       <div class="item-head">
-        <div>
-          <div class="item-name">${esc(r.full_name)}</div>
-          <div class="item-sub">${esc(r.public_id)}</div>
-        </div>
+        <div><div class="item-name">${esc(r.full_name)}</div><div class="item-sub">${esc(r.public_id)}</div></div>
         <span class="pill ${r.status}">${r.status}</span>
       </div>
       <div class="grid">
@@ -370,9 +395,7 @@ function render(box, status, items){
         <div class="pair"><span class="k">Submitted</span><span class="v">${created}</span></div>
         ${r.status === 'approved' ? `<div class="pair"><span class="k">Approved</span><span class="v">${approved}</span></div>` : ''}
       </div>
-      ${reason}
-      ${invite}
-      ${actions}
+      ${reason}${invite}${actions}
     </div>`;
   }).join('');
 
@@ -388,14 +411,10 @@ async function handleAction(act, id, btn){
   try {
     let res, data;
     if (act === 'approve'){
-      res = await fetch('/api/admin-approve', {
-        method: 'POST', headers: authHeaders(true), body: JSON.stringify({ id })
-      });
+      res = await fetch('/api/admin-approve', { method: 'POST', headers: authHeaders(true), body: JSON.stringify({ id }) });
     } else {
       const reason = prompt('Reason for rejection (optional):');
-      res = await fetch('/api/admin-reject', {
-        method: 'POST', headers: authHeaders(true), body: JSON.stringify({ id, reason: reason || '' })
-      });
+      res = await fetch('/api/admin-reject', { method: 'POST', headers: authHeaders(true), body: JSON.stringify({ id, reason: reason || '' }) });
     }
     data = await res.json();
     if (!res.ok) { toastMsg(data.error || 'Action failed.', 'err'); return; }
@@ -405,12 +424,128 @@ async function handleAction(act, id, btn){
   } catch {
     toastMsg('Network error.', 'err');
   } finally {
-    btn.disabled = false;
-    btn.textContent = original;
+    btn.disabled = false; btn.textContent = original;
   }
 }
 
-/* -------- Settings -------- */
+/* ---------- VIDEOS ---------- */
+async function loadVideos(){
+  const box = document.getElementById('videoList');
+  box.innerHTML = '<div class="empty"><div class="icon">⏳</div><p>Loading...</p></div>';
+  try {
+    const res = await fetch('/api/admin-videos', { headers: authHeaders() });
+    if (!res.ok) { box.innerHTML = ''; return; }
+    const data = await res.json();
+    const items = data.items || [];
+    if (!items.length){
+      box.innerHTML = '<div class="empty"><div class="icon">🎬</div><p>No videos yet. Add one above.</p></div>';
+      return;
+    }
+    box.innerHTML = items.map(v => `
+      <div class="admin-row">
+        <div class="who">
+          <div class="u">${esc(v.title)}</div>
+          <div class="n">${esc(v.tag)} · ${esc(v.url)}</div>
+        </div>
+        <button class="btn btn-danger" data-del-vid="${v.id}">Delete</button>
+      </div>`).join('');
+    box.querySelectorAll('[data-del-vid]').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        if (!confirm('Delete this video?')) return;
+        const r = await fetch('/api/admin-videos?id=' + encodeURIComponent(btn.dataset.delVid), { method: 'DELETE', headers: authHeaders() });
+        if (r.ok) { toastMsg('✅ Video removed.', 'ok'); loadVideos(); }
+        else toastMsg('Failed.', 'err');
+      });
+    });
+  } catch {
+    box.innerHTML = '<div class="empty"><div class="icon">⚠️</div><p>Network error.</p></div>';
+  }
+}
+
+document.getElementById('addVideoBtn').addEventListener('click', async () => {
+  const title = document.getElementById('vidTitle').value.trim();
+  const url = document.getElementById('vidUrl').value.trim();
+  const tag = document.getElementById('vidTag').value.trim() || 'Lesson';
+  if (!title || !url) { toastMsg('Title and URL required.', 'err'); return; }
+  const btn = document.getElementById('addVideoBtn');
+  const orig = btn.textContent;
+  btn.disabled = true; btn.textContent = 'Adding...';
+  try {
+    const res = await fetch('/api/admin-videos', {
+      method: 'POST', headers: authHeaders(true),
+      body: JSON.stringify({ title, url, tag })
+    });
+    const data = await res.json();
+    if (!res.ok) { toastMsg(data.error || 'Failed.', 'err'); return; }
+    toastMsg('✅ Video added.', 'ok');
+    document.getElementById('vidTitle').value = '';
+    document.getElementById('vidUrl').value = '';
+    document.getElementById('vidTag').value = '';
+    loadVideos();
+  } catch { toastMsg('Network error.', 'err'); }
+  finally { btn.disabled = false; btn.textContent = orig; }
+});
+
+/* ---------- TESTIMONIALS ---------- */
+async function loadTestimonials(){
+  const box = document.getElementById('tstList');
+  box.innerHTML = '<div class="empty"><div class="icon">⏳</div><p>Loading...</p></div>';
+  try {
+    const res = await fetch('/api/admin-testimonials', { headers: authHeaders() });
+    if (!res.ok) { box.innerHTML = ''; return; }
+    const data = await res.json();
+    const items = data.items || [];
+    if (!items.length){
+      box.innerHTML = '<div class="empty"><div class="icon">💬</div><p>No testimonials yet. Add one above.</p></div>';
+      return;
+    }
+    box.innerHTML = items.map(t => `
+      <div class="admin-row" style="align-items:flex-start">
+        <div class="who">
+          <div class="u">${esc(t.student_name)} — ${esc(t.subject)} ${'★'.repeat(t.stars)}</div>
+          <div class="n" style="line-height:1.5;margin-top:6px">${esc(t.text)}</div>
+        </div>
+        <button class="btn btn-danger" data-del-tst="${t.id}">Delete</button>
+      </div>`).join('');
+    box.querySelectorAll('[data-del-tst]').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        if (!confirm('Delete this testimonial?')) return;
+        const r = await fetch('/api/admin-testimonials?id=' + encodeURIComponent(btn.dataset.delTst), { method: 'DELETE', headers: authHeaders() });
+        if (r.ok) { toastMsg('✅ Removed.', 'ok'); loadTestimonials(); }
+        else toastMsg('Failed.', 'err');
+      });
+    });
+  } catch {
+    box.innerHTML = '<div class="empty"><div class="icon">⚠️</div><p>Network error.</p></div>';
+  }
+}
+
+document.getElementById('addTstBtn').addEventListener('click', async () => {
+  const student_name = document.getElementById('tstName').value.trim();
+  const subject = document.getElementById('tstSubject').value.trim();
+  const text = document.getElementById('tstText').value.trim();
+  const stars = document.getElementById('tstStars').value;
+  if (!student_name || !subject || !text) { toastMsg('All fields required.', 'err'); return; }
+  const btn = document.getElementById('addTstBtn');
+  const orig = btn.textContent;
+  btn.disabled = true; btn.textContent = 'Adding...';
+  try {
+    const res = await fetch('/api/admin-testimonials', {
+      method: 'POST', headers: authHeaders(true),
+      body: JSON.stringify({ student_name, subject, text, stars })
+    });
+    const data = await res.json();
+    if (!res.ok) { toastMsg(data.error || 'Failed.', 'err'); return; }
+    toastMsg('✅ Testimonial added.', 'ok');
+    document.getElementById('tstName').value = '';
+    document.getElementById('tstSubject').value = '';
+    document.getElementById('tstText').value = '';
+    loadTestimonials();
+  } catch { toastMsg('Network error.', 'err'); }
+  finally { btn.disabled = false; btn.textContent = orig; }
+});
+
+/* ---------- SETTINGS ---------- */
 async function loadSettings(){
   try {
     const res = await fetch('/api/admin-settings', { headers: authHeaders() });
@@ -445,14 +580,11 @@ document.getElementById('saveSettings').addEventListener('click', async () => {
     const data = await res.json();
     if (!res.ok) { toastMsg(data.error || 'Save failed.', 'err'); return; }
     toastMsg('✅ Settings saved.', 'ok');
-  } catch {
-    toastMsg('Network error.', 'err');
-  } finally {
-    btn.disabled = false; btn.textContent = orig;
-  }
+  } catch { toastMsg('Network error.', 'err'); }
+  finally { btn.disabled = false; btn.textContent = orig; }
 });
 
-/* -------- Admins -------- */
+/* ---------- ADMINS ---------- */
 async function loadAdmins(){
   const listBox = document.getElementById('adminList');
   listBox.innerHTML = '<div class="empty"><div class="icon">⏳</div><p>Loading...</p></div>';
@@ -475,8 +607,7 @@ async function loadAdmins(){
     listBox.querySelectorAll('[data-del]').forEach(btn => {
       btn.addEventListener('click', async () => {
         if (!confirm('Delete this admin?')) return;
-        const id = btn.dataset.del;
-        const r = await fetch('/api/admin-admins?id=' + encodeURIComponent(id), { method: 'DELETE', headers: authHeaders() });
+        const r = await fetch('/api/admin-admins?id=' + encodeURIComponent(btn.dataset.del), { method: 'DELETE', headers: authHeaders() });
         if (r.ok) { toastMsg('✅ Admin removed.', 'ok'); loadAdmins(); }
         else toastMsg('Failed.', 'err');
       });
@@ -506,14 +637,11 @@ document.getElementById('addAdminBtn').addEventListener('click', async () => {
     document.getElementById('newAdminName').value = '';
     document.getElementById('newAdminPass').value = '';
     loadAdmins();
-  } catch {
-    toastMsg('Network error.', 'err');
-  } finally {
-    btn.disabled = false; btn.textContent = orig;
-  }
+  } catch { toastMsg('Network error.', 'err'); }
+  finally { btn.disabled = false; btn.textContent = orig; }
 });
 
-/* -------- Helpers -------- */
+/* ---------- HELPERS ---------- */
 function authHeaders(isJson){
   const h = { Authorization: 'Bearer ' + state.token };
   if (isJson) h['Content-Type'] = 'application/json';

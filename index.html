@@ -364,10 +364,33 @@ section{scroll-margin-top:calc(var(--header-h) + 20px);}
 .loading-spinner::before{width:56px;height:56px;border:3px solid rgba(59,130,246,.2);border-top-color:#3b82f6;border-right-color:#a855f7;animation:spin 1s linear infinite;}
 .loading-spinner::after{width:8px;height:8px;background:linear-gradient(135deg,#3b82f6,#a855f7);box-shadow:0 0 18px 2px rgba(59,130,246,.8);}
 @keyframes spin{to{transform:rotate(360deg);}}
+.player-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;padding:24px 4px 6px;margin-top:16px;border-top:1px solid rgba(255,255,255,.08);position:relative;}
+.player-list::before{content:'Lessons';position:absolute;top:-10px;left:4px;padding:0 10px;background:#0b1220;color:rgba(255,255,255,.5);font-size:10.5px;font-weight:800;letter-spacing:1.6px;text-transform:uppercase;}
+.pl-item{position:relative;display:flex;gap:13px;align-items:center;text-align:left;padding:12px;border-radius:16px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);transition:background .28s var(--ease),border-color .28s var(--ease),transform .4s var(--bounce),box-shadow .3s var(--ease);cursor:pointer;min-height:76px;overflow:hidden;animation:plItemIn .5s var(--bounce) both;}
+.pl-item:nth-child(1){animation-delay:.05s;}
+.pl-item:nth-child(2){animation-delay:.12s;}
+.pl-item:nth-child(3){animation-delay:.19s;}
+@keyframes plItemIn{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:none;}}
+.pl-item::before{content:'';position:absolute;inset:0;border-radius:16px;background:linear-gradient(135deg,rgba(59,130,246,.15),rgba(168,85,247,.1));opacity:0;transition:opacity .3s var(--ease);pointer-events:none;}
+.pl-item > *{position:relative;z-index:1;}
+.pl-item:hover{background:rgba(255,255,255,.09);transform:translateY(-4px) scale(1.015);border-color:rgba(96,165,250,.35);box-shadow:0 18px 36px -22px rgba(59,130,246,.7);}
+.pl-item:hover::before{opacity:1;}
+.pl-item.active{background:linear-gradient(120deg,rgba(37,99,235,.32),rgba(59,130,246,.2));border-color:rgba(96,165,250,.6);box-shadow:0 0 32px -8px rgba(59,130,246,.7),inset 0 1px 0 rgba(255,255,255,.1);}
+.pl-item.active::after{content:'▸ Playing';position:absolute;top:8px;right:10px;font-size:9.5px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:#bfdbfe;background:rgba(59,130,246,.3);padding:3px 8px;border-radius:999px;}
+.pl-thumb{position:relative;width:88px;height:56px;flex:0 0 88px;border-radius:12px;overflow:hidden;background:#111c33;display:grid;place-items:center;border:1px solid rgba(255,255,255,.08);transition:transform .4s var(--bounce);}
+.pl-thumb img{width:100%;height:100%;object-fit:cover;transition:transform .4s var(--ease);}
+.pl-item:hover .pl-thumb img{transform:scale(1.08);}
+.pl-ph{font-weight:800;font-size:18px;color:#60a5fa;}
+.pl-play{position:absolute;inset:0;display:grid;place-items:center;background:radial-gradient(circle,rgba(0,0,0,.55),rgba(0,0,0,.2));opacity:0;transition:opacity .28s var(--ease);}
+.pl-play::before{content:'';width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#3b82f6,#2563eb);position:absolute;box-shadow:0 10px 24px -8px rgba(37,99,235,.9);transform:scale(.7);transition:transform .35s var(--bounce);}
+.pl-item:hover .pl-play,.pl-item.active .pl-play{opacity:1;}
+.pl-item:hover .pl-play::before,.pl-item.active .pl-play::before{transform:scale(1);}
+.pl-play svg{position:relative;width:20px;height:20px;color:#fff;margin-left:2px;z-index:1;}
+.pl-info{min-width:0;flex:1;}
+.pl-title{color:#fff;font-size:13px;font-weight:700;line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;overflow-wrap:anywhere;}
+.pl-tag{display:inline-block;color:rgba(255,255,255,.5);font-size:10px;font-weight:800;letter-spacing:1px;text-transform:uppercase;margin-top:5px;background:rgba(255,255,255,.06);padding:2px 8px;border-radius:999px;}
 
-/* ============================================================
-   REGISTRATION
-   ============================================================ */
+/* REGISTRATION */
 .reg-modal{position:fixed;inset:0;z-index:150;background:rgba(5,9,18,.86);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);display:flex;align-items:center;justify-content:center;padding:14px;padding-top:calc(14px + env(safe-area-inset-top));padding-bottom:calc(14px + env(safe-area-inset-bottom));opacity:0;visibility:hidden;transition:opacity .35s var(--ease),visibility .35s var(--ease);overflow-y:auto;-ms-overflow-style:none;scrollbar-width:none;}
 .reg-modal::-webkit-scrollbar{display:none;width:0;height:0;}
 .reg-modal.open{opacity:1;visibility:visible;}
@@ -375,7 +398,6 @@ section{scroll-margin-top:calc(var(--header-h) + 20px);}
 .reg-shell::-webkit-scrollbar{display:none;width:0;height:0;}
 .reg-modal.open .reg-shell{transform:translateY(0) scale(1);opacity:1;}
 .reg-shell::before{content:'';position:absolute;inset:-2px;border-radius:26px;padding:2px;background:conic-gradient(from 0deg,#2563eb,#0ea5e9,#a855f7,#f7e07a,#d4af37,#ec4899,#2563eb);background-size:200% 200%;animation:borderSpin 6s linear infinite;-webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;z-index:-1;}
-
 .reg-head{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:8px;margin-bottom:18px;padding:4px 44px 16px;border-bottom:1px solid var(--line);position:relative;}
 .reg-logo{width:54px;height:54px;border-radius:15px;overflow:hidden;flex:0 0 auto;box-shadow:0 12px 26px -10px rgba(212,175,55,.75),0 0 0 2px rgba(255,255,255,.95),0 0 0 3.5px rgba(212,175,55,.4);animation:logoFloat 5s ease-in-out infinite;}
 .reg-head h3{margin:2px 0 0;font-size:17px;font-weight:800;letter-spacing:-.3px;color:var(--ink);}
@@ -383,7 +405,6 @@ section{scroll-margin-top:calc(var(--header-h) + 20px);}
 .reg-head p{margin:2px 0 0;font-size:10px;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;color:var(--blue);}
 .reg-close{position:absolute;top:0;right:0;width:34px;height:34px;border-radius:10px;flex:0 0 34px;background:#eaf1ff;color:#2563eb;display:grid;place-items:center;font-size:14px;font-weight:800;transition:background .2s var(--ease),transform .3s var(--bounce);z-index:3;}
 .reg-close:hover{background:linear-gradient(135deg,#ef4444,#dc2626);color:#fff;transform:rotate(90deg);}
-
 .reg-progress{display:flex;gap:5px;margin-bottom:16px;}
 .reg-progress span{flex:1;height:4px;border-radius:999px;background:#e2eaf7;transition:background .35s var(--ease);}
 .reg-progress span.done{background:linear-gradient(90deg,#2563eb,#6366f1);}
@@ -409,20 +430,17 @@ section{scroll-margin-top:calc(var(--header-h) + 20px);}
 .reg-opt .rc{font-size:10px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--muted);}
 .reg-opt:hover{border-color:#c9d9f2;transform:translateY(-2px);box-shadow:0 14px 26px -18px rgba(15,23,42,.4);}
 .reg-opt.selected{border-color:transparent;background:linear-gradient(135deg,#eaf1ff,#dbeafe);box-shadow:0 14px 30px -18px rgba(37,99,235,.8),inset 0 0 0 2px #2563eb;transform:translateY(-2px);}
-
 .reg-summary{background:linear-gradient(135deg,#f8fbff,#ffffff);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin-bottom:14px;overflow:hidden;}
 .reg-summary .row{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:6px 0;font-size:12.5px;border-bottom:1px dashed var(--line);}
 .reg-summary .row:first-child{padding-top:0;}
 .reg-summary .row:last-child{border-bottom:none;padding-bottom:0;}
 .reg-summary .row span:first-child{color:var(--muted);font-weight:800;letter-spacing:.5px;font-size:10px;text-transform:uppercase;flex:0 0 auto;}
 .reg-summary .row span:last-child{color:var(--ink);font-weight:800;text-align:right;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:60%;}
-
 .reg-pay-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;}
 .pay-cell{background:linear-gradient(135deg,#fff8e1,#fde9a8);border:2px solid rgba(212,175,55,.5);border-radius:14px;padding:14px 12px;text-align:center;display:flex;flex-direction:column;justify-content:center;min-height:86px;overflow:hidden;}
 .pay-cell .label{font-size:9.5px;font-weight:800;letter-spacing:1.1px;text-transform:uppercase;color:#8a6516;margin-bottom:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .pay-cell .val{font-size:15px;font-weight:800;color:#0b1220;letter-spacing:-.2px;line-height:1.15;word-break:break-word;overflow-wrap:anywhere;}
 .pay-cell .val.amount{font-size:22px;color:#8a6516;letter-spacing:-.6px;}
-
 .reg-footer{display:flex;gap:8px;margin-top:16px;}
 .reg-btn{flex:1;padding:12px 16px;border-radius:12px;font-size:14px;font-weight:800;letter-spacing:.3px;display:inline-flex;align-items:center;justify-content:center;gap:8px;transition:transform .25s var(--bounce),box-shadow .25s var(--ease),background .25s var(--ease);min-height:46px;text-decoration:none;}
 .reg-btn.primary{background:linear-gradient(135deg,#2563eb,#1d4ed8);color:#fff;box-shadow:0 14px 30px -14px rgba(37,99,235,.9);}
@@ -438,7 +456,7 @@ section{scroll-margin-top:calc(var(--header-h) + 20px);}
 .reg-success p{margin:0 0 5px;font-size:13.5px;color:var(--muted);line-height:1.6;}
 .reg-success .ref{display:inline-block;margin-top:12px;padding:9px 16px;border-radius:10px;background:#f8fbff;border:1px dashed var(--blue);color:var(--blue);font-size:14px;font-weight:800;letter-spacing:1.2px;}
 
-/* FULL-SCREEN LOADING */
+/* LOADING SCREEN */
 .loading-screen{position:fixed;inset:0;z-index:180;background:linear-gradient(160deg,#0b1220 0%,#131f3d 100%);display:none;flex-direction:column;align-items:center;justify-content:center;padding:24px;text-align:center;overflow:hidden;}
 .loading-screen.show{display:flex;animation:loadingFadeIn .35s var(--ease) both;}
 @keyframes loadingFadeIn{from{opacity:0;}to{opacity:1;}}
@@ -459,7 +477,7 @@ section{scroll-margin-top:calc(var(--header-h) + 20px);}
 .rl-dots span:nth-child(3){animation-delay:.4s;}
 @keyframes rlDot{0%,100%{opacity:.4;transform:scale(1);}50%{opacity:1;transform:scale(1.4);background:#f7e07a;}}
 
-/* ERROR POPUP */
+/* ERROR MODAL */
 .err-modal{position:fixed;inset:0;z-index:200;background:rgba(5,9,18,.72);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;visibility:hidden;transition:opacity .3s var(--ease),visibility .3s var(--ease);}
 .err-modal.open{opacity:1;visibility:visible;}
 .err-box{position:relative;background:#fff;border-radius:22px;padding:28px 24px 22px;max-width:380px;width:100%;text-align:center;box-shadow:0 40px 80px -30px rgba(0,0,0,.75),0 0 0 1px rgba(239,68,68,.2);transform:translateY(20px) scale(.94);opacity:0;transition:transform .4s var(--bounce),opacity .3s var(--ease);}
@@ -469,7 +487,6 @@ section{scroll-margin-top:calc(var(--header-h) + 20px);}
 @keyframes errShake{0%,100%{transform:translateX(0);}20%,60%{transform:translateX(-6px);}40%,80%{transform:translateX(6px);}}
 .err-box h4{margin:0 0 10px;font-size:18px;font-weight:800;letter-spacing:-.3px;color:var(--ink);}
 .err-box p{margin:0 0 20px;font-size:13.5px;color:var(--muted);line-height:1.65;font-weight:500;}
-.err-box p b{color:var(--ink);font-weight:800;}
 .err-actions{display:flex;gap:8px;}
 .err-btn{flex:1;padding:12px 16px;border-radius:12px;font-size:14px;font-weight:800;letter-spacing:.3px;transition:transform .25s var(--bounce),box-shadow .25s var(--ease),background .25s var(--ease);min-height:46px;display:inline-flex;align-items:center;justify-content:center;gap:6px;}
 .err-btn.primary{background:linear-gradient(135deg,#2563eb,#1d4ed8);color:#fff;box-shadow:0 14px 30px -14px rgba(37,99,235,.9);}
@@ -565,7 +582,10 @@ section{scroll-margin-top:calc(var(--header-h) + 20px);}
   .float-cta{right:12px;padding:13px 18px;font-size:13.5px;}
   .float-cta{right:calc(12px + env(safe-area-inset-right));bottom:calc(12px + env(safe-area-inset-bottom));}
   .player-modal{padding:12px;}
-  .player-shell{padding:14px;border-radius:20px;max-height:94vh;}
+  .player-shell{padding:16px;border-radius:22px;max-height:94vh;}
+  .player-list{grid-template-columns:1fr;padding:18px 2px 4px;}
+  .pl-thumb{width:80px;height:52px;flex:0 0 80px;}
+  .pl-title{font-size:12.5px;}
   .cta-section{padding:0 0 60px;}
   .cta-card{border-radius:28px;}
   .cta-inner{padding:44px 22px 42px;border-radius:25px;}
@@ -940,6 +960,7 @@ section{scroll-margin-top:calc(var(--header-h) + 20px);}
       <button class="player-close" id="playerClose" type="button" aria-label="Close">✕</button>
     </div>
     <div class="player-frame" id="playerFrame"><div class="loading-spinner"></div></div>
+    <div class="player-list" id="playerList"></div>
   </div>
 </div>
 
@@ -1073,7 +1094,7 @@ section{scroll-margin-top:calc(var(--header-h) + 20px);}
   </div>
 </div>
 
-<!-- FULL-SCREEN LOADING -->
+<!-- LOADING SCREEN -->
 <div class="loading-screen" id="regLoading">
   <div class="rl-logo-ring">
     <div class="rl-ring"></div>
@@ -1085,7 +1106,7 @@ section{scroll-margin-top:calc(var(--header-h) + 20px);}
   <div class="rl-dots"><span></span><span></span><span></span></div>
 </div>
 
-<!-- ERROR POPUP -->
+<!-- ERROR MODAL -->
 <div class="err-modal" id="errModal" role="dialog" aria-modal="true" aria-label="Error">
   <div class="err-box">
     <div class="err-icon">⚠️</div>
@@ -1105,117 +1126,79 @@ section{scroll-margin-top:calc(var(--header-h) + 20px);}
 const CURRICULUM = {
   first: [
     { name: "Social Science", icon: "📚", courses: [
-      { code:'MATH 1011', name:'Mathematics for Social', icon:'📐', cr:3, video:'',
+      { code:'MATH 1011', name:'Mathematics for Social', icon:'📐', cr:3,
         desc:'Propositional logic; sets; real and complex number systems; functions and graphs; polynomials; logarithms; analytic geometry.',
         chapters:['Propositional Logic and Set Theory','Real and Complex Number Systems','Functions and Graphs','Polynomial and Rational Functions','Exponential and Logarithmic Functions','Analytic Geometry'] },
-      { code:'PSCH 1011', name:'General Psychology', icon:'🧠', cr:3, video:'',
+      { code:'PSCH 1011', name:'General Psychology', icon:'🧠', cr:3,
         desc:'Introduction to psychology; sensation and perception; learning and memory; motivation and emotion; personality; social psychology.',
         chapters:['Introduction to Psychology','Sensation and Perception','Learning and Memory','Motivation and Emotion','Personality','Social Psychology'] },
-      { code:'FLEN 1011', name:'Communicative English I', icon:'🗣️', cr:3, video:'',
+      { code:'FLEN 1011', name:'Communicative English I', icon:'🗣️', cr:3,
         desc:'Effective communication across contexts; grammar and vocabulary; integrated practice in listening, speaking, reading, and writing.',
         chapters:['Listening & Speaking Basics','Reading Comprehension','Grammar Foundations','Vocabulary Building','Writing Simple Texts','Study Skills'] },
-      { code:'GEES 1011', name:'Geography of Ethiopia & the Horn', icon:'🌍', cr:3, video:'',
+      { code:'GEES 1011', name:'Geography of Ethiopia & the Horn', icon:'🌍', cr:3,
         desc:'Geology; topography; drainage systems and water resources; climate; soils; wildlife; population and economic activities.',
         chapters:['Geology of Ethiopia','Topography and Drainage','Climate and Soils','Population Dynamics','Economic Activities','Wildlife and Conservation'] },
-      { code:'LOCT 1011', name:'Logic and Critical Thinking', icon:'💡', cr:3, video:'',
+      { code:'LOCT 1011', name:'Logic and Critical Thinking', icon:'💡', cr:3,
         desc:'Logic and philosophy; arguments and validity; deductive/inductive reasoning; precise language; factors affecting critical thinking.',
         chapters:['Introduction to Logic','Arguments and Validity','Deductive Reasoning','Inductive Reasoning','Common Fallacies','Critical Thinking in Real Life'] },
-      { code:'ECON 1011', name:'Economics', icon:'📈', cr:3, video:'',
+      { code:'ECON 1011', name:'Economics', icon:'📈', cr:3,
         desc:'Fundamental economic principles from supply–demand to market structures; macro/micro concepts.',
         chapters:['Introduction to Economics','Demand and Supply','Market Structures','National Income','Money and Banking','Development Economics'] }
     ]},
     { name: "Natural Science", icon: "🔬", courses: [
-      { code:'MATH 1011', name:'Mathematics for Natural', icon:'📐', cr:3, video:'',
+      { code:'MATH 1011', name:'Mathematics for Natural', icon:'📐', cr:3,
         desc:'Propositional logic; sets; real and complex numbers; functions; polynomials; logarithms; analytic geometry.',
         chapters:['Propositional Logic and Set Theory','Real and Complex Number Systems','Functions and Graphs','Polynomial and Rational Functions','Exponential and Logarithmic Functions','Analytic Geometry'] },
-      { code:'PSCH 1011', name:'General Psychology', icon:'🧠', cr:3, video:'',
+      { code:'PSCH 1011', name:'General Psychology', icon:'🧠', cr:3,
         desc:'Introduction to psychology; sensation and perception; learning and memory; motivation and emotion; personality; social psychology.',
         chapters:['Introduction to Psychology','Sensation and Perception','Learning and Memory','Motivation and Emotion','Personality','Social Psychology'] },
-      { code:'FLEN 1011', name:'Communicative English I', icon:'🗣️', cr:3, video:'',
+      { code:'FLEN 1011', name:'Communicative English I', icon:'🗣️', cr:3,
         desc:'Effective communication across contexts; grammar and vocabulary; integrated practice.',
         chapters:['Listening & Speaking Basics','Reading Comprehension','Grammar Foundations','Vocabulary Building','Writing Simple Texts','Study Skills'] },
-      { code:'GEES 1011', name:'Geography of Ethiopia & the Horn', icon:'🌍', cr:3, video:'',
+      { code:'GEES 1011', name:'Geography of Ethiopia & the Horn', icon:'🌍', cr:3,
         desc:'Geology; topography; drainage; climate; soils; wildlife; population and economic activities.',
         chapters:['Geology of Ethiopia','Topography and Drainage','Climate and Soils','Population Dynamics','Economic Activities','Wildlife and Conservation'] },
-      { code:'LOCT 1011', name:'Logic and Critical Thinking', icon:'💡', cr:3, video:'',
+      { code:'LOCT 1011', name:'Logic and Critical Thinking', icon:'💡', cr:3,
         desc:'Logic and philosophy; arguments and validity; deductive/inductive reasoning; precise language.',
         chapters:['Introduction to Logic','Arguments and Validity','Deductive Reasoning','Inductive Reasoning','Common Fallacies','Critical Thinking in Real Life'] },
-      { code:'PHYS 1011', name:'General Physics', icon:'⚛️', cr:3, video:'',
+      { code:'PHYS 1011', name:'General Physics', icon:'⚛️', cr:3,
         desc:'Kinematics; dynamics; fluids; heat and thermodynamics; oscillations; waves; optics; electromagnetism.',
         chapters:['Kinematics','Dynamics','Fluids','Heat and Thermodynamics','Oscillations and Waves','Optics and Electromagnetism'] }
     ]}
   ],
   second: [
     { name: "Pre-Engineering & Computing", icon: "⚙️", courses: [
-      { code:'MATH 1041', name:'Applied Mathematics I', icon:'📐', cr:3, video:'',
-        desc:'Vectors; matrices; limits; continuity; derivatives; integrals and applications.',
-        chapters:['Vectors','Matrices and Determinants','Limits and Continuity','Derivatives','Applications of Derivatives','Integrals and Applications'] },
-      { code:'ANTH 1012', name:'Social Anthropology', icon:'🏺', cr:2, video:'',
-        desc:'Human diversity; culture areas in Ethiopia; being human; marginalized and vulnerable groups.',
-        chapters:['Introduction to Anthropology','Culture and Society','Human Diversity','Culture Areas of Ethiopia','Marginalized Groups','Local Governance & Peacemaking'] },
-      { code:'ECEG 2052', name:'Computer Programming (C++)', icon:'💻', cr:3, video:'',
-        desc:'Fundamental programming concepts; data types; control statements and loops; file input/output.',
-        chapters:['Introduction to Programming','Data Types and Variables','Control Statements','Loops and Iteration','Functions','File Input/Output'] },
-      { code:'EMTE 1012', name:'Introduction to Emerging Technologies', icon:'🚀', cr:3, video:'',
-        desc:'Overview of AI, Data Science, IoT, and Augmented Reality.',
-        chapters:['Introduction to Emerging Tech','Artificial Intelligence','Data Science','Internet of Things','Augmented & Virtual Reality','Impact on Society'] },
-      { code:'MCIE 1012', name:'Moral and Civic Education', icon:'⚖️', cr:2, video:'',
-        desc:'Ethical principles; social responsibility; civic engagement; critical thinking.',
-        chapters:['Ethics and Morality','Civic Virtues','Social Responsibility','Democratic Citizenship','Rule of Law','Civic Engagement'] },
-      { code:'MGMT 1012', name:'Entrepreneurship', icon:'💼', cr:3, video:'',
-        desc:'Entrepreneurial history and globalization; idea generation; marketing; feasibility studies.',
-        chapters:['Entrepreneurship Basics','Idea Generation','Marketing Fundamentals','Feasibility Studies','Legal Frameworks','Social Entrepreneurship'] },
-      { code:'FLEN 1012', name:'Communicative English II', icon:'🗣️', cr:3, video:'',
-        desc:'Prerequisite: FLEN 1011. Construct sentences; develop paragraphs; write essays.',
-        chapters:['Sentence Construction','Paragraph Development','Descriptive Writing','Narrative Writing','Expository Writing','Argumentative Essays'] }
+      { code:'MATH 1041', name:'Applied Mathematics I', icon:'📐', cr:3, desc:'Vectors; matrices; limits; continuity; derivatives; integrals and applications.', chapters:['Vectors','Matrices and Determinants','Limits and Continuity','Derivatives','Applications of Derivatives','Integrals and Applications'] },
+      { code:'ANTH 1012', name:'Social Anthropology', icon:'🏺', cr:2, desc:'Human diversity; culture areas in Ethiopia; being human; marginalized and vulnerable groups.', chapters:['Introduction to Anthropology','Culture and Society','Human Diversity','Culture Areas of Ethiopia','Marginalized Groups','Local Governance & Peacemaking'] },
+      { code:'ECEG 2052', name:'Computer Programming (C++)', icon:'💻', cr:3, desc:'Fundamental programming concepts; data types; control statements and loops; file input/output.', chapters:['Introduction to Programming','Data Types and Variables','Control Statements','Loops and Iteration','Functions','File Input/Output'] },
+      { code:'EMTE 1012', name:'Introduction to Emerging Technologies', icon:'🚀', cr:3, desc:'Overview of AI, Data Science, IoT, and Augmented Reality.', chapters:['Introduction to Emerging Tech','Artificial Intelligence','Data Science','Internet of Things','Augmented & Virtual Reality','Impact on Society'] },
+      { code:'MCIE 1012', name:'Moral and Civic Education', icon:'⚖️', cr:2, desc:'Ethical principles; social responsibility; civic engagement; critical thinking.', chapters:['Ethics and Morality','Civic Virtues','Social Responsibility','Democratic Citizenship','Rule of Law','Civic Engagement'] },
+      { code:'MGMT 1012', name:'Entrepreneurship', icon:'💼', cr:3, desc:'Entrepreneurial history and globalization; idea generation; marketing; feasibility studies.', chapters:['Entrepreneurship Basics','Idea Generation','Marketing Fundamentals','Feasibility Studies','Legal Frameworks','Social Entrepreneurship'] },
+      { code:'FLEN 1012', name:'Communicative English II', icon:'🗣️', cr:3, desc:'Prerequisite: FLEN 1011. Construct sentences; develop paragraphs; write essays.', chapters:['Sentence Construction','Paragraph Development','Descriptive Writing','Narrative Writing','Expository Writing','Argumentative Essays'] }
     ]},
     { name: "Other Natural Science", icon: "🧪", courses: [
-      { code:'CHEM 2061', name:'General Chemistry I', icon:'🧪', cr:3, video:'',
-        desc:'Chemistry and atomic structure; acids and bases; states of matter; chemical bonding; thermodynamics.',
-        chapters:['Atomic Structure','Chemical Bonding','Acids and Bases','States of Matter','Thermodynamics','Solutions and Equilibrium'] },
-      { code:'ANTH 1012', name:'Social Anthropology', icon:'🏺', cr:2, video:'',
-        desc:'Human diversity; culture areas in Ethiopia; being human; marginalized groups.',
-        chapters:['Introduction to Anthropology','Culture and Society','Human Diversity','Culture Areas of Ethiopia','Marginalized Groups','Local Governance & Peacemaking'] },
-      { code:'BIOL 1011', name:'General Biology', icon:'🧬', cr:3, video:'',
-        desc:'Cell structure and function; genetics and inheritance; evolution; plant and animal biology; ecology.',
-        chapters:['Cell Biology','Genetics and Inheritance','Evolution','Plant Biology','Animal Biology','Ecology and Environment'] },
-      { code:'EMTE 1012', name:'Introduction to Emerging Technologies', icon:'🚀', cr:3, video:'',
-        desc:'Overview of AI, Data Science, IoT, and Augmented Reality.',
-        chapters:['Introduction to Emerging Tech','Artificial Intelligence','Data Science','Internet of Things','Augmented & Virtual Reality','Impact on Society'] },
-      { code:'MCIE 1012', name:'Moral and Civic Education', icon:'⚖️', cr:2, video:'',
-        desc:'Ethical principles; social responsibility; civic engagement.',
-        chapters:['Ethics and Morality','Civic Virtues','Social Responsibility','Democratic Citizenship','Rule of Law','Civic Engagement'] },
-      { code:'ECON 1011', name:'Economics', icon:'📈', cr:3, video:'',
-        desc:'Fundamental economic principles; macro/micro concepts.',
-        chapters:['Introduction to Economics','Demand and Supply','Market Structures','National Income','Money and Banking','Development Economics'] },
-      { code:'FLEN 1012', name:'Communicative English II', icon:'🗣️', cr:3, video:'',
-        desc:'Prerequisite: FLEN 1011. Write descriptive, narrative, expository, and argumentative essays.',
-        chapters:['Sentence Construction','Paragraph Development','Descriptive Writing','Narrative Writing','Expository Writing','Argumentative Essays'] }
+      { code:'CHEM 2061', name:'General Chemistry I', icon:'🧪', cr:3, desc:'Chemistry and atomic structure; acids and bases; states of matter; chemical bonding; thermodynamics.', chapters:['Atomic Structure','Chemical Bonding','Acids and Bases','States of Matter','Thermodynamics','Solutions and Equilibrium'] },
+      { code:'ANTH 1012', name:'Social Anthropology', icon:'🏺', cr:2, desc:'Human diversity; culture areas in Ethiopia; being human; marginalized groups.', chapters:['Introduction to Anthropology','Culture and Society','Human Diversity','Culture Areas of Ethiopia','Marginalized Groups','Local Governance & Peacemaking'] },
+      { code:'BIOL 1011', name:'General Biology', icon:'🧬', cr:3, desc:'Cell structure and function; genetics and inheritance; evolution; plant and animal biology; ecology.', chapters:['Cell Biology','Genetics and Inheritance','Evolution','Plant Biology','Animal Biology','Ecology and Environment'] },
+      { code:'EMTE 1012', name:'Introduction to Emerging Technologies', icon:'🚀', cr:3, desc:'Overview of AI, Data Science, IoT, and Augmented Reality.', chapters:['Introduction to Emerging Tech','Artificial Intelligence','Data Science','Internet of Things','Augmented & Virtual Reality','Impact on Society'] },
+      { code:'MCIE 1012', name:'Moral and Civic Education', icon:'⚖️', cr:2, desc:'Ethical principles; social responsibility; civic engagement.', chapters:['Ethics and Morality','Civic Virtues','Social Responsibility','Democratic Citizenship','Rule of Law','Civic Engagement'] },
+      { code:'ECON 1011', name:'Economics', icon:'📈', cr:3, desc:'Fundamental economic principles; macro/micro concepts.', chapters:['Introduction to Economics','Demand and Supply','Market Structures','National Income','Money and Banking','Development Economics'] },
+      { code:'FLEN 1012', name:'Communicative English II', icon:'🗣️', cr:3, desc:'Prerequisite: FLEN 1011. Write descriptive, narrative, expository, and argumentative essays.', chapters:['Sentence Construction','Paragraph Development','Descriptive Writing','Narrative Writing','Expository Writing','Argumentative Essays'] }
     ]},
     { name: "Social Science", icon: "📚", courses: [
-      { code:'MGMT 1012', name:'Entrepreneurship', icon:'💼', cr:3, video:'',
-        desc:'Entrepreneurial history and globalization; idea generation; marketing.',
-        chapters:['Entrepreneurship Basics','Idea Generation','Marketing Fundamentals','Feasibility Studies','Legal Frameworks','Social Entrepreneurship'] },
-      { code:'ANTH 1012', name:'Social Anthropology', icon:'🏺', cr:2, video:'',
-        desc:'Human diversity; culture areas in Ethiopia.',
-        chapters:['Introduction to Anthropology','Culture and Society','Human Diversity','Culture Areas of Ethiopia','Marginalized Groups','Local Governance & Peacemaking'] },
-      { code:'EMTE 1012', name:'Introduction to Emerging Technologies', icon:'🚀', cr:3, video:'',
-        desc:'Overview of AI, Data Science, IoT, and AR.',
-        chapters:['Introduction to Emerging Tech','Artificial Intelligence','Data Science','Internet of Things','Augmented & Virtual Reality','Impact on Society'] },
-      { code:'MCIE 1012', name:'Moral and Civic Education', icon:'⚖️', cr:2, video:'',
-        desc:'Ethical principles; social responsibility.',
-        chapters:['Ethics and Morality','Civic Virtues','Social Responsibility','Democratic Citizenship','Rule of Law','Civic Engagement'] },
-      { code:'GLTR 2012', name:'Global Trends', icon:'🌐', cr:2, video:'',
-        desc:'Basics of international relations; global challenges.',
-        chapters:['Introduction to International Relations','Theories of IR','Global Challenges','Regional Politics','International Organizations','Contemporary Debates'] },
-      { code:'FLEN 1012', name:'Communicative English II', icon:'🗣️', cr:3, video:'',
-        desc:'Prerequisite: FLEN 1011. Write essays.',
-        chapters:['Sentence Construction','Paragraph Development','Descriptive Writing','Narrative Writing','Expository Writing','Argumentative Essays'] }
+      { code:'MGMT 1012', name:'Entrepreneurship', icon:'💼', cr:3, desc:'Entrepreneurial history and globalization; idea generation; marketing.', chapters:['Entrepreneurship Basics','Idea Generation','Marketing Fundamentals','Feasibility Studies','Legal Frameworks','Social Entrepreneurship'] },
+      { code:'ANTH 1012', name:'Social Anthropology', icon:'🏺', cr:2, desc:'Human diversity; culture areas in Ethiopia.', chapters:['Introduction to Anthropology','Culture and Society','Human Diversity','Culture Areas of Ethiopia','Marginalized Groups','Local Governance & Peacemaking'] },
+      { code:'EMTE 1012', name:'Introduction to Emerging Technologies', icon:'🚀', cr:3, desc:'Overview of AI, Data Science, IoT, and AR.', chapters:['Introduction to Emerging Tech','Artificial Intelligence','Data Science','Internet of Things','Augmented & Virtual Reality','Impact on Society'] },
+      { code:'MCIE 1012', name:'Moral and Civic Education', icon:'⚖️', cr:2, desc:'Ethical principles; social responsibility.', chapters:['Ethics and Morality','Civic Virtues','Social Responsibility','Democratic Citizenship','Rule of Law','Civic Engagement'] },
+      { code:'GLTR 2012', name:'Global Trends', icon:'🌐', cr:2, desc:'Basics of international relations; global challenges.', chapters:['Introduction to International Relations','Theories of IR','Global Challenges','Regional Politics','International Organizations','Contemporary Debates'] },
+      { code:'FLEN 1012', name:'Communicative English II', icon:'🗣️', cr:3, desc:'Prerequisite: FLEN 1011. Write essays.', chapters:['Sentence Construction','Paragraph Development','Descriptive Writing','Narrative Writing','Expository Writing','Argumentative Essays'] }
     ]}
   ]
 };
 
-const SAMPLE_VIDEOS = [
+// Attach a demo video to each course (used by the accordion's Demo Video button).
+// These all feed the shared player modal.
+const COURSE_VIDEOS = [
   'https://youtu.be/xFRevkVzPFk',
   'https://youtu.be/RLVXwk7x-DM',
   'https://youtu.be/K8EKpllPqTY'
@@ -1223,7 +1206,7 @@ const SAMPLE_VIDEOS = [
 Object.values(CURRICULUM).forEach(semArr => {
   semArr.forEach((stream, si) => {
     stream.courses.forEach((c, ci) => {
-      c.video = SAMPLE_VIDEOS[(si + ci) % SAMPLE_VIDEOS.length];
+      c.video = COURSE_VIDEOS[(si + ci) % COURSE_VIDEOS.length];
     });
   });
 });
@@ -1241,21 +1224,25 @@ const COURSE_COLORS = [
   { c1:'#0ea5e9', c2:'#0284c7', s1:'#e0f2fe', s2:'#bae6fd' }
 ];
 
+function esc(s){
+  return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
 function ytId(input){
   if(!input) return '';
-  const s=String(input).trim();
-  const m=s.match(/(?:youtu\.be\/|[?&]v=|embed\/|shorts\/)([A-Za-z0-9_-]{11})/);
+  const s = String(input).trim();
+  const m = s.match(/(?:youtu\.be\/|[?&]v=|embed\/|shorts\/)([A-Za-z0-9_-]{11})/);
   if(m) return m[1];
-  return /^[A-Za-z0-9_-]{11}$/.test(s)?s:'';
+  return /^[A-Za-z0-9_-]{11}$/.test(s) ? s : '';
 }
 
+/* ============================================================
+   2. CURRICULUM RENDER
+   ============================================================ */
 let curSem = 'first', curStream = 0;
 const semSwitch = document.getElementById('semSwitch');
 const semButtons = semSwitch.querySelectorAll('.sem-btn');
 const railBox = document.getElementById('streamRail');
 const stageBox = document.getElementById('courseStage');
-
-function esc(str){ return String(str).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
 
 function renderStreams(){
   railBox.innerHTML = '';
@@ -1314,7 +1301,7 @@ function renderCourses(){
           <div class="cp-block"><h4 class="cp-block-title">Exam Breakdown · Total 100</h4>
             <div class="cp-exam-grid">
               <div class="exam-item"><span class="exam-icon">📝</span><div class="exam-num">30</div><div class="exam-label">Mid Exam</div></div>
-              <div class="exam-item"><span class="exam-icon">💻</span><div class="exam-num">50</div><div class="exam-label">Final · Online</div></div>
+              <div class="exam-item"><span class="exam-icon">💻</span><span class="exam-num">50</span><div class="exam-label">Final · Online</div></div>
               <div class="exam-item"><span class="exam-icon">📚</span><div class="exam-num">20</div><div class="exam-label">Assignment</div></div>
             </div>
           </div>
@@ -1353,111 +1340,282 @@ semButtons.forEach(btn => btn.addEventListener('click', () => {
 renderStreams(); renderCourses();
 
 /* ============================================================
-   2. VIDEO PLAYER
+   3. VIDEO PLAYER (API-driven playlist)
+   ------------------------------------------------------------
+   The playlist loads from /api/videos. Super admin adds videos
+   via the admin panel, they appear here automatically.
+   Falls back to defaults if the API is unreachable.
    ============================================================ */
+const DEFAULT_VIDEOS = [
+  { title:'CIVICS CHAPTER TWO PART 2 DEONTOLOGICAL NORMATIVE ETHICS: DEONTOLOGICAL ETHICS', url:'https://youtu.be/xFRevkVzPFk', tag:'Civics' },
+  { title:'GENERAL MATHS FOR ALL FRESHMAN STUDENTS — SET THEORY AND THE CONCEPT OF SET', url:'https://youtu.be/RLVXwk7x-DM', tag:'Maths' },
+  { title:'GENERAL BIOLOGY MID TERM EXAM FOR ALL FRESHMAN STUDENTS', url:'https://youtu.be/K8EKpllPqTY', tag:'Biology' }
+];
+
 const playerModal = document.getElementById('playerModal');
 const playerFrame = document.getElementById('playerFrame');
+const playerList = document.getElementById('playerList');
 const pnTag = document.getElementById('pnTag');
 const pnTitle = document.getElementById('pnTitle');
+let curVideo = -1;
+let videosData = DEFAULT_VIDEOS.slice();
 
-function openPlayerWithVideo(url, title, tag){
-  const id = ytId(url);
-  if (!id) return;
-  pnTag.textContent = tag || 'Lesson';
-  pnTitle.textContent = title || 'Lesson Demo';
-  playerFrame.innerHTML = `<div class="loading-spinner"></div><iframe src="https://www.youtube.com/embed/${id}?rel=0&modestbranding=1&playsinline=1&autoplay=1" title="${(title||'').replace(/"/g,'&quot;')}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>`;
-  playerModal.classList.add('open');
-  document.body.style.overflow = 'hidden';
+function buildPlaylist(){
+  if (!playerList) return;
+  playerList.innerHTML = videosData.map((v,i) => {
+    const id = ytId(v.url);
+    const thumb = id
+      ? `<img src="https://img.youtube.com/vi/${id}/mqdefault.jpg" alt="" loading="lazy">`
+      : `<span class="pl-ph">${(v.tag || '?').charAt(0)}</span>`;
+    return `<button class="pl-item" data-i="${i}" type="button">
+      <span class="pl-thumb">
+        ${thumb}
+        <span class="pl-play"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>
+      </span>
+      <span class="pl-info">
+        <span class="pl-title">${esc(v.title)}</span>
+        <span class="pl-tag">${esc(v.tag || 'Lesson')}</span>
+      </span>
+    </button>`;
+  }).join('');
+
+  playerList.querySelectorAll('.pl-item').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const n = +btn.dataset.i;
+      if (n === curVideo) return;
+      curVideo = n;
+      playerFrame.classList.add('loading');
+      setTimeout(() => {
+        renderPlayer();
+        setTimeout(() => playerFrame.classList.remove('loading'), 350);
+      }, 180);
+    });
+  });
+}
+
+function renderPlaceholder(){
+  playerFrame.innerHTML = `<div class="loading-spinner"></div>
+    <div class="player-placeholder">
+      <div class="pp-logo-wrap"><img src="logo.jpg" alt="ABJ Tutorial" /></div>
+      <div class="pp-text">Select a lesson to begin</div>
+      <div class="pp-sub">Choose any video from the list below</div>
+    </div>`;
+  pnTag.textContent = 'Welcome';
+  pnTitle.textContent = 'Select a lesson to begin';
+  playerList.querySelectorAll('.pl-item').forEach(el => el.classList.remove('active'));
+}
+
+function renderPlayer(){
+  const v = videosData[curVideo];
+  if (!v) { renderPlaceholder(); return; }
+  const id = ytId(v.url);
+  if (id){
+    playerFrame.innerHTML = `<div class="loading-spinner"></div>
+      <iframe src="https://www.youtube.com/embed/${id}?rel=0&modestbranding=1&playsinline=1&autoplay=1"
+        title="${String(v.title).replace(/"/g,'&quot;')}"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        allowfullscreen></iframe>`;
+  } else {
+    renderPlaceholder();
+    return;
+  }
+  pnTag.textContent = v.tag || 'Lesson';
+  pnTitle.textContent = v.title;
+  playerList.querySelectorAll('.pl-item').forEach((el,i) => el.classList.toggle('active', i === curVideo));
 }
 
 function openPlayerWelcome(){
-  pnTag.textContent = 'Welcome';
-  pnTitle.textContent = 'Select a lesson to begin';
-  playerFrame.innerHTML = `<div class="loading-spinner"></div><div class="player-placeholder"><div class="pp-logo-wrap"><img src="logo.jpg" alt="ABJ Tutorial" /></div><div class="pp-text">Choose a course and tap Demo Video</div><div class="pp-sub">Every course has its own lesson demo</div></div>`;
+  curVideo = -1;
+  renderPlaceholder();
   playerModal.classList.add('open');
   document.body.style.overflow = 'hidden';
 }
-
+function openPlayerWithVideo(url, title, tag){
+  // Find the video in the playlist; if not found, prepend it temporarily.
+  let idx = videosData.findIndex(v => v.url === url);
+  if (idx === -1){
+    videosData.unshift({ title, url, tag });
+    buildPlaylist();
+    idx = 0;
+  }
+  curVideo = idx;
+  playerModal.classList.add('open');
+  document.body.style.overflow = 'hidden';
+  renderPlayer();
+  // Scroll playlist to active item
+  const activeEl = playerList.querySelector('.pl-item.active');
+  if (activeEl) activeEl.scrollIntoView({ behavior:'smooth', block:'nearest' });
+}
 function closePlayer(){
   playerModal.classList.remove('open');
   document.body.style.overflow = '';
   playerFrame.innerHTML = '<div class="loading-spinner"></div>';
+  curVideo = -1;
 }
 document.getElementById('demoBtn').addEventListener('click', openPlayerWelcome);
 document.getElementById('playerClose').addEventListener('click', closePlayer);
 
+// Load videos from the API (super admin's additions appear here)
+(async function loadVideosFromAPI(){
+  try {
+    const res = await fetch('/api/videos', { cache: 'no-store' });
+    if (res.ok){
+      const data = await res.json();
+      if (Array.isArray(data.items) && data.items.length){
+        videosData = data.items;
+      }
+    }
+  } catch {}
+  buildPlaylist();
+})();
+
 /* ============================================================
-   3. TESTIMONIALS
+   4. TESTIMONIALS (API-driven)
    ============================================================ */
-const TESTIMONIALS = [
-  { from:"Girum T.", subject:"Maths", stars:5, text:"The step-by-step maths solutions were a total game-changer for me. I went from barely passing to scoring above 85 on every exam. The tutor explains every single line — no shortcuts, no confusion." },
-  { from:"Hana B.", subject:"Physics", stars:5, text:"I honestly hated Physics before I joined ABJ. Now motion and forces actually make sense. The visual explanations in the video tutorials are amazing — I finally understand what I'm calculating." },
-  { from:"Bereket A.", subject:"Chemistry", stars:5, text:"Organic chemistry used to be my nightmare. ABJ's summarized notes broke it down so simply that I finished the entire unit in one weekend. I scored the highest mark in my class." },
-  { from:"Selam G.", subject:"Biology", stars:5, text:"The biology notes are incredible — diagrams are clean and the explanations connect everything together. I used them for my mid-term and got 92%. I'm recommending ABJ to every freshman I know." },
-  { from:"Yonas H.", subject:"Civics", stars:5, text:"Civics felt boring until I watched the ABJ videos on deontological ethics. The real-world examples made everything click. I actually enjoyed studying for this exam for the first time." },
-  { from:"Meron K.", subject:"English", stars:5, text:"Communicative English was my weakest area. After following ABJ's lessons and doing the past exam questions, I improved my writing and comprehension dramatically. My confidence has grown so much." },
-  { from:"Dawit M.", subject:"Anthropology", stars:5, text:"Anthropology seemed like a lot to memorize, but ABJ's concise notes made it feel approachable. I could actually understand the concepts instead of just memorizing. Highly recommended." },
-  { from:"Feven S.", subject:"Psychology", stars:5, text:"The psychology lessons were some of the best I've ever had. The way the tutor connects theory to everyday life is brilliant. I now understand myself and others better — and I aced the exam." },
-  { from:"Henok D.", subject:"Geography", stars:5, text:"Geography is full of maps and long concepts, but ABJ's visual approach made it manageable. I studied the entire semester in two weeks with the summarized notes and passed with a strong grade." },
-  { from:"Bethlehem W.", subject:"Economics", stars:5, text:"Economics finally clicked when I saw the ABJ tutor break down market theory with real examples. The past exam solutions showed me exactly what to expect. I went from a C to an A." },
-  { from:"Nahom Z.", subject:"C++", stars:5, text:"C++ was terrifying as my first programming language. ABJ made it feel doable — from variables to loops, everything was explained clearly. I now write small programs on my own. Thank you ABJ!" },
-  { from:"Rediet A.", subject:"Logic", stars:5, text:"Logic and Critical Thinking was my favourite course this semester, thanks to ABJ. The arguments and fallacies are explained so well. It sharpened how I think about everything, not just exams." },
-  { from:"Kaleb F.", subject:"Applied Maths", stars:5, text:"Applied Mathematics I nearly broke me last year. I joined ABJ, followed the tutorials and past exams, and this time around I scored an A. Easily the best investment I've made in my studies." },
-  { from:"Sara L.", subject:"Global Trend", stars:5, text:"Global Trend felt disconnected from my life until ABJ connected it to current events. The lessons are engaging and the notes are incredibly well organized. I finally enjoy keeping up with the news." },
-  { from:"Mikiyas T.", subject:"Entrepreneurship", stars:5, text:"Entrepreneurship inspired me to actually start something. The ABJ tutor walks through real business ideas and pitch examples. I pitched my first idea to my class and got amazing feedback. Truly empowering." }
+const DEFAULT_TESTIMONIALS = [
+  { student_name:'Girum T.', subject:'Maths', stars:5, text:'The step-by-step maths solutions were a total game-changer for me. I went from barely passing to scoring above 85 on every exam.' },
+  { student_name:'Hana B.', subject:'Physics', stars:5, text:'I honestly hated Physics before I joined ABJ. Now motion and forces actually make sense. The video tutorials are amazing.' },
+  { student_name:'Bereket A.', subject:'Chemistry', stars:5, text:'Organic chemistry used to be my nightmare. ABJ summarized notes broke it down so simply that I finished the entire unit in one weekend.' },
+  { student_name:'Selam G.', subject:'Biology', stars:5, text:'The biology notes are incredible — diagrams are clean and explanations connect everything together. I got 92% on my mid-term.' },
+  { student_name:'Yonas H.', subject:'Civics', stars:5, text:'Civics felt boring until I watched the ABJ videos on deontological ethics. The real-world examples made everything click.' },
+  { student_name:'Meron K.', subject:'English', stars:5, text:'Communicative English was my weakest area. After following ABJ lessons and doing past exams, my writing improved dramatically.' },
+  { student_name:'Dawit M.', subject:'Anthropology', stars:5, text:'Anthropology seemed like a lot to memorize, but ABJ concise notes made it feel approachable. Highly recommended.' },
+  { student_name:'Feven S.', subject:'Psychology', stars:5, text:'The psychology lessons were some of the best I have ever had. The tutor connects theory to everyday life brilliantly.' },
+  { student_name:'Henok D.', subject:'Geography', stars:5, text:'Geography is full of maps and long concepts, but ABJ visual approach made it manageable. I studied the entire semester in two weeks.' },
+  { student_name:'Bethlehem W.', subject:'Economics', stars:5, text:'Economics finally clicked when I saw the ABJ tutor break down market theory with real examples. I went from a C to an A.' },
+  { student_name:'Nahom Z.', subject:'C++', stars:5, text:'C++ was terrifying as my first programming language. ABJ made it feel doable — from variables to loops, everything was explained clearly.' },
+  { student_name:'Rediet A.', subject:'Logic', stars:5, text:'Logic and Critical Thinking was my favourite course this semester thanks to ABJ. The arguments and fallacies are explained so well.' },
+  { student_name:'Kaleb F.', subject:'Applied Maths', stars:5, text:'Applied Mathematics I nearly broke me last year. I joined ABJ and this time around I scored an A.' },
+  { student_name:'Sara L.', subject:'Global Trend', stars:5, text:'Global Trend felt disconnected until ABJ connected it to current events. I finally enjoy keeping up with the news.' },
+  { student_name:'Mikiyas T.', subject:'Entrepreneurship', stars:5, text:'Entrepreneurship inspired me to actually start something. I pitched my first idea to my class and got amazing feedback.' }
 ];
+let TESTIMONIALS = DEFAULT_TESTIMONIALS.slice();
+
 const track = document.getElementById('tstTrack');
 const dotsBox = document.getElementById('tstDots');
 const counter = document.getElementById('tstCounter');
 let index = 0, autoTimer = null;
+
 function starRow(n){ return '★'.repeat(n) + '☆'.repeat(5-n); }
-TESTIMONIALS.forEach((t,i)=>{
-  const slide = document.createElement('div');
-  slide.className = 'tst-slide';
-  slide.innerHTML = `<div class="tst-frame"><div class="tst-card"><span class="tst-quote">"</span><div class="tst-top"><div class="tst-avatar"><img src="logo.jpg" alt="ABJ" /></div><div class="tst-who"><div class="tst-from">${t.from}</div><span class="tst-subject">${t.subject}</span><div class="tst-stars">${starRow(t.stars)}</div></div></div><p class="tst-text">${t.text}</p></div></div>`;
-  track.appendChild(slide);
-  const dot = document.createElement('button');
-  dot.className = 'dot' + (i===0?' active':''); dot.type='button';
-  dot.addEventListener('click', () => goTo(i)); dotsBox.appendChild(dot);
-});
-function updateCounter(){ counter.textContent = (index+1) + ' / ' + TESTIMONIALS.length; }
-function goTo(i){ const total = TESTIMONIALS.length; index = (i+total)%total; track.style.transform = `translateX(-${index*100}%)`; [...dotsBox.children].forEach((d,k)=>d.classList.toggle('active', k===index)); updateCounter(); }
-function next(){ goTo(index+1); } function prev(){ goTo(index-1); }
-document.getElementById('tstNext').addEventListener('click', ()=>{ next(); restartAuto(); });
-document.getElementById('tstPrev').addEventListener('click', ()=>{ prev(); restartAuto(); });
+
+function renderTestimonials(){
+  if (!track || !dotsBox) return;
+  track.innerHTML = '';
+  dotsBox.innerHTML = '';
+  TESTIMONIALS.forEach((t,i) => {
+    const studentName = t.student_name || t.from || 'ABJ Student';
+    const starCount = t.stars || 5;
+    const slide = document.createElement('div');
+    slide.className = 'tst-slide';
+    slide.innerHTML = `<div class="tst-frame"><div class="tst-card"><span class="tst-quote">"</span><div class="tst-top"><div class="tst-avatar"><img src="logo.jpg" alt="ABJ" /></div><div class="tst-who"><div class="tst-from">${esc(studentName)}</div><span class="tst-subject">${esc(t.subject)}</span><div class="tst-stars">${starRow(starCount)}</div></div></div><p class="tst-text">${esc(t.text)}</p></div></div>`;
+    track.appendChild(slide);
+    const dot = document.createElement('button');
+    dot.className = 'dot' + (i === 0 ? ' active' : '');
+    dot.type = 'button';
+    dot.setAttribute('aria-label', 'Go to testimonial ' + (i + 1));
+    dot.addEventListener('click', () => goTo(i));
+    dotsBox.appendChild(dot);
+  });
+  index = 0;
+  goTo(0);
+}
+
+function updateCounter(){ if (counter) counter.textContent = (index+1) + ' / ' + TESTIMONIALS.length; }
+function goTo(i){
+  const total = TESTIMONIALS.length;
+  if (total === 0) return;
+  index = (i + total) % total;
+  track.style.transform = `translateX(-${index * 100}%)`;
+  [...dotsBox.children].forEach((d,k) => d.classList.toggle('active', k === index));
+  updateCounter();
+}
+function next(){ goTo(index + 1); }
+function prev(){ goTo(index - 1); }
+
+document.getElementById('tstNext').addEventListener('click', () => { next(); restartAuto(); });
+document.getElementById('tstPrev').addEventListener('click', () => { prev(); restartAuto(); });
+
 function startAuto(){ stopAuto(); autoTimer = setInterval(next, 6500); }
-function stopAuto(){ if(autoTimer) clearInterval(autoTimer); autoTimer = null; }
+function stopAuto(){ if (autoTimer) clearInterval(autoTimer); autoTimer = null; }
 function restartAuto(){ startAuto(); }
+
 const tstWrap = document.querySelector('.tst-wrap');
-tstWrap.addEventListener('mouseenter', stopAuto); tstWrap.addEventListener('mouseleave', startAuto);
-let touchX = null;
-tstWrap.addEventListener('touchstart', e => { touchX = e.changedTouches[0].clientX; stopAuto(); }, {passive:true});
-tstWrap.addEventListener('touchend', e => { if(touchX===null) return; const dx = e.changedTouches[0].clientX - touchX; if(Math.abs(dx)>45){ dx<0?next():prev(); } touchX = null; startAuto(); }, {passive:true});
-updateCounter(); startAuto();
+if (tstWrap){
+  tstWrap.addEventListener('mouseenter', stopAuto);
+  tstWrap.addEventListener('mouseleave', startAuto);
+  let touchX = null;
+  tstWrap.addEventListener('touchstart', e => { touchX = e.changedTouches[0].clientX; stopAuto(); }, {passive:true});
+  tstWrap.addEventListener('touchend', e => {
+    if (touchX === null) return;
+    const dx = e.changedTouches[0].clientX - touchX;
+    if (Math.abs(dx) > 45) { dx < 0 ? next() : prev(); }
+    touchX = null;
+    startAuto();
+  }, {passive:true});
+}
+
+// Load testimonials from the API
+(async function loadTestimonialsFromAPI(){
+  try {
+    const res = await fetch('/api/testimonials', { cache: 'no-store' });
+    if (res.ok){
+      const data = await res.json();
+      if (Array.isArray(data.items) && data.items.length){
+        TESTIMONIALS = data.items;
+      }
+    }
+  } catch {}
+  renderTestimonials();
+  startAuto();
+})();
 
 /* ============================================================
-   4. STAT COUNTERS + SCROLL
+   5. STAT COUNTERS + SCROLL REVEAL
    ============================================================ */
 function animateCount(el){
-  const target = parseInt(el.dataset.count, 10); const suffix = el.dataset.suffix || '';
-  const duration = 1600; const start = performance.now();
-  function frame(now){ const p = Math.min((now - start) / duration, 1); const eased = 1 - Math.pow(1 - p, 3); el.textContent = Math.round(target * eased).toLocaleString('en-US') + suffix; if (p < 1) requestAnimationFrame(frame); }
+  const target = parseInt(el.dataset.count, 10);
+  const suffix = el.dataset.suffix || '';
+  const duration = 1600;
+  const start = performance.now();
+  function frame(now){
+    const p = Math.min((now - start) / duration, 1);
+    const eased = 1 - Math.pow(1 - p, 3);
+    el.textContent = Math.round(target * eased).toLocaleString('en-US') + suffix;
+    if (p < 1) requestAnimationFrame(frame);
+  }
   requestAnimationFrame(frame);
 }
 const revealEls = document.querySelectorAll('.reveal');
 const statEls = document.querySelectorAll('.sc-num');
 const orbitEl = document.getElementById('heroStats');
 let statsDone = false;
-const io = new IntersectionObserver((entries) => { entries.forEach(entry => { if(entry.isIntersecting){ entry.target.classList.add('in'); io.unobserve(entry.target); } }); }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting){ entry.target.classList.add('in'); io.unobserve(entry.target); }
+  });
+}, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
 revealEls.forEach(el => io.observe(el));
-const statObserver = new IntersectionObserver((entries) => { entries.forEach(entry => { if(entry.isIntersecting && !statsDone){ statsDone = true; statEls.forEach(animateCount); statObserver.disconnect(); } }); }, { threshold: 0.35 });
+const statObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting && !statsDone){
+      statsDone = true;
+      statEls.forEach(animateCount);
+      statObserver.disconnect();
+    }
+  });
+}, { threshold: 0.35 });
 if (statEls.length && orbitEl) statObserver.observe(orbitEl);
+
 const floatCta = document.getElementById('floatCta');
 const siteHeader = document.getElementById('siteHeader');
-window.addEventListener('scroll', () => { const y = window.scrollY; floatCta.classList.toggle('show', y > 520); siteHeader.classList.toggle('scrolled', y > 6); }, { passive:true });
+window.addEventListener('scroll', () => {
+  const y = window.scrollY;
+  floatCta.classList.toggle('show', y > 520);
+  siteHeader.classList.toggle('scrolled', y > 6);
+}, { passive:true });
 
 /* ============================================================
-   5. REGISTRATION FLOW
+   6. REGISTRATION FLOW
    ============================================================ */
 const regModal = document.getElementById('regModal');
 const regShell = document.getElementById('regShell');
@@ -1482,7 +1640,9 @@ const errMessage = document.getElementById('errMessage');
 const errClose = document.getElementById('errClose');
 const errRetry = document.getElementById('errRetry');
 
-const PAYMENT_ACCOUNTS = {
+// Static display values for the payment step.
+// The server enforces the real fee from the DB, so these are just for display.
+const PAYMENT_ACCOUNTS_DISPLAY = {
   Telebirr: '0927429565',
   CBE: '1000417007192',
   mPesa: '0927429565'
@@ -1530,7 +1690,7 @@ function buildSummary(){
     <div class="row"><span>Payment</span><span>${esc(regData.method)}</span></div>`;
   regAmount.textContent = FEE_DISPLAY.toLocaleString('en-US');
   regAccountLabel.textContent = 'Account (' + regData.method + ')';
-  regAccount.textContent = PAYMENT_ACCOUNTS[regData.method] || '—';
+  regAccount.textContent = PAYMENT_ACCOUNTS_DISPLAY[regData.method] || '—';
 }
 
 function selectOpt(btn){
@@ -1550,22 +1710,28 @@ const ID_RE = /^[A-Za-z]{2,6}[\s\-]?\d{2,8}\s*\/\s*\d{2,4}$/;
 const regName = document.getElementById('regName');
 const errName = document.getElementById('errName');
 regName.addEventListener('input', () => {
-  const v = regName.value.trim(); const ok = NAME_RE.test(v);
+  const v = regName.value.trim();
+  const ok = NAME_RE.test(v);
   regName.classList.toggle('error', !ok && v.length > 0);
   errName.classList.toggle('show', !ok && v.length > 0);
   regName.closest('.reg-step').querySelector('[data-next]').disabled = !ok;
 });
-regName.addEventListener('keydown', e => { if(e.key==='Enter' && !e.target.closest('.reg-step').querySelector('[data-next]').disabled) setStep(2); });
+regName.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && !e.target.closest('.reg-step').querySelector('[data-next]').disabled) setStep(2);
+});
 
 const regId = document.getElementById('regId');
 const errId = document.getElementById('errId');
 regId.addEventListener('input', () => {
-  const v = regId.value.trim(); const ok = ID_RE.test(v);
+  const v = regId.value.trim();
+  const ok = ID_RE.test(v);
   regId.classList.toggle('error', !ok && v.length > 0);
   errId.classList.toggle('show', !ok && v.length > 0);
   regId.closest('.reg-step').querySelector('[data-next]').disabled = !ok;
 });
-regId.addEventListener('keydown', e => { if(e.key==='Enter' && !e.target.closest('.reg-step').querySelector('[data-next]').disabled) setStep(3); });
+regId.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && !e.target.closest('.reg-step').querySelector('[data-next]').disabled) setStep(3);
+});
 
 const regRef = document.getElementById('regRef');
 const errRef = document.getElementById('errRef');
@@ -1577,38 +1743,36 @@ regRef.addEventListener('input', () => {
 
 document.querySelectorAll('[data-next]').forEach(b => b.addEventListener('click', () => {
   const step = +b.closest('.reg-step').dataset.step;
-  if (step === 1){ const v = regName.value.trim(); if(!NAME_RE.test(v)) return; regData.name = v.split(/\s+/).map(w=>w.charAt(0).toUpperCase()+w.slice(1).toLowerCase()).join(' '); }
-  if (step === 2){ const v = regId.value.trim(); if(!ID_RE.test(v)) return; regData.id = v.toUpperCase().replace(/\s+/g,''); }
+  if (step === 1){
+    const v = regName.value.trim();
+    if (!NAME_RE.test(v)) return;
+    regData.name = v.split(/\s+/).map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(' ');
+  }
+  if (step === 2){
+    const v = regId.value.trim();
+    if (!ID_RE.test(v)) return;
+    regData.id = v.toUpperCase().replace(/\s+/g, '');
+  }
   if (step < 7) setStep(step + 1);
 }));
 document.querySelectorAll('[data-back]').forEach(b => b.addEventListener('click', () => setStep(+b.dataset.back)));
 document.querySelectorAll('.reg-options .reg-opt').forEach(btn => btn.addEventListener('click', () => selectOpt(btn)));
 
-/* -------- ERROR POPUP -------- */
 function showError(title, message){
   errTitle.textContent = title;
   errMessage.innerHTML = message;
   errModal.classList.add('open');
 }
-function hideError(){
-  errModal.classList.remove('open');
-}
+function hideError(){ errModal.classList.remove('open'); }
 errClose.addEventListener('click', hideError);
-errRetry.addEventListener('click', () => {
-  hideError();
-  regRef.focus();
-});
-errModal.addEventListener('click', e => {
-  if (e.target === errModal) hideError();
-});
+errRetry.addEventListener('click', () => { hideError(); regRef.focus(); });
+errModal.addEventListener('click', e => { if (e.target === errModal) hideError(); });
 
-/* -------- SUBMIT -------- */
 regSubmit.addEventListener('click', async () => {
   const ref = regRef.value.trim();
   if (!ref){ regRef.classList.add('error'); errRef.classList.add('show'); return; }
   regData.ref = ref;
 
-  // Close registration shell and show full-screen loading
   regShell.style.display = 'none';
   regLoading.classList.add('show');
 
@@ -1632,17 +1796,12 @@ regSubmit.addEventListener('click', async () => {
     regLoading.classList.remove('show');
     regShell.style.display = '';
 
-    if (!res.ok) {
+    if (!res.ok){
       const msg = data.error || 'Something went wrong.';
-      if (/amount does not match/i.test(msg)) {
-        showError('Payment Amount Does Not Match', msg);
-      } else if (/already been used/i.test(msg)) {
-        showError('Reference Already Used', msg);
-      } else if (/could not be verified|not find/i.test(msg)) {
-        showError('Payment Not Verified', msg);
-      } else {
-        showError('Registration Failed', msg);
-      }
+      if (/amount does not match/i.test(msg)) showError('Payment Amount Does Not Match', msg);
+      else if (/already been used/i.test(msg)) showError('Reference Already Used', msg);
+      else if (/could not be verified|not find/i.test(msg)) showError('Payment Not Verified', msg);
+      else showError('Registration Failed', msg);
       return;
     }
 
@@ -1650,7 +1809,7 @@ regSubmit.addEventListener('click', async () => {
     regStatusLink.href = '/status?id=' + encodeURIComponent(data.public_id);
     regSuccess.classList.add('show');
     document.querySelectorAll('.reg-step').forEach(s => s.classList.remove('active'));
-  } catch (e) {
+  } catch (e){
     regLoading.classList.remove('show');
     regShell.style.display = '';
     showError('Network Error', 'Could not reach the server. Please check your connection and try again.');
@@ -1683,7 +1842,7 @@ regClose.addEventListener('click', closeReg);
 regDone.addEventListener('click', closeReg);
 
 /* ============================================================
-   6. KEYBOARD — Escape closes top modal
+   7. KEYBOARD
    ============================================================ */
 document.addEventListener('keydown', e => {
   if (e.key !== 'Escape') return;
