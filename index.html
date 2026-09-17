@@ -569,6 +569,9 @@ section{scroll-margin-top:calc(var(--header-h) + 20px);}
   .orbit-ring, .orbit-counter{animation:none !important;}
 }
 
+/* SAFETY: hide any leftover YouTube links (defensive) */
+a[href*="youtube.com/@abj"], a[href*="youtu.be/@abj"]{display:none !important;}
+
 /* RESPONSIVE */
 @media (max-width:1024px){
   .wrap{padding:0 20px;}
@@ -1194,6 +1197,25 @@ section{scroll-margin-top:calc(var(--header-h) + 20px);}
 
 <script>
 /* ============================================================
+   SAFETY NET — remove any stray YouTube link / element
+   ============================================================ */
+(function stripYouTubeLinks(){
+  function sweep(){
+    document.querySelectorAll('a[href*="youtube.com"], a[href*="youtu.be"]').forEach(el => {
+      // Keep the internal video player's iframe source intact
+      if (el.closest('.player-frame') || el.closest('.pl-item') || el.closest('.cp-video')) return;
+      el.style.display = 'none';
+      el.remove();
+    });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', sweep);
+  } else {
+    sweep();
+  }
+})();
+
+/* ============================================================
    1. CURRICULUM DATA
    ============================================================ */
 const CURRICULUM = {
@@ -1703,9 +1725,6 @@ const errMessage = document.getElementById('errMessage');
 const errClose = document.getElementById('errClose');
 const errRetry = document.getElementById('errRetry');
 
-/* ------------------------------------------------------------------
-   LIVE public settings (fee + receiving accounts).
-   ------------------------------------------------------------------ */
 const PUBLIC_SETTINGS = {
   fee: 10000,
   accounts: { Telebirr: '0927429565', CBE: '1000417007192', mPesa: '0927429565' }
@@ -1919,7 +1938,6 @@ function closeReg(){
   hideError();
 }
 
-/* ---------- MY REGISTRATION (localStorage) ---------- */
 const REG_KEY = 'abj_my_registration';
 function getMyRegistration(){
   try { return JSON.parse(localStorage.getItem(REG_KEY) || 'null'); } catch { return null; }
@@ -1950,7 +1968,6 @@ document.getElementById('floatCta').addEventListener('click', onCtaClick);
 regClose.addEventListener('click', closeReg);
 regDone.addEventListener('click', closeReg);
 
-/* ---------- CLIPBOARD ---------- */
 const copyToast = document.getElementById('copyToast');
 let copyToastTimer = null;
 function showCopyToast(msg, isErr){
@@ -1985,7 +2002,6 @@ async function copyText(text, okMsg){
 }
 regSuccessRef.addEventListener('click', () => copyText(regSuccessRef.textContent, 'Registration ID copied'));
 
-/* ---------- HOME STATUS MODAL ---------- */
 const stsModal = document.getElementById('statusModal');
 const stsBody = document.getElementById('statusBody');
 const stsClose = document.getElementById('statusClose');
@@ -2116,26 +2132,21 @@ function renderStatus(d){
   wireStsCopy();
 }
 
-/* Success box → "Check Status" button inside the registration modal */
 regStatusLink.addEventListener('click', () => {
   const reg = getMyRegistration();
   closeReg();
   if (reg && reg.public_id) setTimeout(() => openStatusModal(reg.public_id), 260);
 });
 
-/* Refresh fee/accounts every time the form opens */
 const _origOpenReg = openReg;
 openReg = function(){
   loadPublicSettings();
   _origOpenReg();
 };
 
-/* Boot */
 applyRegistrationState();
 
-/* ============================================================
-   7. KEYBOARD — ESC closes everything EXCEPT the demo player
-   ============================================================ */
+/* ESC closes everything EXCEPT the demo player */
 document.addEventListener('keydown', e => {
   if (e.key !== 'Escape') return;
   if (errModal.classList.contains('open')) { hideError(); return; }
