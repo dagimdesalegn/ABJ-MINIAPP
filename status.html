@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#eef4ff" />
+<title>Check Status — ABJ Tutorial</title>
+<link rel="icon" type="image/jpeg" href="logo.jpg" />
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--blue:#2563eb;--ink:#0f172a;--muted:#64748b;--line:#e6ebf3;--gold-2:#d4af37;--gold-3:#8a6516;--bounce:cubic-bezier(.34,1.56,.64,1);}
+*,*::before,*::after{box-sizing:border-box;}
+body{margin:0;font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:linear-gradient(135deg,#eef4ff 0%,#f7faff 55%,#ffffff 100%);color:var(--ink);min-height:100vh;display:grid;place-items:center;padding:24px;-webkit-font-smoothing:antialiased;}
+.card{width:100%;max-width:520px;background:#fff;border-radius:26px;padding:32px;box-shadow:0 30px 70px -30px rgba(15,23,42,.35),0 0 0 1px rgba(37,99,235,.06);}
+.head{display:flex;align-items:center;gap:14px;margin-bottom:22px;padding-bottom:18px;border-bottom:1px solid var(--line);}
+.logo{width:46px;height:46px;border-radius:13px;overflow:hidden;box-shadow:0 10px 26px -10px rgba(212,175,55,.75),0 0 0 2px rgba(255,255,255,.95),0 0 0 3.5px rgba(212,175,55,.35);}
+.logo img{width:100%;height:100%;object-fit:cover;}
+.head h1{margin:0;font-size:19px;font-weight:800;letter-spacing:-.3px;}
+.head p{margin:2px 0 0;font-size:11px;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;color:var(--blue);}
+label{display:block;font-size:11.5px;font-weight:800;letter-spacing:1.3px;text-transform:uppercase;color:var(--muted);margin-bottom:8px;}
+input{width:100%;padding:14px 16px;border-radius:14px;background:#f8fbff;border:2px solid var(--line);font-size:15px;font-weight:700;color:var(--ink);outline:none;transition:border-color .2s,box-shadow .2s;letter-spacing:.6px;text-transform:uppercase;}
+input:focus{border-color:var(--blue);background:#fff;box-shadow:0 0 0 4px rgba(37,99,235,.12);}
+button{margin-top:14px;width:100%;padding:15px 20px;border-radius:14px;font-size:15px;font-weight:800;letter-spacing:.3px;color:#fff;background:linear-gradient(135deg,#2563eb,#1d4ed8);box-shadow:0 14px 30px -14px rgba(37,99,235,.9);cursor:pointer;border:none;transition:transform .25s var(--bounce),box-shadow .25s;}
+button:hover{transform:translateY(-2px);box-shadow:0 20px 40px -14px rgba(37,99,235,1);}
+button:disabled{opacity:.6;cursor:not-allowed;transform:none;}
+.result{margin-top:22px;padding:20px;border-radius:16px;display:none;}
+.result.show{display:block;animation:fade .4s var(--bounce) both;}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+.result.pending{background:linear-gradient(135deg,#fff8e1,#fde9a8);border:2px solid rgba(212,175,55,.5);}
+.result.approved{background:linear-gradient(135deg,#d1fae5,#a7f3d0);border:2px solid rgba(16,185,129,.4);}
+.result.rejected{background:linear-gradient(135deg,#fee2e2,#fecaca);border:2px solid rgba(239,68,68,.4);}
+.result.error{background:linear-gradient(135deg,#fee2e2,#fecaca);border:2px solid rgba(239,68,68,.4);}
+.result h3{margin:0 0 6px;font-size:17px;font-weight:800;display:flex;align-items:center;gap:10px;}
+.result p{margin:6px 0;font-size:14px;line-height:1.6;}
+.result .row{display:flex;justify-content:space-between;gap:12px;padding:7px 0;font-size:13.5px;border-bottom:1px dashed rgba(15,23,42,.08);}
+.result .row:last-child{border-bottom:none;}
+.result .row span:first-child{color:var(--muted);font-weight:700;font-size:11.5px;letter-spacing:.5px;text-transform:uppercase;}
+.result .row span:last-child{font-weight:800;}
+.invite-btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;margin-top:16px;width:100%;padding:16px 22px;border-radius:14px;background:linear-gradient(135deg,#f7e07a,#d4af37);color:#0b1220;font-weight:800;font-size:15px;text-decoration:none;box-shadow:0 14px 30px -14px rgba(212,175,55,.95);transition:transform .25s var(--bounce);}
+.invite-btn:hover{transform:translateY(-2px);}
+.back{display:inline-flex;align-items:center;gap:6px;margin-top:20px;color:var(--muted);font-weight:700;font-size:13px;text-decoration:none;}
+.back:hover{color:var(--blue);}
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="head">
+    <div class="logo"><img src="logo.jpg" alt="ABJ" /></div>
+    <div>
+      <h1>Check Registration Status</h1>
+      <p>ABJ Tutorial</p>
+    </div>
+  </div>
+  <label for="regId">Your Registration ID</label>
+  <input id="regId" type="text" placeholder="ABJ-XXXXXXXXXX" autocomplete="off" maxlength="20" />
+  <button id="checkBtn" type="button">Check Status</button>
+  <div class="result" id="result"></div>
+  <a class="back" href="/">← Back to home</a>
+</div>
+<script>
+const input = document.getElementById('regId');
+const btn = document.getElementById('checkBtn');
+const out = document.getElementById('result');
+const urlId = new URLSearchParams(location.search).get('id');
+if (urlId) { input.value = urlId.toUpperCase(); setTimeout(check, 300); }
+input.addEventListener('input', () => { input.value = input.value.toUpperCase(); });
+input.addEventListener('keydown', e => { if (e.key === 'Enter') check(); });
+btn.addEventListener('click', check);
+
+async function check(){
+  const id = input.value.trim();
+  if (!/^ABJ-[A-Z0-9]{8,16}$/i.test(id)) { showError('Please enter a valid ABJ ID.'); return; }
+  btn.disabled = true; btn.textContent = 'Checking...';
+  out.classList.remove('show');
+  try {
+    const res = await fetch('/api/status?id=' + encodeURIComponent(id));
+    const data = await res.json();
+    btn.disabled = false; btn.textContent = 'Check Status';
+    if (!res.ok) { showError(data.error || 'Registration not found.'); return; }
+    render(data);
+  } catch {
+    btn.disabled = false; btn.textContent = 'Check Status';
+    showError('Network error. Please try again.');
+  }
+}
+
+function render(d){
+  const cls = d.status === 'approved' ? 'approved' : d.status === 'rejected' ? 'rejected' : 'pending';
+  const icon = d.status === 'approved' ? '✅' : d.status === 'rejected' ? '❌' : '⏳';
+  const title = d.status === 'approved' ? 'Approved' : d.status === 'rejected' ? 'Rejected' : 'Under Review';
+  let html = `<h3>${icon} ${title}</h3>`;
+  if (d.status === 'pending') html += `<p>Your payment is being reviewed. We'll approve it soon.</p>`;
+  if (d.status === 'rejected' && d.rejection_reason) html += `<p>${esc(d.rejection_reason)}</p>`;
+  html += `<div class="row"><span>Name</span><span>${esc(d.full_name)}</span></div>`;
+  html += `<div class="row"><span>Semester</span><span>${esc(d.semester)}</span></div>`;
+  html += `<div class="row"><span>Stream</span><span>${esc(d.stream)}</span></div>`;
+  html += `<div class="row"><span>Submitted</span><span>${new Date(d.created_at).toLocaleDateString()}</span></div>`;
+  if (d.status === 'approved' && d.invite_link){
+    html += `<p style="margin-top:12px;font-weight:700;">🎉 You're in! Tap below to join — <b>the link works only once</b>.</p>`;
+    html += `<a class="invite-btn" href="${esc(d.invite_link)}" target="_blank" rel="noopener">🌟 Join Main Channel</a>`;
+  }
+  out.className = 'result show ' + cls;
+  out.innerHTML = html;
+}
+
+function showError(msg){
+  out.className = 'result show error';
+  out.innerHTML = `<h3>⚠️ Error</h3><p>${esc(msg)}</p>`;
+}
+function esc(s){
+  return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+</script>
+</body>
+</html>

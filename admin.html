@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#0b1220" />
+<title>Admin — ABJ Tutorial</title>
+<link rel="icon" type="image/jpeg" href="logo.jpg" />
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0f172a;--muted:#64748b;--line:#e6ebf3;--gold-2:#d4af37;--gold-1:#f7e07a;--bounce:cubic-bezier(.34,1.56,.64,1);}
+*,*::before,*::after{box-sizing:border-box;}
+body{margin:0;font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:linear-gradient(135deg,#0b1220 0%,#131f3d 100%);color:#fff;min-height:100vh;-webkit-font-smoothing:antialiased;}
+.wrap{max-width:1100px;margin:0 auto;padding:28px 20px 60px;}
+.head{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-bottom:22px;margin-bottom:28px;border-bottom:1px solid rgba(255,255,255,.1);flex-wrap:wrap;}
+.head-left{display:flex;align-items:center;gap:14px;}
+.logo{width:52px;height:52px;border-radius:14px;overflow:hidden;flex:0 0 52px;box-shadow:0 10px 26px -10px rgba(212,175,55,.85),0 0 0 2px rgba(247,224,122,.6);}
+.logo img{width:100%;height:100%;object-fit:cover;}
+.head h1{margin:0;font-size:20px;font-weight:800;letter-spacing:-.3px;}
+.head p{margin:4px 0 0;font-size:12px;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;color:var(--gold-1);}
+.btn{padding:11px 20px;border-radius:12px;font-weight:800;font-size:13.5px;letter-spacing:.3px;cursor:pointer;border:none;transition:transform .25s var(--bounce),background .25s;}
+.btn-ghost{background:rgba(255,255,255,.08);color:#fff;border:1px solid rgba(255,255,255,.14);}
+.btn-ghost:hover{background:rgba(255,255,255,.18);transform:translateY(-2px);}
+.btn-gold{background:linear-gradient(135deg,var(--gold-1),var(--gold-2));color:#0b1220;box-shadow:0 12px 28px -12px rgba(212,175,55,.9);}
+.btn-gold:hover{transform:translateY(-2px);}
+.btn-approve{background:linear-gradient(135deg,#10b981,#059669);color:#fff;padding:10px 18px;font-size:12.5px;}
+.btn-approve:hover{transform:translateY(-2px);}
+.btn-reject{background:linear-gradient(135deg,#ef4444,#dc2626);color:#fff;padding:10px 18px;font-size:12.5px;}
+.btn-reject:hover{transform:translateY(-2px);}
+.btn-danger{background:linear-gradient(135deg,#ef4444,#b91c1c);color:#fff;padding:8px 14px;font-size:12px;}
+.btn-danger:hover{transform:translateY(-2px);}
+.btn-add{background:linear-gradient(135deg,#2563eb,#1d4ed8);color:#fff;padding:12px 22px;font-size:13.5px;box-shadow:0 12px 26px -12px rgba(37,99,235,.9);}
+.btn-add:hover{transform:translateY(-2px);}
+
+.login-card{max-width:420px;margin:60px auto;padding:32px;background:linear-gradient(135deg,rgba(255,255,255,.06),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.1);border-radius:22px;}
+.login-card h2{margin:0 0 8px;font-size:22px;font-weight:800;}
+.login-card p{margin:0 0 24px;color:rgba(255,255,255,.6);font-size:14px;}
+.login-card label{display:block;font-size:11px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:rgba(255,255,255,.55);margin-bottom:8px;}
+.login-card input{width:100%;padding:14px 18px;border-radius:14px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);color:#fff;font-size:15px;font-weight:600;outline:none;transition:border-color .25s,background .25s;margin-bottom:14px;}
+.login-card input:focus{border-color:var(--gold-1);background:rgba(255,255,255,.12);}
+.login-card input::placeholder{color:rgba(255,255,255,.4);}
+.login-card .btn{width:100%;padding:15px;font-size:15px;}
+.login-error{margin-top:14px;color:#f87171;font-size:13px;font-weight:700;display:none;}
+.login-error.show{display:block;}
+
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:26px;}
+.stat{padding:20px 18px;border-radius:16px;background:linear-gradient(135deg,rgba(255,255,255,.06),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.1);transition:transform .3s var(--bounce),border-color .3s;}
+.stat:hover{transform:translateY(-3px);border-color:rgba(247,224,122,.4);}
+.stat .n{font-size:28px;font-weight:800;letter-spacing:-1px;background:linear-gradient(135deg,var(--gold-1),var(--gold-2));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;line-height:1;}
+.stat .l{margin-top:8px;font-size:11.5px;font-weight:700;letter-spacing:1.1px;text-transform:uppercase;color:rgba(255,255,255,.6);}
+
+.tabs{display:flex;gap:8px;margin-bottom:22px;flex-wrap:wrap;}
+.tab{padding:11px 20px;border-radius:12px;background:rgba(255,255,255,.06);color:rgba(255,255,255,.75);font-weight:800;font-size:13px;cursor:pointer;border:1px solid rgba(255,255,255,.1);transition:all .25s;}
+.tab:hover{background:rgba(255,255,255,.12);color:#fff;}
+.tab.active{background:linear-gradient(135deg,var(--gold-1),var(--gold-2));color:#0b1220;border-color:transparent;box-shadow:0 12px 28px -12px rgba(212,175,55,.9);}
+.tab-content{display:none;}
+.tab-content.active{display:block;animation:fade .35s var(--bounce) both;}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+
+.list{display:grid;gap:12px;}
+.item{padding:18px 20px;border-radius:16px;background:linear-gradient(135deg,rgba(255,255,255,.06),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.1);}
+.item-head{display:flex;justify-content:space-between;gap:14px;align-items:flex-start;flex-wrap:wrap;margin-bottom:10px;}
+.item-name{font-size:16px;font-weight:800;letter-spacing:-.2px;}
+.item-sub{font-size:11.5px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:rgba(255,255,255,.55);margin-top:3px;font-family:monospace;}
+.pill{padding:5px 12px;border-radius:999px;font-size:10.5px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;border:1px solid;}
+.pill.pending{color:#fbbf24;background:rgba(251,191,36,.12);border-color:rgba(251,191,36,.35);}
+.pill.approved{color:#34d399;background:rgba(52,211,153,.12);border-color:rgba(52,211,153,.35);}
+.pill.rejected{color:#f87171;background:rgba(248,113,113,.12);border-color:rgba(248,113,113,.35);}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:8px 20px;font-size:13px;margin-top:12px;padding-top:12px;border-top:1px dashed rgba(255,255,255,.1);}
+.pair{display:flex;flex-direction:column;gap:2px;}
+.pair .k{font-size:10.5px;font-weight:700;letter-spacing:1.1px;text-transform:uppercase;color:rgba(255,255,255,.45);}
+.pair .v{font-size:13px;font-weight:700;color:#fff;overflow-wrap:anywhere;}
+.pair .v.mono{font-family:monospace;letter-spacing:.5px;}
+.actions{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap;}
+.invite-link{display:inline-flex;align-items:center;gap:8px;margin-top:12px;padding:10px 14px;border-radius:10px;background:rgba(247,224,122,.12);border:1px solid rgba(247,224,122,.35);color:var(--gold-1);font-family:monospace;font-size:12px;font-weight:700;text-decoration:none;overflow-wrap:anywhere;word-break:break-all;}
+
+.empty{text-align:center;padding:60px 20px;color:rgba(255,255,255,.5);border:2px dashed rgba(255,255,255,.15);border-radius:18px;}
+.empty .icon{font-size:48px;margin-bottom:14px;opacity:.6;}
+
+.settings{display:grid;gap:16px;max-width:560px;}
+.field{display:flex;flex-direction:column;gap:8px;}
+.field label{font-size:11.5px;font-weight:800;letter-spacing:1.3px;text-transform:uppercase;color:rgba(255,255,255,.6);}
+.field input{padding:14px 16px;border-radius:14px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);color:#fff;font-size:15px;font-weight:600;outline:none;}
+.field input:focus{border-color:var(--gold-1);background:rgba(255,255,255,.12);}
+
+.admin-list{display:grid;gap:10px;margin-top:22px;}
+.admin-row{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 18px;border-radius:14px;background:linear-gradient(135deg,rgba(255,255,255,.05),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.1);}
+.admin-row .who{min-width:0;flex:1;}
+.admin-row .who .u{font-weight:800;font-size:14px;letter-spacing:-.2px;}
+.admin-row .who .n{font-size:11.5px;font-weight:700;color:rgba(255,255,255,.55);margin-top:3px;}
+.super-pill{display:inline-block;margin-left:8px;padding:2px 8px;border-radius:999px;font-size:9.5px;font-weight:800;letter-spacing:1.1px;text-transform:uppercase;background:linear-gradient(135deg,#f7e07a,#d4af37);color:#0b1220;}
+
+.toast{position:fixed;top:20px;right:20px;padding:14px 20px;border-radius:12px;font-weight:800;font-size:13.5px;color:#fff;box-shadow:0 20px 40px -14px rgba(0,0,0,.6);transform:translateY(-120%);transition:transform .35s var(--bounce);z-index:100;}
+.toast.show{transform:translateY(0);}
+.toast.ok{background:linear-gradient(135deg,#10b981,#059669);}
+.toast.err{background:linear-gradient(135deg,#ef4444,#dc2626);}
+
+@media (max-width:640px){
+  .stats{grid-template-columns:repeat(2,1fr);gap:10px;}
+  .stat{padding:16px 14px;}
+  .stat .n{font-size:22px;}
+  .wrap{padding:20px 16px 40px;}
+  .admin-row{flex-direction:column;align-items:flex-start;}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- LOGIN -->
+  <div id="loginView">
+    <div class="login-card">
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:20px;">
+        <div class="logo"><img src="logo.jpg" alt="ABJ" /></div>
+        <div>
+          <h2 style="margin:0">Admin Sign In</h2>
+          <p style="margin:4px 0 0">ABJ Tutorial · Control Panel</p>
+        </div>
+      </div>
+      <label for="adminUser">Username</label>
+      <input id="adminUser" type="text" placeholder="super" autocomplete="username" value="super" />
+      <label for="adminPass">Password</label>
+      <input id="adminPass" type="password" placeholder="Admin password" autocomplete="current-password" />
+      <button class="btn btn-gold" id="loginBtn" type="button">Sign In →</button>
+      <div class="login-error" id="loginError">Invalid credentials.</div>
+    </div>
+  </div>
+
+  <!-- DASHBOARD -->
+  <div id="dashView" style="display:none">
+    <div class="head">
+      <div class="head-left">
+        <div class="logo"><img src="logo.jpg" alt="ABJ" /></div>
+        <div>
+          <h1>Admin Dashboard</h1>
+          <p id="welcomeLine">ABJ Tutorial · Control Panel</p>
+        </div>
+      </div>
+      <button class="btn btn-ghost" id="logoutBtn" type="button">Sign Out</button>
+    </div>
+
+    <div class="stats">
+      <div class="stat"><div class="n" id="stTotal">0</div><div class="l">Total</div></div>
+      <div class="stat"><div class="n" id="stPending">0</div><div class="l">Pending</div></div>
+      <div class="stat"><div class="n" id="stApproved">0</div><div class="l">Approved</div></div>
+      <div class="stat"><div class="n" id="stRejected">0</div><div class="l">Rejected</div></div>
+    </div>
+
+    <div class="tabs">
+      <button class="tab active" data-tab="pending" type="button">⏳ Pending</button>
+      <button class="tab" data-tab="approved" type="button">✅ Approved</button>
+      <button class="tab" data-tab="rejected" type="button">❌ Rejected</button>
+      <button class="tab super-only" data-tab="admins" type="button" style="display:none">👥 Admins</button>
+      <button class="tab super-only" data-tab="settings" type="button" style="display:none">⚙️ Settings</button>
+    </div>
+
+    <div class="tab-content active" id="tab-pending"><div class="list" id="listPending"></div></div>
+    <div class="tab-content" id="tab-approved"><div class="list" id="listApproved"></div></div>
+    <div class="tab-content" id="tab-rejected"><div class="list" id="listRejected"></div></div>
+
+    <div class="tab-content" id="tab-settings">
+      <div class="settings">
+        <div class="field">
+          <label>Registration Fee (ETB)</label>
+          <input type="number" id="setFee" min="1" step="1" />
+        </div>
+        <div class="field">
+          <label>Telebirr Number</label>
+          <input type="text" id="setTelebirr" maxlength="32" />
+        </div>
+        <div class="field">
+          <label>CBE Account</label>
+          <input type="text" id="setCBE" maxlength="32" />
+        </div>
+        <div class="field">
+          <label>mPesa Number</label>
+          <input type="text" id="setMpesa" maxlength="32" />
+        </div>
+        <div class="field">
+          <label>Contact Telegram</label>
+          <input type="text" id="setContactUser" maxlength="64" />
+        </div>
+        <div class="field">
+          <label>Contact Phone</label>
+          <input type="text" id="setContactPhone" maxlength="32" />
+        </div>
+        <button class="btn btn-gold" id="saveSettings" type="button" style="padding:14px;font-size:14px">Save Settings</button>
+      </div>
+    </div>
+
+    <div class="tab-content" id="tab-admins">
+      <div class="settings" style="max-width:640px">
+        <div class="field">
+          <label>New Admin Username</label>
+          <input type="text" id="newAdminUser" placeholder="e.g. dagim" maxlength="24" />
+        </div>
+        <div class="field">
+          <label>New Admin Full Name (optional)</label>
+          <input type="text" id="newAdminName" placeholder="Dagim Desalegn" maxlength="64" />
+        </div>
+        <div class="field">
+          <label>New Admin Password</label>
+          <input type="password" id="newAdminPass" placeholder="At least 6 characters" />
+        </div>
+        <button class="btn btn-add" id="addAdminBtn" type="button">+ Add Admin</button>
+      </div>
+      <div class="admin-list" id="adminList"></div>
+    </div>
+
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const state = {
+  token: sessionStorage.getItem('abj_admin_token') || '',
+  role: sessionStorage.getItem('abj_admin_role') || '',
+  username: sessionStorage.getItem('abj_admin_user') || '',
+};
+
+const loginView = document.getElementById('loginView');
+const dashView = document.getElementById('dashView');
+const adminUser = document.getElementById('adminUser');
+const adminPass = document.getElementById('adminPass');
+const loginBtn = document.getElementById('loginBtn');
+const loginError = document.getElementById('loginError');
+const logoutBtn = document.getElementById('logoutBtn');
+const toast = document.getElementById('toast');
+const welcomeLine = document.getElementById('welcomeLine');
+
+/* -------- Auth -------- */
+loginBtn.addEventListener('click', doLogin);
+adminPass.addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+adminUser.addEventListener('keydown', e => { if (e.key === 'Enter') adminPass.focus(); });
+
+async function doLogin(){
+  const u = adminUser.value.trim().toLowerCase();
+  const p = adminPass.value;
+  if (!u || !p) { loginError.textContent = 'Enter username and password.'; loginError.classList.add('show'); return; }
+  loginBtn.disabled = true; loginBtn.textContent = 'Signing in...';
+  try {
+    const res = await fetch('/api/admin-login', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username: u, password: p })
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      loginError.textContent = data.error || 'Login failed.';
+      loginError.classList.add('show');
+      return;
+    }
+    state.token = data.token;
+    state.role = data.role;
+    state.username = data.username;
+    sessionStorage.setItem('abj_admin_token', state.token);
+    sessionStorage.setItem('abj_admin_role', state.role);
+    sessionStorage.setItem('abj_admin_user', state.username);
+    showDash();
+  } catch {
+    loginError.textContent = 'Network error.';
+    loginError.classList.add('show');
+  } finally {
+    loginBtn.disabled = false; loginBtn.textContent = 'Sign In →';
+  }
+}
+
+logoutBtn.addEventListener('click', () => {
+  sessionStorage.removeItem('abj_admin_token');
+  sessionStorage.removeItem('abj_admin_role');
+  sessionStorage.removeItem('abj_admin_user');
+  state.token = ''; state.role = ''; state.username = '';
+  loginView.style.display = 'block';
+  dashView.style.display = 'none';
+});
+
+function showDash(){
+  loginView.style.display = 'none';
+  dashView.style.display = 'block';
+  loginError.classList.remove('show');
+  adminPass.value = '';
+  welcomeLine.textContent = `Signed in as ${state.username} · ${state.role === 'super' ? 'Super Admin' : 'Admin'}`;
+  document.querySelectorAll('.super-only').forEach(el => {
+    el.style.display = state.role === 'super' ? '' : 'none';
+  });
+  loadTab('pending');
+  updateCounts();
+}
+
+if (state.token) showDash();
+
+/* -------- Tabs -------- */
+let currentTab = 'pending';
+document.querySelectorAll('.tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    document.getElementById('tab-' + tab.dataset.tab).classList.add('active');
+    currentTab = tab.dataset.tab;
+    if (['pending', 'approved', 'rejected'].includes(currentTab)) loadTab(currentTab);
+    if (currentTab === 'settings') loadSettings();
+    if (currentTab === 'admins') loadAdmins();
+  });
+});
+
+async function loadTab(status){
+  const boxMap = { pending: 'listPending', approved: 'listApproved', rejected: 'listRejected' };
+  const box = document.getElementById(boxMap[status]);
+  box.innerHTML = '<div class="empty"><div class="icon">⏳</div><p>Loading...</p></div>';
+  try {
+    const res = await fetch('/api/admin-list?status=' + status, { headers: authHeaders() });
+    if (res.status === 401) { logoutBtn.click(); return; }
+    const data = await res.json();
+    render(box, status, data.items || []);
+  } catch {
+    box.innerHTML = '<div class="empty"><div class="icon">⚠️</div><p>Network error.</p></div>';
+  }
+}
+
+async function updateCounts(){
+  try {
+    const [p, a, r] = await Promise.all([
+      fetch('/api/admin-list?status=pending', { headers: authHeaders() }).then(r => r.json()),
+      fetch('/api/admin-list?status=approved', { headers: authHeaders() }).then(r => r.json()),
+      fetch('/api/admin-list?status=rejected', { headers: authHeaders() }).then(r => r.json()),
+    ]);
+    document.getElementById('stTotal').textContent = (p.items?.length || 0) + (a.items?.length || 0) + (r.items?.length || 0);
+    document.getElementById('stPending').textContent = p.items?.length || 0;
+    document.getElementById('stApproved').textContent = a.items?.length || 0;
+    document.getElementById('stRejected').textContent = r.items?.length || 0;
+  } catch {}
+}
+
+function render(box, status, items){
+  if (!items.length){
+    const msg = status === 'pending' ? 'No pending registrations.' :
+                status === 'approved' ? 'No approved registrations yet.' : 'No rejected registrations.';
+    box.innerHTML = `<div class="empty"><div class="icon">📭</div><p>${msg}</p></div>`;
+    return;
+  }
+  box.innerHTML = items.map(r => {
+    const created = new Date(r.created_at).toLocaleString();
+    const approved = r.approved_at ? new Date(r.approved_at).toLocaleString() : '—';
+    const actions = r.status === 'pending'
+      ? `<div class="actions">
+           <button class="btn btn-approve" data-act="approve" data-id="${r.id}">✅ Approve & Create Invite</button>
+           <button class="btn btn-reject" data-act="reject" data-id="${r.id}">❌ Reject</button>
+         </div>` : '';
+    const invite = r.invite_link
+      ? `<a class="invite-link" href="${esc(r.invite_link)}" target="_blank" rel="noopener">🔗 ${esc(r.invite_link)}</a>` : '';
+    const reason = r.rejection_reason
+      ? `<div style="margin-top:10px;padding:10px 14px;border-radius:10px;background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);font-size:13px;"><strong style="color:#f87171;">Rejection reason:</strong> ${esc(r.rejection_reason)}</div>` : '';
+    return `<div class="item">
+      <div class="item-head">
+        <div>
+          <div class="item-name">${esc(r.full_name)}</div>
+          <div class="item-sub">${esc(r.public_id)}</div>
+        </div>
+        <span class="pill ${r.status}">${r.status}</span>
+      </div>
+      <div class="grid">
+        <div class="pair"><span class="k">Student ID</span><span class="v mono">${esc(r.id_number)}</span></div>
+        <div class="pair"><span class="k">Semester</span><span class="v">${esc(r.semester)}</span></div>
+        <div class="pair"><span class="k">Stream</span><span class="v">${esc(r.stream)}</span></div>
+        <div class="pair"><span class="k">Gender</span><span class="v">${esc(r.gender)}</span></div>
+        <div class="pair"><span class="k">Payment</span><span class="v">${esc(r.payment_method)}</span></div>
+        <div class="pair"><span class="k">Amount</span><span class="v">ETB ${Number(r.amount).toLocaleString()}</span></div>
+        <div class="pair"><span class="k">Reference</span><span class="v mono">${esc(r.transaction_ref)}</span></div>
+        <div class="pair"><span class="k">Submitted</span><span class="v">${created}</span></div>
+        ${r.status === 'approved' ? `<div class="pair"><span class="k">Approved</span><span class="v">${approved}</span></div>` : ''}
+      </div>
+      ${reason}
+      ${invite}
+      ${actions}
+    </div>`;
+  }).join('');
+
+  box.querySelectorAll('[data-act]').forEach(btn => {
+    btn.addEventListener('click', () => handleAction(btn.dataset.act, btn.dataset.id, btn));
+  });
+}
+
+async function handleAction(act, id, btn){
+  const original = btn.textContent;
+  btn.disabled = true;
+  btn.textContent = act === 'approve' ? 'Creating invite...' : 'Rejecting...';
+  try {
+    let res, data;
+    if (act === 'approve'){
+      res = await fetch('/api/admin-approve', {
+        method: 'POST', headers: authHeaders(true), body: JSON.stringify({ id })
+      });
+    } else {
+      const reason = prompt('Reason for rejection (optional):');
+      res = await fetch('/api/admin-reject', {
+        method: 'POST', headers: authHeaders(true), body: JSON.stringify({ id, reason: reason || '' })
+      });
+    }
+    data = await res.json();
+    if (!res.ok) { toastMsg(data.error || 'Action failed.', 'err'); return; }
+    toastMsg(act === 'approve' ? '✅ Approved & invite created.' : '❌ Rejected.', 'ok');
+    await loadTab(currentTab);
+    await updateCounts();
+  } catch {
+    toastMsg('Network error.', 'err');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = original;
+  }
+}
+
+/* -------- Settings -------- */
+async function loadSettings(){
+  try {
+    const res = await fetch('/api/admin-settings', { headers: authHeaders() });
+    const data = await res.json();
+    if (!res.ok) return;
+    const s = data.settings || {};
+    document.getElementById('setFee').value = s.fee || '10000';
+    document.getElementById('setTelebirr').value = s.account_telebirr || '';
+    document.getElementById('setCBE').value = s.account_cbe || '';
+    document.getElementById('setMpesa').value = s.account_mpesa || '';
+    document.getElementById('setContactUser').value = s.contact_username || '';
+    document.getElementById('setContactPhone').value = s.contact_phone || '';
+  } catch {}
+}
+
+document.getElementById('saveSettings').addEventListener('click', async () => {
+  const btn = document.getElementById('saveSettings');
+  const orig = btn.textContent;
+  btn.disabled = true; btn.textContent = 'Saving...';
+  try {
+    const res = await fetch('/api/admin-settings', {
+      method: 'POST', headers: authHeaders(true),
+      body: JSON.stringify({
+        fee: document.getElementById('setFee').value,
+        account_telebirr: document.getElementById('setTelebirr').value,
+        account_cbe: document.getElementById('setCBE').value,
+        account_mpesa: document.getElementById('setMpesa').value,
+        contact_username: document.getElementById('setContactUser').value,
+        contact_phone: document.getElementById('setContactPhone').value,
+      })
+    });
+    const data = await res.json();
+    if (!res.ok) { toastMsg(data.error || 'Save failed.', 'err'); return; }
+    toastMsg('✅ Settings saved.', 'ok');
+  } catch {
+    toastMsg('Network error.', 'err');
+  } finally {
+    btn.disabled = false; btn.textContent = orig;
+  }
+});
+
+/* -------- Admins -------- */
+async function loadAdmins(){
+  const listBox = document.getElementById('adminList');
+  listBox.innerHTML = '<div class="empty"><div class="icon">⏳</div><p>Loading...</p></div>';
+  try {
+    const res = await fetch('/api/admin-admins', { headers: authHeaders() });
+    if (!res.ok) { listBox.innerHTML = ''; return; }
+    const data = await res.json();
+    const items = data.admins || [];
+    listBox.innerHTML = `
+      <div class="admin-row" style="background:linear-gradient(135deg,rgba(247,224,122,.15),rgba(212,175,55,.08));border-color:rgba(247,224,122,.4);">
+        <div class="who"><div class="u">super <span class="super-pill">Super Admin</span></div><div class="n">Environment-configured super admin</div></div>
+      </div>` + items.map(a => `
+        <div class="admin-row">
+          <div class="who">
+            <div class="u">${esc(a.username)}</div>
+            <div class="n">${esc(a.full_name || 'No name')} · Added ${new Date(a.created_at).toLocaleDateString()}</div>
+          </div>
+          <button class="btn btn-danger" data-del="${a.id}">Delete</button>
+        </div>`).join('');
+    listBox.querySelectorAll('[data-del]').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        if (!confirm('Delete this admin?')) return;
+        const id = btn.dataset.del;
+        const r = await fetch('/api/admin-admins?id=' + encodeURIComponent(id), { method: 'DELETE', headers: authHeaders() });
+        if (r.ok) { toastMsg('✅ Admin removed.', 'ok'); loadAdmins(); }
+        else toastMsg('Failed.', 'err');
+      });
+    });
+  } catch {
+    listBox.innerHTML = '<div class="empty"><div class="icon">⚠️</div><p>Network error.</p></div>';
+  }
+}
+
+document.getElementById('addAdminBtn').addEventListener('click', async () => {
+  const u = document.getElementById('newAdminUser').value.trim().toLowerCase();
+  const n = document.getElementById('newAdminName').value.trim();
+  const p = document.getElementById('newAdminPass').value;
+  if (!u || !p) { toastMsg('Username and password required.', 'err'); return; }
+  const btn = document.getElementById('addAdminBtn');
+  const orig = btn.textContent;
+  btn.disabled = true; btn.textContent = 'Adding...';
+  try {
+    const res = await fetch('/api/admin-admins', {
+      method: 'POST', headers: authHeaders(true),
+      body: JSON.stringify({ username: u, password: p, full_name: n })
+    });
+    const data = await res.json();
+    if (!res.ok) { toastMsg(data.error || 'Failed.', 'err'); return; }
+    toastMsg('✅ Admin added.', 'ok');
+    document.getElementById('newAdminUser').value = '';
+    document.getElementById('newAdminName').value = '';
+    document.getElementById('newAdminPass').value = '';
+    loadAdmins();
+  } catch {
+    toastMsg('Network error.', 'err');
+  } finally {
+    btn.disabled = false; btn.textContent = orig;
+  }
+});
+
+/* -------- Helpers -------- */
+function authHeaders(isJson){
+  const h = { Authorization: 'Bearer ' + state.token };
+  if (isJson) h['Content-Type'] = 'application/json';
+  return h;
+}
+function toastMsg(msg, kind){
+  toast.textContent = msg;
+  toast.className = 'toast ' + (kind === 'err' ? 'err' : 'ok') + ' show';
+  setTimeout(() => toast.classList.remove('show'), 2800);
+}
+function esc(s){
+  return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+</script>
+</body>
+</html>
