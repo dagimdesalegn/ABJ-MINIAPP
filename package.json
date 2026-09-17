@@ -2,5 +2,8 @@
   "name": "abj-tutorial",
   "version": "1.0.0",
   "private": true,
-  "engines": { "node": ">=18" }
+  "engines": { "node": ">=18" },
+  "dependencies": {
+    "telegram": "^2.19.10"
+  }
 }

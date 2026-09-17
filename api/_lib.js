@@ -7,6 +7,10 @@ const {
   VERIFY_API_KEY,
   TELEGRAM_BOT_TOKEN,
   TELEGRAM_MAIN_CHANNEL_ID,
+  TELEGRAM_CHANNEL_ID,
+  TELEGRAM_API_ID,
+  TELEGRAM_API_HASH,
+  TELEGRAM_SESSION,
   JWT_SECRET,
   ADMIN_PASSWORD,
 } = process.env;
@@ -95,6 +99,27 @@ async function getFee() {
   const v = await getSetting('fee', '10000');
   const n = parseFloat(v);
   return isNaN(n) ? 10000 : n;
+}
+
+async function getPublicSettings() {
+  const q = await supabaseQuery('app_settings?select=key,value');
+  const s = {};
+  (q.data || []).forEach(r => { s[r.key] = r.value; });
+
+  const feeNum = parseFloat(s.fee);
+  return {
+    fee: isNaN(feeNum) || feeNum <= 0 ? 10000 : feeNum,
+    accounts: {
+      Telebirr: s.account_telebirr || '',
+      CBE: s.account_cbe || '',
+      mPesa: s.account_mpesa || '',
+    },
+    contact: {
+      username: s.contact_username || '',
+      phone: s.contact_phone || '',
+    },
+    updated_at: new Date().toISOString(),
+  };
 }
 
 /* ============================================================
@@ -259,12 +284,66 @@ async function verifyPayment(reference, suffix) {
 }
 
 /* ============================================================
-   Telegram invite
+   Telegram one-time invite links
+   ------------------------------------------------------------
+   MODE A — USER ACCOUNT (no bot):
+     TELEGRAM_API_ID, TELEGRAM_API_HASH, TELEGRAM_SESSION, TELEGRAM_CHANNEL_ID
+   MODE B — BOT (fallback):
+     TELEGRAM_BOT_TOKEN / BOT_TOKEN, TELEGRAM_CHANNEL_ID or TELEGRAM_MAIN_CHANNEL_ID
    ============================================================ */
-async function createTelegramInvite(linkName) {
-  const token = process.env.BOT_TOKEN;
-  const channelId = process.env.TELEGRAM_MAIN_CHANNEL_ID;
-  if (!token || !channelId) throw new Error('Telegram not configured.');
+
+function telegramChannelId() {
+  return TELEGRAM_CHANNEL_ID || TELEGRAM_MAIN_CHANNEL_ID || '';
+}
+
+async function createInviteViaUser({ channelId, title, expireDate }) {
+  const { TelegramClient, Api } = require('telegram');
+  const { StringSession } = require('telegram/sessions');
+
+  const client = new TelegramClient(
+    new StringSession(TELEGRAM_SESSION),
+    Number(TELEGRAM_API_ID),
+    TELEGRAM_API_HASH,
+    {
+      connectionRetries: 3,
+      useWSS: true,
+      deviceModel: 'ABJ Tutorial',
+      systemVersion: 'Vercel',
+      appVersion: '1.0.0',
+    }
+  );
+
+  await client.connect();
+
+  try {
+    const entity = await client.getInputEntity(channelId);
+
+    let res;
+    try {
+      res = await client.invoke(new Api.messages.ExportChatInvite({
+        peer: entity,
+        expireDate,
+        usageLimit: 1,
+        title,
+      }));
+    } catch (e) {
+      res = await client.invoke(new Api.messages.ExportChatInvite({
+        peer: entity,
+        expireDate,
+        memberLimit: 1,
+        title,
+      }));
+    }
+
+    const link = res.link || (res.invite && res.invite.link);
+    if (!link) throw new Error('Telegram returned no invite link.');
+    return { invite_link: link, expire_date: expireDate, member_limit: 1, via: 'user' };
+  } finally {
+    try { await client.disconnect(); } catch {}
+  }
+}
+
+async function createInviteViaBot({ token, channelId, title, expireDate }) {
   const url = `https://api.telegram.org/bot${token}/createChatInviteLink`;
   const res = await fetch(url, {
     method: 'POST',
@@ -272,13 +351,37 @@ async function createTelegramInvite(linkName) {
     body: JSON.stringify({
       chat_id: channelId,
       member_limit: 1,
-      name: String(linkName).slice(0, 32),
-      expire_date: Math.floor(Date.now() / 1000) + 7 * 24 * 3600,
+      name: title,
+      expire_date: expireDate,
     }),
   });
   const data = await res.json();
   if (!data.ok) throw new Error(data.description || 'Telegram error');
-  return data.result;
+  return {
+    invite_link: data.result.invite_link,
+    expire_date: data.result.expire_date,
+    member_limit: 1,
+    via: 'bot',
+  };
+}
+
+async function createTelegramInvite(linkName) {
+  const channelId = telegramChannelId();
+  if (!channelId) throw new Error('Telegram channel id is not configured.');
+
+  const title = String(linkName || 'ABJ').slice(0, 32);
+  const expireDate = Math.floor(Date.now() / 1000) + 7 * 24 * 3600;
+
+  if (TELEGRAM_API_ID && TELEGRAM_API_HASH && TELEGRAM_SESSION) {
+    return await createInviteViaUser({ channelId, title, expireDate });
+  }
+
+  const botToken = TELEGRAM_BOT_TOKEN || process.env.BOT_TOKEN;
+  if (botToken) {
+    return await createInviteViaBot({ token: botToken, channelId, title, expireDate });
+  }
+
+  throw new Error('Telegram not configured. Add TELEGRAM_SESSION (user account) or TELEGRAM_BOT_TOKEN (bot).');
 }
 
 /* ============================================================
@@ -349,7 +452,7 @@ function json(res, status, body) {
 
 module.exports = {
   supabaseQuery, supabaseInsert, supabaseUpdate, supabaseDelete,
-  getSetting, setSetting, getFee,
+  getSetting, setSetting, getFee, getPublicSettings,
   hashPassword, verifyPassword,
   signJWT, verifyJWT, requireAdmin, requireSuper,
   verifyPayment, createTelegramInvite,

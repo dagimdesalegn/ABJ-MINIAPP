@@ -97,6 +97,33 @@ body{margin:0;font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:li
 .toast.ok{background:linear-gradient(135deg,#10b981,#059669);}
 .toast.err{background:linear-gradient(135deg,#ef4444,#dc2626);}
 
+/* BRANDED ADMIN SUCCESS MODAL */
+.adm-modal{position:fixed;inset:0;z-index:200;background:rgba(5,9,18,.84);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);display:flex;align-items:center;justify-content:center;padding:18px;opacity:0;visibility:hidden;transition:opacity .32s var(--bounce),visibility .32s;overflow-y:auto;}
+.adm-modal.open{opacity:1;visibility:visible;}
+.adm-box{position:relative;width:100%;max-width:430px;max-height:calc(100dvh - 36px);overflow-y:auto;background:radial-gradient(420px 220px at 50% -10%,rgba(59,130,246,.30),transparent 70%),linear-gradient(160deg,#0f1a2f 0%,#131f3d 100%);border:1px solid rgba(255,255,255,.12);border-radius:24px;padding:24px 22px 22px;text-align:center;color:#fff;box-shadow:0 50px 100px -40px rgba(0,0,0,.95),0 0 90px -25px rgba(37,99,235,.55),inset 0 1px 0 rgba(255,255,255,.08);transform:translateY(26px) scale(.95);opacity:0;transition:transform .5s var(--bounce),opacity .35s;}
+.adm-modal.open .adm-box{transform:translateY(0) scale(1);opacity:1;}
+.adm-brand{display:flex;align-items:center;justify-content:center;gap:11px;padding-bottom:16px;margin-bottom:18px;border-bottom:1px solid rgba(255,255,255,.1);}
+.adm-brand-logo{width:44px;height:44px;border-radius:13px;overflow:hidden;flex:0 0 44px;box-shadow:0 10px 26px -10px rgba(212,175,55,.85),0 0 0 2px rgba(247,224,122,.6);}
+.adm-brand-logo img{width:100%;height:100%;object-fit:cover;display:block;}
+.adm-brand-text{text-align:left;line-height:1.1;}
+.adm-brand-name{font-size:13px;font-weight:800;letter-spacing:1.6px;color:#fff;}
+.adm-brand-moto{font-size:8px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;background:linear-gradient(90deg,#8a6516 0%,#d4af37 30%,#f7e07a 50%,#d4af37 70%,#8a6516 100%);background-size:200% auto;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:mottoShine 6s linear infinite;margin-top:3px;}
+@keyframes mottoShine{0%{background-position:0% center;}100%{background-position:200% center;}}
+.adm-badge{width:70px;height:70px;border-radius:50%;display:grid;place-items:center;margin:0 auto 16px;font-size:34px;font-weight:800;background:linear-gradient(135deg,#d1fae5,#a7f3d0);color:#059669;box-shadow:0 18px 38px -16px rgba(16,185,129,.85),inset 0 0 0 3px rgba(255,255,255,.9),inset 0 0 0 4px rgba(16,185,129,.3);animation:admPop .6s var(--bounce) both;}
+@keyframes admPop{from{transform:scale(.3);opacity:0;}to{transform:scale(1);opacity:1;}}
+.adm-modal.err .adm-badge{background:linear-gradient(135deg,#fee2e2,#fecaca);color:#dc2626;box-shadow:0 18px 38px -16px rgba(239,68,68,.85),inset 0 0 0 3px rgba(255,255,255,.9),inset 0 0 0 4px rgba(239,68,68,.3);}
+.adm-modal.warn .adm-badge{background:linear-gradient(135deg,#fff8e1,#fde9a8);color:#8a6516;box-shadow:0 18px 38px -16px rgba(212,175,55,.85),inset 0 0 0 3px rgba(255,255,255,.9),inset 0 0 0 4px rgba(212,175,55,.3);}
+.adm-box h4{margin:0 0 8px;font-size:19px;font-weight:800;letter-spacing:-.3px;color:#fff;}
+.adm-box p#admMsg{margin:0;font-size:13.5px;line-height:1.65;color:rgba(255,255,255,.72);font-weight:500;}
+.adm-extra{margin-top:14px;text-align:left;}
+.adm-link{margin-top:10px;padding:12px 14px;border-radius:12px;background:rgba(247,224,122,.12);border:1px solid rgba(247,224,122,.4);color:var(--gold-1);font-family:monospace;font-size:11.5px;font-weight:700;word-break:break-all;line-height:1.5;}
+.adm-kv{display:flex;justify-content:space-between;gap:12px;padding:7px 0;font-size:12.5px;border-bottom:1px dashed rgba(255,255,255,.1);}
+.adm-kv:last-child{border-bottom:none;}
+.adm-kv span:first-child{color:rgba(255,255,255,.5);font-weight:800;font-size:10px;letter-spacing:.7px;text-transform:uppercase;flex:0 0 auto;}
+.adm-kv span:last-child{font-weight:800;color:#fff;text-align:right;overflow-wrap:anywhere;}
+.adm-actions{display:flex;gap:9px;margin-top:20px;flex-wrap:wrap;}
+.adm-actions .btn{flex:1;min-width:120px;padding:13px 18px;font-size:13.5px;border-radius:12px;display:inline-flex;align-items:center;justify-content:center;gap:7px;}
+
 @media (max-width:640px){
   .stats{grid-template-columns:repeat(2,1fr);gap:10px;}
   .stat{padding:16px 14px;}
@@ -241,6 +268,25 @@ body{margin:0;font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:li
 
 <div class="toast" id="toast"></div>
 
+<div class="adm-modal" id="admModal" role="dialog" aria-modal="true" aria-label="Result">
+  <div class="adm-box">
+    <div class="adm-brand">
+      <div class="adm-brand-logo"><img src="logo.jpg" alt="ABJ" /></div>
+      <div class="adm-brand-text">
+        <div class="adm-brand-name">ABJ TUTORIAL</div>
+        <div class="adm-brand-moto">Empowering Tomorrow, Today.</div>
+      </div>
+    </div>
+    <div class="adm-badge" id="admBadge">✓</div>
+    <h4 id="admTitle">Success</h4>
+    <p id="admMsg">Done.</p>
+    <div class="adm-extra" id="admExtra"></div>
+    <div class="adm-actions" id="admActions">
+      <button class="btn btn-gold" id="admOk" type="button">OK</button>
+    </div>
+  </div>
+</div>
+
 <script>
 const state = {
   token: sessionStorage.getItem('abj_admin_token') || '',
@@ -258,7 +304,76 @@ const logoutBtn = document.getElementById('logoutBtn');
 const toast = document.getElementById('toast');
 const welcomeLine = document.getElementById('welcomeLine');
 
-/* ---------- AUTH ---------- */
+/* ============================================================
+   BRANDED RESULT MODAL
+   ============================================================ */
+const admModalEl = document.getElementById('admModal');
+const admBadge   = document.getElementById('admBadge');
+const admTitle   = document.getElementById('admTitle');
+const admMsg     = document.getElementById('admMsg');
+const admExtra   = document.getElementById('admExtra');
+const admActions = document.getElementById('admActions');
+
+function showAdmModal(opts){
+  const { tone = 'ok', badge, title, message, extra = '', buttons = null } = opts || {};
+  admModalEl.classList.remove('ok', 'err', 'warn');
+  admModalEl.classList.add(tone);
+  admBadge.textContent = badge || (tone === 'err' ? '✕' : tone === 'warn' ? '!' : '✓');
+  admTitle.textContent = title || 'Success';
+  admMsg.textContent   = message || '';
+  admExtra.innerHTML   = extra;
+
+  admActions.innerHTML = '';
+  const list = buttons && buttons.length
+    ? buttons
+    : [{ label: 'OK', class: 'btn-gold' }];
+
+  list.forEach(b => {
+    const el = document.createElement('button');
+    el.type = 'button';
+    el.className = 'btn ' + (b.class || 'btn-ghost');
+    el.textContent = b.label;
+    el.addEventListener('click', () => {
+      if (b.onClick) b.onClick();
+      if (b.close !== false) hideAdmModal();
+    });
+    admActions.appendChild(el);
+  });
+
+  admModalEl.classList.add('open');
+}
+function hideAdmModal(){ admModalEl.classList.remove('open'); }
+admModalEl.addEventListener('click', e => { if (e.target === admModalEl) hideAdmModal(); });
+
+function admSuccess(title, message, extra){ showAdmModal({ tone:'ok', title, message, extra }); }
+function admError(title, message){ showAdmModal({ tone:'err', badge:'!', title, message }); }
+
+function copyToClipboard(text, okMsg){
+  const done = () => toastMsg('📋 ' + (okMsg || 'Copied'), 'ok');
+  try {
+    if (navigator.clipboard && window.isSecureContext){
+      navigator.clipboard.writeText(text).then(done).catch(() => fallback());
+    } else fallback();
+  } catch { fallback(); }
+
+  function fallback(){
+    try {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.top = '-1000px';
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      document.body.removeChild(ta);
+      done();
+    } catch { toastMsg('Copy failed', 'err'); }
+  }
+}
+
+/* ============================================================
+   AUTH
+   ============================================================ */
 loginBtn.addEventListener('click', doLogin);
 adminPass.addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
 adminUser.addEventListener('keydown', e => { if (e.key === 'Enter') adminPass.focus(); });
@@ -284,6 +399,11 @@ async function doLogin(){
     sessionStorage.setItem('abj_admin_role', state.role);
     sessionStorage.setItem('abj_admin_user', state.username);
     showDash();
+    setTimeout(() => showAdmModal({
+      tone: 'ok', badge: '👋',
+      title: 'Welcome back, ' + state.username + '!',
+      message: 'Signed in as ' + (state.role === 'super' ? 'Super Admin' : 'Admin') + '. Dashboard is ready.',
+    }), 250);
   } catch {
     loginError.textContent = 'Network error.';
     loginError.classList.add('show');
@@ -314,7 +434,9 @@ function showDash(){
 
 if (state.token) showDash();
 
-/* ---------- TABS ---------- */
+/* ============================================================
+   TABS
+   ============================================================ */
 let currentTab = 'pending';
 document.querySelectorAll('.tab').forEach(tab => {
   tab.addEventListener('click', () => {
@@ -331,7 +453,9 @@ document.querySelectorAll('.tab').forEach(tab => {
   });
 });
 
-/* ---------- REGISTRATIONS ---------- */
+/* ============================================================
+   REGISTRATIONS
+   ============================================================ */
 async function loadTab(status){
   const boxMap = { pending: 'listPending', approved: 'listApproved', rejected: 'listRejected' };
   const box = document.getElementById(boxMap[status]);
@@ -349,12 +473,12 @@ async function loadTab(status){
 async function updateCounts(){
   try {
     const [p, a, r] = await Promise.all([
-      fetch('/api/admin-list?status=pending', { headers: authHeaders() }).then(r => r.json()),
+      fetch('/api/admin-list?status=pending',  { headers: authHeaders() }).then(r => r.json()),
       fetch('/api/admin-list?status=approved', { headers: authHeaders() }).then(r => r.json()),
       fetch('/api/admin-list?status=rejected', { headers: authHeaders() }).then(r => r.json()),
     ]);
-    document.getElementById('stTotal').textContent = (p.items?.length||0) + (a.items?.length||0) + (r.items?.length||0);
-    document.getElementById('stPending').textContent = p.items?.length || 0;
+    document.getElementById('stTotal').textContent    = (p.items?.length||0) + (a.items?.length||0) + (r.items?.length||0);
+    document.getElementById('stPending').textContent  = p.items?.length || 0;
     document.getElementById('stApproved').textContent = a.items?.length || 0;
     document.getElementById('stRejected').textContent = r.items?.length || 0;
   } catch {}
@@ -368,12 +492,12 @@ function render(box, status, items){
     return;
   }
   box.innerHTML = items.map(r => {
-    const created = new Date(r.created_at).toLocaleString();
+    const created  = new Date(r.created_at).toLocaleString();
     const approved = r.approved_at ? new Date(r.approved_at).toLocaleString() : '—';
     const actions = r.status === 'pending'
       ? `<div class="actions">
            <button class="btn btn-approve" data-act="approve" data-id="${r.id}">✅ Approve & Create Invite</button>
-           <button class="btn btn-reject" data-act="reject" data-id="${r.id}">❌ Reject</button>
+           <button class="btn btn-reject"  data-act="reject"  data-id="${r.id}">❌ Reject</button>
          </div>` : '';
     const invite = r.invite_link
       ? `<a class="invite-link" href="${esc(r.invite_link)}" target="_blank" rel="noopener">🔗 ${esc(r.invite_link)}</a>` : '';
@@ -410,25 +534,54 @@ async function handleAction(act, id, btn){
   btn.textContent = act === 'approve' ? 'Creating invite...' : 'Rejecting...';
   try {
     let res, data;
+
     if (act === 'approve'){
-      res = await fetch('/api/admin-approve', { method: 'POST', headers: authHeaders(true), body: JSON.stringify({ id }) });
+      res = await fetch('/api/admin-approve', {
+        method: 'POST', headers: authHeaders(true), body: JSON.stringify({ id })
+      });
+      data = await res.json();
+      if (!res.ok) { admError('Approval Failed', data.error || 'Action failed.'); return; }
+
+      showAdmModal({
+        tone: 'ok', badge: '✅',
+        title: 'Registration Approved',
+        message: 'A one-time invite link was created and is now live. Copy it or share it with the student.',
+        extra: `<div class="adm-kv"><span>Student</span><span>${esc(data.public_id || '')}</span></div>
+                <div class="adm-link">${esc(data.invite_link || '')}</div>`,
+        buttons: [
+          { label: '📋 Copy Link', class: 'btn-ghost', close: false,
+            onClick: () => copyToClipboard(data.invite_link || '', 'Invite link copied') },
+          { label: 'Done', class: 'btn-gold' }
+        ]
+      });
     } else {
       const reason = prompt('Reason for rejection (optional):');
-      res = await fetch('/api/admin-reject', { method: 'POST', headers: authHeaders(true), body: JSON.stringify({ id, reason: reason || '' }) });
+      res = await fetch('/api/admin-reject', {
+        method: 'POST', headers: authHeaders(true), body: JSON.stringify({ id, reason: reason || '' })
+      });
+      data = await res.json();
+      if (!res.ok) { admError('Rejection Failed', data.error || 'Action failed.'); return; }
+
+      showAdmModal({
+        tone: 'warn', badge: '❌',
+        title: 'Registration Rejected',
+        message: reason ? 'The student will see your reason when they check their status.' : 'The registration was rejected.',
+        extra: reason ? `<div class="adm-link" style="background:rgba(239,68,68,.12);border-color:rgba(239,68,68,.4);color:#fca5a5;">${esc(reason)}</div>` : ''
+      });
     }
-    data = await res.json();
-    if (!res.ok) { toastMsg(data.error || 'Action failed.', 'err'); return; }
-    toastMsg(act === 'approve' ? '✅ Approved & invite created.' : '❌ Rejected.', 'ok');
+
     await loadTab(currentTab);
     await updateCounts();
   } catch {
-    toastMsg('Network error.', 'err');
+    admError('Network Error', 'Could not reach the server. Please try again.');
   } finally {
     btn.disabled = false; btn.textContent = original;
   }
 }
 
-/* ---------- VIDEOS ---------- */
+/* ============================================================
+   VIDEOS
+   ============================================================ */
 async function loadVideos(){
   const box = document.getElementById('videoList');
   box.innerHTML = '<div class="empty"><div class="icon">⏳</div><p>Loading...</p></div>';
@@ -452,9 +605,13 @@ async function loadVideos(){
     box.querySelectorAll('[data-del-vid]').forEach(btn => {
       btn.addEventListener('click', async () => {
         if (!confirm('Delete this video?')) return;
-        const r = await fetch('/api/admin-videos?id=' + encodeURIComponent(btn.dataset.delVid), { method: 'DELETE', headers: authHeaders() });
-        if (r.ok) { toastMsg('✅ Video removed.', 'ok'); loadVideos(); }
-        else toastMsg('Failed.', 'err');
+        const r = await fetch('/api/admin-videos?id=' + encodeURIComponent(btn.dataset.delVid), {
+          method: 'DELETE', headers: authHeaders()
+        });
+        if (r.ok) {
+          admSuccess('Video Removed', 'The lesson was deleted from the public playlist.');
+          loadVideos();
+        } else admError('Delete Failed', 'Could not remove the video.');
       });
     });
   } catch {
@@ -464,9 +621,10 @@ async function loadVideos(){
 
 document.getElementById('addVideoBtn').addEventListener('click', async () => {
   const title = document.getElementById('vidTitle').value.trim();
-  const url = document.getElementById('vidUrl').value.trim();
-  const tag = document.getElementById('vidTag').value.trim() || 'Lesson';
-  if (!title || !url) { toastMsg('Title and URL required.', 'err'); return; }
+  const url   = document.getElementById('vidUrl').value.trim();
+  const tag   = document.getElementById('vidTag').value.trim() || 'Lesson';
+  if (!title || !url) { admError('Missing Fields', 'Title and YouTube URL are required.'); return; }
+
   const btn = document.getElementById('addVideoBtn');
   const orig = btn.textContent;
   btn.disabled = true; btn.textContent = 'Adding...';
@@ -476,17 +634,27 @@ document.getElementById('addVideoBtn').addEventListener('click', async () => {
       body: JSON.stringify({ title, url, tag })
     });
     const data = await res.json();
-    if (!res.ok) { toastMsg(data.error || 'Failed.', 'err'); return; }
-    toastMsg('✅ Video added.', 'ok');
+    if (!res.ok) { admError('Could Not Add Video', data.error || 'Failed.'); return; }
+
+    showAdmModal({
+      tone: 'ok', badge: '🎬',
+      title: 'Video Added',
+      message: 'The lesson is now live on the home page playlist.',
+      extra: `<div class="adm-kv"><span>Title</span><span>${esc(title)}</span></div>
+              <div class="adm-kv"><span>Tag</span><span>${esc(tag)}</span></div>`
+    });
+
     document.getElementById('vidTitle').value = '';
-    document.getElementById('vidUrl').value = '';
-    document.getElementById('vidTag').value = '';
+    document.getElementById('vidUrl').value   = '';
+    document.getElementById('vidTag').value   = '';
     loadVideos();
-  } catch { toastMsg('Network error.', 'err'); }
+  } catch { admError('Network Error', 'Could not reach the server.'); }
   finally { btn.disabled = false; btn.textContent = orig; }
 });
 
-/* ---------- TESTIMONIALS ---------- */
+/* ============================================================
+   TESTIMONIALS
+   ============================================================ */
 async function loadTestimonials(){
   const box = document.getElementById('tstList');
   box.innerHTML = '<div class="empty"><div class="icon">⏳</div><p>Loading...</p></div>';
@@ -510,9 +678,13 @@ async function loadTestimonials(){
     box.querySelectorAll('[data-del-tst]').forEach(btn => {
       btn.addEventListener('click', async () => {
         if (!confirm('Delete this testimonial?')) return;
-        const r = await fetch('/api/admin-testimonials?id=' + encodeURIComponent(btn.dataset.delTst), { method: 'DELETE', headers: authHeaders() });
-        if (r.ok) { toastMsg('✅ Removed.', 'ok'); loadTestimonials(); }
-        else toastMsg('Failed.', 'err');
+        const r = await fetch('/api/admin-testimonials?id=' + encodeURIComponent(btn.dataset.delTst), {
+          method: 'DELETE', headers: authHeaders()
+        });
+        if (r.ok) {
+          admSuccess('Testimonial Removed', 'It no longer appears on the home page.');
+          loadTestimonials();
+        } else admError('Delete Failed', 'Could not remove the testimonial.');
       });
     });
   } catch {
@@ -522,10 +694,11 @@ async function loadTestimonials(){
 
 document.getElementById('addTstBtn').addEventListener('click', async () => {
   const student_name = document.getElementById('tstName').value.trim();
-  const subject = document.getElementById('tstSubject').value.trim();
-  const text = document.getElementById('tstText').value.trim();
-  const stars = document.getElementById('tstStars').value;
-  if (!student_name || !subject || !text) { toastMsg('All fields required.', 'err'); return; }
+  const subject      = document.getElementById('tstSubject').value.trim();
+  const text         = document.getElementById('tstText').value.trim();
+  const stars        = document.getElementById('tstStars').value;
+  if (!student_name || !subject || !text) { admError('Missing Fields', 'All fields are required.'); return; }
+
   const btn = document.getElementById('addTstBtn');
   const orig = btn.textContent;
   btn.disabled = true; btn.textContent = 'Adding...';
@@ -535,29 +708,50 @@ document.getElementById('addTstBtn').addEventListener('click', async () => {
       body: JSON.stringify({ student_name, subject, text, stars })
     });
     const data = await res.json();
-    if (!res.ok) { toastMsg(data.error || 'Failed.', 'err'); return; }
-    toastMsg('✅ Testimonial added.', 'ok');
-    document.getElementById('tstName').value = '';
+    if (!res.ok) { admError('Could Not Add Testimonial', data.error || 'Failed.'); return; }
+
+    showAdmModal({
+      tone: 'ok', badge: '💬',
+      title: 'Testimonial Added',
+      message: 'It is now visible in the home-page slider.',
+      extra: `<div class="adm-kv"><span>Student</span><span>${esc(student_name)}</span></div>
+              <div class="adm-kv"><span>Subject</span><span>${esc(subject)}</span></div>
+              <div class="adm-kv"><span>Stars</span><span>${'★'.repeat(parseInt(stars,10))}</span></div>`
+    });
+
+    document.getElementById('tstName').value    = '';
     document.getElementById('tstSubject').value = '';
-    document.getElementById('tstText').value = '';
+    document.getElementById('tstText').value    = '';
     loadTestimonials();
-  } catch { toastMsg('Network error.', 'err'); }
+  } catch { admError('Network Error', 'Could not reach the server.'); }
   finally { btn.disabled = false; btn.textContent = orig; }
 });
 
-/* ---------- SETTINGS ---------- */
+/* ============================================================
+   SETTINGS
+   ============================================================ */
 async function loadSettings(){
   try {
     const res = await fetch('/api/admin-settings', { headers: authHeaders() });
     const data = await res.json();
     if (!res.ok) return;
     const s = data.settings || {};
-    document.getElementById('setFee').value = s.fee || '10000';
-    document.getElementById('setTelebirr').value = s.account_telebirr || '';
-    document.getElementById('setCBE').value = s.account_cbe || '';
-    document.getElementById('setMpesa').value = s.account_mpesa || '';
-    document.getElementById('setContactUser').value = s.contact_username || '';
+    document.getElementById('setFee').value          = s.fee || '10000';
+    document.getElementById('setTelebirr').value     = s.account_telebirr || '';
+    document.getElementById('setCBE').value          = s.account_cbe || '';
+    document.getElementById('setMpesa').value        = s.account_mpesa || '';
+    document.getElementById('setContactUser').value  = s.contact_username || '';
     document.getElementById('setContactPhone').value = s.contact_phone || '';
+
+    showAdmModal({
+      tone: 'ok', badge: '⚙️',
+      title: 'Settings Loaded',
+      message: 'Current fee and payment accounts are ready to edit.',
+      extra: `<div class="adm-kv"><span>Registration Fee</span><span>ETB ${Number(s.fee || 10000).toLocaleString()}</span></div>
+              <div class="adm-kv"><span>Telebirr</span><span>${esc(s.account_telebirr || '—')}</span></div>
+              <div class="adm-kv"><span>CBE</span><span>${esc(s.account_cbe || '—')}</span></div>
+              <div class="adm-kv"><span>mPesa</span><span>${esc(s.account_mpesa || '—')}</span></div>`
+    });
   } catch {}
 }
 
@@ -565,26 +759,39 @@ document.getElementById('saveSettings').addEventListener('click', async () => {
   const btn = document.getElementById('saveSettings');
   const orig = btn.textContent;
   btn.disabled = true; btn.textContent = 'Saving...';
+
+  const payload = {
+    fee:              document.getElementById('setFee').value,
+    account_telebirr: document.getElementById('setTelebirr').value,
+    account_cbe:      document.getElementById('setCBE').value,
+    account_mpesa:    document.getElementById('setMpesa').value,
+    contact_username: document.getElementById('setContactUser').value,
+    contact_phone:    document.getElementById('setContactPhone').value,
+  };
+
   try {
     const res = await fetch('/api/admin-settings', {
-      method: 'POST', headers: authHeaders(true),
-      body: JSON.stringify({
-        fee: document.getElementById('setFee').value,
-        account_telebirr: document.getElementById('setTelebirr').value,
-        account_cbe: document.getElementById('setCBE').value,
-        account_mpesa: document.getElementById('setMpesa').value,
-        contact_username: document.getElementById('setContactUser').value,
-        contact_phone: document.getElementById('setContactPhone').value,
-      })
+      method: 'POST', headers: authHeaders(true), body: JSON.stringify(payload)
     });
     const data = await res.json();
-    if (!res.ok) { toastMsg(data.error || 'Save failed.', 'err'); return; }
-    toastMsg('✅ Settings saved.', 'ok');
-  } catch { toastMsg('Network error.', 'err'); }
+    if (!res.ok) { admError('Save Failed', data.error || 'Could not save settings.'); return; }
+
+    showAdmModal({
+      tone: 'ok', badge: '💾',
+      title: 'Settings Saved',
+      message: 'The home-page registration form now shows the new fee and accounts immediately.',
+      extra: `<div class="adm-kv"><span>Registration Fee</span><span>ETB ${Number(payload.fee || 0).toLocaleString()}</span></div>
+              <div class="adm-kv"><span>Telebirr</span><span>${esc(payload.account_telebirr || '—')}</span></div>
+              <div class="adm-kv"><span>CBE</span><span>${esc(payload.account_cbe || '—')}</span></div>
+              <div class="adm-kv"><span>mPesa</span><span>${esc(payload.account_mpesa || '—')}</span></div>`
+    });
+  } catch { admError('Network Error', 'Could not reach the server.'); }
   finally { btn.disabled = false; btn.textContent = orig; }
 });
 
-/* ---------- ADMINS ---------- */
+/* ============================================================
+   ADMINS
+   ============================================================ */
 async function loadAdmins(){
   const listBox = document.getElementById('adminList');
   listBox.innerHTML = '<div class="empty"><div class="icon">⏳</div><p>Loading...</p></div>';
@@ -607,9 +814,13 @@ async function loadAdmins(){
     listBox.querySelectorAll('[data-del]').forEach(btn => {
       btn.addEventListener('click', async () => {
         if (!confirm('Delete this admin?')) return;
-        const r = await fetch('/api/admin-admins?id=' + encodeURIComponent(btn.dataset.del), { method: 'DELETE', headers: authHeaders() });
-        if (r.ok) { toastMsg('✅ Admin removed.', 'ok'); loadAdmins(); }
-        else toastMsg('Failed.', 'err');
+        const r = await fetch('/api/admin-admins?id=' + encodeURIComponent(btn.dataset.del), {
+          method: 'DELETE', headers: authHeaders()
+        });
+        if (r.ok) {
+          admSuccess('Admin Removed', 'That admin can no longer sign in.');
+          loadAdmins();
+        } else admError('Delete Failed', 'Could not remove the admin.');
       });
     });
   } catch {
@@ -621,7 +832,8 @@ document.getElementById('addAdminBtn').addEventListener('click', async () => {
   const u = document.getElementById('newAdminUser').value.trim().toLowerCase();
   const n = document.getElementById('newAdminName').value.trim();
   const p = document.getElementById('newAdminPass').value;
-  if (!u || !p) { toastMsg('Username and password required.', 'err'); return; }
+  if (!u || !p) { admError('Missing Fields', 'Username and password are required.'); return; }
+
   const btn = document.getElementById('addAdminBtn');
   const orig = btn.textContent;
   btn.disabled = true; btn.textContent = 'Adding...';
@@ -631,17 +843,28 @@ document.getElementById('addAdminBtn').addEventListener('click', async () => {
       body: JSON.stringify({ username: u, password: p, full_name: n })
     });
     const data = await res.json();
-    if (!res.ok) { toastMsg(data.error || 'Failed.', 'err'); return; }
-    toastMsg('✅ Admin added.', 'ok');
+    if (!res.ok) { admError('Could Not Add Admin', data.error || 'Failed.'); return; }
+
+    showAdmModal({
+      tone: 'ok', badge: '👤',
+      title: 'Admin Added',
+      message: 'This account can now sign in to the control panel.',
+      extra: `<div class="adm-kv"><span>Username</span><span>${esc(u)}</span></div>
+              <div class="adm-kv"><span>Name</span><span>${esc(n || '—')}</span></div>
+              <div class="adm-kv"><span>Role</span><span>Admin</span></div>`
+    });
+
     document.getElementById('newAdminUser').value = '';
     document.getElementById('newAdminName').value = '';
     document.getElementById('newAdminPass').value = '';
     loadAdmins();
-  } catch { toastMsg('Network error.', 'err'); }
+  } catch { admError('Network Error', 'Could not reach the server.'); }
   finally { btn.disabled = false; btn.textContent = orig; }
 });
 
-/* ---------- HELPERS ---------- */
+/* ============================================================
+   HELPERS
+   ============================================================ */
 function authHeaders(isJson){
   const h = { Authorization: 'Bearer ' + state.token };
   if (isJson) h['Content-Type'] = 'application/json';

@@ -456,6 +456,66 @@ section{scroll-margin-top:calc(var(--header-h) + 20px);}
 .reg-success p{margin:0 0 5px;font-size:13.5px;color:var(--muted);line-height:1.6;}
 .reg-success .ref{display:inline-block;margin-top:12px;padding:9px 16px;border-radius:10px;background:#f8fbff;border:1px dashed var(--blue);color:var(--blue);font-size:14px;font-weight:800;letter-spacing:1.2px;}
 
+/* COPY TOAST */
+.copy-toast{position:fixed;left:50%;bottom:calc(28px + env(safe-area-inset-bottom));transform:translate(-50%,160%);z-index:230;padding:13px 22px;border-radius:999px;background:linear-gradient(135deg,#0b1220,#1e3a8a);color:#fff;font-weight:800;font-size:13.5px;letter-spacing:.2px;box-shadow:0 18px 40px -14px rgba(0,0,0,.7),inset 0 0 0 2px rgba(247,224,122,.75);transition:transform .45s var(--bounce);pointer-events:none;display:flex;align-items:center;gap:9px;max-width:calc(100vw - 32px);text-align:center;}
+.copy-toast.show{transform:translate(-50%,0);}
+.copy-toast.err{box-shadow:0 18px 40px -14px rgba(0,0,0,.7),inset 0 0 0 2px rgba(239,68,68,.85);}
+
+/* COPYABLE REG ID */
+.ref.copy-ref{cursor:pointer;border:none;font-family:inherit;transition:transform .25s var(--bounce),box-shadow .25s var(--ease);}
+.ref.copy-ref:hover{transform:translateY(-2px);box-shadow:0 12px 24px -12px rgba(37,99,235,.8);}
+.ref-hint{margin-top:8px;font-size:11.5px;font-weight:700;letter-spacing:.4px;color:var(--muted);text-align:center;}
+
+/* HOME STATUS MODAL */
+.sts-modal{position:fixed;inset:0;z-index:160;background:rgba(5,9,18,.86);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);display:flex;align-items:center;justify-content:center;padding:16px;padding-top:calc(16px + env(safe-area-inset-top));padding-bottom:calc(16px + env(safe-area-inset-bottom));opacity:0;visibility:hidden;transition:opacity .35s var(--ease),visibility .35s var(--ease);overflow-y:auto;-ms-overflow-style:none;scrollbar-width:none;}
+.sts-modal::-webkit-scrollbar{display:none;width:0;height:0;}
+.sts-modal.open{opacity:1;visibility:visible;}
+.sts-shell{position:relative;width:100%;max-width:470px;max-height:calc(100dvh - 32px);overflow-y:auto;-webkit-overflow-scrolling:touch;background:radial-gradient(420px 220px at 50% -10%,rgba(59,130,246,.20),transparent 70%),linear-gradient(160deg,#ffffff 0%,#f8fbff 100%);border-radius:24px;padding:24px 22px 22px;box-shadow:0 50px 100px -40px rgba(0,0,0,.9),0 0 90px -25px rgba(37,99,235,.55),inset 0 1px 0 rgba(255,255,255,.9);transform:translateY(28px) scale(.96);opacity:0;transition:transform .5s var(--bounce),opacity .35s var(--ease);-ms-overflow-style:none;scrollbar-width:none;}
+.sts-shell::-webkit-scrollbar{display:none;width:0;height:0;}
+.sts-modal.open .sts-shell{transform:translateY(0) scale(1);opacity:1;}
+.sts-shell::before{content:'';position:absolute;inset:-2px;border-radius:26px;padding:2px;background:conic-gradient(from 0deg,#2563eb,#0ea5e9,#a855f7,#f7e07a,#d4af37,#2563eb);background-size:200% 200%;animation:borderSpin 6s linear infinite;-webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;z-index:-1;}
+.sts-head{display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center;padding-bottom:16px;margin-bottom:16px;border-bottom:1px solid var(--line);position:relative;}
+.sts-logo{width:54px;height:54px;border-radius:15px;overflow:hidden;box-shadow:0 12px 26px -10px rgba(212,175,55,.75),0 0 0 2px rgba(255,255,255,.95),0 0 0 3.5px rgba(212,175,55,.4);animation:logoFloat 5s ease-in-out infinite;}
+.sts-head h3{margin:6px 0 0;font-size:17px;font-weight:800;letter-spacing:-.3px;color:var(--ink);}
+.sts-moto{font-size:8.5px;font-weight:800;letter-spacing:1.8px;text-transform:uppercase;background:linear-gradient(90deg,#8a6516 0%,#d4af37 30%,#f7e07a 50%,#d4af37 70%,#8a6516 100%);background-size:200% auto;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:mottoShine 6s linear infinite;}
+.sts-close{position:absolute;top:-4px;right:0;width:34px;height:34px;border-radius:10px;background:#eaf1ff;color:#2563eb;display:grid;place-items:center;font-size:14px;font-weight:800;transition:background .2s var(--ease),transform .3s var(--bounce);z-index:3;}
+.sts-close:hover{background:linear-gradient(135deg,#ef4444,#dc2626);color:#fff;transform:rotate(90deg);}
+.sts-id{display:block;width:100%;text-align:center;padding:14px 16px;border-radius:14px;background:linear-gradient(135deg,#fff8e1,#fde9a8);border:2px dashed rgba(212,175,55,.6);margin-bottom:16px;cursor:pointer;transition:transform .25s var(--bounce),box-shadow .25s var(--ease);font-family:inherit;}
+.sts-id:hover{transform:translateY(-2px);box-shadow:0 14px 28px -14px rgba(212,175,55,.85);}
+.sts-id-label{display:block;font-size:9.5px;font-weight:800;letter-spacing:1.3px;text-transform:uppercase;color:#8a6516;margin-bottom:5px;}
+.sts-id-val{display:block;font-size:19px;font-weight:800;letter-spacing:2px;color:#0b1220;word-break:break-all;}
+.sts-id-copy{display:block;font-size:9.5px;font-weight:800;letter-spacing:1.1px;text-transform:uppercase;color:#8a6516;opacity:.8;margin-top:6px;}
+.sts-badge{display:inline-block;padding:7px 16px;border-radius:999px;font-size:11.5px;font-weight:800;letter-spacing:1.3px;text-transform:uppercase;margin-bottom:12px;}
+.sts-badge.ok{background:linear-gradient(135deg,#d1fae5,#a7f3d0);color:#065f46;border:1px solid rgba(16,185,129,.45);}
+.sts-badge.bad{background:linear-gradient(135deg,#fee2e2,#fecaca);color:#991b1b;border:1px solid rgba(239,68,68,.45);}
+.sts-badge.wait{background:linear-gradient(135deg,#fef3c7,#fde68a);color:#8a6516;border:1px solid rgba(212,175,55,.5);}
+.sts-title{margin:0 0 8px;font-size:18px;font-weight:800;letter-spacing:-.3px;color:var(--ink);}
+.sts-text{margin:0 0 14px;font-size:13.5px;line-height:1.65;color:var(--muted);font-weight:500;}
+.sts-rows{background:#f8fbff;border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin-bottom:14px;}
+.sts-row{display:flex;justify-content:space-between;gap:12px;padding:6px 0;font-size:12.5px;border-bottom:1px dashed var(--line);}
+.sts-row:last-child{border-bottom:none;}
+.sts-row span:first-child{color:var(--muted);font-weight:800;font-size:10px;letter-spacing:.6px;text-transform:uppercase;flex:0 0 auto;}
+.sts-row span:last-child{font-weight:800;color:var(--ink);text-align:right;min-width:0;overflow-wrap:anywhere;}
+.sts-reason{padding:12px 14px;border-radius:12px;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.35);color:#991b1b;font-size:13px;font-weight:600;line-height:1.6;margin-bottom:14px;text-align:left;}
+.sts-warn{padding:14px 16px;border-radius:14px;background:linear-gradient(135deg,#fff8e1,#fde9a8);border:2px solid rgba(212,175,55,.55);margin-bottom:16px;text-align:left;}
+.sts-warn strong{display:block;font-size:12.5px;font-weight:800;color:#8a6516;margin-bottom:8px;letter-spacing:.3px;}
+.sts-warn ul{margin:0;padding-left:18px;list-style:disc;}
+.sts-warn li{font-size:12.5px;color:#4a3a10;line-height:1.65;font-weight:600;margin-bottom:4px;}
+.sts-warn li b{color:#8a6516;}
+.sts-btn{width:100%;padding:14px 18px;border-radius:14px;font-size:14.5px;font-weight:800;letter-spacing:.3px;display:flex;align-items:center;justify-content:center;gap:9px;cursor:pointer;border:none;transition:transform .25s var(--bounce),box-shadow .25s var(--ease),background .25s var(--ease);min-height:50px;font-family:inherit;margin-bottom:9px;}
+.sts-btn:last-of-type{margin-bottom:0;}
+.sts-btn.primary{background:linear-gradient(135deg,#2563eb,#1d4ed8);color:#fff;box-shadow:0 14px 30px -14px rgba(37,99,235,.9);}
+.sts-btn.primary:hover{transform:translateY(-2px);box-shadow:0 20px 40px -14px rgba(37,99,235,1);}
+.sts-btn.gold{background:linear-gradient(135deg,#f7e07a,#d4af37);color:#0b1220;box-shadow:0 16px 34px -14px rgba(212,175,55,.95);animation:joinPulse 2.4s ease-in-out infinite;}
+.sts-btn.gold:hover{transform:translateY(-2px);box-shadow:0 22px 44px -14px rgba(212,175,55,1);}
+@keyframes joinPulse{0%,100%{box-shadow:0 16px 34px -14px rgba(212,175,55,.95),0 0 0 0 rgba(212,175,55,.55);}50%{box-shadow:0 16px 34px -14px rgba(212,175,55,.95),0 0 0 10px rgba(212,175,55,0);}}
+.sts-btn.ghost{background:#ffffff;color:var(--ink);border:2px solid var(--line);}
+.sts-btn.ghost:hover{border-color:#c9d9f2;background:#f8fbff;transform:translateY(-2px);}
+.sts-mini{margin:12px 0 0;font-size:11.5px;color:var(--muted);text-align:center;font-weight:600;line-height:1.5;}
+.sts-loading{text-align:center;padding:40px 10px;}
+.sts-loading p{margin:16px 0 0;font-size:13.5px;color:var(--muted);font-weight:700;}
+.sts-spinner{display:inline-block;width:46px;height:46px;border-radius:50%;border:3px solid rgba(37,99,235,.18);border-top-color:#2563eb;border-right-color:#a855f7;animation:spin 1s linear infinite;}
+
 /* LOADING SCREEN */
 .loading-screen{position:fixed;inset:0;z-index:180;background:linear-gradient(160deg,#0b1220 0%,#131f3d 100%);display:none;flex-direction:column;align-items:center;justify-content:center;padding:24px;text-align:center;overflow:hidden;}
 .loading-screen.show{display:flex;animation:loadingFadeIn .35s var(--ease) both;}
@@ -917,7 +977,7 @@ section{scroll-margin-top:calc(var(--header-h) + 20px);}
                 <span class="tg-ic">
                   <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21.94 4.3 18.9 19.1c-.23 1.02-.84 1.27-1.7.79l-4.7-3.46-2.27 2.18c-.25.25-.46.46-.94.46l.33-4.75 8.65-7.81c.38-.33-.08-.52-.58-.19L6.98 13.1l-4.6-1.44c-1-.31-1.02-1 .21-1.48l17.98-6.93c.83-.31 1.56.2 1.37 1.05z"/></svg>
                 </span>
-                Register Now
+                <span id="ctaBtnLabel">Register Now</span>
               </button>
             </span>
           </div>
@@ -946,7 +1006,7 @@ section{scroll-margin-top:calc(var(--header-h) + 20px);}
 
 <button class="float-cta" id="floatCta" type="button">
   <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21.94 4.3 18.9 19.1c-.23 1.02-.84 1.27-1.7.79l-4.7-3.46-2.27 2.18c-.25.25-.46.46-.94.46l.33-4.75 8.65-7.81c.38-.33-.08-.52-.58-.19L6.98 13.1l-4.6-1.44c-1-.31-1.02-1 .21-1.48l17.98-6.93c.83-.31 1.56.2 1.37 1.05z"/></svg>
-  Register Now
+  <span id="floatCtaLabel">Register Now</span>
 </button>
 
 <!-- VIDEO PLAYER -->
@@ -1084,15 +1144,31 @@ section{scroll-margin-top:calc(var(--header-h) + 20px);}
       <h4>Registration Received!</h4>
       <p>Your details are now under review. Our admin will verify your payment and approve your account shortly.</p>
       <p>Save the ID below to check your status anytime.</p>
-      <div class="ref" id="regSuccessRef"></div>
+      <button class="ref copy-ref" id="regSuccessRef" type="button" title="Tap to copy"></button>
+      <div class="ref-hint">👆 Tap the ID above to copy it — save it somewhere safe</div>
       <div class="reg-footer" style="margin-top:18px">
-        <a class="reg-btn ghost" id="regStatusLink" href="#" target="_blank" style="text-decoration:none;">🔎 Check Status</a>
+        <button class="reg-btn ghost" id="regStatusLink" type="button">🔎 Check Status</button>
         <button class="reg-btn primary" id="regDone" type="button">Done</button>
       </div>
     </div>
 
   </div>
 </div>
+
+<!-- HOME STATUS MODAL -->
+<div class="sts-modal" id="statusModal" role="dialog" aria-modal="true" aria-label="Registration status">
+  <div class="sts-shell">
+    <div class="sts-head">
+      <button class="sts-close" id="statusClose" type="button" aria-label="Close">✕</button>
+      <div class="sts-logo"><img src="logo.jpg" alt="ABJ" /></div>
+      <h3>Registration Status</h3>
+      <span class="sts-moto">Empowering Tomorrow, Today.</span>
+    </div>
+    <div id="statusBody"></div>
+  </div>
+</div>
+
+<div class="copy-toast" id="copyToast">📋 Copied</div>
 
 <!-- LOADING SCREEN -->
 <div class="loading-screen" id="regLoading">
@@ -1196,8 +1272,6 @@ const CURRICULUM = {
   ]
 };
 
-// Attach a demo video to each course (used by the accordion's Demo Video button).
-// These all feed the shared player modal.
 const COURSE_VIDEOS = [
   'https://youtu.be/xFRevkVzPFk',
   'https://youtu.be/RLVXwk7x-DM',
@@ -1340,11 +1414,7 @@ semButtons.forEach(btn => btn.addEventListener('click', () => {
 renderStreams(); renderCourses();
 
 /* ============================================================
-   3. VIDEO PLAYER (API-driven playlist)
-   ------------------------------------------------------------
-   The playlist loads from /api/videos. Super admin adds videos
-   via the admin panel, they appear here automatically.
-   Falls back to defaults if the API is unreachable.
+   3. VIDEO PLAYER
    ============================================================ */
 const DEFAULT_VIDEOS = [
   { title:'CIVICS CHAPTER TWO PART 2 DEONTOLOGICAL NORMATIVE ETHICS: DEONTOLOGICAL ETHICS', url:'https://youtu.be/xFRevkVzPFk', tag:'Civics' },
@@ -1431,7 +1501,6 @@ function openPlayerWelcome(){
   document.body.style.overflow = 'hidden';
 }
 function openPlayerWithVideo(url, title, tag){
-  // Find the video in the playlist; if not found, prepend it temporarily.
   let idx = videosData.findIndex(v => v.url === url);
   if (idx === -1){
     videosData.unshift({ title, url, tag });
@@ -1442,7 +1511,6 @@ function openPlayerWithVideo(url, title, tag){
   playerModal.classList.add('open');
   document.body.style.overflow = 'hidden';
   renderPlayer();
-  // Scroll playlist to active item
   const activeEl = playerList.querySelector('.pl-item.active');
   if (activeEl) activeEl.scrollIntoView({ behavior:'smooth', block:'nearest' });
 }
@@ -1455,7 +1523,6 @@ function closePlayer(){
 document.getElementById('demoBtn').addEventListener('click', openPlayerWelcome);
 document.getElementById('playerClose').addEventListener('click', closePlayer);
 
-// Load videos from the API (super admin's additions appear here)
 (async function loadVideosFromAPI(){
   try {
     const res = await fetch('/api/videos', { cache: 'no-store' });
@@ -1470,7 +1537,7 @@ document.getElementById('playerClose').addEventListener('click', closePlayer);
 })();
 
 /* ============================================================
-   4. TESTIMONIALS (API-driven)
+   4. TESTIMONIALS
    ============================================================ */
 const DEFAULT_TESTIMONIALS = [
   { student_name:'Girum T.', subject:'Maths', stars:5, text:'The step-by-step maths solutions were a total game-changer for me. I went from barely passing to scoring above 85 on every exam.' },
@@ -1554,7 +1621,6 @@ if (tstWrap){
   }, {passive:true});
 }
 
-// Load testimonials from the API
 (async function loadTestimonialsFromAPI(){
   try {
     const res = await fetch('/api/testimonials', { cache: 'no-store' });
@@ -1640,14 +1706,30 @@ const errMessage = document.getElementById('errMessage');
 const errClose = document.getElementById('errClose');
 const errRetry = document.getElementById('errRetry');
 
-// Static display values for the payment step.
-// The server enforces the real fee from the DB, so these are just for display.
-const PAYMENT_ACCOUNTS_DISPLAY = {
-  Telebirr: '0927429565',
-  CBE: '1000417007192',
-  mPesa: '0927429565'
+/* ------------------------------------------------------------------
+   LIVE public settings (fee + receiving accounts).
+   ------------------------------------------------------------------ */
+const PUBLIC_SETTINGS = {
+  fee: 10000,
+  accounts: { Telebirr: '0927429565', CBE: '1000417007192', mPesa: '0927429565' }
 };
-const FEE_DISPLAY = 10000;
+let PUBLIC_SETTINGS_READY = false;
+
+async function loadPublicSettings(){
+  try {
+    const res = await fetch('/api/settings', { cache: 'no-store' });
+    if (res.ok){
+      const d = await res.json();
+      if (d && typeof d.fee === 'number' && d.fee > 0) PUBLIC_SETTINGS.fee = d.fee;
+      if (d && d.accounts){
+        PUBLIC_SETTINGS.accounts = Object.assign({}, PUBLIC_SETTINGS.accounts, d.accounts);
+      }
+      PUBLIC_SETTINGS_READY = true;
+    }
+  } catch {}
+  if (currentStep === 7 && typeof buildSummary === 'function') buildSummary();
+}
+loadPublicSettings();
 
 const regData = { name:'', id:'', semester:'', stream:'', gender:'', method:'', ref:'' };
 let currentStep = 1;
@@ -1688,9 +1770,9 @@ function buildSummary(){
     <div class="row"><span>Stream</span><span>${esc(regData.stream)}</span></div>
     <div class="row"><span>Gender</span><span>${esc(regData.gender)}</span></div>
     <div class="row"><span>Payment</span><span>${esc(regData.method)}</span></div>`;
-  regAmount.textContent = FEE_DISPLAY.toLocaleString('en-US');
+  regAmount.textContent = PUBLIC_SETTINGS.fee.toLocaleString('en-US');
   regAccountLabel.textContent = 'Account (' + regData.method + ')';
-  regAccount.textContent = PAYMENT_ACCOUNTS_DISPLAY[regData.method] || '—';
+  regAccount.textContent = PUBLIC_SETTINGS.accounts[regData.method] || '—';
 }
 
 function selectOpt(btn){
@@ -1806,9 +1888,12 @@ regSubmit.addEventListener('click', async () => {
     }
 
     regSuccessRef.textContent = data.public_id;
-    regStatusLink.href = '/status?id=' + encodeURIComponent(data.public_id);
+    regSuccessRef.dataset.copy = data.public_id;
     regSuccess.classList.add('show');
     document.querySelectorAll('.reg-step').forEach(s => s.classList.remove('active'));
+
+    saveMyRegistration({ public_id: data.public_id, status: 'pending', created_at: Date.now() });
+    applyRegistrationState();
   } catch (e){
     regLoading.classList.remove('show');
     regShell.style.display = '';
@@ -1836,10 +1921,220 @@ function closeReg(){
   regShell.style.display = '';
   hideError();
 }
-document.getElementById('registerBtn').addEventListener('click', openReg);
-document.getElementById('floatCta').addEventListener('click', openReg);
+
+/* ---------- MY REGISTRATION (localStorage) ---------- */
+const REG_KEY = 'abj_my_registration';
+function getMyRegistration(){
+  try { return JSON.parse(localStorage.getItem(REG_KEY) || 'null'); } catch { return null; }
+}
+function saveMyRegistration(o){
+  try { localStorage.setItem(REG_KEY, JSON.stringify(o)); } catch {}
+}
+function clearMyRegistration(){
+  try { localStorage.removeItem(REG_KEY); } catch {}
+}
+
+function applyRegistrationState(){
+  const reg = getMyRegistration();
+  const has = !!(reg && reg.public_id);
+  const a = document.getElementById('ctaBtnLabel');
+  const b = document.getElementById('floatCtaLabel');
+  if (a) a.textContent = has ? 'Check My Status' : 'Register Now';
+  if (b) b.textContent = has ? 'Check Status' : 'Register Now';
+}
+
+function onCtaClick(){
+  const reg = getMyRegistration();
+  if (reg && reg.public_id) openStatusModal(reg.public_id);
+  else openReg();
+}
+document.getElementById('registerBtn').addEventListener('click', onCtaClick);
+document.getElementById('floatCta').addEventListener('click', onCtaClick);
 regClose.addEventListener('click', closeReg);
 regDone.addEventListener('click', closeReg);
+
+/* ---------- CLIPBOARD ---------- */
+const copyToast = document.getElementById('copyToast');
+let copyToastTimer = null;
+function showCopyToast(msg, isErr){
+  if (!copyToast) return;
+  copyToast.textContent = (isErr ? '⚠️ ' : '📋 ') + msg;
+  copyToast.className = 'copy-toast show' + (isErr ? ' err' : '');
+  clearTimeout(copyToastTimer);
+  copyToastTimer = setTimeout(() => copyToast.classList.remove('show'), 2400);
+}
+async function copyText(text, okMsg){
+  if (!text) return;
+  try {
+    if (navigator.clipboard && window.isSecureContext){
+      await navigator.clipboard.writeText(text);
+    } else {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.setAttribute('readonly', '');
+      ta.style.position = 'fixed';
+      ta.style.top = '-1000px';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      ta.setSelectionRange(0, ta.value.length);
+      document.execCommand('copy');
+      document.body.removeChild(ta);
+    }
+    showCopyToast(okMsg || 'Copied to clipboard');
+  } catch {
+    showCopyToast('Copy failed — long-press to copy manually', true);
+  }
+}
+regSuccessRef.addEventListener('click', () => copyText(regSuccessRef.textContent, 'Registration ID copied'));
+
+/* ---------- HOME STATUS MODAL ---------- */
+const stsModal = document.getElementById('statusModal');
+const stsBody = document.getElementById('statusBody');
+const stsClose = document.getElementById('statusClose');
+
+function closeStatusModal(){
+  stsModal.classList.remove('open');
+  document.body.style.overflow = '';
+}
+stsClose.addEventListener('click', closeStatusModal);
+stsModal.addEventListener('click', e => { if (e.target === stsModal) closeStatusModal(); });
+
+function stsIdChip(id){
+  return `<button class="sts-id" type="button" data-copy="${esc(id)}" title="Tap to copy">
+    <span class="sts-id-label">Your Registration ID</span>
+    <span class="sts-id-val">${esc(id)}</span>
+    <span class="sts-id-copy">📋 Tap to copy</span>
+  </button>`;
+}
+function stsRows(d){
+  return `<div class="sts-rows">
+    <div class="sts-row"><span>Name</span><span>${esc(d.full_name)}</span></div>
+    <div class="sts-row"><span>Semester</span><span>${esc(d.semester)}</span></div>
+    <div class="sts-row"><span>Stream</span><span>${esc(d.stream)}</span></div>
+    <div class="sts-row"><span>Submitted</span><span>${new Date(d.created_at).toLocaleDateString()}</span></div>
+  </div>`;
+}
+function wireStsCopy(){
+  stsBody.querySelectorAll('[data-copy]').forEach(b => {
+    b.addEventListener('click', () => copyText(b.dataset.copy, 'Registration ID copied'));
+  });
+}
+
+async function openStatusModal(publicId){
+  stsModal.classList.add('open');
+  document.body.style.overflow = 'hidden';
+  stsBody.innerHTML = `<div class="sts-loading"><span class="sts-spinner"></span><p>Checking your registration…</p></div>`;
+
+  try {
+    const res = await fetch('/api/status?id=' + encodeURIComponent(publicId), { cache: 'no-store' });
+    const d = await res.json();
+
+    if (!res.ok){
+      if (res.status === 404){
+        clearMyRegistration();
+        applyRegistrationState();
+      }
+      stsBody.innerHTML = `
+        <div class="sts-badge bad">⚠️ Error</div>
+        <h4 class="sts-title">We couldn't find that registration</h4>
+        <p class="sts-text">${esc(d.error || 'Please check your ID and try again.')}</p>
+        <button class="sts-btn primary" id="stsNew" type="button">➕ Start a New Registration</button>`;
+      document.getElementById('stsNew').addEventListener('click', () => {
+        closeStatusModal(); setTimeout(openReg, 240);
+      });
+      return;
+    }
+
+    saveMyRegistration({ public_id: d.public_id, status: d.status, created_at: Date.now() });
+    applyRegistrationState();
+    renderStatus(d);
+
+  } catch {
+    stsBody.innerHTML = `
+      <div class="sts-badge bad">⚠️ Network</div>
+      <h4 class="sts-title">Couldn't reach the server</h4>
+      <p class="sts-text">Check your connection and try again.</p>
+      <button class="sts-btn ghost" id="stsRetryNet" type="button">🔄 Retry</button>`;
+    document.getElementById('stsRetryNet').addEventListener('click', () => openStatusModal(publicId));
+  }
+}
+
+function renderStatus(d){
+  const id = d.public_id;
+
+  if (d.status === 'approved'){
+    stsBody.innerHTML = stsIdChip(id) +
+      `<div class="sts-badge ok">✅ Approved</div>
+       <h4 class="sts-title">You're in! 🎉</h4>
+       <p class="sts-text">Your payment was verified and your seat is confirmed.</p>
+       ${stsRows(d)}
+       <div class="sts-warn">
+         <strong>⚠️ One-time link — read this first</strong>
+         <ul>
+           <li>This invite link works <b>only once</b> and expires in <b>7 days</b>.</li>
+           <li><b>Never share</b> it with anyone — anyone who has it can join your seat.</li>
+           <li>Tap the gold button below and you'll be taken <b>straight to Telegram</b>.</li>
+           <li>If you leave the channel, the link is dead and cannot be reused.</li>
+         </ul>
+       </div>
+       <button class="sts-btn gold" id="stsJoin" type="button">🌟 Join the Channel Now</button>
+       <button class="sts-btn ghost" id="stsCopyLink" type="button">🔗 Copy Invite Link</button>
+       <p class="sts-mini">Lost the link? Contact support for a new one.</p>`;
+
+    document.getElementById('stsJoin').addEventListener('click', () => {
+      window.location.href = d.invite_link;
+    });
+    document.getElementById('stsCopyLink').addEventListener('click', () => {
+      copyText(d.invite_link, 'Invite link copied — keep it private!');
+    });
+  }
+  else if (d.status === 'rejected'){
+    stsBody.innerHTML = stsIdChip(id) +
+      `<div class="sts-badge bad">❌ Rejected</div>
+       <h4 class="sts-title">We couldn't approve this registration</h4>
+       ${stsRows(d)}
+       ${d.rejection_reason ? `<div class="sts-reason"><strong>Reason:</strong> ${esc(d.rejection_reason)}</div>` : ''}
+       <p class="sts-text">Fix the issue and submit again with a valid payment. You can start a brand-new registration right now.</p>
+       <button class="sts-btn primary" id="stsRetry" type="button">🔄 Start New Registration</button>`;
+
+    document.getElementById('stsRetry').addEventListener('click', () => {
+      clearMyRegistration();
+      applyRegistrationState();
+      closeStatusModal();
+      setTimeout(openReg, 260);
+    });
+  }
+  else {
+    stsBody.innerHTML = stsIdChip(id) +
+      `<div class="sts-badge wait">⏳ Under Review</div>
+       <h4 class="sts-title">We're checking your payment</h4>
+       <p class="sts-text">Our admin will verify your transaction and approve you shortly. Keep your ID safe — you'll need it to check back.</p>
+       ${stsRows(d)}
+       <button class="sts-btn ghost" id="stsRefresh" type="button">🔄 Refresh Status</button>`;
+
+    document.getElementById('stsRefresh').addEventListener('click', () => openStatusModal(id));
+  }
+
+  wireStsCopy();
+}
+
+/* Success box → “Check Status” button inside the registration modal */
+regStatusLink.addEventListener('click', () => {
+  const reg = getMyRegistration();
+  closeReg();
+  if (reg && reg.public_id) setTimeout(() => openStatusModal(reg.public_id), 260);
+});
+
+/* Refresh fee/accounts every time the form opens */
+const _origOpenReg = openReg;
+openReg = function(){
+  loadPublicSettings();
+  _origOpenReg();
+};
+
+/* Boot */
+applyRegistrationState();
 
 /* ============================================================
    7. KEYBOARD
@@ -1847,6 +2142,7 @@ regDone.addEventListener('click', closeReg);
 document.addEventListener('keydown', e => {
   if (e.key !== 'Escape') return;
   if (errModal.classList.contains('open')) { hideError(); return; }
+  if (stsModal.classList.contains('open')) { closeStatusModal(); return; }
   if (playerModal.classList.contains('open')) { closePlayer(); return; }
   if (regModal.classList.contains('open') && !regLoading.classList.contains('show')) { closeReg(); return; }
 });
