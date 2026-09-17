@@ -1226,7 +1226,6 @@ regSubmit.addEventListener('click', async () => {
     const data = await res.json();
     regLoading.classList.remove('show');
     regShell.style.display = '';
-
     if (!res.ok){
       const msg = data.error || 'Something went wrong.';
       if (/amount does not match/i.test(msg)) showError('Payment Amount Does Not Match', msg);
