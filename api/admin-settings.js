@@ -1,6 +1,24 @@
-const { requireAdmin, requireSuper, getSetting, setSetting, supabaseQuery, json } = require('./_lib');
+const {
+  requireAdmin, getSetting, setSetting, getPublicSettings,
+  supabaseQuery, json,
+} = require('./_lib');
 
 module.exports = async (req, res) => {
+  /* ---------- PUBLIC GET (no auth) — used by home page ---------- */
+  if (req.method === 'GET' && !req.headers.authorization) {
+    try {
+      const s = await getPublicSettings();
+      return json(res, 200, s);
+    } catch {
+      return json(res, 200, {
+        fee: 10000,
+        accounts: { Telebirr: '', CBE: '', mPesa: '' },
+        contact: { username: '', phone: '' },
+      });
+    }
+  }
+
+  /* ---------- AUTHENTICATED ADMIN ---------- */
   const payload = requireAdmin(req);
   if (!payload) return json(res, 401, { error: 'Unauthorized' });
 
@@ -21,10 +39,10 @@ module.exports = async (req, res) => {
       await setSetting('fee', String(Math.round(n)));
     }
     if (account_telebirr != null) await setSetting('account_telebirr', String(account_telebirr).slice(0, 32));
-    if (account_cbe != null) await setSetting('account_cbe', String(account_cbe).slice(0, 32));
-    if (account_mpesa != null) await setSetting('account_mpesa', String(account_mpesa).slice(0, 32));
+    if (account_cbe      != null) await setSetting('account_cbe',      String(account_cbe).slice(0, 32));
+    if (account_mpesa    != null) await setSetting('account_mpesa',    String(account_mpesa).slice(0, 32));
     if (contact_username != null) await setSetting('contact_username', String(contact_username).slice(0, 64));
-    if (contact_phone != null) await setSetting('contact_phone', String(contact_phone).slice(0, 32));
+    if (contact_phone    != null) await setSetting('contact_phone',    String(contact_phone).slice(0, 32));
 
     return json(res, 200, { success: true });
   }

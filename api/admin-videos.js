@@ -1,6 +1,15 @@
-const { requireSuper, supabaseQuery, supabaseInsert, supabaseDelete, json } = require('./_lib');
+const {
+  requireSuper, supabaseQuery, supabaseInsert, supabaseDelete, json,
+} = require('./_lib');
 
 module.exports = async (req, res) => {
+  /* ---------- PUBLIC GET (no auth) — home page playlist ---------- */
+  if (req.method === 'GET' && !req.headers.authorization) {
+    const q = await supabaseQuery('videos?order=display_order.asc,created_at.asc&select=id,title,url,tag');
+    return json(res, 200, { items: q.data || [] });
+  }
+
+  /* ---------- SUPER ADMIN ---------- */
   const admin = requireSuper(req);
   if (!admin) return json(res, 403, { error: 'Super admin only.' });
 

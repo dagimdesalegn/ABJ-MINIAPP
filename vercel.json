@@ -5,7 +5,10 @@
     "api/*.js": { "memory": 512, "maxDuration": 30 }
   },
   "rewrites": [
-    { "source": "/admin", "destination": "/admin.html" },
-    { "source": "/status", "destination": "/status.html" }
+    { "source": "/admin",            "destination": "/admin.html" },
+    { "source": "/status",           "destination": "/status.html" },
+    { "source": "/api/settings",     "destination": "/api/admin-settings" },
+    { "source": "/api/videos",       "destination": "/api/admin-videos" },
+    { "source": "/api/testimonials", "destination": "/api/admin-testimonials" }
   ]
 }
