@@ -13,16 +13,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-:root{
-  --navy:#0b1220;--blue:#2563eb;--blue-2:#3b82f6;--blue-soft:#eaf1ff;
-  --ink:#0f172a;--muted:#64748b;--line:#e6ebf3;--bg:#ffffff;--soft:#f5f8fd;
-  --gold-1:#f7e07a;--gold-2:#d4af37;--gold-3:#8a6516;
-  --radius:20px;--radius-sm:14px;
-  --shadow:0 18px 45px -22px rgba(15,23,42,.30);
-  --shadow-lg:0 30px 70px -30px rgba(15,23,42,.35);
-  --maxw:1120px;--ease:cubic-bezier(.4,0,.2,1);--bounce:cubic-bezier(.34,1.56,.64,1);
-  --header-h:78px;
-}
+:root{--navy:#0b1220;--blue:#2563eb;--blue-2:#3b82f6;--blue-soft:#eaf1ff;--ink:#0f172a;--muted:#64748b;--line:#e6ebf3;--bg:#ffffff;--soft:#f5f8fd;--gold-1:#f7e07a;--gold-2:#d4af37;--gold-3:#8a6516;--radius:20px;--radius-sm:14px;--shadow:0 18px 45px -22px rgba(15,23,42,.30);--shadow-lg:0 30px 70px -30px rgba(15,23,42,.35);--maxw:1120px;--ease:cubic-bezier(.4,0,.2,1);--bounce:cubic-bezier(.34,1.56,.64,1);--header-h:78px;}
 *,*::before,*::after{box-sizing:border-box;}
 html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;overflow-x:hidden;}
 body{margin:0;font-family:'Plus Jakarta Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;color:var(--ink);background:var(--bg);line-height:1.65;-webkit-font-smoothing:antialiased;overflow-x:hidden;width:100%;padding-top:calc(var(--header-h) + env(safe-area-inset-top));}
@@ -33,8 +24,6 @@ input,select,textarea{font-family:inherit;font-size:inherit;color:inherit;}
 .wrap{width:100%;max-width:var(--maxw);margin:0 auto;padding:0 22px;}
 section{scroll-margin-top:calc(var(--header-h) + 20px);}
 .logo-img{display:block;width:100%;height:100%;object-fit:cover;border-radius:inherit;}
-
-/* HEADER */
 .header{position:fixed;top:0;left:0;right:0;z-index:60;padding-top:env(safe-area-inset-top);background:radial-gradient(900px 200px at 50% -30%, #dbe9ff 0%, rgba(219,233,255,.55) 55%, rgba(219,233,255,0) 100%),linear-gradient(180deg,#eef4ff 0%,#f5f9ff 55%,rgba(255,255,255,.94) 100%);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);transition:box-shadow .3s var(--ease);}
 .header.scrolled{box-shadow:0 12px 34px -22px rgba(15,23,42,.4);}
 .header-inner{display:flex;align-items:center;justify-content:center;height:var(--header-h);}
@@ -44,8 +33,6 @@ section{scroll-margin-top:calc(var(--header-h) + 20px);}
 .brand-name{color:var(--ink);font-weight:800;font-size:16px;letter-spacing:1.8px;}
 .brand-moto{font-size:9px;font-weight:800;letter-spacing:1.8px;text-transform:uppercase;background:linear-gradient(90deg,#8a6516 0%,#d4af37 30%,#f7e07a 50%,#d4af37 70%,#8a6516 100%);background-size:200% auto;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:mottoShine 6s linear infinite;margin-top:4px;}
 @keyframes mottoShine{0%{background-position:0% center;}100%{background-position:200% center;}}
-
-/* HERO */
 .hero{position:relative;padding:60px 0 80px;overflow:hidden;background:radial-gradient(900px 480px at 50% -10%, #eaf1ff 0%, rgba(234,241,255,0) 62%),#fff;text-align:center;}
 .hero-glow{position:absolute;inset:0;pointer-events:none;overflow:hidden;}
 .hero-glow::before,.hero-glow::after{content:'';position:absolute;border-radius:50%;filter:blur(70px);opacity:.55;}
@@ -63,8 +50,6 @@ section{scroll-margin-top:calc(var(--header-h) + 20px);}
 .motto{display:inline-block;font-size:clamp(11px,1.5vw,13px);font-weight:800;letter-spacing:4px;text-transform:uppercase;background:linear-gradient(90deg,#8a6516 0%,#d4af37 25%,#f7e07a 50%,#d4af37 75%,#8a6516 100%);background-size:200% auto;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:mottoShine 6s linear infinite;margin:0 0 24px;}
 .hero p.lead{font-size:clamp(15px,2.3vw,17.5px);color:var(--muted);max-width:62ch;margin:0 auto 56px;line-height:1.75;}
 .hero p.lead b{color:var(--ink);font-weight:700;}
-
-/* ORBIT */
 .orbit{--item-size:23%;--center-size:32%;--orbit-radius:34%;--orbit-speed:60s;position:relative;width:clamp(320px,82vw,580px);aspect-ratio:1 / 1;margin:0 auto 52px;}
 .orbit-ring{position:absolute;inset:0;transform-origin:50% 50%;animation:orbitSpin var(--orbit-speed) linear infinite;z-index:1;}
 @keyframes orbitSpin{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
@@ -106,10 +91,7 @@ section{scroll-margin-top:calc(var(--header-h) + 20px);}
 .orbit-item-3 .stat-card{background:radial-gradient(circle at 30% 25%, rgba(255,255,255,.55), transparent 55%),linear-gradient(135deg,#f5e7ff 0%,#d8b4fe 50%,#9333ea 100%);box-shadow:0 18px 40px -18px rgba(147,51,234,.75),0 0 0 1.5px rgba(147,51,234,.35) inset,0 0 0 1px rgba(255,255,255,.6) inset;}
 .orbit-item-4 .stat-card{background:radial-gradient(circle at 30% 25%, rgba(255,255,255,.55), transparent 55%),linear-gradient(135deg,#ffe4e6 0%,#fecaca 50%,#f43f5e 100%);box-shadow:0 18px 40px -18px rgba(244,63,94,.75),0 0 0 1.5px rgba(244,63,94,.35) inset,0 0 0 1px rgba(255,255,255,.6) inset;}
 .sc-icon{position:relative;z-index:1;display:grid;place-items:center;width:32px;height:32px;border-radius:11px;font-size:16px;margin-bottom:5px;background:rgba(255,255,255,.75);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);box-shadow:0 6px 16px -8px rgba(0,0,0,.3);transition:transform .55s var(--bounce);}
-.orbit-item-1 .sc-icon{color:#8a6516;}
-.orbit-item-2 .sc-icon{color:#1e40af;}
-.orbit-item-3 .sc-icon{color:#6b21a8;}
-.orbit-item-4 .sc-icon{color:#9f1239;}
+.orbit-item-1 .sc-icon{color:#8a6516;}.orbit-item-2 .sc-icon{color:#1e40af;}.orbit-item-3 .sc-icon{color:#6b21a8;}.orbit-item-4 .sc-icon{color:#9f1239;}
 .sc-num{position:relative;z-index:1;font-size:clamp(17px,2.2vw,22px);font-weight:800;letter-spacing:-.8px;line-height:1.05;color:#0b1220;text-shadow:0 1px 2px rgba(255,255,255,.5);}
 .sc-label{position:relative;z-index:1;font-size:9.5px;color:#1e293b;font-weight:700;margin-top:4px;line-height:1.35;max-width:120px;opacity:.85;}
 .orbit-item:hover .stat-card{scale:1.08;box-shadow:0 30px 60px -20px rgba(15,23,42,.7),0 0 0 2px rgba(255,255,255,.9) inset;}
@@ -122,8 +104,6 @@ section{scroll-margin-top:calc(var(--header-h) + 20px);}
 .orbit-item-4 .sc-icon{animation:iconBob 4.5s ease-in-out infinite .9s;}
 @keyframes iconBob{0%,100%{translate:0 0;}50%{translate:0 -2px;}}
 .hero-actions{display:flex;justify-content:center;gap:14px;flex-wrap:wrap;}
-
-/* START DEMO */
 .demo-wrap{position:relative;display:inline-flex;padding:3px;border-radius:24px;background:linear-gradient(135deg,#3b82f6 0%,#6366f1 45%,#a855f7 100%);box-shadow:0 12px 32px -14px rgba(99,102,241,.7),0 4px 16px -8px rgba(168,85,247,.5);transition:transform .3s var(--bounce),box-shadow .35s var(--ease);}
 .demo-wrap:hover{transform:translateY(-4px);box-shadow:0 24px 54px -16px rgba(99,102,241,1),0 8px 26px -10px rgba(168,85,247,.85);}
 .btn-demo{position:relative;display:inline-flex;align-items:center;justify-content:center;gap:14px;padding:20px 42px;border-radius:21px;background:linear-gradient(135deg,#0b1220 0%,#15264a 55%,#1d4ed8 130%);color:#fff;font-size:17px;font-weight:800;letter-spacing:.3px;min-height:64px;overflow:hidden;transition:box-shadow .35s var(--ease);box-shadow:inset 0 1px 0 rgba(255,255,255,.15);}
@@ -131,15 +111,11 @@ section{scroll-margin-top:calc(var(--header-h) + 20px);}
 @keyframes sheen{0%,75%{left:-60%;}100%{left:130%;}}
 .demo-play-ring{position:relative;width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#3b82f6,#a855f7);display:grid;place-items:center;flex:0 0 36px;box-shadow:0 6px 18px -6px rgba(59,130,246,1);}
 .demo-play-tri{width:0;height:0;margin-left:3px;border-left:11px solid #fff;border-top:6.5px solid transparent;border-bottom:6.5px solid transparent;}
-
-/* SECTION */
 .section{padding:82px 0;}
 .section-head{text-align:center;margin-bottom:46px;}
 .section-head h2{font-size:clamp(24px,5vw,40px);font-weight:800;letter-spacing:-1.2px;margin:0 0 12px;line-height:1.15;}
 .section-head p{color:var(--muted);max-width:56ch;margin:0 auto;font-size:15.5px;padding:0 6px;}
 .eyebrow{display:inline-block;font-size:12px;font-weight:800;letter-spacing:1.6px;text-transform:uppercase;color:var(--blue);background:var(--blue-soft);padding:7px 14px;border-radius:999px;margin-bottom:16px;}
-
-/* CURRICULUM */
 .cur-section{position:relative;padding:90px 0 96px;background:linear-gradient(180deg,#ffffff 0%,#f7faff 100%);overflow:hidden;}
 .cur-section::before{content:'';position:absolute;inset:0;pointer-events:none;background-image:radial-gradient(circle, rgba(37,99,235,.10) 1px, transparent 1px);background-size:30px 30px;mask-image:radial-gradient(circle at 50% 42%, black 20%, transparent 72%);-webkit-mask-image:radial-gradient(circle at 50% 42%, black 20%, transparent 72%);}
 .cur-shell{position:relative;z-index:2;background:radial-gradient(600px 320px at 0% 0%, rgba(59,130,246,.05), transparent 60%),radial-gradient(600px 320px at 100% 100%, rgba(168,85,247,.05), transparent 60%),#fff;border:1px solid var(--line);border-radius:32px;padding:30px;box-shadow:0 40px 90px -55px rgba(15,23,42,.55),0 20px 60px -40px rgba(37,99,235,.35);}
@@ -219,8 +195,6 @@ section{scroll-margin-top:calc(var(--header-h) + 20px);}
 .exam-icon{font-size:14px;line-height:1;display:block;margin-bottom:4px;}
 .exam-num{font-size:16px;font-weight:800;letter-spacing:-.5px;color:var(--cc2, #2563eb);line-height:1;}
 .exam-label{font-size:9px;font-weight:800;letter-spacing:.9px;text-transform:uppercase;color:var(--muted);margin-top:5px;}
-
-/* COURSE DEMO VIDEO BOX */
 .cp-video{display:flex;gap:12px;align-items:center;padding:10px;border-radius:14px;background:linear-gradient(135deg,#0b1220,#15264a);border:1px solid rgba(96,165,250,.3);cursor:pointer;transition:transform .3s var(--bounce), box-shadow .3s var(--ease), border-color .3s var(--ease);overflow:hidden;position:relative;isolation:isolate;width:100%;text-align:left;}
 .cp-video::before{content:'';position:absolute;inset:0;background:radial-gradient(400px 200px at 20% 50%, rgba(59,130,246,.28), transparent 70%);opacity:.7;pointer-events:none;z-index:0;}
 .cp-video > *{position:relative;z-index:1;}
@@ -237,8 +211,6 @@ section{scroll-margin-top:calc(var(--header-h) + 20px);}
 .cp-video-title{color:#fff;font-size:12.5px;font-weight:800;line-height:1.35;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;}
 .cp-video-sub{color:rgba(255,255,255,.6);font-size:10.5px;font-weight:600;margin-top:3px;}
 @keyframes cardFlipIn{0%{opacity:0;transform:perspective(800px) rotateX(-20deg) translateY(18px) scale(.94);}60%{opacity:1;transform:perspective(800px) rotateX(3deg) translateY(-3px) scale(1.01);}100%{opacity:1;transform:perspective(800px) rotateX(0deg) translateY(0) scale(1);}}
-
-/* TESTIMONIALS */
 .tst-section{position:relative;background:linear-gradient(180deg,#f7faff 0%,#ffffff 100%);overflow:hidden;}
 .tst-section::before{content:'';position:absolute;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle, rgba(212,175,55,.10), transparent 70%);top:-300px;right:-160px;pointer-events:none;}
 .tst-section::after{content:'';position:absolute;width:520px;height:520px;border-radius:50%;background:radial-gradient(circle, rgba(37,99,235,.08), transparent 70%);bottom:-260px;left:-160px;pointer-events:none;}
@@ -258,10 +230,7 @@ section{scroll-margin-top:calc(var(--header-h) + 20px);}
 @keyframes goldSheen{0%,75%{left:-60%;}100%{left:130%;}}
 .tst-top{display:flex;align-items:center;gap:16px;margin-bottom:20px;position:relative;z-index:1;padding-bottom:18px;border-bottom:1px dashed rgba(212,175,55,.35);}
 .tst-avatar{width:62px;height:62px;border-radius:50%;flex:0 0 62px;overflow:hidden;background:#2b2b4f;position:relative;box-shadow:0 10px 22px -8px rgba(15,23,42,.6),0 0 0 2px rgba(212,175,55,.85),0 0 0 4px rgba(255,255,255,.95),0 0 22px -2px rgba(212,175,55,.5);animation:avatarGlow 3.5s ease-in-out infinite;}
-@keyframes avatarGlow{
-  0%,100%{box-shadow:0 10px 22px -8px rgba(15,23,42,.6),0 0 0 2px rgba(212,175,55,.85),0 0 0 4px rgba(255,255,255,.95),0 0 22px -2px rgba(212,175,55,.5);}
-  50%{box-shadow:0 10px 22px -8px rgba(15,23,42,.6),0 0 0 2px rgba(247,224,122,1),0 0 0 4px rgba(255,255,255,.95),0 0 34px -2px rgba(212,175,55,.85);}
-}
+@keyframes avatarGlow{0%,100%{box-shadow:0 10px 22px -8px rgba(15,23,42,.6),0 0 0 2px rgba(212,175,55,.85),0 0 0 4px rgba(255,255,255,.95),0 0 22px -2px rgba(212,175,55,.5);}50%{box-shadow:0 10px 22px -8px rgba(15,23,42,.6),0 0 0 2px rgba(247,224,122,1),0 0 0 4px rgba(255,255,255,.95),0 0 34px -2px rgba(212,175,55,.85);}}
 .tst-avatar img{width:100%;height:100%;object-fit:cover;display:block;border-radius:50%;}
 .tst-who{min-width:0;flex:1;}
 .tst-from{font-size:16px;font-weight:800;overflow-wrap:anywhere;color:var(--ink);letter-spacing:-.2px;}
@@ -271,15 +240,12 @@ section{scroll-margin-top:calc(var(--header-h) + 20px);}
 .tst-text::first-letter{font-size:2.2em;font-weight:800;color:#d4af37;float:left;line-height:.9;margin:6px 10px 0 0;font-family:Georgia,serif;}
 .tst-arrow{position:absolute;top:50%;transform:translateY(-50%);width:52px;height:52px;border-radius:50%;background:#ffffff;border:2px solid var(--gold-2);display:grid;place-items:center;color:var(--gold-3);box-shadow:0 10px 24px -12px rgba(212,175,55,.85),0 0 0 4px rgba(255,255,255,.95),0 0 0 5px rgba(212,175,55,.25);transition:background .25s var(--ease),color .25s var(--ease),transform .3s var(--bounce),box-shadow .25s var(--ease);z-index:3;}
 .tst-arrow:hover{background:linear-gradient(135deg,#f7e07a,#d4af37);color:#ffffff;transform:translateY(-50%) scale(1.1);box-shadow:0 16px 36px -12px rgba(212,175,55,1),0 0 0 4px rgba(255,255,255,.95),0 0 0 5px rgba(212,175,55,.4);}
-.tst-arrow.prev{left:0;}
-.tst-arrow.next{right:0;}
+.tst-arrow.prev{left:0;}.tst-arrow.next{right:0;}
 .tst-arrow svg{width:20px;height:20px;}
 .tst-dots{display:flex;justify-content:center;gap:6px;margin-top:28px;flex-wrap:wrap;max-width:520px;margin-left:auto;margin-right:auto;}
 .dot{width:8px;height:8px;border-radius:999px;background:#e6d9a8;transition:all .35s var(--ease);padding:0;}
 .dot.active{background:linear-gradient(135deg,#d4af37,#8a6516);width:24px;box-shadow:0 2px 8px -2px rgba(212,175,55,.7);}
 .tst-counter{text-align:center;font-size:12px;font-weight:800;letter-spacing:1.6px;color:var(--gold-3);margin-top:16px;text-transform:uppercase;}
-
-/* CTA */
 .cta-section{position:relative;padding:0 0 82px;}
 .cta-card{position:relative;border-radius:34px;padding:3px;isolation:isolate;}
 .cta-card::before{content:'';position:absolute;inset:0;border-radius:34px;background:conic-gradient(from 0deg,#2563eb,#0ea5e9,#a855f7,#f7e07a,#d4af37,#ec4899,#2563eb);background-size:200% 200%;animation:borderSpin 7s linear infinite;z-index:0;filter:blur(.3px);}
@@ -308,8 +274,6 @@ section{scroll-margin-top:calc(var(--header-h) + 20px);}
 .cta-btn::after{content:'';position:absolute;top:0;left:-60%;width:50%;height:100%;background:linear-gradient(120deg,transparent,rgba(255,255,255,.32),transparent);transform:skewX(-22deg);animation:sheen 4s ease-in-out infinite;}
 .cta-btn .tg-ic{width:24px;height:24px;flex:0 0 24px;display:grid;place-items:center;color:#f7e07a;filter:drop-shadow(0 2px 6px rgba(247,224,122,.6));}
 .cta-btn .tg-ic svg{width:24px;height:24px;}
-
-/* FOOTER */
 .footer{position:relative;background:#ffffff;color:var(--ink);padding:80px 0 64px;padding-bottom:calc(64px + env(safe-area-inset-bottom));overflow:hidden;}
 .footer::before{content:'';position:absolute;width:760px;height:760px;border-radius:50%;background:radial-gradient(circle, rgba(37,99,235,.10), transparent 70%);top:-420px;left:50%;transform:translateX(-50%);pointer-events:none;}
 .footer::after{content:'';position:absolute;width:520px;height:520px;border-radius:50%;background:radial-gradient(circle, rgba(212,175,55,.08), transparent 70%);bottom:-300px;right:-140px;pointer-events:none;}
@@ -324,13 +288,18 @@ section{scroll-margin-top:calc(var(--header-h) + 20px);}
 .social svg{width:24px;height:24px;}
 .social:hover{border-color:var(--gold-3);background:#fffdf6;box-shadow:0 10px 22px -10px rgba(212,175,55,.85),inset 0 0 0 1px rgba(255,255,255,.95);}
 .social.tg{color:#229ED9;}.social.ig{color:#E1306C;}.social.tt{color:#0f172a;}.social.ph{color:#22c55e;}
-
-/* FLOATING CTA */
 .float-cta{position:fixed;right:18px;bottom:18px;z-index:70;bottom:calc(18px + env(safe-area-inset-bottom));right:calc(18px + env(safe-area-inset-right));display:inline-flex;align-items:center;gap:10px;padding:14px 22px;border-radius:999px;background:linear-gradient(135deg,#0b1220 0%,#1e3a8a 100%);color:#fff;font-weight:800;font-size:14px;letter-spacing:.3px;box-shadow:inset 0 0 0 2px rgba(247,224,122,.85),inset 0 0 0 3.5px rgba(255,255,255,.15),0 16px 34px -12px rgba(212,175,55,.85),0 8px 22px -10px rgba(37,99,235,.6);transform:translateY(120px);opacity:0;transition:transform .45s var(--ease),opacity .45s var(--ease),box-shadow .35s var(--ease);}
 .float-cta.show{transform:translateY(0);opacity:1;}
 .float-cta svg{width:16px;height:16px;flex:0 0 16px;color:#f7e07a;}
 
-/* VIDEO PLAYER — LOCKED */
+/* ============================================================
+   COPY TOAST — FIXED: uses opacity/visibility instead of transform
+   so it can NEVER hold space or appear accidentally
+   ============================================================ */
+.copy-toast{position:fixed;left:50%;bottom:calc(28px + env(safe-area-inset-bottom));transform:translateX(-50%);z-index:230;padding:13px 22px;border-radius:999px;background:linear-gradient(135deg,#0b1220,#1e3a8a);color:#fff;font-weight:800;font-size:13.5px;letter-spacing:.2px;box-shadow:0 18px 40px -14px rgba(0,0,0,.7),inset 0 0 0 2px rgba(247,224,122,.75);transition:opacity .25s ease,visibility .25s ease;display:flex;align-items:center;gap:9px;max-width:calc(100vw - 32px);text-align:center;opacity:0;visibility:hidden;pointer-events:none;}
+.copy-toast.show{opacity:1;visibility:visible;}
+.copy-toast.err{box-shadow:0 18px 40px -14px rgba(0,0,0,.7),inset 0 0 0 2px rgba(239,68,68,.85);}
+
 .player-modal{position:fixed;inset:0;z-index:120;background:rgba(5,9,18,.88);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);display:grid;place-items:center;padding:16px;padding-top:calc(16px + env(safe-area-inset-top));padding-bottom:calc(16px + env(safe-area-inset-bottom));opacity:0;visibility:hidden;transition:opacity .38s var(--ease),visibility .38s var(--ease);}
 .player-modal.open{opacity:1;visibility:visible;}
 .player-modal, .player-modal *{overflow:hidden !important;}
@@ -387,8 +356,6 @@ section{scroll-margin-top:calc(var(--header-h) + 20px);}
 .pl-info{min-width:0;flex:1;}
 .pl-title{color:#fff;font-size:13px;font-weight:700;line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;overflow-wrap:anywhere;}
 .pl-tag{display:inline-block;color:rgba(255,255,255,.5);font-size:10px;font-weight:800;letter-spacing:1px;text-transform:uppercase;margin-top:5px;background:rgba(255,255,255,.06);padding:2px 8px;border-radius:999px;}
-
-/* REGISTRATION */
 .reg-modal{position:fixed;inset:0;z-index:150;background:rgba(5,9,18,.86);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);display:flex;align-items:center;justify-content:center;padding:14px;padding-top:calc(14px + env(safe-area-inset-top));padding-bottom:calc(14px + env(safe-area-inset-bottom));opacity:0;visibility:hidden;transition:opacity .35s var(--ease),visibility .35s var(--ease);overflow-y:auto;-ms-overflow-style:none;scrollbar-width:none;}
 .reg-modal::-webkit-scrollbar{display:none;width:0;height:0;}
 .reg-modal.open{opacity:1;visibility:visible;}
@@ -453,18 +420,9 @@ section{scroll-margin-top:calc(var(--header-h) + 20px);}
 .reg-success h4{margin:0 0 8px;font-size:19px;font-weight:800;color:var(--ink);}
 .reg-success p{margin:0 0 5px;font-size:13.5px;color:var(--muted);line-height:1.6;}
 .reg-success .ref{display:inline-block;margin-top:12px;padding:9px 16px;border-radius:10px;background:#f8fbff;border:1px dashed var(--blue);color:var(--blue);font-size:14px;font-weight:800;letter-spacing:1.2px;}
-
-/* COPY TOAST */
-.copy-toast{position:fixed;left:50%;bottom:calc(28px + env(safe-area-inset-bottom));transform:translate(-50%,160%);z-index:230;padding:13px 22px;border-radius:999px;background:linear-gradient(135deg,#0b1220,#1e3a8a);color:#fff;font-weight:800;font-size:13.5px;letter-spacing:.2px;box-shadow:0 18px 40px -14px rgba(0,0,0,.7),inset 0 0 0 2px rgba(247,224,122,.75);transition:transform .45s var(--bounce);pointer-events:none;display:flex;align-items:center;gap:9px;max-width:calc(100vw - 32px);text-align:center;}
-.copy-toast.show{transform:translate(-50%,0);}
-.copy-toast.err{box-shadow:0 18px 40px -14px rgba(0,0,0,.7),inset 0 0 0 2px rgba(239,68,68,.85);}
-
-/* COPYABLE REG ID */
 .ref.copy-ref{cursor:pointer;border:none;font-family:inherit;transition:transform .25s var(--bounce),box-shadow .25s var(--ease);}
 .ref.copy-ref:hover{transform:translateY(-2px);box-shadow:0 12px 24px -12px rgba(37,99,235,.8);}
 .ref-hint{margin-top:8px;font-size:11.5px;font-weight:700;letter-spacing:.4px;color:var(--muted);text-align:center;}
-
-/* HOME STATUS MODAL */
 .sts-modal{position:fixed;inset:0;z-index:160;background:rgba(5,9,18,.86);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);display:flex;align-items:center;justify-content:center;padding:16px;padding-top:calc(16px + env(safe-area-inset-top));padding-bottom:calc(16px + env(safe-area-inset-bottom));opacity:0;visibility:hidden;transition:opacity .35s var(--ease),visibility .35s var(--ease);overflow-y:auto;-ms-overflow-style:none;scrollbar-width:none;}
 .sts-modal::-webkit-scrollbar{display:none;width:0;height:0;}
 .sts-modal.open{opacity:1;visibility:visible;}
@@ -513,8 +471,6 @@ section{scroll-margin-top:calc(var(--header-h) + 20px);}
 .sts-loading{text-align:center;padding:40px 10px;}
 .sts-loading p{margin:16px 0 0;font-size:13.5px;color:var(--muted);font-weight:700;}
 .sts-spinner{display:inline-block;width:46px;height:46px;border-radius:50%;border:3px solid rgba(37,99,235,.18);border-top-color:#2563eb;border-right-color:#a855f7;animation:spin 1s linear infinite;}
-
-/* LOADING SCREEN */
 .loading-screen{position:fixed;inset:0;z-index:180;background:linear-gradient(160deg,#0b1220 0%,#131f3d 100%);display:none;flex-direction:column;align-items:center;justify-content:center;padding:24px;text-align:center;overflow:hidden;}
 .loading-screen.show{display:flex;animation:loadingFadeIn .35s var(--ease) both;}
 @keyframes loadingFadeIn{from{opacity:0;}to{opacity:1;}}
@@ -534,8 +490,6 @@ section{scroll-margin-top:calc(var(--header-h) + 20px);}
 .rl-dots span:nth-child(2){animation-delay:.2s;}
 .rl-dots span:nth-child(3){animation-delay:.4s;}
 @keyframes rlDot{0%,100%{opacity:.4;transform:scale(1);}50%{opacity:1;transform:scale(1.4);background:#f7e07a;}}
-
-/* ERROR MODAL */
 .err-modal{position:fixed;inset:0;z-index:200;background:rgba(5,9,18,.72);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;visibility:hidden;transition:opacity .3s var(--ease),visibility .3s var(--ease);}
 .err-modal.open{opacity:1;visibility:visible;}
 .err-box{position:relative;background:#fff;border-radius:22px;padding:28px 24px 22px;max-width:380px;width:100%;text-align:center;box-shadow:0 40px 80px -30px rgba(0,0,0,.75),0 0 0 1px rgba(239,68,68,.2);transform:translateY(20px) scale(.94);opacity:0;transition:transform .4s var(--bounce),opacity .3s var(--ease);}
@@ -551,286 +505,25 @@ section{scroll-margin-top:calc(var(--header-h) + 20px);}
 .err-btn.primary:hover{transform:translateY(-2px);box-shadow:0 20px 40px -14px rgba(37,99,235,1);}
 .err-btn.ghost{background:#f8fafc;color:var(--ink);border:2px solid var(--line);}
 .err-btn.ghost:hover{border-color:#c9d9f2;background:#fff;}
-
 .reg-modal, .reg-modal *{-ms-overflow-style:none;scrollbar-width:none;}
 .reg-modal::-webkit-scrollbar, .reg-modal *::-webkit-scrollbar{display:none;width:0;height:0;}
-
-/* REVEAL */
 .reveal{opacity:0;transform:translateY(26px);transition:opacity .75s var(--ease),transform .75s var(--ease);}
 .reveal.in{opacity:1;transform:none;}
 .reveal.d1{transition-delay:.09s;}
 .reveal.d2{transition-delay:.18s;}
 .reveal.d3{transition-delay:.27s;}
 .reveal.d4{transition-delay:.36s;}
-@media (prefers-reduced-motion:reduce){
-  *{animation:none!important;transition:none!important;}
-  .reveal{opacity:1;transform:none;}
-  html{scroll-behavior:auto;}
-  .orbit-ring, .orbit-counter{animation:none !important;}
-}
-
-/* SAFETY: hide any leftover YouTube links (defensive) */
-a[href*="youtube.com/@abj"], a[href*="youtu.be/@abj"]{display:none !important;}
-
-/* RESPONSIVE */
-@media (max-width:1024px){
-  .wrap{padding:0 20px;}
-  .hero{padding:52px 0 70px;}
-  .section{padding:72px 0;}
-  .cur-section{padding:80px 0 86px;}
-  .cur-shell{padding:24px;}
-  .course-stage{grid-template-columns:repeat(auto-fill,minmax(260px,1fr));}
-  .tst-wrap{padding:0 66px;}
-}
-@media (max-width:900px){
-  .orbit{--item-size:24%;--center-size:32%;--orbit-radius:34%;}
-  .tst-wrap{padding:0 60px;}
-  .tst-arrow{width:46px;height:46px;}
-  .tst-arrow svg{width:18px;height:18px;}
-  .tst-card{padding:34px 30px 30px;}
-  .tst-quote{font-size:110px;top:16px;right:22px;}
-}
-@media (max-width:720px){
-  .orbit{--item-size:26%;--center-size:30%;--orbit-radius:34%;width:clamp(300px,88vw,480px);}
-  .tst-wrap{padding:0 52px;}
-  .tst-arrow{width:42px;height:42px;}
-  .tst-arrow svg{width:16px;height:16px;}
-  .tst-card{padding:30px 24px 26px;}
-  .tst-from{font-size:15px;}
-  .tst-text{font-size:14.5px;}
-  .reg-shell{max-width:100%;}
-}
-@media (max-width:640px){
-  :root{--header-h:70px;}
-  .wrap{padding:0 18px;}
-  .brand-logo{width:42px;height:42px;border-radius:12px;}
-  .brand-name{font-size:15px;letter-spacing:1.6px;}
-  .brand-moto{font-size:8.5px;letter-spacing:1.5px;}
-  .hero{padding:40px 0 60px;}
-  .hero h1{letter-spacing:-1.2px;}
-  .hero p.lead{margin-bottom:44px;}
-  .section{padding:60px 0;}
-  .section-head{margin-bottom:36px;}
-  .orbit{--item-size:28%;--center-size:28%;--orbit-radius:34%;margin-bottom:44px;}
-  .sc-icon{width:28px;height:28px;font-size:14px;border-radius:9px;}
-  .sc-label{font-size:9px;}
-  .sc-num{font-size:17px;}
-  .btn-demo{padding:18px 32px;font-size:15.5px;min-height:58px;}
-  .demo-play-ring{width:32px;height:32px;flex:0 0 32px;}
-  .demo-play-tri{border-left-width:10px;border-top-width:6px;border-bottom-width:6px;}
-  .cur-section{padding:66px 0 72px;}
-  .cur-shell{padding:18px;border-radius:24px;}
-  .sem-switch{grid-template-columns:1fr;gap:12px;margin-bottom:22px;}
-  .sem-btn{padding:16px 18px;border-radius:18px;min-height:auto;}
-  .sem-num{font-size:26px;letter-spacing:-1.8px;}
-  .sem-name{font-size:15px;}
-  .course-stage{grid-template-columns:1fr;gap:12px;}
-  .course-head{padding:16px 18px;}
-  .cp-video{gap:10px;padding:8px;}
-  .cp-video-thumb{width:88px;height:56px;flex:0 0 88px;}
-  .cp-video-title{font-size:12px;}
-  .tst-wrap{padding:0 48px;}
-  .tst-arrow{width:38px;height:38px;border-width:2px;}
-  .tst-arrow svg{width:15px;height:15px;}
-  .tst-arrow.prev{left:2px;}
-  .tst-arrow.next{right:2px;}
-  .tst-card{padding:28px 22px 24px;border-radius:20px;}
-  .tst-quote{font-size:90px;top:12px;right:16px;}
-  .tst-top{gap:14px;padding-bottom:14px;margin-bottom:16px;}
-  .tst-avatar{width:52px;height:52px;flex:0 0 52px;}
-  .tst-from{font-size:14.5px;}
-  .tst-text{font-size:14px;line-height:1.75;}
-  .float-cta{right:12px;padding:13px 18px;font-size:13.5px;}
-  .float-cta{right:calc(12px + env(safe-area-inset-right));bottom:calc(12px + env(safe-area-inset-bottom));}
-  .player-modal{padding:12px;}
-  .player-shell{padding:16px;border-radius:22px;max-height:94vh;}
-  .player-list{grid-template-columns:1fr;padding:18px 2px 4px;}
-  .pl-thumb{width:80px;height:52px;flex:0 0 80px;}
-  .pl-title{font-size:12.5px;}
-  .cta-section{padding:0 0 60px;}
-  .cta-card{border-radius:28px;}
-  .cta-inner{padding:44px 22px 42px;border-radius:25px;}
-  .cta-btn{padding:17px 28px;font-size:15.5px;min-height:58px;}
-  .cta-title{letter-spacing:-1px;}
-  .footer{padding:60px 0 52px;padding-bottom:calc(52px + env(safe-area-inset-bottom));}
-  .footer p{font-size:14.5px;}
-  .footer-logo{width:88px;height:88px;border-radius:22px;}
-  .social{width:52px;height:52px;border-radius:15px;}
-  .social svg{width:22px;height:22px;}
-  .reg-shell{padding:18px;border-radius:22px;}
-  .reg-logo{width:48px;height:48px;border-radius:13px;}
-  .reg-head h3{font-size:16px;}
-  .rl-logo-ring{width:84px;height:84px;margin-bottom:14px;}
-  .rl-logo{width:52px;height:52px;}
-  .rl-orb{width:9px;height:9px;margin-left:-4.5px;transform-origin:4.5px 42px;}
-  .rl-text{font-size:14px;}
-  .rl-sub{font-size:11.5px;}
-}
-@media (max-width:480px){
-  :root{--header-h:66px;}
-  .wrap{padding:0 16px;}
-  .brand-logo{width:38px;height:38px;border-radius:11px;}
-  .brand-name{font-size:14px;letter-spacing:1.4px;}
-  .brand-moto{font-size:8px;letter-spacing:1.2px;}
-  .hero{padding:34px 0 52px;}
-  .hero h1{letter-spacing:-1px;max-width:100%;margin-bottom:12px;}
-  .hero p.lead{font-size:14.5px;margin-bottom:38px;}
-  .hero-badge{font-size:11px;padding:7px 13px;letter-spacing:1.2px;}
-  .motto{letter-spacing:2.6px;margin-bottom:20px;}
-  .orbit{--item-size:30%;--center-size:28%;--orbit-radius:33%;width:clamp(280px,94vw,400px);margin-bottom:38px;}
-  .sc-icon{width:26px;height:26px;font-size:13px;border-radius:8px;margin-bottom:3px;}
-  .sc-num{font-size:15px;}
-  .sc-label{font-size:8.5px;max-width:90px;}
-  .btn-demo{padding:16px 26px;font-size:14.5px;min-height:54px;gap:11px;}
-  .demo-play-ring{width:30px;height:30px;flex:0 0 30px;}
-  .section-head h2{letter-spacing:-1px;}
-  .section-head p{font-size:14.5px;}
-  .cur-shell{padding:15px;border-radius:20px;}
-  .sem-btn{padding:14px 16px;border-radius:16px;}
-  .sem-num{font-size:24px;}
-  .sem-name{font-size:14.5px;}
-  .stream-rail{gap:9px;padding:4px 4px 14px;}
-  .stream-pill{padding:10px 14px;font-size:12.5px;}
-  .stream-pill .s-name{font-size:12.5px;}
-  .course-head{padding:14px 14px;gap:12px;}
-  .cc-ic{width:42px;height:42px;flex:0 0 42px;font-size:19px;border-radius:12px;}
-  .cc-name{font-size:13.5px;}
-  .cc-meta{font-size:9.5px;}
-  .course-panel-inner{padding:0 14px;}
-  .course-card.open .course-panel-inner{padding:0 14px 18px;}
-  .cp-exam-grid{grid-template-columns:1fr;gap:6px;}
-  .cp-video-thumb{width:80px;height:52px;flex:0 0 80px;}
-  .cp-video-title{font-size:11.5px;}
-  .tst-wrap{padding:0 42px;}
-  .tst-arrow{width:34px;height:34px;}
-  .tst-arrow svg{width:14px;height:14px;}
-  .tst-arrow.prev{left:2px;}
-  .tst-arrow.next{right:2px;}
-  .tst-card{padding:24px 18px 20px;border-radius:18px;}
-  .tst-quote{font-size:76px;top:10px;right:12px;}
-  .tst-top{gap:12px;padding-bottom:12px;margin-bottom:14px;}
-  .tst-avatar{width:48px;height:48px;flex:0 0 48px;}
-  .tst-from{font-size:14px;}
-  .tst-subject{font-size:9.5px;padding:3px 9px;}
-  .tst-text{font-size:13.5px;line-height:1.7;}
-  .cta-inner{padding:38px 18px 36px;}
-  .cta-badge{font-size:10.5px;padding:7px 13px;letter-spacing:1.3px;}
-  .cta-btn{padding:15px 22px;font-size:14.5px;min-height:54px;}
-  .cta-btn .tg-ic{width:22px;height:22px;flex:0 0 22px;}
-  .cta-btn .tg-ic svg{width:22px;height:22px;}
-  .footer{padding:52px 0 46px;padding-bottom:calc(46px + env(safe-area-inset-bottom));}
-  .footer h3{font-size:23px;}
-  .footer p{font-size:14px;}
-  .footer-logo{width:80px;height:80px;border-radius:20px;margin-bottom:18px;}
-  .socials{gap:12px;}
-  .social{width:48px;height:48px;border-radius:13px;}
-  .social svg{width:21px;height:21px;}
-  .player-shell{padding:12px;border-radius:18px;}
-  .player-frame{border-radius:14px;}
-  .player-close{width:36px;height:36px;flex:0 0 36px;}
-  .reg-shell{padding:16px;border-radius:20px;}
-  .reg-logo{width:46px;height:46px;border-radius:12px;}
-  .reg-head h3{font-size:15px;}
-  .reg-head p{font-size:9.5px;}
-  .reg-moto{font-size:8px;}
-  .reg-step h4{font-size:16px;}
-  .reg-opt{padding:12px 13px;font-size:13px;gap:10px;}
-  .reg-opt .ri{font-size:18px;flex:0 0 18px;}
-  .reg-pay-grid{gap:8px;}
-  .pay-cell{padding:12px 10px;min-height:78px;}
-  .pay-cell .val{font-size:14px;}
-  .pay-cell .val.amount{font-size:20px;}
-  .reg-btn{padding:11px 14px;font-size:13.5px;min-height:44px;}
-  .rl-logo-ring{width:76px;height:76px;margin-bottom:12px;}
-  .rl-logo{width:48px;height:48px;}
-  .rl-orb{width:8px;height:8px;margin-left:-4px;transform-origin:4px 38px;}
-  .rl-text{font-size:13.5px;}
-  .rl-sub{font-size:11px;max-width:220px;}
-  .err-box{padding:24px 18px 18px;border-radius:20px;}
-  .err-icon{width:56px;height:56px;font-size:28px;}
-  .err-box h4{font-size:16px;}
-  .err-box p{font-size:13px;}
-  .err-btn{padding:11px 14px;font-size:13.5px;min-height:44px;}
-}
-@media (max-width:360px){
-  :root{--header-h:62px;}
-  .wrap{padding:0 14px;}
-  .brand-logo{width:34px;height:34px;border-radius:10px;}
-  .brand-name{font-size:12.5px;letter-spacing:1.1px;}
-  .brand-moto{display:none;}
-  .hero h1{letter-spacing:-.8px;}
-  .hero p.lead{font-size:14px;}
-  .orbit{--item-size:32%;--center-size:26%;--orbit-radius:32%;}
-  .sc-icon{width:24px;height:24px;font-size:12px;border-radius:7px;}
-  .sc-num{font-size:14px;}
-  .sc-label{font-size:8px;max-width:80px;}
-  .btn-demo{padding:14px 20px;font-size:13.5px;min-height:50px;gap:10px;}
-  .demo-play-ring{width:26px;height:26px;flex:0 0 26px;}
-  .demo-play-tri{border-left-width:9px;border-top-width:5.5px;border-bottom-width:5.5px;}
-  .cur-shell{padding:12px;border-radius:18px;}
-  .sem-btn{padding:12px 14px;border-radius:14px;}
-  .sem-num{font-size:22px;}
-  .stream-pill{padding:9px 12px;}
-  .stream-pill .s-count{display:none;}
-  .course-head{padding:12px 12px;gap:10px;}
-  .cc-ic{width:38px;height:38px;flex:0 0 38px;font-size:17px;}
-  .course-panel-inner{padding:0 12px;}
-  .course-card.open .course-panel-inner{padding:0 12px 16px;}
-  .cp-video{flex-direction:column;align-items:stretch;gap:8px;}
-  .cp-video-thumb{width:100%;height:auto;aspect-ratio:16/9;flex:1 1 auto;}
-  .tst-wrap{padding:0 38px;}
-  .tst-arrow{width:30px;height:30px;}
-  .tst-arrow svg{width:12px;height:12px;}
-  .tst-card{padding:22px 16px 18px;}
-  .tst-quote{font-size:64px;top:8px;right:8px;}
-  .tst-text{font-size:13px;}
-  .tst-avatar{width:44px;height:44px;flex:0 0 44px;}
-  .tst-from{font-size:13px;}
-  .cta-inner{padding:34px 16px 32px;}
-  .cta-title{letter-spacing:-.8px;}
-  .footer h3{font-size:21px;}
-  .footer-logo{width:72px;height:72px;border-radius:18px;}
-  .social{width:46px;height:46px;border-radius:13px;}
-  .social svg{width:20px;height:20px;}
-  .float-cta{padding:12px 16px;font-size:13px;}
-  .float-cta{right:calc(10px + env(safe-area-inset-right));bottom:calc(10px + env(safe-area-inset-bottom));}
-  .reg-shell{padding:14px;border-radius:18px;}
-  .reg-summary{padding:10px;}
-  .reg-summary .row{font-size:11.5px;padding:3px 0;}
-  .pay-cell{padding:10px 8px;border-radius:10px;min-height:70px;}
-  .pay-cell .label{font-size:8.5px;letter-spacing:.8px;}
-  .pay-cell .val{font-size:13px;}
-  .pay-cell .val.amount{font-size:18px;}
-}
-@media (max-height:600px){
-  .reg-shell{padding:14px;max-height:calc(100dvh - 20px);}
-  .reg-head{padding:2px 40px 12px;margin-bottom:12px;gap:6px;}
-  .reg-logo{width:42px;height:42px;border-radius:11px;}
-  .reg-head h3{font-size:15px;}
-  .reg-progress{margin-bottom:12px;}
-  .reg-step h4{font-size:15px;}
-  .reg-step p.hint{margin-bottom:10px;font-size:12px;}
-  .reg-input{padding:10px 12px;font-size:14px;}
-  .reg-opt{padding:10px 12px;font-size:13px;}
-  .reg-footer{margin-top:12px;}
-  .rl-logo-ring{width:70px;height:70px;margin-bottom:10px;}
-  .rl-logo{width:44px;height:44px;}
-  .rl-orb{width:8px;height:8px;margin-left:-4px;transform-origin:4px 35px;}
-  .rl-text{font-size:13px;}
-  .rl-sub{font-size:11px;}
-}
-@media (max-height:480px) and (orientation:landscape){
-  .hero{padding:36px 0 30px;}
-  .hero h1{font-size:32px;margin-bottom:14px;}
-  .hero p.lead{margin-bottom:22px;}
-  .orbit{width:clamp(240px,55vw,380px);}
-  .player-shell{max-height:96vh;padding:14px;}
-  .player-frame{max-height:60vh;margin:0 auto;}
-  .reg-shell{max-height:calc(100dvh - 20px);padding:14px;}
-}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;}.reveal{opacity:1;transform:none;}html{scroll-behavior:auto;}.orbit-ring,.orbit-counter{animation:none !important;}}
+@media (max-width:1024px){.wrap{padding:0 20px;}.hero{padding:52px 0 70px;}.section{padding:72px 0;}.cur-section{padding:80px 0 86px;}.cur-shell{padding:24px;}.course-stage{grid-template-columns:repeat(auto-fill,minmax(260px,1fr));}.tst-wrap{padding:0 66px;}}
+@media (max-width:900px){.orbit{--item-size:24%;--center-size:32%;--orbit-radius:34%;}.tst-wrap{padding:0 60px;}.tst-arrow{width:46px;height:46px;}.tst-arrow svg{width:18px;height:18px;}.tst-card{padding:34px 30px 30px;}.tst-quote{font-size:110px;top:16px;right:22px;}}
+@media (max-width:720px){.orbit{--item-size:26%;--center-size:30%;--orbit-radius:34%;width:clamp(300px,88vw,480px);}.tst-wrap{padding:0 52px;}.tst-arrow{width:42px;height:42px;}.tst-arrow svg{width:16px;height:16px;}.tst-card{padding:30px 24px 26px;}.tst-from{font-size:15px;}.tst-text{font-size:14.5px;}.reg-shell{max-width:100%;}}
+@media (max-width:640px){:root{--header-h:70px;}.wrap{padding:0 18px;}.brand-logo{width:42px;height:42px;border-radius:12px;}.brand-name{font-size:15px;letter-spacing:1.6px;}.brand-moto{font-size:8.5px;letter-spacing:1.5px;}.hero{padding:40px 0 60px;}.hero h1{letter-spacing:-1.2px;}.hero p.lead{margin-bottom:44px;}.section{padding:60px 0;}.section-head{margin-bottom:36px;}.orbit{--item-size:28%;--center-size:28%;--orbit-radius:34%;margin-bottom:44px;}.sc-icon{width:28px;height:28px;font-size:14px;border-radius:9px;}.sc-label{font-size:9px;}.sc-num{font-size:17px;}.btn-demo{padding:18px 32px;font-size:15.5px;min-height:58px;}.demo-play-ring{width:32px;height:32px;flex:0 0 32px;}.demo-play-tri{border-left-width:10px;border-top-width:6px;border-bottom-width:6px;}.cur-section{padding:66px 0 72px;}.cur-shell{padding:18px;border-radius:24px;}.sem-switch{grid-template-columns:1fr;gap:12px;margin-bottom:22px;}.sem-btn{padding:16px 18px;border-radius:18px;min-height:auto;}.sem-num{font-size:26px;letter-spacing:-1.8px;}.sem-name{font-size:15px;}.course-stage{grid-template-columns:1fr;gap:12px;}.course-head{padding:16px 18px;}.cp-video{gap:10px;padding:8px;}.cp-video-thumb{width:88px;height:56px;flex:0 0 88px;}.cp-video-title{font-size:12px;}.tst-wrap{padding:0 48px;}.tst-arrow{width:38px;height:38px;border-width:2px;}.tst-arrow svg{width:15px;height:15px;}.tst-arrow.prev{left:2px;}.tst-arrow.next{right:2px;}.tst-card{padding:28px 22px 24px;border-radius:20px;}.tst-quote{font-size:90px;top:12px;right:16px;}.tst-top{gap:14px;padding-bottom:14px;margin-bottom:16px;}.tst-avatar{width:52px;height:52px;flex:0 0 52px;}.tst-from{font-size:14.5px;}.tst-text{font-size:14px;line-height:1.75;}.float-cta{right:12px;padding:13px 18px;font-size:13.5px;}.float-cta{right:calc(12px + env(safe-area-inset-right));bottom:calc(12px + env(safe-area-inset-bottom));}.player-modal{padding:12px;}.player-shell{padding:16px;border-radius:22px;max-height:94vh;}.player-list{grid-template-columns:1fr;padding:18px 2px 4px;}.pl-thumb{width:80px;height:52px;flex:0 0 80px;}.pl-title{font-size:12.5px;}.cta-section{padding:0 0 60px;}.cta-card{border-radius:28px;}.cta-inner{padding:44px 22px 42px;border-radius:25px;}.cta-btn{padding:17px 28px;font-size:15.5px;min-height:58px;}.cta-title{letter-spacing:-1px;}.footer{padding:60px 0 52px;padding-bottom:calc(52px + env(safe-area-inset-bottom));}.footer p{font-size:14.5px;}.footer-logo{width:88px;height:88px;border-radius:22px;}.social{width:52px;height:52px;border-radius:15px;}.social svg{width:22px;height:22px;}.reg-shell{padding:18px;border-radius:22px;}.reg-logo{width:48px;height:48px;border-radius:13px;}.reg-head h3{font-size:16px;}.rl-logo-ring{width:84px;height:84px;margin-bottom:14px;}.rl-logo{width:52px;height:52px;}.rl-orb{width:9px;height:9px;margin-left:-4.5px;transform-origin:4.5px 42px;}.rl-text{font-size:14px;}.rl-sub{font-size:11.5px;}}
+@media (max-width:480px){:root{--header-h:66px;}.wrap{padding:0 16px;}.brand-logo{width:38px;height:38px;border-radius:11px;}.brand-name{font-size:14px;letter-spacing:1.4px;}.brand-moto{font-size:8px;letter-spacing:1.2px;}.hero{padding:34px 0 52px;}.hero h1{letter-spacing:-1px;max-width:100%;margin-bottom:12px;}.hero p.lead{font-size:14.5px;margin-bottom:38px;}.hero-badge{font-size:11px;padding:7px 13px;letter-spacing:1.2px;}.motto{letter-spacing:2.6px;margin-bottom:20px;}.orbit{--item-size:30%;--center-size:28%;--orbit-radius:33%;width:clamp(280px,94vw,400px);margin-bottom:38px;}.sc-icon{width:26px;height:26px;font-size:13px;border-radius:8px;margin-bottom:3px;}.sc-num{font-size:15px;}.sc-label{font-size:8.5px;max-width:90px;}.btn-demo{padding:16px 26px;font-size:14.5px;min-height:54px;gap:11px;}.demo-play-ring{width:30px;height:30px;flex:0 0 30px;}.section-head h2{letter-spacing:-1px;}.section-head p{font-size:14.5px;}.cur-shell{padding:15px;border-radius:20px;}.sem-btn{padding:14px 16px;border-radius:16px;}.sem-num{font-size:24px;}.sem-name{font-size:14.5px;}.stream-rail{gap:9px;padding:4px 4px 14px;}.stream-pill{padding:10px 14px;font-size:12.5px;}.stream-pill .s-name{font-size:12.5px;}.course-head{padding:14px 14px;gap:12px;}.cc-ic{width:42px;height:42px;flex:0 0 42px;font-size:19px;border-radius:12px;}.cc-name{font-size:13.5px;}.cc-meta{font-size:9.5px;}.course-panel-inner{padding:0 14px;}.course-card.open .course-panel-inner{padding:0 14px 18px;}.cp-exam-grid{grid-template-columns:1fr;gap:6px;}.cp-video-thumb{width:80px;height:52px;flex:0 0 80px;}.cp-video-title{font-size:11.5px;}.tst-wrap{padding:0 42px;}.tst-arrow{width:34px;height:34px;}.tst-arrow svg{width:14px;height:14px;}.tst-arrow.prev{left:2px;}.tst-arrow.next{right:2px;}.tst-card{padding:24px 18px 20px;border-radius:18px;}.tst-quote{font-size:76px;top:10px;right:12px;}.tst-top{gap:12px;padding-bottom:12px;margin-bottom:14px;}.tst-avatar{width:48px;height:48px;flex:0 0 48px;}.tst-from{font-size:14px;}.tst-subject{font-size:9.5px;padding:3px 9px;}.tst-text{font-size:13.5px;line-height:1.7;}.cta-inner{padding:38px 18px 36px;}.cta-badge{font-size:10.5px;padding:7px 13px;letter-spacing:1.3px;}.cta-btn{padding:15px 22px;font-size:14.5px;min-height:54px;}.cta-btn .tg-ic{width:22px;height:22px;flex:0 0 22px;}.cta-btn .tg-ic svg{width:22px;height:22px;}.footer{padding:52px 0 46px;padding-bottom:calc(46px + env(safe-area-inset-bottom));}.footer h3{font-size:23px;}.footer p{font-size:14px;}.footer-logo{width:80px;height:80px;border-radius:20px;margin-bottom:18px;}.socials{gap:12px;}.social{width:48px;height:48px;border-radius:13px;}.social svg{width:21px;height:21px;}.player-shell{padding:12px;border-radius:18px;}.player-frame{border-radius:14px;}.player-close{width:36px;height:36px;flex:0 0 36px;}.reg-shell{padding:16px;border-radius:20px;}.reg-logo{width:46px;height:46px;border-radius:12px;}.reg-head h3{font-size:15px;}.reg-head p{font-size:9.5px;}.reg-moto{font-size:8px;}.reg-step h4{font-size:16px;}.reg-opt{padding:12px 13px;font-size:13px;gap:10px;}.reg-opt .ri{font-size:18px;flex:0 0 18px;}.reg-pay-grid{gap:8px;}.pay-cell{padding:12px 10px;min-height:78px;}.pay-cell .val{font-size:14px;}.pay-cell .val.amount{font-size:20px;}.reg-btn{padding:11px 14px;font-size:13.5px;min-height:44px;}.rl-logo-ring{width:76px;height:76px;margin-bottom:12px;}.rl-logo{width:48px;height:48px;}.rl-orb{width:8px;height:8px;margin-left:-4px;transform-origin:4px 38px;}.rl-text{font-size:13.5px;}.rl-sub{font-size:11px;max-width:220px;}.err-box{padding:24px 18px 18px;border-radius:20px;}.err-icon{width:56px;height:56px;font-size:28px;}.err-box h4{font-size:16px;}.err-box p{font-size:13px;}.err-btn{padding:11px 14px;font-size:13.5px;min-height:44px;}}
+@media (max-width:360px){:root{--header-h:62px;}.wrap{padding:0 14px;}.brand-logo{width:34px;height:34px;border-radius:10px;}.brand-name{font-size:12.5px;letter-spacing:1.1px;}.brand-moto{display:none;}.hero h1{letter-spacing:-.8px;}.hero p.lead{font-size:14px;}.orbit{--item-size:32%;--center-size:26%;--orbit-radius:32%;}.sc-icon{width:24px;height:24px;font-size:12px;border-radius:7px;}.sc-num{font-size:14px;}.sc-label{font-size:8px;max-width:80px;}.btn-demo{padding:14px 20px;font-size:13.5px;min-height:50px;gap:10px;}.demo-play-ring{width:26px;height:26px;flex:0 0 26px;}.demo-play-tri{border-left-width:9px;border-top-width:5.5px;border-bottom-width:5.5px;}.cur-shell{padding:12px;border-radius:18px;}.sem-btn{padding:12px 14px;border-radius:14px;}.sem-num{font-size:22px;}.stream-pill{padding:9px 12px;}.stream-pill .s-count{display:none;}.course-head{padding:12px 12px;gap:10px;}.cc-ic{width:38px;height:38px;flex:0 0 38px;font-size:17px;}.course-panel-inner{padding:0 12px;}.course-card.open .course-panel-inner{padding:0 12px 16px;}.cp-video{flex-direction:column;align-items:stretch;gap:8px;}.cp-video-thumb{width:100%;height:auto;aspect-ratio:16/9;flex:1 1 auto;}.tst-wrap{padding:0 38px;}.tst-arrow{width:30px;height:30px;}.tst-arrow svg{width:12px;height:12px;}.tst-card{padding:22px 16px 18px;}.tst-quote{font-size:64px;top:8px;right:8px;}.tst-text{font-size:13px;}.tst-avatar{width:44px;height:44px;flex:0 0 44px;}.tst-from{font-size:13px;}.cta-inner{padding:34px 16px 32px;}.cta-title{letter-spacing:-.8px;}.footer h3{font-size:21px;}.footer-logo{width:72px;height:72px;border-radius:18px;}.social{width:46px;height:46px;border-radius:13px;}.social svg{width:20px;height:20px;}.float-cta{padding:12px 16px;font-size:13px;}.float-cta{right:calc(10px + env(safe-area-inset-right));bottom:calc(10px + env(safe-area-inset-bottom));}.reg-shell{padding:14px;border-radius:18px;}.reg-summary{padding:10px;}.reg-summary .row{font-size:11.5px;padding:3px 0;}.pay-cell{padding:10px 8px;border-radius:10px;min-height:70px;}.pay-cell .label{font-size:8.5px;letter-spacing:.8px;}.pay-cell .val{font-size:13px;}.pay-cell .val.amount{font-size:18px;}}
+@media (max-height:600px){.reg-shell{padding:14px;max-height:calc(100dvh - 20px);}.reg-head{padding:2px 40px 12px;margin-bottom:12px;gap:6px;}.reg-logo{width:42px;height:42px;border-radius:11px;}.reg-head h3{font-size:15px;}.reg-progress{margin-bottom:12px;}.reg-step h4{font-size:15px;}.reg-step p.hint{margin-bottom:10px;font-size:12px;}.reg-input{padding:10px 12px;font-size:14px;}.reg-opt{padding:10px 12px;font-size:13px;}.reg-footer{margin-top:12px;}.rl-logo-ring{width:70px;height:70px;margin-bottom:10px;}.rl-logo{width:44px;height:44px;}.rl-orb{width:8px;height:8px;margin-left:-4px;transform-origin:4px 35px;}.rl-text{font-size:13px;}.rl-sub{font-size:11px;}}
+@media (max-height:480px) and (orientation:landscape){.hero{padding:36px 0 30px;}.hero h1{font-size:32px;margin-bottom:14px;}.hero p.lead{margin-bottom:22px;}.orbit{width:clamp(240px,55vw,380px);}.player-shell{max-height:96vh;padding:14px;}.player-frame{max-height:60vh;margin:0 auto;}.reg-shell{max-height:calc(100dvh - 20px);padding:14px;}}
 </style>
 </head>
-
 <body>
 
 <header class="header" id="siteHeader">
@@ -846,91 +539,44 @@ a[href*="youtube.com/@abj"], a[href*="youtu.be/@abj"]{display:none !important;}
 </header>
 
 <main id="top">
-
   <section class="hero">
     <div class="hero-glow" aria-hidden="true"></div>
     <div class="wrap hero-inner">
       <span class="hero-badge reveal"><span class="dot"></span> Since 2023</span>
       <h1 class="reveal d1">Welcome to <span class="grad-text">ABJ Tutorial</span></h1>
       <span class="motto reveal d2">Empowering Tomorrow, Today.</span>
-      <p class="lead reveal d2">
-        ABJ Tutorial has helped Ethiopian university freshmen learn simply and
-        effectively — offering past exams with <b>step-by-step solutions</b>,
-        concise notes, and clear explanations so students can prepare smarter
-        and achieve higher results.
-      </p>
-
+      <p class="lead reveal d2">ABJ Tutorial has helped Ethiopian university freshmen learn simply and effectively — offering past exams with <b>step-by-step solutions</b>, concise notes, and clear explanations so students can prepare smarter and achieve higher results.</p>
       <div class="orbit reveal d3" id="heroStats" aria-label="Key statistics">
         <svg class="orbit-wires" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-          <g class="wire-1" style="color:#d4af37">
-            <line class="wire-base" x1="50" y1="50" x2="50" y2="16" stroke="#d4af37"/>
-            <line class="wire-flow" x1="50" y1="50" x2="50" y2="16" stroke="#f7e07a"/>
-            <circle class="wire-halo wire-halo-1" cx="50" cy="33" r="1.6" stroke="#f7e07a" stroke-width=".6"/>
-          </g>
-          <g class="wire-2" style="color:#6366f1">
-            <line class="wire-base" x1="50" y1="50" x2="84" y2="50" stroke="#6366f1"/>
-            <line class="wire-flow" x1="50" y1="50" x2="84" y2="50" stroke="#a5b4fc"/>
-            <circle class="wire-halo wire-halo-2" cx="67" cy="50" r="1.6" stroke="#a5b4fc" stroke-width=".6"/>
-          </g>
-          <g class="wire-3" style="color:#a855f7">
-            <line class="wire-base" x1="50" y1="50" x2="50" y2="84" stroke="#a855f7"/>
-            <line class="wire-flow" x1="50" y1="50" x2="50" y2="84" stroke="#c084fc"/>
-            <circle class="wire-halo wire-halo-3" cx="50" cy="67" r="1.6" stroke="#c084fc" stroke-width=".6"/>
-          </g>
-          <g class="wire-4" style="color:#f43f5e">
-            <line class="wire-base" x1="50" y1="50" x2="16" y2="50" stroke="#f43f5e"/>
-            <line class="wire-flow" x1="50" y1="50" x2="16" y2="50" stroke="#fda4af"/>
-            <circle class="wire-halo wire-halo-4" cx="33" cy="50" r="1.6" stroke="#fda4af" stroke-width=".6"/>
-          </g>
+          <g class="wire-1" style="color:#d4af37"><line class="wire-base" x1="50" y1="50" x2="50" y2="16" stroke="#d4af37"/><line class="wire-flow" x1="50" y1="50" x2="50" y2="16" stroke="#f7e07a"/><circle class="wire-halo wire-halo-1" cx="50" cy="33" r="1.6" stroke="#f7e07a" stroke-width=".6"/></g>
+          <g class="wire-2" style="color:#6366f1"><line class="wire-base" x1="50" y1="50" x2="84" y2="50" stroke="#6366f1"/><line class="wire-flow" x1="50" y1="50" x2="84" y2="50" stroke="#a5b4fc"/><circle class="wire-halo wire-halo-2" cx="67" cy="50" r="1.6" stroke="#a5b4fc" stroke-width=".6"/></g>
+          <g class="wire-3" style="color:#a855f7"><line class="wire-base" x1="50" y1="50" x2="50" y2="84" stroke="#a855f7"/><line class="wire-flow" x1="50" y1="50" x2="50" y2="84" stroke="#c084fc"/><circle class="wire-halo wire-halo-3" cx="50" cy="67" r="1.6" stroke="#c084fc" stroke-width=".6"/></g>
+          <g class="wire-4" style="color:#f43f5e"><line class="wire-base" x1="50" y1="50" x2="16" y2="50" stroke="#f43f5e"/><line class="wire-flow" x1="50" y1="50" x2="16" y2="50" stroke="#fda4af"/><circle class="wire-halo wire-halo-4" cx="33" cy="50" r="1.6" stroke="#fda4af" stroke-width=".6"/></g>
         </svg>
-
         <div class="orbit-ring">
           <div class="orbit-item orbit-item-1"><div class="orbit-counter"><div class="stat-card"><div class="sc-icon">🎓</div><div class="sc-num" data-count="2000" data-suffix="+">0</div><div class="sc-label">Students taught</div></div></div></div>
           <div class="orbit-item orbit-item-2"><div class="orbit-counter"><div class="stat-card"><div class="sc-icon">📈</div><div class="sc-num" data-count="95" data-suffix="%">0</div><div class="sc-label">Above 3.0 GPA</div></div></div></div>
           <div class="orbit-item orbit-item-3"><div class="orbit-counter"><div class="stat-card"><div class="sc-icon">🏆</div><div class="sc-num" data-count="99" data-suffix="%+">0</div><div class="sc-label">4.0 scorers @ Jimma</div></div></div></div>
           <div class="orbit-item orbit-item-4"><div class="orbit-counter"><div class="stat-card"><div class="sc-icon">▶️</div><div class="sc-num" data-count="1" data-suffix="M+">0</div><div class="sc-label">YouTube views</div></div></div></div>
         </div>
-
         <div class="orbit-center" aria-hidden="true">
           <span class="bubble-ring"></span><span class="bubble-ring"></span><span class="bubble-ring"></span>
           <div class="orbit-center-inner"><img src="logo.jpg" alt="ABJ Tutorial" /></div>
         </div>
       </div>
-
       <div class="hero-actions reveal d4">
-        <span class="demo-wrap">
-          <button class="btn-demo" id="demoBtn" type="button">
-            <span class="demo-play-ring"><span class="demo-play-tri"></span></span>
-            Start Demo
-          </button>
-        </span>
+        <span class="demo-wrap"><button class="btn-demo" id="demoBtn" type="button"><span class="demo-play-ring"><span class="demo-play-tri"></span></span> Start Demo</button></span>
       </div>
     </div>
   </section>
 
   <section class="cur-section" id="courses">
     <div class="wrap">
-      <div class="section-head reveal">
-        <span class="eyebrow">Curriculum</span>
-        <h2>What You'll Study</h2>
-        <p>Complete course lists for both semesters. Tap any course to see chapters, credit hours, exam breakdown, and a demo video.</p>
-      </div>
+      <div class="section-head reveal"><span class="eyebrow">Curriculum</span><h2>What You'll Study</h2><p>Complete course lists for both semesters. Tap any course to see chapters, credit hours, exam breakdown, and a demo video.</p></div>
       <div class="cur-shell reveal d1">
         <div class="sem-switch" id="semSwitch">
-          <button class="sem-btn active" data-sem="first" type="button">
-            <span class="sem-num">01</span>
-            <span class="sem-info">
-              <span class="sem-name">First Semester</span>
-              <span class="sem-sub">Foundation · 2 streams</span>
-            </span>
-          </button>
-          <button class="sem-btn" data-sem="second" type="button">
-            <span class="sem-num">02</span>
-            <span class="sem-info">
-              <span class="sem-name">Second Semester</span>
-              <span class="sem-sub">Specialization · 3 streams</span>
-            </span>
-          </button>
+          <button class="sem-btn active" data-sem="first" type="button"><span class="sem-num">01</span><span class="sem-info"><span class="sem-name">First Semester</span><span class="sem-sub">Foundation · 2 streams</span></span></button>
+          <button class="sem-btn" data-sem="second" type="button"><span class="sem-num">02</span><span class="sem-info"><span class="sem-name">Second Semester</span><span class="sem-sub">Specialization · 3 streams</span></span></button>
         </div>
         <div class="stream-rail" id="streamRail"></div>
         <div class="course-stage" id="courseStage"></div>
@@ -940,19 +586,11 @@ a[href*="youtube.com/@abj"], a[href*="youtu.be/@abj"]{display:none !important;}
 
   <section class="section tst-section" id="testimonials">
     <div class="wrap">
-      <div class="section-head reveal">
-        <span class="eyebrow">Real students</span>
-        <h2>What Students Say About ABJ Tutorial</h2>
-        <p>Hundreds of freshmen have already changed the way they study.</p>
-      </div>
+      <div class="section-head reveal"><span class="eyebrow">Real students</span><h2>What Students Say About ABJ Tutorial</h2><p>Hundreds of freshmen have already changed the way they study.</p></div>
       <div class="tst-wrap reveal d1">
-        <button class="tst-arrow prev" id="tstPrev" type="button" aria-label="Previous testimonial">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
-        </button>
+        <button class="tst-arrow prev" id="tstPrev" type="button" aria-label="Previous testimonial"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></button>
         <div class="tst-viewport"><div class="tst-track" id="tstTrack"></div></div>
-        <button class="tst-arrow next" id="tstNext" type="button" aria-label="Next testimonial">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-        </button>
+        <button class="tst-arrow next" id="tstNext" type="button" aria-label="Next testimonial"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button>
         <div class="tst-dots" id="tstDots"></div>
         <div class="tst-counter" id="tstCounter">1 / 15</div>
       </div>
@@ -969,15 +607,10 @@ a[href*="youtube.com/@abj"], a[href*="youtu.be/@abj"]{display:none !important;}
           <div class="cta-content">
             <span class="cta-badge"><span class="spark"></span> Registration Open</span>
             <h2 class="cta-title">Ready to Register?</h2>
-            <p class="cta-sub">
-              Fill out the quick form below — your payment will be <b>verified automatically</b>,
-              and you'll get instant access once approved.
-            </p>
+            <p class="cta-sub">Fill out the quick form below — your payment will be <b>verified automatically</b>, and you'll get instant access once approved.</p>
             <span class="cta-btn-wrap">
               <button class="cta-btn" id="registerBtn" type="button">
-                <span class="tg-ic">
-                  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21.94 4.3 18.9 19.1c-.23 1.02-.84 1.27-1.7.79l-4.7-3.46-2.27 2.18c-.25.25-.46.46-.94.46l.33-4.75 8.65-7.81c.38-.33-.08-.52-.58-.19L6.98 13.1l-4.6-1.44c-1-.31-1.02-1 .21-1.48l17.98-6.93c.83-.31 1.56.2 1.37 1.05z"/></svg>
-                </span>
+                <span class="tg-ic"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M21.94 4.3 18.9 19.1c-.23 1.02-.84 1.27-1.7.79l-4.7-3.46-2.27 2.18c-.25.25-.46.46-.94.46l.33-4.75 8.65-7.81c.38-.33-.08-.52-.58-.19L6.98 13.1l-4.6-1.44c-1-.31-1.02-1 .21-1.48l17.98-6.93c.83-.31 1.56.2 1.37 1.05z"/></svg></span>
                 <span id="ctaBtnLabel">Register Now</span>
               </button>
             </span>
@@ -986,7 +619,6 @@ a[href*="youtube.com/@abj"], a[href*="youtu.be/@abj"]{display:none !important;}
       </div>
     </div>
   </section>
-
 </main>
 
 <footer class="footer" id="contact">
@@ -1009,14 +641,10 @@ a[href*="youtube.com/@abj"], a[href*="youtu.be/@abj"]{display:none !important;}
   <span id="floatCtaLabel">Register Now</span>
 </button>
 
-<!-- VIDEO PLAYER -->
 <div class="player-modal" id="playerModal" role="dialog" aria-modal="true">
   <div class="player-shell">
     <div class="player-header">
-      <div class="ph-info">
-        <span class="pn-tag" id="pnTag">Welcome</span>
-        <h3 class="pn-title" id="pnTitle">Select a lesson to begin</h3>
-      </div>
+      <div class="ph-info"><span class="pn-tag" id="pnTag">Welcome</span><h3 class="pn-title" id="pnTitle">Select a lesson to begin</h3></div>
       <button class="player-close" id="playerClose" type="button" aria-label="Close">✕</button>
     </div>
     <div class="player-frame" id="playerFrame"><div class="loading-spinner"></div></div>
@@ -1024,7 +652,6 @@ a[href*="youtube.com/@abj"], a[href*="youtu.be/@abj"]{display:none !important;}
   </div>
 </div>
 
-<!-- REGISTRATION MODAL -->
 <div class="reg-modal" id="regModal" role="dialog" aria-modal="true" aria-label="Registration">
   <div class="reg-shell" id="regShell">
     <div class="reg-head">
@@ -1034,128 +661,18 @@ a[href*="youtube.com/@abj"], a[href*="youtu.be/@abj"]{display:none !important;}
       <span class="reg-moto">Empowering Tomorrow, Today.</span>
       <p id="regStepLabel">Step 1 of 7</p>
     </div>
-
-    <div class="reg-progress" id="regProgress">
-      <span></span><span></span><span></span><span></span><span></span><span></span><span></span>
-    </div>
-
-    <div class="reg-step active" data-step="1">
-      <div class="reg-step-label">Step 1 of 7</div>
-      <h4>What's your full name?</h4>
-      <p class="hint">Enter exactly <b>two words</b> — first and last name. Letters only.</p>
-      <input class="reg-input" id="regName" type="text" placeholder="e.g. Dagim Desalegn" autocomplete="name" />
-      <div class="reg-error" id="errName">⚠️ Please enter exactly two words (letters only).</div>
-      <div class="reg-footer">
-        <button class="reg-btn primary" data-next="1" type="button" disabled>Continue →</button>
-      </div>
-    </div>
-
-    <div class="reg-step" data-step="2">
-      <div class="reg-step-label">Step 2 of 7</div>
-      <h4>Your Student ID number</h4>
-      <p class="hint">Format: letters + digits, slash, year digits. Example: <b>RU0562/15</b></p>
-      <input class="reg-input" id="regId" type="text" placeholder="e.g. RU0562/15" autocomplete="off" />
-      <div class="reg-error" id="errId">⚠️ Invalid format. Try something like RU0562/15</div>
-      <div class="reg-footer">
-        <button class="reg-btn ghost" data-back="1" type="button">← Back</button>
-        <button class="reg-btn primary" data-next="2" type="button" disabled>Continue →</button>
-      </div>
-    </div>
-
-    <div class="reg-step" data-step="3">
-      <div class="reg-step-label">Step 3 of 7</div>
-      <h4>Choose your semester</h4>
-      <p class="hint">Select the semester you're currently in.</p>
-      <div class="reg-options" data-group="semester">
-        <button class="reg-opt" data-value="First Semester" type="button"><span class="ri">📘</span><span class="rl">First Semester</span><span class="rc">Foundation</span></button>
-        <button class="reg-opt" data-value="Second Semester" type="button"><span class="ri">📗</span><span class="rl">Second Semester</span><span class="rc">Specialization</span></button>
-      </div>
-      <div class="reg-footer">
-        <button class="reg-btn ghost" data-back="2" type="button">← Back</button>
-        <button class="reg-btn primary" data-next="3" type="button" disabled>Continue →</button>
-      </div>
-    </div>
-
-    <div class="reg-step" data-step="4">
-      <div class="reg-step-label">Step 4 of 7</div>
-      <h4>Choose your stream</h4>
-      <p class="hint">Select the stream you belong to.</p>
-      <div class="reg-options" data-group="stream" id="regStreams"></div>
-      <div class="reg-footer">
-        <button class="reg-btn ghost" data-back="3" type="button">← Back</button>
-        <button class="reg-btn primary" data-next="4" type="button" disabled>Continue →</button>
-      </div>
-    </div>
-
-    <div class="reg-step" data-step="5">
-      <div class="reg-step-label">Step 5 of 7</div>
-      <h4>Your gender</h4>
-      <p class="hint">This helps us personalize your experience.</p>
-      <div class="reg-options" data-group="gender">
-        <button class="reg-opt" data-value="Male" type="button"><span class="ri">👨</span><span class="rl">Male</span></button>
-        <button class="reg-opt" data-value="Female" type="button"><span class="ri">👩</span><span class="rl">Female</span></button>
-      </div>
-      <div class="reg-footer">
-        <button class="reg-btn ghost" data-back="4" type="button">← Back</button>
-        <button class="reg-btn primary" data-next="5" type="button" disabled>Continue →</button>
-      </div>
-    </div>
-
-    <div class="reg-step" data-step="6">
-      <div class="reg-step-label">Step 6 of 7</div>
-      <h4>Choose your payment method</h4>
-      <p class="hint">Send the exact amount to the account that appears next.</p>
-      <div class="reg-options" data-group="method">
-        <button class="reg-opt" data-value="Telebirr" type="button"><span class="ri">💳</span><span class="rl">Telebirr</span></button>
-        <button class="reg-opt" data-value="CBE" type="button"><span class="ri">🏦</span><span class="rl">CBE</span></button>
-        <button class="reg-opt" data-value="mPesa" type="button"><span class="ri">📱</span><span class="rl">mPesa</span></button>
-      </div>
-      <div class="reg-footer">
-        <button class="reg-btn ghost" data-back="5" type="button">← Back</button>
-        <button class="reg-btn primary" data-next="6" type="button" disabled>Continue →</button>
-      </div>
-    </div>
-
-    <div class="reg-step" data-step="7">
-      <div class="reg-step-label">Step 7 of 7</div>
-      <h4>Send the payment</h4>
-      <p class="hint">Transfer the exact amount, then enter your transaction reference below.</p>
-      <div class="reg-summary" id="regSummary"></div>
-      <div class="reg-pay-grid">
-        <div class="pay-cell">
-          <div class="label">Amount (ETB)</div>
-          <div class="val amount" id="regAmount">10,000</div>
-        </div>
-        <div class="pay-cell">
-          <div class="label" id="regAccountLabel">Account</div>
-          <div class="val" id="regAccount">—</div>
-        </div>
-      </div>
-      <input class="reg-input" id="regRef" type="text" placeholder="Transaction reference number" autocomplete="off" />
-      <div class="reg-error" id="errRef">⚠️ Please enter your transaction reference.</div>
-      <div class="reg-footer">
-        <button class="reg-btn ghost" data-back="6" type="button">← Back</button>
-        <button class="reg-btn primary" id="regSubmit" type="button">Submit Registration ✓</button>
-      </div>
-    </div>
-
-    <div class="reg-success" id="regSuccess">
-      <div class="check">✓</div>
-      <h4>Registration Received!</h4>
-      <p>Your details are now under review. Our admin will verify your payment and approve your account shortly.</p>
-      <p>Save the ID below to check your status anytime.</p>
-      <button class="ref copy-ref" id="regSuccessRef" type="button" title="Tap to copy"></button>
-      <div class="ref-hint">👆 Tap the ID above to copy it — save it somewhere safe</div>
-      <div class="reg-footer" style="margin-top:18px">
-        <button class="reg-btn ghost" id="regStatusLink" type="button">🔎 Check Status</button>
-        <button class="reg-btn primary" id="regDone" type="button">Done</button>
-      </div>
-    </div>
-
+    <div class="reg-progress" id="regProgress"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+    <div class="reg-step active" data-step="1"><div class="reg-step-label">Step 1 of 7</div><h4>What's your full name?</h4><p class="hint">Enter exactly <b>two words</b> — first and last name. Letters only.</p><input class="reg-input" id="regName" type="text" placeholder="e.g. Dagim Desalegn" autocomplete="name" /><div class="reg-error" id="errName">⚠️ Please enter exactly two words (letters only).</div><div class="reg-footer"><button class="reg-btn primary" data-next="1" type="button" disabled>Continue →</button></div></div>
+    <div class="reg-step" data-step="2"><div class="reg-step-label">Step 2 of 7</div><h4>Your Student ID number</h4><p class="hint">Format: letters + digits, slash, year digits. Example: <b>RU0562/15</b></p><input class="reg-input" id="regId" type="text" placeholder="e.g. RU0562/15" autocomplete="off" /><div class="reg-error" id="errId">⚠️ Invalid format. Try something like RU0562/15</div><div class="reg-footer"><button class="reg-btn ghost" data-back="1" type="button">← Back</button><button class="reg-btn primary" data-next="2" type="button" disabled>Continue →</button></div></div>
+    <div class="reg-step" data-step="3"><div class="reg-step-label">Step 3 of 7</div><h4>Choose your semester</h4><p class="hint">Select the semester you're currently in.</p><div class="reg-options" data-group="semester"><button class="reg-opt" data-value="First Semester" type="button"><span class="ri">📘</span><span class="rl">First Semester</span><span class="rc">Foundation</span></button><button class="reg-opt" data-value="Second Semester" type="button"><span class="ri">📗</span><span class="rl">Second Semester</span><span class="rc">Specialization</span></button></div><div class="reg-footer"><button class="reg-btn ghost" data-back="2" type="button">← Back</button><button class="reg-btn primary" data-next="3" type="button" disabled>Continue →</button></div></div>
+    <div class="reg-step" data-step="4"><div class="reg-step-label">Step 4 of 7</div><h4>Choose your stream</h4><p class="hint">Select the stream you belong to.</p><div class="reg-options" data-group="stream" id="regStreams"></div><div class="reg-footer"><button class="reg-btn ghost" data-back="3" type="button">← Back</button><button class="reg-btn primary" data-next="4" type="button" disabled>Continue →</button></div></div>
+    <div class="reg-step" data-step="5"><div class="reg-step-label">Step 5 of 7</div><h4>Your gender</h4><p class="hint">This helps us personalize your experience.</p><div class="reg-options" data-group="gender"><button class="reg-opt" data-value="Male" type="button"><span class="ri">👨</span><span class="rl">Male</span></button><button class="reg-opt" data-value="Female" type="button"><span class="ri">👩</span><span class="rl">Female</span></button></div><div class="reg-footer"><button class="reg-btn ghost" data-back="4" type="button">← Back</button><button class="reg-btn primary" data-next="5" type="button" disabled>Continue →</button></div></div>
+    <div class="reg-step" data-step="6"><div class="reg-step-label">Step 6 of 7</div><h4>Choose your payment method</h4><p class="hint">Send the exact amount to the account that appears next.</p><div class="reg-options" data-group="method"><button class="reg-opt" data-value="Telebirr" type="button"><span class="ri">💳</span><span class="rl">Telebirr</span></button><button class="reg-opt" data-value="CBE" type="button"><span class="ri">🏦</span><span class="rl">CBE</span></button><button class="reg-opt" data-value="mPesa" type="button"><span class="ri">📱</span><span class="rl">mPesa</span></button></div><div class="reg-footer"><button class="reg-btn ghost" data-back="5" type="button">← Back</button><button class="reg-btn primary" data-next="6" type="button" disabled>Continue →</button></div></div>
+    <div class="reg-step" data-step="7"><div class="reg-step-label">Step 7 of 7</div><h4>Send the payment</h4><p class="hint">Transfer the exact amount, then enter your transaction reference below.</p><div class="reg-summary" id="regSummary"></div><div class="reg-pay-grid"><div class="pay-cell"><div class="label">Amount (ETB)</div><div class="val amount" id="regAmount">10,000</div></div><div class="pay-cell"><div class="label" id="regAccountLabel">Account</div><div class="val" id="regAccount">—</div></div></div><input class="reg-input" id="regRef" type="text" placeholder="Transaction reference number" autocomplete="off" /><div class="reg-error" id="errRef">⚠️ Please enter your transaction reference.</div><div class="reg-footer"><button class="reg-btn ghost" data-back="6" type="button">← Back</button><button class="reg-btn primary" id="regSubmit" type="button">Submit Registration ✓</button></div></div>
+    <div class="reg-success" id="regSuccess"><div class="check">✓</div><h4>Registration Received!</h4><p>Your details are now under review. Our admin will verify your payment and approve your account shortly.</p><p>Save the ID below to check your status anytime.</p><button class="ref copy-ref" id="regSuccessRef" type="button" title="Tap to copy"></button><div class="ref-hint">👆 Tap the ID above to copy it — save it somewhere safe</div><div class="reg-footer" style="margin-top:18px"><button class="reg-btn ghost" id="regStatusLink" type="button">🔎 Check Status</button><button class="reg-btn primary" id="regDone" type="button">Done</button></div></div>
   </div>
 </div>
 
-<!-- HOME STATUS MODAL -->
 <div class="sts-modal" id="statusModal" role="dialog" aria-modal="true" aria-label="Registration status">
   <div class="sts-shell">
     <div class="sts-head">
@@ -1170,139 +687,78 @@ a[href*="youtube.com/@abj"], a[href*="youtu.be/@abj"]{display:none !important;}
 
 <div class="copy-toast" id="copyToast">📋 Copied</div>
 
-<!-- LOADING SCREEN -->
 <div class="loading-screen" id="regLoading">
-  <div class="rl-logo-ring">
-    <div class="rl-ring"></div>
-    <div class="rl-orb"></div>
-    <div class="rl-logo"><img src="logo.jpg" alt="ABJ" /></div>
-  </div>
+  <div class="rl-logo-ring"><div class="rl-ring"></div><div class="rl-orb"></div><div class="rl-logo"><img src="logo.jpg" alt="ABJ" /></div></div>
   <div class="rl-text">Verifying payment...</div>
   <div class="rl-sub">Checking with the bank. This takes about 5 seconds.</div>
   <div class="rl-dots"><span></span><span></span><span></span></div>
 </div>
 
-<!-- ERROR MODAL -->
 <div class="err-modal" id="errModal" role="dialog" aria-modal="true" aria-label="Error">
   <div class="err-box">
     <div class="err-icon">⚠️</div>
     <h4 id="errTitle">Payment Amount Does Not Match</h4>
     <p id="errMessage">Received ETB 10,400, required exactly ETB 10,000 (over by ETB 400).</p>
-    <div class="err-actions">
-      <button class="err-btn ghost" id="errClose" type="button">Close</button>
-      <button class="err-btn primary" id="errRetry" type="button">Try Again</button>
-    </div>
+    <div class="err-actions"><button class="err-btn ghost" id="errClose" type="button">Close</button><button class="err-btn primary" id="errRetry" type="button">Try Again</button></div>
   </div>
 </div>
 
 <script>
-/* ============================================================
-   SAFETY NET — remove any stray YouTube link / element
-   ============================================================ */
-(function stripYouTubeLinks(){
-  function sweep(){
-    document.querySelectorAll('a[href*="youtube.com"], a[href*="youtu.be"]').forEach(el => {
-      // Keep the internal video player's iframe source intact
-      if (el.closest('.player-frame') || el.closest('.pl-item') || el.closest('.cp-video')) return;
-      el.style.display = 'none';
-      el.remove();
-    });
-  }
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', sweep);
-  } else {
-    sweep();
-  }
-})();
+/* ---------- SAFETY: remove any stray YouTube anchor ---------- */
+(function(){function sweep(){document.querySelectorAll('a[href*="youtube.com"],a[href*="youtu.be"]').forEach(el=>{if(el.closest('.player-frame')||el.closest('.pl-item')||el.closest('.cp-video'))return;el.remove();});}document.readyState==='loading'?document.addEventListener('DOMContentLoaded',sweep):sweep();})();
 
-/* ============================================================
-   1. CURRICULUM DATA
-   ============================================================ */
+/* ---------- CURRICULUM ---------- */
 const CURRICULUM = {
   first: [
     { name: "Social Science", icon: "📚", courses: [
-      { code:'MATH 1011', name:'Mathematics for Social', icon:'📐', cr:3,
-        desc:'Propositional logic; sets; real and complex number systems; functions and graphs; polynomials; logarithms; analytic geometry.',
-        chapters:['Propositional Logic and Set Theory','Real and Complex Number Systems','Functions and Graphs','Polynomial and Rational Functions','Exponential and Logarithmic Functions','Analytic Geometry'] },
-      { code:'PSCH 1011', name:'General Psychology', icon:'🧠', cr:3,
-        desc:'Introduction to psychology; sensation and perception; learning and memory; motivation and emotion; personality; social psychology.',
-        chapters:['Introduction to Psychology','Sensation and Perception','Learning and Memory','Motivation and Emotion','Personality','Social Psychology'] },
-      { code:'FLEN 1011', name:'Communicative English I', icon:'🗣️', cr:3,
-        desc:'Effective communication across contexts; grammar and vocabulary; integrated practice in listening, speaking, reading, and writing.',
-        chapters:['Listening & Speaking Basics','Reading Comprehension','Grammar Foundations','Vocabulary Building','Writing Simple Texts','Study Skills'] },
-      { code:'GEES 1011', name:'Geography of Ethiopia & the Horn', icon:'🌍', cr:3,
-        desc:'Geology; topography; drainage systems and water resources; climate; soils; wildlife; population and economic activities.',
-        chapters:['Geology of Ethiopia','Topography and Drainage','Climate and Soils','Population Dynamics','Economic Activities','Wildlife and Conservation'] },
-      { code:'LOCT 1011', name:'Logic and Critical Thinking', icon:'💡', cr:3,
-        desc:'Logic and philosophy; arguments and validity; deductive/inductive reasoning; precise language; factors affecting critical thinking.',
-        chapters:['Introduction to Logic','Arguments and Validity','Deductive Reasoning','Inductive Reasoning','Common Fallacies','Critical Thinking in Real Life'] },
-      { code:'ECON 1011', name:'Economics', icon:'📈', cr:3,
-        desc:'Fundamental economic principles from supply–demand to market structures; macro/micro concepts.',
-        chapters:['Introduction to Economics','Demand and Supply','Market Structures','National Income','Money and Banking','Development Economics'] }
+      { code:'MATH 1011', name:'Mathematics for Social', icon:'📐', cr:3, desc:'Propositional logic; sets; real and complex number systems; functions and graphs; polynomials; logarithms; analytic geometry.', chapters:['Propositional Logic and Set Theory','Real and Complex Number Systems','Functions and Graphs','Polynomial and Rational Functions','Exponential and Logarithmic Functions','Analytic Geometry'] },
+      { code:'PSCH 1011', name:'General Psychology', icon:'🧠', cr:3, desc:'Introduction to psychology; sensation and perception; learning and memory; motivation and emotion; personality; social psychology.', chapters:['Introduction to Psychology','Sensation and Perception','Learning and Memory','Motivation and Emotion','Personality','Social Psychology'] },
+      { code:'FLEN 1011', name:'Communicative English I', icon:'🗣️', cr:3, desc:'Effective communication across contexts; grammar and vocabulary; integrated practice.', chapters:['Listening & Speaking Basics','Reading Comprehension','Grammar Foundations','Vocabulary Building','Writing Simple Texts','Study Skills'] },
+      { code:'GEES 1011', name:'Geography of Ethiopia & the Horn', icon:'🌍', cr:3, desc:'Geology; topography; drainage; climate; soils; wildlife; population.', chapters:['Geology of Ethiopia','Topography and Drainage','Climate and Soils','Population Dynamics','Economic Activities','Wildlife and Conservation'] },
+      { code:'LOCT 1011', name:'Logic and Critical Thinking', icon:'💡', cr:3, desc:'Logic and philosophy; arguments and validity; reasoning; fallacies.', chapters:['Introduction to Logic','Arguments and Validity','Deductive Reasoning','Inductive Reasoning','Common Fallacies','Critical Thinking in Real Life'] },
+      { code:'ECON 1011', name:'Economics', icon:'📈', cr:3, desc:'Fundamental economic principles from supply-demand to market structures.', chapters:['Introduction to Economics','Demand and Supply','Market Structures','National Income','Money and Banking','Development Economics'] }
     ]},
     { name: "Natural Science", icon: "🔬", courses: [
-      { code:'MATH 1011', name:'Mathematics for Natural', icon:'📐', cr:3,
-        desc:'Propositional logic; sets; real and complex numbers; functions; polynomials; logarithms; analytic geometry.',
-        chapters:['Propositional Logic and Set Theory','Real and Complex Number Systems','Functions and Graphs','Polynomial and Rational Functions','Exponential and Logarithmic Functions','Analytic Geometry'] },
-      { code:'PSCH 1011', name:'General Psychology', icon:'🧠', cr:3,
-        desc:'Introduction to psychology; sensation and perception; learning and memory; motivation and emotion; personality; social psychology.',
-        chapters:['Introduction to Psychology','Sensation and Perception','Learning and Memory','Motivation and Emotion','Personality','Social Psychology'] },
-      { code:'FLEN 1011', name:'Communicative English I', icon:'🗣️', cr:3,
-        desc:'Effective communication across contexts; grammar and vocabulary; integrated practice.',
-        chapters:['Listening & Speaking Basics','Reading Comprehension','Grammar Foundations','Vocabulary Building','Writing Simple Texts','Study Skills'] },
-      { code:'GEES 1011', name:'Geography of Ethiopia & the Horn', icon:'🌍', cr:3,
-        desc:'Geology; topography; drainage; climate; soils; wildlife; population and economic activities.',
-        chapters:['Geology of Ethiopia','Topography and Drainage','Climate and Soils','Population Dynamics','Economic Activities','Wildlife and Conservation'] },
-      { code:'LOCT 1011', name:'Logic and Critical Thinking', icon:'💡', cr:3,
-        desc:'Logic and philosophy; arguments and validity; deductive/inductive reasoning; precise language.',
-        chapters:['Introduction to Logic','Arguments and Validity','Deductive Reasoning','Inductive Reasoning','Common Fallacies','Critical Thinking in Real Life'] },
-      { code:'PHYS 1011', name:'General Physics', icon:'⚛️', cr:3,
-        desc:'Kinematics; dynamics; fluids; heat and thermodynamics; oscillations; waves; optics; electromagnetism.',
-        chapters:['Kinematics','Dynamics','Fluids','Heat and Thermodynamics','Oscillations and Waves','Optics and Electromagnetism'] }
+      { code:'MATH 1011', name:'Mathematics for Natural', icon:'📐', cr:3, desc:'Propositional logic; sets; complex numbers; functions; polynomials; logarithms.', chapters:['Propositional Logic and Set Theory','Real and Complex Number Systems','Functions and Graphs','Polynomial and Rational Functions','Exponential and Logarithmic Functions','Analytic Geometry'] },
+      { code:'PSCH 1011', name:'General Psychology', icon:'🧠', cr:3, desc:'Introduction to psychology; perception; learning; personality; social psychology.', chapters:['Introduction to Psychology','Sensation and Perception','Learning and Memory','Motivation and Emotion','Personality','Social Psychology'] },
+      { code:'FLEN 1011', name:'Communicative English I', icon:'🗣️', cr:3, desc:'Effective communication; grammar and vocabulary; integrated practice.', chapters:['Listening & Speaking Basics','Reading Comprehension','Grammar Foundations','Vocabulary Building','Writing Simple Texts','Study Skills'] },
+      { code:'GEES 1011', name:'Geography of Ethiopia & the Horn', icon:'🌍', cr:3, desc:'Geology; topography; drainage; climate; soils; population.', chapters:['Geology of Ethiopia','Topography and Drainage','Climate and Soils','Population Dynamics','Economic Activities','Wildlife and Conservation'] },
+      { code:'LOCT 1011', name:'Logic and Critical Thinking', icon:'💡', cr:3, desc:'Logic; arguments; reasoning; fallacies; critical thinking.', chapters:['Introduction to Logic','Arguments and Validity','Deductive Reasoning','Inductive Reasoning','Common Fallacies','Critical Thinking in Real Life'] },
+      { code:'PHYS 1011', name:'General Physics', icon:'⚛️', cr:3, desc:'Kinematics; dynamics; fluids; thermodynamics; waves; optics; electromagnetism.', chapters:['Kinematics','Dynamics','Fluids','Heat and Thermodynamics','Oscillations and Waves','Optics and Electromagnetism'] }
     ]}
   ],
   second: [
     { name: "Pre-Engineering & Computing", icon: "⚙️", courses: [
-      { code:'MATH 1041', name:'Applied Mathematics I', icon:'📐', cr:3, desc:'Vectors; matrices; limits; continuity; derivatives; integrals and applications.', chapters:['Vectors','Matrices and Determinants','Limits and Continuity','Derivatives','Applications of Derivatives','Integrals and Applications'] },
-      { code:'ANTH 1012', name:'Social Anthropology', icon:'🏺', cr:2, desc:'Human diversity; culture areas in Ethiopia; being human; marginalized and vulnerable groups.', chapters:['Introduction to Anthropology','Culture and Society','Human Diversity','Culture Areas of Ethiopia','Marginalized Groups','Local Governance & Peacemaking'] },
-      { code:'ECEG 2052', name:'Computer Programming (C++)', icon:'💻', cr:3, desc:'Fundamental programming concepts; data types; control statements and loops; file input/output.', chapters:['Introduction to Programming','Data Types and Variables','Control Statements','Loops and Iteration','Functions','File Input/Output'] },
-      { code:'EMTE 1012', name:'Introduction to Emerging Technologies', icon:'🚀', cr:3, desc:'Overview of AI, Data Science, IoT, and Augmented Reality.', chapters:['Introduction to Emerging Tech','Artificial Intelligence','Data Science','Internet of Things','Augmented & Virtual Reality','Impact on Society'] },
-      { code:'MCIE 1012', name:'Moral and Civic Education', icon:'⚖️', cr:2, desc:'Ethical principles; social responsibility; civic engagement; critical thinking.', chapters:['Ethics and Morality','Civic Virtues','Social Responsibility','Democratic Citizenship','Rule of Law','Civic Engagement'] },
-      { code:'MGMT 1012', name:'Entrepreneurship', icon:'💼', cr:3, desc:'Entrepreneurial history and globalization; idea generation; marketing; feasibility studies.', chapters:['Entrepreneurship Basics','Idea Generation','Marketing Fundamentals','Feasibility Studies','Legal Frameworks','Social Entrepreneurship'] },
-      { code:'FLEN 1012', name:'Communicative English II', icon:'🗣️', cr:3, desc:'Prerequisite: FLEN 1011. Construct sentences; develop paragraphs; write essays.', chapters:['Sentence Construction','Paragraph Development','Descriptive Writing','Narrative Writing','Expository Writing','Argumentative Essays'] }
+      { code:'MATH 1041', name:'Applied Mathematics I', icon:'📐', cr:3, desc:'Vectors; matrices; limits; derivatives; integrals.', chapters:['Vectors','Matrices and Determinants','Limits and Continuity','Derivatives','Applications of Derivatives','Integrals and Applications'] },
+      { code:'ANTH 1012', name:'Social Anthropology', icon:'🏺', cr:2, desc:'Human diversity; culture areas in Ethiopia.', chapters:['Introduction to Anthropology','Culture and Society','Human Diversity','Culture Areas of Ethiopia','Marginalized Groups','Local Governance & Peacemaking'] },
+      { code:'ECEG 2052', name:'Computer Programming (C++)', icon:'💻', cr:3, desc:'Programming fundamentals; data types; loops; file I/O.', chapters:['Introduction to Programming','Data Types and Variables','Control Statements','Loops and Iteration','Functions','File Input/Output'] },
+      { code:'EMTE 1012', name:'Introduction to Emerging Technologies', icon:'🚀', cr:3, desc:'AI, Data Science, IoT, AR.', chapters:['Introduction to Emerging Tech','Artificial Intelligence','Data Science','Internet of Things','Augmented & Virtual Reality','Impact on Society'] },
+      { code:'MCIE 1012', name:'Moral and Civic Education', icon:'⚖️', cr:2, desc:'Ethics; civic engagement.', chapters:['Ethics and Morality','Civic Virtues','Social Responsibility','Democratic Citizenship','Rule of Law','Civic Engagement'] },
+      { code:'MGMT 1012', name:'Entrepreneurship', icon:'💼', cr:3, desc:'Entrepreneurship; idea generation; marketing.', chapters:['Entrepreneurship Basics','Idea Generation','Marketing Fundamentals','Feasibility Studies','Legal Frameworks','Social Entrepreneurship'] },
+      { code:'FLEN 1012', name:'Communicative English II', icon:'🗣️', cr:3, desc:'Prerequisite: FLEN 1011. Write essays.', chapters:['Sentence Construction','Paragraph Development','Descriptive Writing','Narrative Writing','Expository Writing','Argumentative Essays'] }
     ]},
     { name: "Other Natural Science", icon: "🧪", courses: [
-      { code:'CHEM 2061', name:'General Chemistry I', icon:'🧪', cr:3, desc:'Chemistry and atomic structure; acids and bases; states of matter; chemical bonding; thermodynamics.', chapters:['Atomic Structure','Chemical Bonding','Acids and Bases','States of Matter','Thermodynamics','Solutions and Equilibrium'] },
-      { code:'ANTH 1012', name:'Social Anthropology', icon:'🏺', cr:2, desc:'Human diversity; culture areas in Ethiopia; being human; marginalized groups.', chapters:['Introduction to Anthropology','Culture and Society','Human Diversity','Culture Areas of Ethiopia','Marginalized Groups','Local Governance & Peacemaking'] },
-      { code:'BIOL 1011', name:'General Biology', icon:'🧬', cr:3, desc:'Cell structure and function; genetics and inheritance; evolution; plant and animal biology; ecology.', chapters:['Cell Biology','Genetics and Inheritance','Evolution','Plant Biology','Animal Biology','Ecology and Environment'] },
-      { code:'EMTE 1012', name:'Introduction to Emerging Technologies', icon:'🚀', cr:3, desc:'Overview of AI, Data Science, IoT, and Augmented Reality.', chapters:['Introduction to Emerging Tech','Artificial Intelligence','Data Science','Internet of Things','Augmented & Virtual Reality','Impact on Society'] },
-      { code:'MCIE 1012', name:'Moral and Civic Education', icon:'⚖️', cr:2, desc:'Ethical principles; social responsibility; civic engagement.', chapters:['Ethics and Morality','Civic Virtues','Social Responsibility','Democratic Citizenship','Rule of Law','Civic Engagement'] },
-      { code:'ECON 1011', name:'Economics', icon:'📈', cr:3, desc:'Fundamental economic principles; macro/micro concepts.', chapters:['Introduction to Economics','Demand and Supply','Market Structures','National Income','Money and Banking','Development Economics'] },
-      { code:'FLEN 1012', name:'Communicative English II', icon:'🗣️', cr:3, desc:'Prerequisite: FLEN 1011. Write descriptive, narrative, expository, and argumentative essays.', chapters:['Sentence Construction','Paragraph Development','Descriptive Writing','Narrative Writing','Expository Writing','Argumentative Essays'] }
+      { code:'CHEM 2061', name:'General Chemistry I', icon:'🧪', cr:3, desc:'Atomic structure; bonding; acids; thermodynamics.', chapters:['Atomic Structure','Chemical Bonding','Acids and Bases','States of Matter','Thermodynamics','Solutions and Equilibrium'] },
+      { code:'ANTH 1012', name:'Social Anthropology', icon:'🏺', cr:2, desc:'Human diversity; culture areas.', chapters:['Introduction to Anthropology','Culture and Society','Human Diversity','Culture Areas of Ethiopia','Marginalized Groups','Local Governance & Peacemaking'] },
+      { code:'BIOL 1011', name:'General Biology', icon:'🧬', cr:3, desc:'Cells; genetics; evolution; ecology.', chapters:['Cell Biology','Genetics and Inheritance','Evolution','Plant Biology','Animal Biology','Ecology and Environment'] },
+      { code:'EMTE 1012', name:'Introduction to Emerging Technologies', icon:'🚀', cr:3, desc:'AI, DS, IoT, AR.', chapters:['Introduction to Emerging Tech','Artificial Intelligence','Data Science','Internet of Things','Augmented & Virtual Reality','Impact on Society'] },
+      { code:'MCIE 1012', name:'Moral and Civic Education', icon:'⚖️', cr:2, desc:'Ethics; responsibility.', chapters:['Ethics and Morality','Civic Virtues','Social Responsibility','Democratic Citizenship','Rule of Law','Civic Engagement'] },
+      { code:'ECON 1011', name:'Economics', icon:'📈', cr:3, desc:'Economic principles; macro/micro.', chapters:['Introduction to Economics','Demand and Supply','Market Structures','National Income','Money and Banking','Development Economics'] },
+      { code:'FLEN 1012', name:'Communicative English II', icon:'🗣️', cr:3, desc:'Write descriptive, narrative, expository essays.', chapters:['Sentence Construction','Paragraph Development','Descriptive Writing','Narrative Writing','Expository Writing','Argumentative Essays'] }
     ]},
     { name: "Social Science", icon: "📚", courses: [
-      { code:'MGMT 1012', name:'Entrepreneurship', icon:'💼', cr:3, desc:'Entrepreneurial history and globalization; idea generation; marketing.', chapters:['Entrepreneurship Basics','Idea Generation','Marketing Fundamentals','Feasibility Studies','Legal Frameworks','Social Entrepreneurship'] },
-      { code:'ANTH 1012', name:'Social Anthropology', icon:'🏺', cr:2, desc:'Human diversity; culture areas in Ethiopia.', chapters:['Introduction to Anthropology','Culture and Society','Human Diversity','Culture Areas of Ethiopia','Marginalized Groups','Local Governance & Peacemaking'] },
-      { code:'EMTE 1012', name:'Introduction to Emerging Technologies', icon:'🚀', cr:3, desc:'Overview of AI, Data Science, IoT, and AR.', chapters:['Introduction to Emerging Tech','Artificial Intelligence','Data Science','Internet of Things','Augmented & Virtual Reality','Impact on Society'] },
-      { code:'MCIE 1012', name:'Moral and Civic Education', icon:'⚖️', cr:2, desc:'Ethical principles; social responsibility.', chapters:['Ethics and Morality','Civic Virtues','Social Responsibility','Democratic Citizenship','Rule of Law','Civic Engagement'] },
-      { code:'GLTR 2012', name:'Global Trends', icon:'🌐', cr:2, desc:'Basics of international relations; global challenges.', chapters:['Introduction to International Relations','Theories of IR','Global Challenges','Regional Politics','International Organizations','Contemporary Debates'] },
-      { code:'FLEN 1012', name:'Communicative English II', icon:'🗣️', cr:3, desc:'Prerequisite: FLEN 1011. Write essays.', chapters:['Sentence Construction','Paragraph Development','Descriptive Writing','Narrative Writing','Expository Writing','Argumentative Essays'] }
+      { code:'MGMT 1012', name:'Entrepreneurship', icon:'💼', cr:3, desc:'Entrepreneurship; marketing.', chapters:['Entrepreneurship Basics','Idea Generation','Marketing Fundamentals','Feasibility Studies','Legal Frameworks','Social Entrepreneurship'] },
+      { code:'ANTH 1012', name:'Social Anthropology', icon:'🏺', cr:2, desc:'Human diversity.', chapters:['Introduction to Anthropology','Culture and Society','Human Diversity','Culture Areas of Ethiopia','Marginalized Groups','Local Governance & Peacemaking'] },
+      { code:'EMTE 1012', name:'Introduction to Emerging Technologies', icon:'🚀', cr:3, desc:'AI, DS, IoT, AR.', chapters:['Introduction to Emerging Tech','Artificial Intelligence','Data Science','Internet of Things','Augmented & Virtual Reality','Impact on Society'] },
+      { code:'MCIE 1012', name:'Moral and Civic Education', icon:'⚖️', cr:2, desc:'Ethics; responsibility.', chapters:['Ethics and Morality','Civic Virtues','Social Responsibility','Democratic Citizenship','Rule of Law','Civic Engagement'] },
+      { code:'GLTR 2012', name:'Global Trends', icon:'🌐', cr:2, desc:'International relations.', chapters:['Introduction to International Relations','Theories of IR','Global Challenges','Regional Politics','International Organizations','Contemporary Debates'] },
+      { code:'FLEN 1012', name:'Communicative English II', icon:'🗣️', cr:3, desc:'Write essays.', chapters:['Sentence Construction','Paragraph Development','Descriptive Writing','Narrative Writing','Expository Writing','Argumentative Essays'] }
     ]}
   ]
 };
 
-const COURSE_VIDEOS = [
-  'https://youtu.be/xFRevkVzPFk',
-  'https://youtu.be/RLVXwk7x-DM',
-  'https://youtu.be/K8EKpllPqTY'
-];
-Object.values(CURRICULUM).forEach(semArr => {
-  semArr.forEach((stream, si) => {
-    stream.courses.forEach((c, ci) => {
-      c.video = COURSE_VIDEOS[(si + ci) % COURSE_VIDEOS.length];
-    });
-  });
-});
+const COURSE_VIDEOS = ['https://youtu.be/xFRevkVzPFk','https://youtu.be/RLVXwk7x-DM','https://youtu.be/K8EKpllPqTY'];
+Object.values(CURRICULUM).forEach(semArr => { semArr.forEach((stream, si) => { stream.courses.forEach((c, ci) => { c.video = COURSE_VIDEOS[(si + ci) % COURSE_VIDEOS.length]; }); }); });
 
 const COURSE_COLORS = [
   { c1:'#3b82f6', c2:'#2563eb', s1:'#eaf1ff', s2:'#dbeafe' },
@@ -1317,20 +773,9 @@ const COURSE_COLORS = [
   { c1:'#0ea5e9', c2:'#0284c7', s1:'#e0f2fe', s2:'#bae6fd' }
 ];
 
-function esc(s){
-  return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-}
-function ytId(input){
-  if(!input) return '';
-  const s = String(input).trim();
-  const m = s.match(/(?:youtu\.be\/|[?&]v=|embed\/|shorts\/)([A-Za-z0-9_-]{11})/);
-  if(m) return m[1];
-  return /^[A-Za-z0-9_-]{11}$/.test(s) ? s : '';
-}
+function esc(s){ return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function ytId(input){ if(!input) return ''; const s = String(input).trim(); const m = s.match(/(?:youtu\.be\/|[?&]v=|embed\/|shorts\/)([A-Za-z0-9_-]{11})/); if(m) return m[1]; return /^[A-Za-z0-9_-]{11}$/.test(s) ? s : ''; }
 
-/* ============================================================
-   2. CURRICULUM RENDER
-   ============================================================ */
 let curSem = 'first', curStream = 0;
 const semSwitch = document.getElementById('semSwitch');
 const semButtons = semSwitch.querySelectorAll('.sem-btn');
@@ -1355,50 +800,27 @@ function renderCourses(){
   stageBox.innerHTML = s.courses.map((c, i) => {
     const col = COURSE_COLORS[i % COURSE_COLORS.length];
     const vid = ytId(c.video);
-    const thumb = vid
-      ? `<img src="https://img.youtube.com/vi/${vid}/mqdefault.jpg" alt="" loading="lazy">`
-      : `<div class="cp-video-placeholder">🎬</div>`;
+    const thumb = vid ? `<img src="https://img.youtube.com/vi/${vid}/mqdefault.jpg" alt="" loading="lazy">` : `<div class="cp-video-placeholder">🎬</div>`;
     return `<article class="course-card" style="animation-delay:${i*70}ms;--cc1:${col.c1};--cc2:${col.c2};--cc-soft1:${col.s1};--cc-soft2:${col.s2};">
       <div class="course-inner">
         <button class="course-head" type="button" aria-expanded="false">
           <span class="cc-ic">${c.icon}</span>
-          <span class="cc-body"><span class="cc-name">${esc(c.name)}</span>
-            <span class="cc-meta"><span class="cc-code">${esc(c.code)}</span><span>· ${c.cr} Cr · Course ${String(i+1).padStart(2,'0')}</span></span>
-          </span>
+          <span class="cc-body"><span class="cc-name">${esc(c.name)}</span><span class="cc-meta"><span class="cc-code">${esc(c.code)}</span><span>· ${c.cr} Cr · Course ${String(i+1).padStart(2,'0')}</span></span></span>
           <span class="cc-chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>
         </button>
         <div class="course-panel"><div class="course-panel-inner">
           <div class="cp-divider"></div>
-
-          <div class="cp-block">
-            <h4 class="cp-block-title">Demo Video</h4>
+          <div class="cp-block"><h4 class="cp-block-title">Demo Video</h4>
             <button class="cp-video" type="button" data-video="${esc(c.video || '')}" data-title="${esc(c.name)}" data-tag="${esc(c.code)}">
-              <span class="cp-video-thumb">
-                ${thumb}
-                <span class="cp-video-play"></span>
-              </span>
-              <span class="cp-video-info">
-                <span class="cp-video-tag">${vid ? 'Watch Lesson' : 'Coming Soon'}</span>
-                <span class="cp-video-title">${esc(c.name)}</span>
-                <span class="cp-video-sub">${vid ? 'Tap to play this lesson demo' : 'Video will be added soon'}</span>
-              </span>
+              <span class="cp-video-thumb">${thumb}<span class="cp-video-play"></span></span>
+              <span class="cp-video-info"><span class="cp-video-tag">${vid ? 'Watch Lesson' : 'Coming Soon'}</span><span class="cp-video-title">${esc(c.name)}</span><span class="cp-video-sub">${vid ? 'Tap to play this lesson demo' : 'Video will be added soon'}</span></span>
             </button>
           </div>
-
           <p class="cp-desc">${esc(c.desc)}</p>
-
-          <div class="cp-block"><h4 class="cp-block-title">Chapters</h4>
-            <ul class="cp-chapters">${c.chapters.map((ch,k)=>`<li><span class="cp-num">${String(k+1).padStart(2,'0')}</span><span>${esc(ch)}</span></li>`).join('')}</ul>
-          </div>
-
+          <div class="cp-block"><h4 class="cp-block-title">Chapters</h4><ul class="cp-chapters">${c.chapters.map((ch,k)=>`<li><span class="cp-num">${String(k+1).padStart(2,'0')}</span><span>${esc(ch)}</span></li>`).join('')}</ul></div>
           <div class="cp-block"><h4 class="cp-block-title">Exam Breakdown · Total 100</h4>
-            <div class="cp-exam-grid">
-              <div class="exam-item"><span class="exam-icon">📝</span><div class="exam-num">30</div><div class="exam-label">Mid Exam</div></div>
-              <div class="exam-item"><span class="exam-icon">💻</span><span class="exam-num">50</span><div class="exam-label">Final · Online</div></div>
-              <div class="exam-item"><span class="exam-icon">📚</span><div class="exam-num">20</div><div class="exam-label">Assignment</div></div>
-            </div>
+            <div class="cp-exam-grid"><div class="exam-item"><span class="exam-icon">📝</span><div class="exam-num">30</div><div class="exam-label">Mid Exam</div></div><div class="exam-item"><span class="exam-icon">💻</span><span class="exam-num">50</span><div class="exam-label">Final · Online</div></div><div class="exam-item"><span class="exam-icon">📚</span><div class="exam-num">20</div><div class="exam-label">Assignment</div></div></div>
           </div>
-
         </div></div>
       </div></article>`;
   }).join('');
@@ -1415,9 +837,7 @@ function renderCourses(){
   stageBox.querySelectorAll('.cp-video').forEach(btn => {
     btn.addEventListener('click', e => {
       e.stopPropagation();
-      const url = btn.dataset.video;
-      const title = btn.dataset.title;
-      const tag = btn.dataset.tag || 'Lesson';
+      const url = btn.dataset.video; const title = btn.dataset.title; const tag = btn.dataset.tag || 'Lesson';
       if (!url) return;
       openPlayerWithVideo(url, title, tag);
     });
@@ -1432,15 +852,12 @@ semButtons.forEach(btn => btn.addEventListener('click', () => {
 }));
 renderStreams(); renderCourses();
 
-/* ============================================================
-   3. VIDEO PLAYER
-   ============================================================ */
+/* ---------- VIDEO PLAYER ---------- */
 const DEFAULT_VIDEOS = [
   { title:'CIVICS CHAPTER TWO PART 2 DEONTOLOGICAL NORMATIVE ETHICS: DEONTOLOGICAL ETHICS', url:'https://youtu.be/xFRevkVzPFk', tag:'Civics' },
   { title:'GENERAL MATHS FOR ALL FRESHMAN STUDENTS — SET THEORY AND THE CONCEPT OF SET', url:'https://youtu.be/RLVXwk7x-DM', tag:'Maths' },
   { title:'GENERAL BIOLOGY MID TERM EXAM FOR ALL FRESHMAN STUDENTS', url:'https://youtu.be/K8EKpllPqTY', tag:'Biology' }
 ];
-
 const playerModal = document.getElementById('playerModal');
 const playerFrame = document.getElementById('playerFrame');
 const playerList = document.getElementById('playerList');
@@ -1453,42 +870,22 @@ function buildPlaylist(){
   if (!playerList) return;
   playerList.innerHTML = videosData.map((v,i) => {
     const id = ytId(v.url);
-    const thumb = id
-      ? `<img src="https://img.youtube.com/vi/${id}/mqdefault.jpg" alt="" loading="lazy">`
-      : `<span class="pl-ph">${(v.tag || '?').charAt(0)}</span>`;
-    return `<button class="pl-item" data-i="${i}" type="button">
-      <span class="pl-thumb">
-        ${thumb}
-        <span class="pl-play"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>
-      </span>
-      <span class="pl-info">
-        <span class="pl-title">${esc(v.title)}</span>
-        <span class="pl-tag">${esc(v.tag || 'Lesson')}</span>
-      </span>
-    </button>`;
+    const thumb = id ? `<img src="https://img.youtube.com/vi/${id}/mqdefault.jpg" alt="" loading="lazy">` : `<span class="pl-ph">${(v.tag || '?').charAt(0)}</span>`;
+    return `<button class="pl-item" data-i="${i}" type="button"><span class="pl-thumb">${thumb}<span class="pl-play"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span></span><span class="pl-info"><span class="pl-title">${esc(v.title)}</span><span class="pl-tag">${esc(v.tag || 'Lesson')}</span></span></button>`;
   }).join('');
-
   playerList.querySelectorAll('.pl-item').forEach(btn => {
     btn.addEventListener('click', () => {
       const n = +btn.dataset.i;
       if (n === curVideo) return;
       curVideo = n;
       playerFrame.classList.add('loading');
-      setTimeout(() => {
-        renderPlayer();
-        setTimeout(() => playerFrame.classList.remove('loading'), 350);
-      }, 180);
+      setTimeout(() => { renderPlayer(); setTimeout(() => playerFrame.classList.remove('loading'), 350); }, 180);
     });
   });
 }
 
 function renderPlaceholder(){
-  playerFrame.innerHTML = `<div class="loading-spinner"></div>
-    <div class="player-placeholder">
-      <div class="pp-logo-wrap"><img src="logo.jpg" alt="ABJ Tutorial" /></div>
-      <div class="pp-text">Select a lesson to begin</div>
-      <div class="pp-sub">Choose any video from the list below</div>
-    </div>`;
+  playerFrame.innerHTML = `<div class="loading-spinner"></div><div class="player-placeholder"><div class="pp-logo-wrap"><img src="logo.jpg" alt="ABJ Tutorial" /></div><div class="pp-text">Select a lesson to begin</div><div class="pp-sub">Choose any video from the list below</div></div>`;
   pnTag.textContent = 'Welcome';
   pnTitle.textContent = 'Select a lesson to begin';
   playerList.querySelectorAll('.pl-item').forEach(el => el.classList.remove('active'));
@@ -1499,65 +896,32 @@ function renderPlayer(){
   if (!v) { renderPlaceholder(); return; }
   const id = ytId(v.url);
   if (id){
-    playerFrame.innerHTML = `<div class="loading-spinner"></div>
-      <iframe src="https://www.youtube.com/embed/${id}?rel=0&modestbranding=1&playsinline=1&autoplay=1"
-        title="${String(v.title).replace(/"/g,'&quot;')}"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-        allowfullscreen></iframe>`;
-  } else {
-    renderPlaceholder();
-    return;
-  }
+    playerFrame.innerHTML = `<div class="loading-spinner"></div><iframe src="https://www.youtube.com/embed/${id}?rel=0&modestbranding=1&playsinline=1&autoplay=1" title="${String(v.title).replace(/"/g,'&quot;')}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>`;
+  } else { renderPlaceholder(); return; }
   pnTag.textContent = v.tag || 'Lesson';
   pnTitle.textContent = v.title;
   playerList.querySelectorAll('.pl-item').forEach((el,i) => el.classList.toggle('active', i === curVideo));
 }
 
-function openPlayerWelcome(){
-  curVideo = -1;
-  renderPlaceholder();
-  playerModal.classList.add('open');
-  document.body.style.overflow = 'hidden';
-}
+function openPlayerWelcome(){ curVideo = -1; renderPlaceholder(); playerModal.classList.add('open'); document.body.style.overflow = 'hidden'; }
 function openPlayerWithVideo(url, title, tag){
   let idx = videosData.findIndex(v => v.url === url);
-  if (idx === -1){
-    videosData.unshift({ title, url, tag });
-    buildPlaylist();
-    idx = 0;
-  }
-  curVideo = idx;
-  playerModal.classList.add('open');
-  document.body.style.overflow = 'hidden';
+  if (idx === -1){ videosData.unshift({ title, url, tag }); buildPlaylist(); idx = 0; }
+  curVideo = idx; playerModal.classList.add('open'); document.body.style.overflow = 'hidden';
   renderPlayer();
   const activeEl = playerList.querySelector('.pl-item.active');
   if (activeEl) activeEl.scrollIntoView({ behavior:'smooth', block:'nearest' });
 }
-function closePlayer(){
-  playerModal.classList.remove('open');
-  document.body.style.overflow = '';
-  playerFrame.innerHTML = '<div class="loading-spinner"></div>';
-  curVideo = -1;
-}
+function closePlayer(){ playerModal.classList.remove('open'); document.body.style.overflow = ''; playerFrame.innerHTML = '<div class="loading-spinner"></div>'; curVideo = -1; }
 document.getElementById('demoBtn').addEventListener('click', openPlayerWelcome);
 document.getElementById('playerClose').addEventListener('click', closePlayer);
 
 (async function loadVideosFromAPI(){
-  try {
-    const res = await fetch('/api/videos', { cache: 'no-store' });
-    if (res.ok){
-      const data = await res.json();
-      if (Array.isArray(data.items) && data.items.length){
-        videosData = data.items;
-      }
-    }
-  } catch {}
+  try { const res = await fetch('/api/videos', { cache: 'no-store' }); if (res.ok){ const data = await res.json(); if (Array.isArray(data.items) && data.items.length){ videosData = data.items; } } } catch {}
   buildPlaylist();
 })();
 
-/* ============================================================
-   4. TESTIMONIALS
-   ============================================================ */
+/* ---------- TESTIMONIALS ---------- */
 const DEFAULT_TESTIMONIALS = [
   { student_name:'Girum T.', subject:'Maths', stars:5, text:'The step-by-step maths solutions were a total game-changer for me. I went from barely passing to scoring above 85 on every exam.' },
   { student_name:'Hana B.', subject:'Physics', stars:5, text:'I honestly hated Physics before I joined ABJ. Now motion and forces actually make sense. The video tutorials are amazing.' },
@@ -1581,13 +945,11 @@ const track = document.getElementById('tstTrack');
 const dotsBox = document.getElementById('tstDots');
 const counter = document.getElementById('tstCounter');
 let index = 0, autoTimer = null;
-
 function starRow(n){ return '★'.repeat(n) + '☆'.repeat(5-n); }
 
 function renderTestimonials(){
   if (!track || !dotsBox) return;
-  track.innerHTML = '';
-  dotsBox.innerHTML = '';
+  track.innerHTML = ''; dotsBox.innerHTML = '';
   TESTIMONIALS.forEach((t,i) => {
     const studentName = t.student_name || t.from || 'ABJ Student';
     const starCount = t.stars || 5;
@@ -1597,34 +959,21 @@ function renderTestimonials(){
     track.appendChild(slide);
     const dot = document.createElement('button');
     dot.className = 'dot' + (i === 0 ? ' active' : '');
-    dot.type = 'button';
-    dot.setAttribute('aria-label', 'Go to testimonial ' + (i + 1));
+    dot.type = 'button'; dot.setAttribute('aria-label', 'Go to testimonial ' + (i + 1));
     dot.addEventListener('click', () => goTo(i));
     dotsBox.appendChild(dot);
   });
-  index = 0;
-  goTo(0);
+  index = 0; goTo(0);
 }
-
 function updateCounter(){ if (counter) counter.textContent = (index+1) + ' / ' + TESTIMONIALS.length; }
-function goTo(i){
-  const total = TESTIMONIALS.length;
-  if (total === 0) return;
-  index = (i + total) % total;
-  track.style.transform = `translateX(-${index * 100}%)`;
-  [...dotsBox.children].forEach((d,k) => d.classList.toggle('active', k === index));
-  updateCounter();
-}
+function goTo(i){ const total = TESTIMONIALS.length; if (total === 0) return; index = (i + total) % total; track.style.transform = `translateX(-${index * 100}%)`; [...dotsBox.children].forEach((d,k) => d.classList.toggle('active', k === index)); updateCounter(); }
 function next(){ goTo(index + 1); }
 function prev(){ goTo(index - 1); }
-
 document.getElementById('tstNext').addEventListener('click', () => { next(); restartAuto(); });
 document.getElementById('tstPrev').addEventListener('click', () => { prev(); restartAuto(); });
-
 function startAuto(){ stopAuto(); autoTimer = setInterval(next, 6500); }
 function stopAuto(){ if (autoTimer) clearInterval(autoTimer); autoTimer = null; }
 function restartAuto(){ startAuto(); }
-
 const tstWrap = document.querySelector('.tst-wrap');
 if (tstWrap){
   tstWrap.addEventListener('mouseenter', stopAuto);
@@ -1635,28 +984,15 @@ if (tstWrap){
     if (touchX === null) return;
     const dx = e.changedTouches[0].clientX - touchX;
     if (Math.abs(dx) > 45) { dx < 0 ? next() : prev(); }
-    touchX = null;
-    startAuto();
+    touchX = null; startAuto();
   }, {passive:true});
 }
-
 (async function loadTestimonialsFromAPI(){
-  try {
-    const res = await fetch('/api/testimonials', { cache: 'no-store' });
-    if (res.ok){
-      const data = await res.json();
-      if (Array.isArray(data.items) && data.items.length){
-        TESTIMONIALS = data.items;
-      }
-    }
-  } catch {}
-  renderTestimonials();
-  startAuto();
+  try { const res = await fetch('/api/testimonials', { cache: 'no-store' }); if (res.ok){ const data = await res.json(); if (Array.isArray(data.items) && data.items.length){ TESTIMONIALS = data.items; } } } catch {}
+  renderTestimonials(); startAuto();
 })();
 
-/* ============================================================
-   5. STAT COUNTERS + SCROLL REVEAL
-   ============================================================ */
+/* ---------- STAT COUNTERS + REVEAL ---------- */
 function animateCount(el){
   const target = parseInt(el.dataset.count, 10);
   const suffix = el.dataset.suffix || '';
@@ -1674,34 +1010,15 @@ const revealEls = document.querySelectorAll('.reveal');
 const statEls = document.querySelectorAll('.sc-num');
 const orbitEl = document.getElementById('heroStats');
 let statsDone = false;
-const io = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting){ entry.target.classList.add('in'); io.unobserve(entry.target); }
-  });
-}, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+const io = new IntersectionObserver((entries) => { entries.forEach(entry => { if (entry.isIntersecting){ entry.target.classList.add('in'); io.unobserve(entry.target); } }); }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
 revealEls.forEach(el => io.observe(el));
-const statObserver = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting && !statsDone){
-      statsDone = true;
-      statEls.forEach(animateCount);
-      statObserver.disconnect();
-    }
-  });
-}, { threshold: 0.35 });
+const statObserver = new IntersectionObserver((entries) => { entries.forEach(entry => { if (entry.isIntersecting && !statsDone){ statsDone = true; statEls.forEach(animateCount); statObserver.disconnect(); } }); }, { threshold: 0.35 });
 if (statEls.length && orbitEl) statObserver.observe(orbitEl);
-
 const floatCta = document.getElementById('floatCta');
 const siteHeader = document.getElementById('siteHeader');
-window.addEventListener('scroll', () => {
-  const y = window.scrollY;
-  floatCta.classList.toggle('show', y > 520);
-  siteHeader.classList.toggle('scrolled', y > 6);
-}, { passive:true });
+window.addEventListener('scroll', () => { const y = window.scrollY; floatCta.classList.toggle('show', y > 520); siteHeader.classList.toggle('scrolled', y > 6); }, { passive:true });
 
-/* ============================================================
-   6. REGISTRATION FLOW
-   ============================================================ */
+/* ---------- REGISTRATION ---------- */
 const regModal = document.getElementById('regModal');
 const regShell = document.getElementById('regShell');
 const regClose = document.getElementById('regClose');
@@ -1718,29 +1035,20 @@ const regSuccessRef = document.getElementById('regSuccessRef');
 const regStatusLink = document.getElementById('regStatusLink');
 const regStreams = document.getElementById('regStreams');
 const regLoading = document.getElementById('regLoading');
-
 const errModal = document.getElementById('errModal');
 const errTitle = document.getElementById('errTitle');
 const errMessage = document.getElementById('errMessage');
 const errClose = document.getElementById('errClose');
 const errRetry = document.getElementById('errRetry');
 
-const PUBLIC_SETTINGS = {
-  fee: 10000,
-  accounts: { Telebirr: '0927429565', CBE: '1000417007192', mPesa: '0927429565' }
-};
-let PUBLIC_SETTINGS_READY = false;
-
+const PUBLIC_SETTINGS = { fee: 10000, accounts: { Telebirr: '0927429565', CBE: '1000417007192', mPesa: '0927429565' } };
 async function loadPublicSettings(){
   try {
     const res = await fetch('/api/settings', { cache: 'no-store' });
     if (res.ok){
       const d = await res.json();
       if (d && typeof d.fee === 'number' && d.fee > 0) PUBLIC_SETTINGS.fee = d.fee;
-      if (d && d.accounts){
-        PUBLIC_SETTINGS.accounts = Object.assign({}, PUBLIC_SETTINGS.accounts, d.accounts);
-      }
-      PUBLIC_SETTINGS_READY = true;
+      if (d && d.accounts) PUBLIC_SETTINGS.accounts = Object.assign({}, PUBLIC_SETTINGS.accounts, d.accounts);
     }
   } catch {}
   if (currentStep === 7 && typeof buildSummary === 'function') buildSummary();
@@ -1749,11 +1057,7 @@ loadPublicSettings();
 
 const regData = { name:'', id:'', semester:'', stream:'', gender:'', method:'', ref:'' };
 let currentStep = 1;
-
-const STREAMS_BY_SEM = {
-  'First Semester': ['Social Science','Natural Science'],
-  'Second Semester': ['Pre-Engineering & Computing','Other Natural Science','Social Science']
-};
+const STREAMS_BY_SEM = { 'First Semester': ['Social Science','Natural Science'], 'Second Semester': ['Pre-Engineering & Computing','Other Natural Science','Social Science'] };
 
 function setStep(n){
   currentStep = n;
@@ -1772,9 +1076,7 @@ function buildStreamOptions(){
   const sem = regData.semester || 'First Semester';
   const streams = STREAMS_BY_SEM[sem] || [];
   const icons = { 'Social Science':'📚', 'Natural Science':'🔬', 'Pre-Engineering & Computing':'⚙️', 'Other Natural Science':'🧪' };
-  regStreams.innerHTML = streams.map(s =>
-    `<button class="reg-opt ${regData.stream===s?'selected':''}" data-value="${s}" type="button"><span class="ri">${icons[s]||'📖'}</span><span class="rl">${s}</span></button>`
-  ).join('');
+  regStreams.innerHTML = streams.map(s => `<button class="reg-opt ${regData.stream===s?'selected':''}" data-value="${s}" type="button"><span class="ri">${icons[s]||'📖'}</span><span class="rl">${s}</span></button>`).join('');
   regStreams.querySelectorAll('.reg-opt').forEach(b => b.addEventListener('click', () => selectOpt(b)));
 }
 
@@ -1804,7 +1106,6 @@ function selectOpt(btn){
 
 const NAME_RE = /^[A-Za-z][A-Za-z'\-]{1,}\s+[A-Za-z][A-Za-z'\-]{1,}$/;
 const ID_RE = /^[A-Za-z]{2,6}[\s\-]?\d{2,8}\s*\/\s*\d{2,4}$/;
-
 const regName = document.getElementById('regName');
 const errName = document.getElementById('errName');
 regName.addEventListener('input', () => {
@@ -1814,10 +1115,7 @@ regName.addEventListener('input', () => {
   errName.classList.toggle('show', !ok && v.length > 0);
   regName.closest('.reg-step').querySelector('[data-next]').disabled = !ok;
 });
-regName.addEventListener('keydown', e => {
-  if (e.key === 'Enter' && !e.target.closest('.reg-step').querySelector('[data-next]').disabled) setStep(2);
-});
-
+regName.addEventListener('keydown', e => { if (e.key === 'Enter' && !e.target.closest('.reg-step').querySelector('[data-next]').disabled) setStep(2); });
 const regId = document.getElementById('regId');
 const errId = document.getElementById('errId');
 regId.addEventListener('input', () => {
@@ -1827,10 +1125,7 @@ regId.addEventListener('input', () => {
   errId.classList.toggle('show', !ok && v.length > 0);
   regId.closest('.reg-step').querySelector('[data-next]').disabled = !ok;
 });
-regId.addEventListener('keydown', e => {
-  if (e.key === 'Enter' && !e.target.closest('.reg-step').querySelector('[data-next]').disabled) setStep(3);
-});
-
+regId.addEventListener('keydown', e => { if (e.key === 'Enter' && !e.target.closest('.reg-step').querySelector('[data-next]').disabled) setStep(3); });
 const regRef = document.getElementById('regRef');
 const errRef = document.getElementById('errRef');
 regRef.addEventListener('input', () => {
@@ -1838,29 +1133,16 @@ regRef.addEventListener('input', () => {
   regRef.classList.toggle('error', !ok && regRef.value.length > 0);
   errRef.classList.toggle('show', !ok && regRef.value.length > 0);
 });
-
 document.querySelectorAll('[data-next]').forEach(b => b.addEventListener('click', () => {
   const step = +b.closest('.reg-step').dataset.step;
-  if (step === 1){
-    const v = regName.value.trim();
-    if (!NAME_RE.test(v)) return;
-    regData.name = v.split(/\s+/).map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(' ');
-  }
-  if (step === 2){
-    const v = regId.value.trim();
-    if (!ID_RE.test(v)) return;
-    regData.id = v.toUpperCase().replace(/\s+/g, '');
-  }
+  if (step === 1){ const v = regName.value.trim(); if (!NAME_RE.test(v)) return; regData.name = v.split(/\s+/).map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(' '); }
+  if (step === 2){ const v = regId.value.trim(); if (!ID_RE.test(v)) return; regData.id = v.toUpperCase().replace(/\s+/g, ''); }
   if (step < 7) setStep(step + 1);
 }));
 document.querySelectorAll('[data-back]').forEach(b => b.addEventListener('click', () => setStep(+b.dataset.back)));
 document.querySelectorAll('.reg-options .reg-opt').forEach(btn => btn.addEventListener('click', () => selectOpt(btn)));
 
-function showError(title, message){
-  errTitle.textContent = title;
-  errMessage.innerHTML = message;
-  errModal.classList.add('open');
-}
+function showError(title, message){ errTitle.textContent = title; errMessage.innerHTML = message; errModal.classList.add('open'); }
 function hideError(){ errModal.classList.remove('open'); }
 errClose.addEventListener('click', hideError);
 errRetry.addEventListener('click', () => { hideError(); regRef.focus(); });
@@ -1870,30 +1152,13 @@ regSubmit.addEventListener('click', async () => {
   const ref = regRef.value.trim();
   if (!ref){ regRef.classList.add('error'); errRef.classList.add('show'); return; }
   regData.ref = ref;
-
   regShell.style.display = 'none';
   regLoading.classList.add('show');
-
   try {
-    const res = await fetch('/api/register', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        full_name: regData.name,
-        id_number: regData.id,
-        semester: regData.semester,
-        stream: regData.stream,
-        gender: regData.gender,
-        payment_method: regData.method,
-        transaction_ref: regData.ref,
-        transaction_suffix: null
-      })
-    });
+    const res = await fetch('/api/register', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ full_name: regData.name, id_number: regData.id, semester: regData.semester, stream: regData.stream, gender: regData.gender, payment_method: regData.method, transaction_ref: regData.ref, transaction_suffix: null }) });
     const data = await res.json();
-
     regLoading.classList.remove('show');
     regShell.style.display = '';
-
     if (!res.ok){
       const msg = data.error || 'Something went wrong.';
       if (/amount does not match/i.test(msg)) showError('Payment Amount Does Not Match', msg);
@@ -1902,14 +1167,14 @@ regSubmit.addEventListener('click', async () => {
       else showError('Registration Failed', msg);
       return;
     }
-
     regSuccessRef.textContent = data.public_id;
     regSuccessRef.dataset.copy = data.public_id;
     regSuccess.classList.add('show');
     document.querySelectorAll('.reg-step').forEach(s => s.classList.remove('active'));
-
     saveMyRegistration({ public_id: data.public_id, status: 'pending', created_at: Date.now() });
     applyRegistrationState();
+    /* Start background polling immediately so student sees approval fast */
+    startBackgroundPolling();
   } catch (e){
     regLoading.classList.remove('show');
     regShell.style.display = '';
@@ -1939,15 +1204,9 @@ function closeReg(){
 }
 
 const REG_KEY = 'abj_my_registration';
-function getMyRegistration(){
-  try { return JSON.parse(localStorage.getItem(REG_KEY) || 'null'); } catch { return null; }
-}
-function saveMyRegistration(o){
-  try { localStorage.setItem(REG_KEY, JSON.stringify(o)); } catch {}
-}
-function clearMyRegistration(){
-  try { localStorage.removeItem(REG_KEY); } catch {}
-}
+function getMyRegistration(){ try { return JSON.parse(localStorage.getItem(REG_KEY) || 'null'); } catch { return null; } }
+function saveMyRegistration(o){ try { localStorage.setItem(REG_KEY, JSON.stringify(o)); } catch {} }
+function clearMyRegistration(){ try { localStorage.removeItem(REG_KEY); } catch {} }
 
 function applyRegistrationState(){
   const reg = getMyRegistration();
@@ -1968,6 +1227,7 @@ document.getElementById('floatCta').addEventListener('click', onCtaClick);
 regClose.addEventListener('click', closeReg);
 regDone.addEventListener('click', closeReg);
 
+/* ---------- CLIPBOARD ---------- */
 const copyToast = document.getElementById('copyToast');
 let copyToastTimer = null;
 function showCopyToast(msg, isErr){
@@ -1984,153 +1244,121 @@ async function copyText(text, okMsg){
       await navigator.clipboard.writeText(text);
     } else {
       const ta = document.createElement('textarea');
-      ta.value = text;
-      ta.setAttribute('readonly', '');
-      ta.style.position = 'fixed';
-      ta.style.top = '-1000px';
-      ta.style.opacity = '0';
-      document.body.appendChild(ta);
-      ta.select();
-      ta.setSelectionRange(0, ta.value.length);
-      document.execCommand('copy');
-      document.body.removeChild(ta);
+      ta.value = text; ta.setAttribute('readonly',''); ta.style.position='fixed'; ta.style.top='-1000px'; ta.style.opacity='0';
+      document.body.appendChild(ta); ta.select(); ta.setSelectionRange(0, ta.value.length); document.execCommand('copy'); document.body.removeChild(ta);
     }
     showCopyToast(okMsg || 'Copied to clipboard');
-  } catch {
-    showCopyToast('Copy failed — long-press to copy manually', true);
-  }
+  } catch { showCopyToast('Copy failed — long-press to copy manually', true); }
 }
 regSuccessRef.addEventListener('click', () => copyText(regSuccessRef.textContent, 'Registration ID copied'));
 
+/* ---------- STATUS MODAL + POLLING ---------- */
 const stsModal = document.getElementById('statusModal');
 const stsBody = document.getElementById('statusBody');
 const stsClose = document.getElementById('statusClose');
+let statusPollTimer = null;
+let backgroundPollTimer = null;
 
 function closeStatusModal(){
   stsModal.classList.remove('open');
   document.body.style.overflow = '';
+  stopStatusPolling();
 }
 stsClose.addEventListener('click', closeStatusModal);
 stsModal.addEventListener('click', e => { if (e.target === stsModal) closeStatusModal(); });
 
+function stopStatusPolling(){ if (statusPollTimer){ clearInterval(statusPollTimer); statusPollTimer = null; } }
+
 function stsIdChip(id){
-  return `<button class="sts-id" type="button" data-copy="${esc(id)}" title="Tap to copy">
-    <span class="sts-id-label">Your Registration ID</span>
-    <span class="sts-id-val">${esc(id)}</span>
-    <span class="sts-id-copy">📋 Tap to copy</span>
-  </button>`;
+  return `<button class="sts-id" type="button" data-copy="${esc(id)}" title="Tap to copy"><span class="sts-id-label">Your Registration ID</span><span class="sts-id-val">${esc(id)}</span><span class="sts-id-copy">📋 Tap to copy</span></button>`;
 }
 function stsRows(d){
-  return `<div class="sts-rows">
-    <div class="sts-row"><span>Name</span><span>${esc(d.full_name)}</span></div>
-    <div class="sts-row"><span>Semester</span><span>${esc(d.semester)}</span></div>
-    <div class="sts-row"><span>Stream</span><span>${esc(d.stream)}</span></div>
-    <div class="sts-row"><span>Submitted</span><span>${new Date(d.created_at).toLocaleDateString()}</span></div>
-  </div>`;
+  return `<div class="sts-rows"><div class="sts-row"><span>Name</span><span>${esc(d.full_name)}</span></div><div class="sts-row"><span>Semester</span><span>${esc(d.semester)}</span></div><div class="sts-row"><span>Stream</span><span>${esc(d.stream)}</span></div><div class="sts-row"><span>Submitted</span><span>${new Date(d.created_at).toLocaleDateString()}</span></div></div>`;
 }
-function wireStsCopy(){
-  stsBody.querySelectorAll('[data-copy]').forEach(b => {
-    b.addEventListener('click', () => copyText(b.dataset.copy, 'Registration ID copied'));
-  });
-}
+function wireStsCopy(){ stsBody.querySelectorAll('[data-copy]').forEach(b => { b.addEventListener('click', () => copyText(b.dataset.copy, 'Registration ID copied')); }); }
 
 async function openStatusModal(publicId){
   stsModal.classList.add('open');
   document.body.style.overflow = 'hidden';
   stsBody.innerHTML = `<div class="sts-loading"><span class="sts-spinner"></span><p>Checking your registration…</p></div>`;
-
   try {
     const res = await fetch('/api/status?id=' + encodeURIComponent(publicId), { cache: 'no-store' });
     const d = await res.json();
-
     if (!res.ok){
-      if (res.status === 404){
-        clearMyRegistration();
-        applyRegistrationState();
-      }
-      stsBody.innerHTML = `
-        <div class="sts-badge bad">⚠️ Error</div>
-        <h4 class="sts-title">We couldn't find that registration</h4>
-        <p class="sts-text">${esc(d.error || 'Please check your ID and try again.')}</p>
-        <button class="sts-btn primary" id="stsNew" type="button">➕ Start a New Registration</button>`;
-      document.getElementById('stsNew').addEventListener('click', () => {
-        closeStatusModal(); setTimeout(openReg, 240);
-      });
+      if (res.status === 404){ clearMyRegistration(); applyRegistrationState(); }
+      stsBody.innerHTML = `<div class="sts-badge bad">⚠️ Error</div><h4 class="sts-title">We couldn't find that registration</h4><p class="sts-text">${esc(d.error || 'Please check your ID and try again.')}</p><button class="sts-btn primary" id="stsNew" type="button">➕ Start a New Registration</button>`;
+      document.getElementById('stsNew').addEventListener('click', () => { closeStatusModal(); setTimeout(openReg, 240); });
       return;
     }
-
     saveMyRegistration({ public_id: d.public_id, status: d.status, created_at: Date.now() });
     applyRegistrationState();
     renderStatus(d);
-
+    if (d.status === 'pending') startStatusPolling(publicId);
   } catch {
-    stsBody.innerHTML = `
-      <div class="sts-badge bad">⚠️ Network</div>
-      <h4 class="sts-title">Couldn't reach the server</h4>
-      <p class="sts-text">Check your connection and try again.</p>
-      <button class="sts-btn ghost" id="stsRetryNet" type="button">🔄 Retry</button>`;
+    stsBody.innerHTML = `<div class="sts-badge bad">⚠️ Network</div><h4 class="sts-title">Couldn't reach the server</h4><p class="sts-text">Check your connection and try again.</p><button class="sts-btn ghost" id="stsRetryNet" type="button">🔄 Retry</button>`;
     document.getElementById('stsRetryNet').addEventListener('click', () => openStatusModal(publicId));
   }
 }
 
+function startStatusPolling(publicId){
+  stopStatusPolling();
+  statusPollTimer = setInterval(async () => {
+    if (!stsModal.classList.contains('open')){ stopStatusPolling(); return; }
+    try {
+      const res = await fetch('/api/status?id=' + encodeURIComponent(publicId), { cache: 'no-store' });
+      if (!res.ok) return;
+      const d = await res.json();
+      if (d.status !== 'pending'){
+        stopStatusPolling();
+        saveMyRegistration({ public_id: d.public_id, status: d.status, created_at: Date.now() });
+        applyRegistrationState();
+        renderStatus(d);
+        showCopyToast(d.status === 'approved' ? '🎉 Your registration is approved!' : '⚠️ Your registration status changed', d.status !== 'approved');
+      }
+    } catch {}
+  }, 5000);
+}
+
 function renderStatus(d){
   const id = d.public_id;
-
   if (d.status === 'approved'){
-    stsBody.innerHTML = stsIdChip(id) +
-      `<div class="sts-badge ok">✅ Approved</div>
-       <h4 class="sts-title">You're in! 🎉</h4>
-       <p class="sts-text">Your payment was verified and your seat is confirmed.</p>
-       ${stsRows(d)}
-       <div class="sts-warn">
-         <strong>⚠️ One-time link — read this first</strong>
-         <ul>
-           <li>This invite link works <b>only once</b> and expires in <b>7 days</b>.</li>
-           <li><b>Never share</b> it with anyone — anyone who has it can join your seat.</li>
-           <li>Tap the gold button below and you'll be taken <b>straight to Telegram</b>.</li>
-           <li>If you leave the channel, the link is dead and cannot be reused.</li>
-         </ul>
-       </div>
-       <button class="sts-btn gold" id="stsJoin" type="button">🌟 Join the Channel Now</button>
-       <button class="sts-btn ghost" id="stsCopyLink" type="button">🔗 Copy Invite Link</button>
-       <p class="sts-mini">Lost the link? Contact support for a new one.</p>`;
-
-    document.getElementById('stsJoin').addEventListener('click', () => {
-      window.location.href = d.invite_link;
-    });
-    document.getElementById('stsCopyLink').addEventListener('click', () => {
-      copyText(d.invite_link, 'Invite link copied — keep it private!');
-    });
-  }
-  else if (d.status === 'rejected'){
-    stsBody.innerHTML = stsIdChip(id) +
-      `<div class="sts-badge bad">❌ Rejected</div>
-       <h4 class="sts-title">We couldn't approve this registration</h4>
-       ${stsRows(d)}
-       ${d.rejection_reason ? `<div class="sts-reason"><strong>Reason:</strong> ${esc(d.rejection_reason)}</div>` : ''}
-       <p class="sts-text">Fix the issue and submit again with a valid payment. You can start a brand-new registration right now.</p>
-       <button class="sts-btn primary" id="stsRetry" type="button">🔄 Start New Registration</button>`;
-
-    document.getElementById('stsRetry').addEventListener('click', () => {
-      clearMyRegistration();
-      applyRegistrationState();
-      closeStatusModal();
-      setTimeout(openReg, 260);
-    });
-  }
-  else {
-    stsBody.innerHTML = stsIdChip(id) +
-      `<div class="sts-badge wait">⏳ Under Review</div>
-       <h4 class="sts-title">We're checking your payment</h4>
-       <p class="sts-text">Our admin will verify your transaction and approve you shortly. Keep your ID safe — you'll need it to check back.</p>
-       ${stsRows(d)}
-       <button class="sts-btn ghost" id="stsRefresh" type="button">🔄 Refresh Status</button>`;
-
+    stsBody.innerHTML = stsIdChip(id) + `<div class="sts-badge ok">✅ Approved</div><h4 class="sts-title">You're in! 🎉</h4><p class="sts-text">Your payment was verified and your seat is confirmed.</p>${stsRows(d)}<div class="sts-warn"><strong>⚠️ One-time link — read this first</strong><ul><li>This invite link works <b>only once</b> and expires in <b>7 days</b>.</li><li><b>Never share</b> it with anyone — anyone who has it can join your seat.</li><li>Tap the gold button below and you'll be taken <b>straight to Telegram</b>.</li><li>If you leave the channel, the link is dead and cannot be reused.</li></ul></div><button class="sts-btn gold" id="stsJoin" type="button">🌟 Join the Channel Now</button><button class="sts-btn ghost" id="stsCopyLink" type="button">🔗 Copy Invite Link</button><p class="sts-mini">Lost the link? Contact support for a new one.</p>`;
+    document.getElementById('stsJoin').addEventListener('click', () => { window.location.href = d.invite_link; });
+    document.getElementById('stsCopyLink').addEventListener('click', () => { copyText(d.invite_link, 'Invite link copied — keep it private!'); });
+  } else if (d.status === 'rejected'){
+    stsBody.innerHTML = stsIdChip(id) + `<div class="sts-badge bad">❌ Rejected</div><h4 class="sts-title">We couldn't approve this registration</h4>${stsRows(d)}${d.rejection_reason ? `<div class="sts-reason"><strong>Reason:</strong> ${esc(d.rejection_reason)}</div>` : ''}<p class="sts-text">Fix the issue and submit again with a valid payment. You can start a brand-new registration right now.</p><button class="sts-btn primary" id="stsRetry" type="button">🔄 Start New Registration</button>`;
+    document.getElementById('stsRetry').addEventListener('click', () => { clearMyRegistration(); applyRegistrationState(); closeStatusModal(); setTimeout(openReg, 260); });
+  } else {
+    stsBody.innerHTML = stsIdChip(id) + `<div class="sts-badge wait">⏳ Under Review</div><h4 class="sts-title">We're checking your payment</h4><p class="sts-text">Our admin will verify your transaction and approve you shortly. Keep your ID safe — you'll need it to check back.</p>${stsRows(d)}<button class="sts-btn ghost" id="stsRefresh" type="button">🔄 Refresh Now</button><p class="sts-mini" style="margin-top:10px">✨ This page auto-updates every 5 seconds</p>`;
     document.getElementById('stsRefresh').addEventListener('click', () => openStatusModal(id));
   }
-
   wireStsCopy();
 }
+
+/* ---------- BACKGROUND POLLING (home page) ---------- */
+async function backgroundCheck(){
+  const reg = getMyRegistration();
+  if (!reg || !reg.public_id) return;
+  if (reg.status === 'approved' || reg.status === 'rejected') return;
+  try {
+    const res = await fetch('/api/status?id=' + encodeURIComponent(reg.public_id), { cache: 'no-store' });
+    if (!res.ok) return;
+    const d = await res.json();
+    if (d.status !== reg.status){
+      saveMyRegistration({ public_id: d.public_id, status: d.status, created_at: Date.now() });
+      applyRegistrationState();
+      if (stsModal.classList.contains('open')) renderStatus(d);
+      if (d.status === 'approved') showCopyToast('🎉 Your registration is approved!', false);
+      else if (d.status === 'rejected') showCopyToast('⚠️ Your registration was rejected', true);
+    }
+  } catch {}
+}
+function startBackgroundPolling(){
+  if (backgroundPollTimer) clearInterval(backgroundPollTimer);
+  backgroundPollTimer = setInterval(backgroundCheck, 20000);
+  backgroundCheck();
+}
+startBackgroundPolling();
 
 regStatusLink.addEventListener('click', () => {
   const reg = getMyRegistration();
@@ -2139,14 +1367,11 @@ regStatusLink.addEventListener('click', () => {
 });
 
 const _origOpenReg = openReg;
-openReg = function(){
-  loadPublicSettings();
-  _origOpenReg();
-};
+openReg = function(){ loadPublicSettings(); _origOpenReg(); };
 
 applyRegistrationState();
 
-/* ESC closes everything EXCEPT the demo player */
+/* ---------- KEYBOARD ---------- */
 document.addEventListener('keydown', e => {
   if (e.key !== 'Escape') return;
   if (errModal.classList.contains('open')) { hideError(); return; }
@@ -2154,6 +1379,5 @@ document.addEventListener('keydown', e => {
   if (regModal.classList.contains('open') && !regLoading.classList.contains('show')) { closeReg(); return; }
 });
 </script>
-
 </body>
 </html>
