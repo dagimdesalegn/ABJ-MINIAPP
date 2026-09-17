@@ -385,6 +385,48 @@ async function createTelegramInvite(linkName) {
 }
 
 /* ============================================================
+   Screenshot upload → Supabase Storage
+   ============================================================ */
+async function uploadScreenshotToStorage(publicId, base64Data, mimeType) {
+  if (!SUPABASE_URL || !SUPABASE_SERVICE_KEY) return { ok: false, error: 'Storage not configured.' };
+  const safeId = String(publicId).replace(/[^A-Za-z0-9_-]/g, '');
+  const ext = (mimeType || 'image/jpeg').split('/')[1]?.replace('jpeg', 'jpg') || 'jpg';
+  const path = `${safeId}-${Date.now()}.${ext}`;
+
+  let buffer;
+  try {
+    buffer = Buffer.from(String(base64Data).replace(/^data:[^,]+,/, ''), 'base64');
+  } catch {
+    return { ok: false, error: 'Invalid image data.' };
+  }
+
+  if (buffer.length > 3.5 * 1024 * 1024) {
+    return { ok: false, error: 'Screenshot too large (max 3.5 MB).' };
+  }
+
+  const res = await fetch(`${SUPABASE_URL}/storage/v1/object/screenshots/${path}`, {
+    method: 'POST',
+    headers: {
+      apikey: SUPABASE_SERVICE_KEY,
+      Authorization: `Bearer ${SUPABASE_SERVICE_KEY}`,
+      'Content-Type': mimeType || 'image/jpeg',
+      'x-upsert': 'true',
+    },
+    body: buffer,
+  });
+
+  if (!res.ok) {
+    const t = await res.text();
+    return { ok: false, error: 'Storage upload failed: ' + t.slice(0, 120) };
+  }
+
+  return {
+    ok: true,
+    url: `${SUPABASE_URL}/storage/v1/object/public/screenshots/${path}`,
+  };
+}
+
+/* ============================================================
    Rate limiting
    ============================================================ */
 async function checkRateLimit(ip, maxPerHour = 10) {
@@ -455,7 +497,7 @@ module.exports = {
   getSetting, setSetting, getFee, getPublicSettings,
   hashPassword, verifyPassword,
   signJWT, verifyJWT, requireAdmin, requireSuper,
-  verifyPayment, createTelegramInvite,
+  verifyPayment, createTelegramInvite, uploadScreenshotToStorage,
   checkRateLimit, validateRegistration, randomPublicId,
   getClientIp, json,
   ADMIN_PASSWORD,

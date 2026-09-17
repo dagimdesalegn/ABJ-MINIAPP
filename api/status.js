@@ -15,7 +15,8 @@ module.exports = async (req, res) => {
   const q = await supabaseQuery(
     `registrations?public_id=eq.${encodeURIComponent(id.toUpperCase())}` +
     `&select=public_id,status,full_name,semester,stream,created_at,approved_at,` +
-    `invite_link,invite_link_created_at,rejection_reason`
+    `invite_link,invite_link_created_at,rejection_reason,auto_approved,` +
+    `verification_status,screenshot_url`
   );
   const row = q.data?.[0];
   if (!row) return json(res, 404, { error: 'Registration not found.' });
@@ -28,6 +29,9 @@ module.exports = async (req, res) => {
     stream: row.stream,
     created_at: row.created_at,
     approved_at: row.approved_at,
+    auto_approved: row.auto_approved || false,
+    verification_status: row.verification_status || 'auto_verified',
+    screenshot_uploaded: !!row.screenshot_url,
   };
   if (row.status === 'approved' && row.invite_link) {
     out.invite_link = row.invite_link;

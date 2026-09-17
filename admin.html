@@ -97,7 +97,6 @@ body{margin:0;font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:li
 .toast.ok{background:linear-gradient(135deg,#10b981,#059669);}
 .toast.err{background:linear-gradient(135deg,#ef4444,#dc2626);}
 
-/* BRANDED ADMIN SUCCESS MODAL */
 .adm-modal{position:fixed;inset:0;z-index:200;background:rgba(5,9,18,.84);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);display:flex;align-items:center;justify-content:center;padding:18px;opacity:0;visibility:hidden;transition:opacity .32s var(--bounce),visibility .32s;overflow-y:auto;}
 .adm-modal.open{opacity:1;visibility:visible;}
 .adm-box{position:relative;width:100%;max-width:430px;max-height:calc(100dvh - 36px);overflow-y:auto;background:radial-gradient(420px 220px at 50% -10%,rgba(59,130,246,.30),transparent 70%),linear-gradient(160deg,#0f1a2f 0%,#131f3d 100%);border:1px solid rgba(255,255,255,.12);border-radius:24px;padding:24px 22px 22px;text-align:center;color:#fff;box-shadow:0 50px 100px -40px rgba(0,0,0,.95),0 0 90px -25px rgba(37,99,235,.55),inset 0 1px 0 rgba(255,255,255,.08);transform:translateY(26px) scale(.95);opacity:0;transition:transform .5s var(--bounce),opacity .35s;}
@@ -136,7 +135,6 @@ body{margin:0;font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:li
 <body>
 <div class="wrap">
 
-  <!-- LOGIN -->
   <div id="loginView">
     <div class="login-card">
       <div style="display:flex;align-items:center;gap:14px;margin-bottom:20px;">
@@ -155,7 +153,6 @@ body{margin:0;font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:li
     </div>
   </div>
 
-  <!-- DASHBOARD -->
   <div id="dashView" style="display:none">
     <div class="head">
       <div class="head-left">
@@ -189,39 +186,21 @@ body{margin:0;font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:li
     <div class="tab-content" id="tab-approved"><div class="list" id="listApproved"></div></div>
     <div class="tab-content" id="tab-rejected"><div class="list" id="listRejected"></div></div>
 
-    <!-- VIDEOS -->
     <div class="tab-content" id="tab-videos">
       <div class="settings" style="max-width:640px">
-        <div class="field">
-          <label>Video Title</label>
-          <input type="text" id="vidTitle" placeholder="e.g. Maths Chapter 1 — Set Theory" maxlength="200" />
-        </div>
-        <div class="field">
-          <label>YouTube URL or Video ID</label>
-          <input type="text" id="vidUrl" placeholder="https://youtu.be/xxxx or xxxx" maxlength="500" />
-        </div>
-        <div class="field">
-          <label>Tag / Subject (short)</label>
-          <input type="text" id="vidTag" placeholder="Maths" maxlength="40" />
-        </div>
+        <div class="field"><label>Video Title</label><input type="text" id="vidTitle" placeholder="e.g. Maths Chapter 1 — Set Theory" maxlength="200" /></div>
+        <div class="field"><label>YouTube URL or Video ID</label><input type="text" id="vidUrl" placeholder="https://youtu.be/xxxx or xxxx" maxlength="500" /></div>
+        <div class="field"><label>Tag / Subject (short)</label><input type="text" id="vidTag" placeholder="Maths" maxlength="40" /></div>
         <button class="btn btn-add" id="addVideoBtn" type="button">+ Add Video</button>
       </div>
       <div class="admin-list" id="videoList"></div>
     </div>
 
-    <!-- TESTIMONIALS -->
     <div class="tab-content" id="tab-testimonials">
       <div class="settings" style="max-width:640px">
-        <div class="field">
-          <label>Student Name</label>
-          <input type="text" id="tstName" placeholder="e.g. Girum T." maxlength="64" />
-        </div>
-        <div class="field">
-          <label>Subject</label>
-          <input type="text" id="tstSubject" placeholder="Maths" maxlength="64" />
-        </div>
-        <div class="field">
-          <label>Stars (1–5)</label>
+        <div class="field"><label>Student Name</label><input type="text" id="tstName" placeholder="e.g. Girum T." maxlength="64" /></div>
+        <div class="field"><label>Subject</label><input type="text" id="tstSubject" placeholder="Maths" maxlength="64" /></div>
+        <div class="field"><label>Stars (1–5)</label>
           <select id="tstStars">
             <option value="5" selected>5 ★★★★★</option>
             <option value="4">4 ★★★★</option>
@@ -230,16 +209,12 @@ body{margin:0;font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:li
             <option value="1">1 ★</option>
           </select>
         </div>
-        <div class="field">
-          <label>Testimonial Text</label>
-          <textarea id="tstText" placeholder="What the student said..." maxlength="1000"></textarea>
-        </div>
+        <div class="field"><label>Testimonial Text</label><textarea id="tstText" placeholder="What the student said..." maxlength="1000"></textarea></div>
         <button class="btn btn-add" id="addTstBtn" type="button">+ Add Testimonial</button>
       </div>
       <div class="admin-list" id="tstList"></div>
     </div>
 
-    <!-- SETTINGS -->
     <div class="tab-content" id="tab-settings">
       <div class="settings">
         <div class="field"><label>Registration Fee (ETB)</label><input type="number" id="setFee" min="1" step="1" /></div>
@@ -252,7 +227,6 @@ body{margin:0;font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:li
       </div>
     </div>
 
-    <!-- ADMINS -->
     <div class="tab-content" id="tab-admins">
       <div class="settings" style="max-width:640px">
         <div class="field"><label>New Admin Username</label><input type="text" id="newAdminUser" placeholder="e.g. dagim" maxlength="24" /></div>
@@ -304,9 +278,6 @@ const logoutBtn = document.getElementById('logoutBtn');
 const toast = document.getElementById('toast');
 const welcomeLine = document.getElementById('welcomeLine');
 
-/* ============================================================
-   BRANDED RESULT MODAL
-   ============================================================ */
 const admModalEl = document.getElementById('admModal');
 const admBadge   = document.getElementById('admBadge');
 const admTitle   = document.getElementById('admTitle');
@@ -324,10 +295,7 @@ function showAdmModal(opts){
   admExtra.innerHTML   = extra;
 
   admActions.innerHTML = '';
-  const list = buttons && buttons.length
-    ? buttons
-    : [{ label: 'OK', class: 'btn-gold' }];
-
+  const list = buttons && buttons.length ? buttons : [{ label: 'OK', class: 'btn-gold' }];
   list.forEach(b => {
     const el = document.createElement('button');
     el.type = 'button';
@@ -344,7 +312,6 @@ function showAdmModal(opts){
 }
 function hideAdmModal(){ admModalEl.classList.remove('open'); }
 admModalEl.addEventListener('click', e => { if (e.target === admModalEl) hideAdmModal(); });
-
 function admSuccess(title, message, extra){ showAdmModal({ tone:'ok', title, message, extra }); }
 function admError(title, message){ showAdmModal({ tone:'err', badge:'!', title, message }); }
 
@@ -355,7 +322,6 @@ function copyToClipboard(text, okMsg){
       navigator.clipboard.writeText(text).then(done).catch(() => fallback());
     } else fallback();
   } catch { fallback(); }
-
   function fallback(){
     try {
       const ta = document.createElement('textarea');
@@ -371,9 +337,6 @@ function copyToClipboard(text, okMsg){
   }
 }
 
-/* ============================================================
-   AUTH
-   ============================================================ */
 loginBtn.addEventListener('click', doLogin);
 adminPass.addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
 adminUser.addEventListener('keydown', e => { if (e.key === 'Enter') adminPass.focus(); });
@@ -434,9 +397,6 @@ function showDash(){
 
 if (state.token) showDash();
 
-/* ============================================================
-   TABS
-   ============================================================ */
 let currentTab = 'pending';
 document.querySelectorAll('.tab').forEach(tab => {
   tab.addEventListener('click', () => {
@@ -453,9 +413,6 @@ document.querySelectorAll('.tab').forEach(tab => {
   });
 });
 
-/* ============================================================
-   REGISTRATIONS
-   ============================================================ */
 async function loadTab(status){
   const boxMap = { pending: 'listPending', approved: 'listApproved', rejected: 'listRejected' };
   const box = document.getElementById(boxMap[status]);
@@ -494,19 +451,49 @@ function render(box, status, items){
   box.innerHTML = items.map(r => {
     const created  = new Date(r.created_at).toLocaleString();
     const approved = r.approved_at ? new Date(r.approved_at).toLocaleString() : '—';
+
     const actions = r.status === 'pending'
       ? `<div class="actions">
-           <button class="btn btn-approve" data-act="approve" data-id="${r.id}">✅ Approve & Create Invite</button>
+           <button class="btn btn-approve" data-act="approve" data-id="${r.id}">✅ ${r.screenshot_url ? 'Approve (Screenshot Reviewed)' : 'Approve & Create Invite'}</button>
            <button class="btn btn-reject"  data-act="reject"  data-id="${r.id}">❌ Reject</button>
          </div>` : '';
+
     const invite = r.invite_link
       ? `<a class="invite-link" href="${esc(r.invite_link)}" target="_blank" rel="noopener">🔗 ${esc(r.invite_link)}</a>` : '';
+
     const reason = r.rejection_reason
       ? `<div style="margin-top:10px;padding:10px 14px;border-radius:10px;background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);font-size:13px;"><strong style="color:#f87171;">Reason:</strong> ${esc(r.rejection_reason)}</div>` : '';
+
+    const autoTag = r.auto_approved
+      ? `<span class="pill approved" style="margin-left:6px;">🤖 Auto</span>` : '';
+
+    const verifTag = r.verification_status === 'needs_manual'
+      ? `<span class="pill pending" style="margin-left:6px;">📸 Manual Review</span>`
+      : r.verification_status === 'screenshot_uploaded'
+      ? `<span class="pill pending" style="margin-left:6px;">📸 Screenshot Uploaded</span>`
+      : '';
+
+    const screenshotBox = r.screenshot_url
+      ? `<div style="margin-top:12px;">
+           <div style="font-size:10.5px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,.55);margin-bottom:8px;">Payment Screenshot</div>
+           <a href="${esc(r.screenshot_url)}" target="_blank" rel="noopener">
+             <img src="${esc(r.screenshot_url)}" alt="Screenshot" style="max-width:280px;max-height:280px;border-radius:12px;border:2px solid rgba(247,224,122,.5);display:block;" />
+           </a>
+           <a href="${esc(r.screenshot_url)}" target="_blank" rel="noopener" style="display:inline-block;margin-top:8px;font-size:11.5px;color:#f7e07a;text-decoration:underline;">🔍 Open full size</a>
+         </div>` : '';
+
+    const verifyErr = r.verify_error && r.status === 'pending'
+      ? `<div style="margin-top:10px;padding:10px 14px;border-radius:10px;background:rgba(251,191,36,.08);border:1px solid rgba(251,191,36,.3);font-size:12.5px;color:#fbbf24;"><strong>API note:</strong> ${esc(r.verify_error)}</div>` : '';
+
     return `<div class="item">
       <div class="item-head">
-        <div><div class="item-name">${esc(r.full_name)}</div><div class="item-sub">${esc(r.public_id)}</div></div>
-        <span class="pill ${r.status}">${r.status}</span>
+        <div>
+          <div class="item-name">${esc(r.full_name)}</div>
+          <div class="item-sub">${esc(r.public_id)}</div>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:4px;">
+          <span class="pill ${r.status}">${r.status}</span>${autoTag}${verifTag}
+        </div>
       </div>
       <div class="grid">
         <div class="pair"><span class="k">Student ID</span><span class="v mono">${esc(r.id_number)}</span></div>
@@ -519,7 +506,7 @@ function render(box, status, items){
         <div class="pair"><span class="k">Submitted</span><span class="v">${created}</span></div>
         ${r.status === 'approved' ? `<div class="pair"><span class="k">Approved</span><span class="v">${approved}</span></div>` : ''}
       </div>
-      ${reason}${invite}${actions}
+      ${verifyErr}${screenshotBox}${reason}${invite}${actions}
     </div>`;
   }).join('');
 
@@ -579,9 +566,6 @@ async function handleAction(act, id, btn){
   }
 }
 
-/* ============================================================
-   VIDEOS
-   ============================================================ */
 async function loadVideos(){
   const box = document.getElementById('videoList');
   box.innerHTML = '<div class="empty"><div class="icon">⏳</div><p>Loading...</p></div>';
@@ -605,13 +589,9 @@ async function loadVideos(){
     box.querySelectorAll('[data-del-vid]').forEach(btn => {
       btn.addEventListener('click', async () => {
         if (!confirm('Delete this video?')) return;
-        const r = await fetch('/api/admin-videos?id=' + encodeURIComponent(btn.dataset.delVid), {
-          method: 'DELETE', headers: authHeaders()
-        });
-        if (r.ok) {
-          admSuccess('Video Removed', 'The lesson was deleted from the public playlist.');
-          loadVideos();
-        } else admError('Delete Failed', 'Could not remove the video.');
+        const r = await fetch('/api/admin-videos?id=' + encodeURIComponent(btn.dataset.delVid), { method: 'DELETE', headers: authHeaders() });
+        if (r.ok) { admSuccess('Video Removed', 'The lesson was deleted from the public playlist.'); loadVideos(); }
+        else admError('Delete Failed', 'Could not remove the video.');
       });
     });
   } catch {
@@ -624,18 +604,13 @@ document.getElementById('addVideoBtn').addEventListener('click', async () => {
   const url   = document.getElementById('vidUrl').value.trim();
   const tag   = document.getElementById('vidTag').value.trim() || 'Lesson';
   if (!title || !url) { admError('Missing Fields', 'Title and YouTube URL are required.'); return; }
-
   const btn = document.getElementById('addVideoBtn');
   const orig = btn.textContent;
   btn.disabled = true; btn.textContent = 'Adding...';
   try {
-    const res = await fetch('/api/admin-videos', {
-      method: 'POST', headers: authHeaders(true),
-      body: JSON.stringify({ title, url, tag })
-    });
+    const res = await fetch('/api/admin-videos', { method: 'POST', headers: authHeaders(true), body: JSON.stringify({ title, url, tag }) });
     const data = await res.json();
     if (!res.ok) { admError('Could Not Add Video', data.error || 'Failed.'); return; }
-
     showAdmModal({
       tone: 'ok', badge: '🎬',
       title: 'Video Added',
@@ -643,7 +618,6 @@ document.getElementById('addVideoBtn').addEventListener('click', async () => {
       extra: `<div class="adm-kv"><span>Title</span><span>${esc(title)}</span></div>
               <div class="adm-kv"><span>Tag</span><span>${esc(tag)}</span></div>`
     });
-
     document.getElementById('vidTitle').value = '';
     document.getElementById('vidUrl').value   = '';
     document.getElementById('vidTag').value   = '';
@@ -652,9 +626,6 @@ document.getElementById('addVideoBtn').addEventListener('click', async () => {
   finally { btn.disabled = false; btn.textContent = orig; }
 });
 
-/* ============================================================
-   TESTIMONIALS
-   ============================================================ */
 async function loadTestimonials(){
   const box = document.getElementById('tstList');
   box.innerHTML = '<div class="empty"><div class="icon">⏳</div><p>Loading...</p></div>';
@@ -678,13 +649,9 @@ async function loadTestimonials(){
     box.querySelectorAll('[data-del-tst]').forEach(btn => {
       btn.addEventListener('click', async () => {
         if (!confirm('Delete this testimonial?')) return;
-        const r = await fetch('/api/admin-testimonials?id=' + encodeURIComponent(btn.dataset.delTst), {
-          method: 'DELETE', headers: authHeaders()
-        });
-        if (r.ok) {
-          admSuccess('Testimonial Removed', 'It no longer appears on the home page.');
-          loadTestimonials();
-        } else admError('Delete Failed', 'Could not remove the testimonial.');
+        const r = await fetch('/api/admin-testimonials?id=' + encodeURIComponent(btn.dataset.delTst), { method: 'DELETE', headers: authHeaders() });
+        if (r.ok) { admSuccess('Testimonial Removed', 'It no longer appears on the home page.'); loadTestimonials(); }
+        else admError('Delete Failed', 'Could not remove the testimonial.');
       });
     });
   } catch {
@@ -698,18 +665,13 @@ document.getElementById('addTstBtn').addEventListener('click', async () => {
   const text         = document.getElementById('tstText').value.trim();
   const stars        = document.getElementById('tstStars').value;
   if (!student_name || !subject || !text) { admError('Missing Fields', 'All fields are required.'); return; }
-
   const btn = document.getElementById('addTstBtn');
   const orig = btn.textContent;
   btn.disabled = true; btn.textContent = 'Adding...';
   try {
-    const res = await fetch('/api/admin-testimonials', {
-      method: 'POST', headers: authHeaders(true),
-      body: JSON.stringify({ student_name, subject, text, stars })
-    });
+    const res = await fetch('/api/admin-testimonials', { method: 'POST', headers: authHeaders(true), body: JSON.stringify({ student_name, subject, text, stars }) });
     const data = await res.json();
     if (!res.ok) { admError('Could Not Add Testimonial', data.error || 'Failed.'); return; }
-
     showAdmModal({
       tone: 'ok', badge: '💬',
       title: 'Testimonial Added',
@@ -718,7 +680,6 @@ document.getElementById('addTstBtn').addEventListener('click', async () => {
               <div class="adm-kv"><span>Subject</span><span>${esc(subject)}</span></div>
               <div class="adm-kv"><span>Stars</span><span>${'★'.repeat(parseInt(stars,10))}</span></div>`
     });
-
     document.getElementById('tstName').value    = '';
     document.getElementById('tstSubject').value = '';
     document.getElementById('tstText').value    = '';
@@ -727,9 +688,6 @@ document.getElementById('addTstBtn').addEventListener('click', async () => {
   finally { btn.disabled = false; btn.textContent = orig; }
 });
 
-/* ============================================================
-   SETTINGS
-   ============================================================ */
 async function loadSettings(){
   try {
     const res = await fetch('/api/admin-settings', { headers: authHeaders() });
@@ -742,7 +700,6 @@ async function loadSettings(){
     document.getElementById('setMpesa').value        = s.account_mpesa || '';
     document.getElementById('setContactUser').value  = s.contact_username || '';
     document.getElementById('setContactPhone').value = s.contact_phone || '';
-
     showAdmModal({
       tone: 'ok', badge: '⚙️',
       title: 'Settings Loaded',
@@ -759,7 +716,6 @@ document.getElementById('saveSettings').addEventListener('click', async () => {
   const btn = document.getElementById('saveSettings');
   const orig = btn.textContent;
   btn.disabled = true; btn.textContent = 'Saving...';
-
   const payload = {
     fee:              document.getElementById('setFee').value,
     account_telebirr: document.getElementById('setTelebirr').value,
@@ -768,14 +724,10 @@ document.getElementById('saveSettings').addEventListener('click', async () => {
     contact_username: document.getElementById('setContactUser').value,
     contact_phone:    document.getElementById('setContactPhone').value,
   };
-
   try {
-    const res = await fetch('/api/admin-settings', {
-      method: 'POST', headers: authHeaders(true), body: JSON.stringify(payload)
-    });
+    const res = await fetch('/api/admin-settings', { method: 'POST', headers: authHeaders(true), body: JSON.stringify(payload) });
     const data = await res.json();
     if (!res.ok) { admError('Save Failed', data.error || 'Could not save settings.'); return; }
-
     showAdmModal({
       tone: 'ok', badge: '💾',
       title: 'Settings Saved',
@@ -789,9 +741,6 @@ document.getElementById('saveSettings').addEventListener('click', async () => {
   finally { btn.disabled = false; btn.textContent = orig; }
 });
 
-/* ============================================================
-   ADMINS
-   ============================================================ */
 async function loadAdmins(){
   const listBox = document.getElementById('adminList');
   listBox.innerHTML = '<div class="empty"><div class="icon">⏳</div><p>Loading...</p></div>';
@@ -814,13 +763,9 @@ async function loadAdmins(){
     listBox.querySelectorAll('[data-del]').forEach(btn => {
       btn.addEventListener('click', async () => {
         if (!confirm('Delete this admin?')) return;
-        const r = await fetch('/api/admin-admins?id=' + encodeURIComponent(btn.dataset.del), {
-          method: 'DELETE', headers: authHeaders()
-        });
-        if (r.ok) {
-          admSuccess('Admin Removed', 'That admin can no longer sign in.');
-          loadAdmins();
-        } else admError('Delete Failed', 'Could not remove the admin.');
+        const r = await fetch('/api/admin-admins?id=' + encodeURIComponent(btn.dataset.del), { method: 'DELETE', headers: authHeaders() });
+        if (r.ok) { admSuccess('Admin Removed', 'That admin can no longer sign in.'); loadAdmins(); }
+        else admError('Delete Failed', 'Could not remove the admin.');
       });
     });
   } catch {
@@ -833,18 +778,13 @@ document.getElementById('addAdminBtn').addEventListener('click', async () => {
   const n = document.getElementById('newAdminName').value.trim();
   const p = document.getElementById('newAdminPass').value;
   if (!u || !p) { admError('Missing Fields', 'Username and password are required.'); return; }
-
   const btn = document.getElementById('addAdminBtn');
   const orig = btn.textContent;
   btn.disabled = true; btn.textContent = 'Adding...';
   try {
-    const res = await fetch('/api/admin-admins', {
-      method: 'POST', headers: authHeaders(true),
-      body: JSON.stringify({ username: u, password: p, full_name: n })
-    });
+    const res = await fetch('/api/admin-admins', { method: 'POST', headers: authHeaders(true), body: JSON.stringify({ username: u, password: p, full_name: n }) });
     const data = await res.json();
     if (!res.ok) { admError('Could Not Add Admin', data.error || 'Failed.'); return; }
-
     showAdmModal({
       tone: 'ok', badge: '👤',
       title: 'Admin Added',
@@ -853,7 +793,6 @@ document.getElementById('addAdminBtn').addEventListener('click', async () => {
               <div class="adm-kv"><span>Name</span><span>${esc(n || '—')}</span></div>
               <div class="adm-kv"><span>Role</span><span>Admin</span></div>`
     });
-
     document.getElementById('newAdminUser').value = '';
     document.getElementById('newAdminName').value = '';
     document.getElementById('newAdminPass').value = '';
@@ -862,9 +801,6 @@ document.getElementById('addAdminBtn').addEventListener('click', async () => {
   finally { btn.disabled = false; btn.textContent = orig; }
 });
 
-/* ============================================================
-   HELPERS
-   ============================================================ */
 function authHeaders(isJson){
   const h = { Authorization: 'Bearer ' + state.token };
   if (isJson) h['Content-Type'] = 'application/json';

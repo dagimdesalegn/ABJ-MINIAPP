@@ -1,5 +1,5 @@
 const {
-  supabaseQuery, supabaseInsert, verifyPayment,
+  supabaseQuery, supabaseInsert, verifyPayment, createTelegramInvite,
   checkRateLimit, validateRegistration, randomPublicId,
   getClientIp, getFee, json,
 } = require('./_lib');
@@ -23,7 +23,7 @@ module.exports = async (req, res) => {
   const ref = String(transaction_ref).trim();
   const suffix = transaction_suffix ? String(transaction_suffix).trim() : null;
 
-  // 1. Reference uniqueness check
+  /* 1. Reference uniqueness */
   const existing = await supabaseQuery(
     `registrations?transaction_ref=eq.${encodeURIComponent(ref)}&select=public_id`
   );
@@ -31,57 +31,122 @@ module.exports = async (req, res) => {
     return json(res, 409, { error: 'This transaction reference has already been used.' });
   }
 
-  // 2. Server-side verification with Verify.ET
+  /* 2. Verify with Verify.ET */
   const verify = await verifyPayment(ref, suffix);
-  if (verify.result !== 'success') {
-    return json(res, 400, {
-      error: verify.message || 'Payment could not be verified.',
-      code: verify.result,
-    });
-  }
-
-  // 3. Amount must match the current DB-driven fee exactly
-  const expected = await getFee();
-  const received = parseFloat(verify.amount);
-  if (Math.abs(received - expected) > 0.01) {
-    const diff = Math.abs(received - expected);
-    return json(res, 400, {
-      error: `Payment amount does not match. Received ETB ${received.toLocaleString()}, required exactly ETB ${expected.toLocaleString()} (${received < expected ? 'short by' : 'over by'} ETB ${diff.toLocaleString()}).`,
-    });
-  }
-
-  // 4. Insert
+  const result = verify.result;
   const public_id = randomPublicId();
-  const record = {
+
+  const baseRecord = {
     public_id,
     full_name: full_name.trim().split(/\s+/)
       .map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(' '),
     id_number: id_number.trim().toUpperCase().replace(/\s+/g, ''),
-    semester,
-    stream,
-    gender,
+    semester, stream, gender,
     payment_method,
     transaction_ref: ref,
     transaction_suffix: suffix,
-    amount: received,
     receiver_account: verify.receiver || null,
-    status: 'pending',
     client_ip: ip,
+    verify_error: verify.message || null,
+    verify_response: verify,
   };
 
-  const insert = await supabaseInsert('registrations', record);
-
-  if (!insert.ok) {
-    if (insert.status === 409) {
-      return json(res, 409, { error: 'This transaction reference has already been used.' });
-    }
-    return json(res, 500, { error: 'Could not save your registration. Please try again.' });
+  /* ---------- CASE A — HARD FAILURES: reject outright ---------- */
+  if (result === 'failed' || result === 'mismatch' || result === 'duplicate' || result === 'invalid') {
+    await supabaseInsert('registrations', {
+      ...baseRecord,
+      amount: 0,
+      status: 'rejected',
+      verification_status: 'auto_failed',
+      auto_approved: false,
+      rejection_reason: verify.message || 'Automated payment verification failed.',
+    });
+    return json(res, 400, {
+      error: verify.message || 'Payment could not be verified.',
+      code: result,
+    });
   }
+
+  /* ---------- CASE B — SUCCESS: auto-approve + create invite ---------- */
+  if (result === 'success') {
+    const expected = await getFee();
+    const received = parseFloat(verify.amount);
+
+    if (Math.abs(received - expected) > 0.01) {
+      const diff = Math.abs(received - expected);
+      await supabaseInsert('registrations', {
+        ...baseRecord,
+        amount: received,
+        status: 'rejected',
+        verification_status: 'auto_failed',
+        auto_approved: false,
+        rejection_reason: `Payment amount does not match. Received ETB ${received.toLocaleString()}, required exactly ETB ${expected.toLocaleString()} (${received < expected ? 'short by' : 'over by'} ETB ${diff.toLocaleString()}).`,
+      });
+      return json(res, 400, {
+        error: `Payment amount does not match. Received ETB ${received.toLocaleString()}, required exactly ETB ${expected.toLocaleString()}.`,
+        code: 'amount_mismatch',
+      });
+    }
+
+    /* Try to auto-create invite */
+    let invite = null, inviteErr = null;
+    try {
+      invite = await createTelegramInvite(`ABJ-${public_id}`);
+    } catch (e) {
+      inviteErr = e.message || 'Invite creation failed';
+    }
+
+    const now = new Date().toISOString();
+    const record = {
+      ...baseRecord,
+      amount: received,
+      status: invite ? 'approved' : 'pending',
+      verification_status: invite ? 'auto_verified' : 'auto_verified_invite_pending',
+      auto_approved: true,
+      approved_at: invite ? now : null,
+      invite_link: invite ? invite.invite_link : null,
+      invite_link_created_at: invite ? now : null,
+      approved_by: 'auto:verify.et',
+      rejection_reason: inviteErr ? `Auto-approved but invite failed: ${inviteErr}` : null,
+    };
+
+    const insert = await supabaseInsert('registrations', record);
+    if (!insert.ok) {
+      if (insert.status === 409) return json(res, 409, { error: 'This transaction reference has already been used.' });
+      return json(res, 500, { error: 'Could not save your registration. Please try again.' });
+    }
+
+    return json(res, 200, {
+      success: true,
+      public_id,
+      status: record.status,
+      auto_approved: true,
+      invite_link: invite ? invite.invite_link : null,
+      message: invite
+        ? 'Verified automatically. Welcome to ABJ!'
+        : 'Payment verified. Invite link will be ready shortly — check status in a moment.',
+    });
+  }
+
+  /* ---------- CASE C — PENDING / SERVICE ERROR: needs screenshot ---------- */
+  const needsScreenshot = ['pending', 'service_error', 'not_found'].includes(result);
+
+  await supabaseInsert('registrations', {
+    ...baseRecord,
+    amount: 0,
+    status: 'pending',
+    verification_status: needsScreenshot ? 'needs_manual' : 'auto_pending',
+    auto_approved: false,
+  });
 
   return json(res, 200, {
     success: true,
     public_id,
     status: 'pending',
-    message: 'Registration received. Save your ID to check status.',
+    needs_screenshot: needsScreenshot,
+    verify_message: verify.message || null,
+    message: needsScreenshot
+      ? 'Automated verification could not confirm your payment. Please upload a screenshot.'
+      : 'Registration received. Awaiting manual review.',
   });
 };
