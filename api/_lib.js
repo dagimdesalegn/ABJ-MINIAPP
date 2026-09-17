@@ -234,52 +234,95 @@ function _interpret(body) {
 
 async function verifyPayment(reference, suffix) {
   if (!VERIFY_API_KEY) return { result: 'service_error', message: 'Verification service not configured.' };
-  const url = `${VERIFY_API_URL}?waitMs=5000`;
-  const payload = suffix ? { reference, suffix } : { reference };
-  const headers = {
-    'Content-Type': 'application/json',
-    'x-api-key': VERIFY_API_KEY,
-    'Idempotency-Key': `abj-${Date.now()}-${reference}`,
-  };
 
+  /* Two full attempts.
+     Attempt 0 = generous (bank gets 20s to respond, we can wait 24s, then poll 20s).
+     Attempt 1 = quick confirmation (10s).
+     Total worst case ~50s — fits inside Vercel's 60s Hobby maxDuration. */
   for (let attempt = 0; attempt < 2; attempt++) {
+    const waitMs    = attempt === 0 ? 20000 : 8000;
+    const timeoutMs = attempt === 0 ? 24000 : 10000;
+    const url = `${VERIFY_API_URL}?waitMs=${waitMs}`;
+    const headers = {
+      'Content-Type': 'application/json',
+      'x-api-key': VERIFY_API_KEY,
+      'Idempotency-Key': `abj-${Date.now()}-${reference}-${attempt}`,
+    };
+
     try {
-      const res = await fetch(url, { method: 'POST', headers, body: JSON.stringify(payload), signal: AbortSignal.timeout(7000) });
+      const res = await fetch(url, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify(suffix ? { reference, suffix } : { reference }),
+        signal: AbortSignal.timeout(timeoutMs),
+      });
+
       const text = await res.text();
       let body = null;
       try { body = text ? JSON.parse(text) : null; } catch {}
 
-      if (res.status === 401) return { result: 'service_error', message: 'Verification service unavailable.' };
-      if (res.status === 402 || res.status === 403) return { result: 'service_error', message: 'Verification service unavailable.' };
+      /* ---------- Hard failures — bail immediately (no retry) ---------- */
+      if (res.status === 401 || res.status === 402 || res.status === 403) {
+        return { result: 'service_error', message: 'Verification service unavailable.' };
+      }
       if (res.status === 409) return { result: 'duplicate', message: 'This transaction reference has already been used.' };
       if (res.status === 422) return { result: 'invalid', message: "We couldn't read your transaction details." };
-      if (res.status === 429) return { result: 'service_error', message: 'Too many attempts. Try again shortly.' };
-      if (res.status === 503) return { result: 'service_error', message: 'Bank service is busy. Try again shortly.' };
-      if (res.status !== 200 && res.status !== 202) return { result: 'service_error', message: "We couldn't verify your payment." };
 
+      /* ---------- Rate limit / busy — retry ---------- */
+      if (res.status === 429 || res.status === 503) {
+        if (attempt < 1) { await sleep(3000); continue; }
+        return { result: 'service_error', message: 'Bank service is busy. Try again shortly.' };
+      }
+
+      /* ---------- Unexpected status — retry once ---------- */
+      if (res.status !== 200 && res.status !== 202) {
+        if (attempt < 1) { await sleep(1500); continue; }
+        return { result: 'service_error', message: "We couldn't verify your payment." };
+      }
+
+      /* ---------- 202 = bank still processing — poll generously ---------- */
       if (res.status === 202) {
         const rid = body?.requestId;
         const links = body?.links || {};
         const statusUrl = links.statusUrl || (rid ? `/api/verify/${rid}` : null);
-        if (!statusUrl) return { result: 'pending', message: 'The bank is still confirming.' };
-        for (let i = 0; i < 3; i++) {
-          await sleep(700);
-          const poll = await _pollStatus(statusUrl);
-          if (poll.status !== 200 || !poll.data) continue;
-          let it = poll.data.data;
-          if (Array.isArray(it)) it = it[0];
-          if (!it || typeof it !== 'object') continue;
-          if (it.processingStatus === 'completed') return _interpret(it);
-          if (it.processingStatus === 'failed') return { result: 'failed', message: 'The bank shows this transaction as unsuccessful.' };
+
+        if (statusUrl) {
+          /* Poll up to ~22 seconds (10 tries with growing delay) */
+          for (let i = 0; i < 10; i++) {
+            await sleep(1500 + i * 200);
+            const poll = await _pollStatus(statusUrl);
+            if (poll.status !== 200 || !poll.data) continue;
+            let it = poll.data.data;
+            if (Array.isArray(it)) it = it[0];
+            if (!it || typeof it !== 'object') continue;
+            if (it.processingStatus === 'completed') return _interpret(it);
+            if (it.processingStatus === 'failed') return { result: 'failed', message: 'The bank shows this transaction as unsuccessful.' };
+          }
         }
-        return { result: 'pending', message: 'The bank is still confirming.' };
+
+        /* Still pending — retry whole flow once before giving up */
+        if (attempt < 1) { await sleep(2000); continue; }
+        return { result: 'pending', message: 'The bank is still confirming your payment.' };
       }
-      return _interpret(body);
+
+      /* ---------- 200 = interpret ---------- */
+      const interpreted = _interpret(body);
+
+      /* If the bank says "pending", retry once before accepting it */
+      if (interpreted.result === 'pending' && attempt < 1) {
+        await sleep(2500);
+        continue;
+      }
+
+      return interpreted;
+
     } catch (err) {
-      if (attempt === 0) { await sleep(500); continue; }
+      /* Network error or abort timeout */
+      if (attempt < 1) { await sleep(2000); continue; }
       return { result: 'service_error', message: 'Network error reaching the bank.' };
     }
   }
+
   return { result: 'service_error', message: 'Verification failed.' };
 }
 
