@@ -13,15 +13,59 @@
 html,body{margin:0;padding:0;}
 body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:linear-gradient(135deg,#0b1220 0%,#131f3d 100%);color:#fff;min-height:100vh;-webkit-font-smoothing:antialiased;}
 
+/* ============ TELEGRAM CARD ============ */
+.tg-card{padding:22px 24px;border-radius:18px;background:linear-gradient(135deg,rgba(255,255,255,.06),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.1);position:relative;overflow:hidden;max-width:640px;}
+.tg-card.ok{border-color:rgba(52,211,153,.4);box-shadow:0 12px 32px -16px rgba(16,185,129,.4);}
+.tg-card.bad{border-color:rgba(248,113,113,.35);}
+.tg-status{display:inline-flex;align-items:center;gap:8px;padding:6px 14px;border-radius:999px;font-size:11px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;margin-bottom:16px;}
+.tg-status.ok{background:rgba(52,211,153,.12);color:#34d399;border:1px solid rgba(52,211,153,.35);}
+.tg-status.bad{background:rgba(248,113,113,.12);color:#f87171;border:1px solid rgba(248,113,113,.35);}
+.tg-status .dot{width:7px;height:7px;border-radius:50%;background:currentColor;box-shadow:0 0 8px currentColor;animation:tgPulse 2s infinite;}
+@keyframes tgPulse{0%,100%{opacity:1;}50%{opacity:.4;}}
+.tg-row{display:flex;justify-content:space-between;align-items:center;gap:14px;padding:10px 0;border-bottom:1px dashed rgba(255,255,255,.08);font-size:13px;}
+.tg-row:last-child{border-bottom:none;padding-bottom:0;}
+.tg-row .k{color:rgba(255,255,255,.5);font-weight:800;font-size:10px;letter-spacing:.7px;text-transform:uppercase;flex:0 0 auto;}
+.tg-row .v{font-weight:700;color:#fff;text-align:right;font-family:monospace;font-size:12px;overflow-wrap:anywhere;min-width:0;}
+.tg-actions{display:flex;gap:8px;margin-top:18px;flex-wrap:wrap;}
+.tg-actions .btn{flex:1;min-width:140px;padding:12px 16px;font-size:13px;}
+
+/* ============ TELEGRAM WIZARD MODAL ============ */
+.tg-wiz{position:fixed;inset:0;z-index:210;background:rgba(5,9,18,.88);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);display:flex;align-items:center;justify-content:center;padding:16px;padding-top:calc(16px + env(safe-area-inset-top));padding-bottom:calc(16px + env(safe-area-inset-bottom));opacity:0;visibility:hidden;transition:opacity .3s,visibility .3s;overflow-y:auto;}
+.tg-wiz.open{opacity:1;visibility:visible;}
+.tg-wiz-box{position:relative;width:100%;max-width:420px;max-height:calc(100dvh - 32px);overflow-y:auto;background:radial-gradient(400px 200px at 50% -10%,rgba(59,130,246,.3),transparent 70%),linear-gradient(160deg,#0f1a2f 0%,#131f3d 100%);border:1px solid rgba(255,255,255,.12);border-radius:24px;padding:28px 24px 24px;color:#fff;box-shadow:0 50px 100px -40px rgba(0,0,0,.95),0 0 90px -25px rgba(37,99,235,.55);transform:translateY(24px) scale(.95);opacity:0;transition:transform .5s var(--bounce),opacity .35s;}
+.tg-wiz.open .tg-wiz-box{transform:translateY(0) scale(1);opacity:1;}
+.tg-prog{display:flex;gap:6px;justify-content:center;margin-bottom:22px;}
+.tg-prog i{width:28px;height:4px;border-radius:999px;background:rgba(255,255,255,.1);transition:background .3s;}
+.tg-prog i.done{background:linear-gradient(90deg,#f7e07a,#d4af37);}
+.tg-prog i.current{background:linear-gradient(90deg,#f7e07a,#d4af37);animation:progressGlow 2s ease-in-out infinite;}
+@keyframes progressGlow{0%,100%{box-shadow:0 0 0 0 rgba(212,175,55,.6);}50%{box-shadow:0 0 0 4px rgba(212,175,55,0);}}
+.tg-wiz-close{position:absolute;top:16px;right:16px;width:34px;height:34px;border-radius:10px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.1);color:#fff;display:grid;place-items:center;font-size:14px;cursor:pointer;transition:background .2s,transform .3s var(--bounce);z-index:5;}
+.tg-wiz-close:hover{background:linear-gradient(135deg,#ef4444,#dc2626);transform:rotate(90deg);}
+.tg-step{display:none;}
+.tg-step.active{display:block;animation:fadeUp .35s var(--bounce) both;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+.tg-step-tag{display:inline-block;font-size:10px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:#f7e07a;background:rgba(247,224,122,.12);padding:4px 11px;border-radius:999px;margin-bottom:14px;}
+.tg-step h3{margin:0 0 8px;font-size:18px;font-weight:800;letter-spacing:-.3px;color:#fff;}
+.tg-step p{margin:0 0 18px;font-size:13px;color:rgba(255,255,255,.68);line-height:1.6;}
+.tg-step p b{color:#f7e07a;font-weight:800;}
+.tg-input{width:100%;padding:13px 16px;border-radius:12px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);color:#fff;font-size:14.5px;font-weight:600;outline:none;font-family:inherit;margin-bottom:12px;transition:border-color .2s,background .2s;}
+.tg-input:focus{border-color:#f7e07a;background:rgba(255,255,255,.1);}
+.tg-input::placeholder{color:rgba(255,255,255,.35);font-weight:500;}
+.tg-actions-row{display:flex;gap:8px;margin-top:16px;}
+.tg-actions-row button{flex:1;padding:13px 16px;border-radius:12px;font-size:14px;font-weight:800;cursor:pointer;border:none;transition:all .25s var(--bounce);font-family:inherit;}
+.tg-btn-primary{background:linear-gradient(135deg,#f7e07a,#d4af37);color:#0b1220;box-shadow:0 12px 28px -12px rgba(212,175,55,.9);}
+.tg-btn-primary:hover:not(:disabled){transform:translateY(-2px);}
+.tg-btn-primary:disabled{opacity:.5;cursor:not-allowed;transform:none;}
+.tg-btn-ghost{background:rgba(255,255,255,.08);color:#fff;border:1px solid rgba(255,255,255,.14);flex:0 0 auto;padding-left:22px;padding-right:22px;}
+.tg-btn-ghost:hover{background:rgba(255,255,255,.14);}
+.tg-btn-ghost:disabled{opacity:.4;cursor:not-allowed;}
+.tg-error{color:#f87171;font-size:12.5px;font-weight:700;margin-top:10px;display:none;}
+.tg-error.show{display:block;}
+.tg-note{font-size:12px;color:#93c5fd;background:rgba(59,130,246,.08);border:1px solid rgba(59,130,246,.3);padding:11px 13px;border-radius:10px;line-height:1.55;margin-bottom:14px;}
+.tg-note b{color:#bfdbfe;}
+
 /* ============ LOGIN — FULL SCREEN CENTER ============ */
-#loginView{
-  position:fixed;inset:0;
-  display:flex;align-items:center;justify-content:center;
-  padding:20px;
-  padding-top:calc(20px + env(safe-area-inset-top));
-  padding-bottom:calc(20px + env(safe-area-inset-bottom));
-  overflow-y:auto;z-index:1;
-}
+#loginView{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:20px;padding-top:calc(20px + env(safe-area-inset-top));padding-bottom:calc(20px + env(safe-area-inset-bottom));overflow-y:auto;z-index:1;}
 .login-card{width:100%;max-width:420px;margin:auto;padding:32px;background:linear-gradient(135deg,rgba(255,255,255,.06),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.1);border-radius:22px;}
 .login-card h2{margin:0 0 8px;font-size:22px;font-weight:800;}
 .login-card p{margin:0 0 24px;color:rgba(255,255,255,.6);font-size:14px;}
@@ -33,18 +77,10 @@ body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:linear-grad
 .login-error{margin-top:14px;color:#f87171;font-size:13px;font-weight:700;display:none;}
 .login-error.show{display:block;}
 
-/* ============ PASSWORD WRAPPER (with eye toggle) ============ */
+/* ============ PASSWORD WRAPPER ============ */
 .pw-wrap{position:relative;margin-bottom:14px;}
 .pw-wrap input{margin-bottom:0 !important;padding-right:52px !important;}
-.pw-toggle{
-  position:absolute;top:50%;right:12px;transform:translateY(-50%);
-  width:36px;height:36px;border-radius:10px;
-  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);
-  color:rgba(255,255,255,.65);cursor:pointer;
-  display:grid;place-items:center;
-  transition:background .2s,color .2s,transform .25s var(--bounce);
-  padding:0;
-}
+.pw-toggle{position:absolute;top:50%;right:12px;transform:translateY(-50%);width:36px;height:36px;border-radius:10px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.65);cursor:pointer;display:grid;place-items:center;transition:background .2s,color .2s,transform .25s var(--bounce);padding:0;}
 .pw-toggle:hover{background:rgba(255,255,255,.14);color:#fff;}
 .pw-toggle:active{transform:translateY(-50%) scale(.92);}
 .pw-toggle svg{width:18px;height:18px;display:block;pointer-events:none;}
@@ -113,8 +149,6 @@ body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:linear-grad
 .field textarea{min-height:100px;resize:vertical;line-height:1.5;font-family:monospace;font-size:12px;word-break:break-all;}
 .field select option{background:#0b1220;color:#fff;}
 .sys-hr{border:none;border-top:1px solid rgba(255,255,255,.08);margin:14px 0;}
-
-/* field-scoped pw toggle uses same .pw-toggle but on dark bg */
 .field .pw-wrap{margin-bottom:0;}
 
 .admin-list{display:grid;gap:10px;margin-top:22px;}
@@ -318,11 +352,11 @@ body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:linear-grad
         <strong>⚠️ Sensitive.</strong> Powers Telegram invites and payment verification. Changes take effect within 60 seconds.
       </div>
 
-      <h3 style="margin:18px 0 4px;font-size:14px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--gold-1);">Telegram API</h3>
-      <div class="field"><label>API ID</label><input type="text" id="sysTgApiId" placeholder="e.g. 34415625" maxlength="32" autocomplete="off" /></div>
-      <div class="field"><label>API Hash</label><input type="text" id="sysTgApiHash" placeholder="e.g. b5a21951..." maxlength="128" autocomplete="off" /></div>
-      <div class="field"><label>Session String</label><textarea id="sysTgSession" placeholder="The long session string from your script" autocomplete="off"></textarea></div>
-      <div class="field"><label>Channel ID</label><input type="text" id="sysTgChannel" placeholder="e.g. -1003816618687" maxlength="32" autocomplete="off" /></div>
+      <h3 style="margin:6px 0 4px;font-size:14px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--gold-1);">Telegram Session</h3>
+
+      <div class="tg-card bad" id="tgCard">
+        <!-- filled by JS -->
+      </div>
 
       <hr class="sys-hr" />
 
@@ -330,7 +364,7 @@ body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:linear-grad
       <div class="field"><label>API URL</label><input type="text" id="sysVerifyUrl" placeholder="https://verify.et/api/verify" maxlength="200" autocomplete="off" /></div>
       <div class="field"><label>API Key</label><input type="text" id="sysVerifyKey" placeholder="The Verify.ET API key" maxlength="256" autocomplete="off" /></div>
 
-      <button class="btn btn-gold" id="saveSystem" type="button" style="padding:14px;font-size:14px;margin-top:8px;">Save System Settings</button>
+      <button class="btn btn-gold" id="saveSystem" type="button" style="padding:14px;font-size:14px;margin-top:8px;">Save Verify Settings</button>
     </div>
   </div>
 
@@ -363,6 +397,78 @@ body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:linear-grad
 </div>
 
 <div class="toast" id="toast"></div>
+
+<!-- ============ TELEGRAM SESSION WIZARD ============ -->
+<div class="tg-wiz" id="tgWiz" role="dialog" aria-modal="true" aria-label="Telegram setup">
+  <div class="tg-wiz-box">
+    <button class="tg-wiz-close" id="tgWizClose" type="button" aria-label="Close">✕</button>
+
+    <div class="tg-prog" id="tgProg">
+      <i data-p="1"></i><i data-p="2"></i><i data-p="3"></i><i data-p="4"></i>
+    </div>
+
+    <!-- STEP 1: API credentials -->
+    <div class="tg-step active" data-step="1">
+      <span class="tg-step-tag">Step 1 of 4</span>
+      <h3>API Credentials</h3>
+      <p>Paste your Telegram <b>API ID</b> and <b>API Hash</b>.<br>Get them from <b>my.telegram.org → API development tools</b>.</p>
+      <input class="tg-input" id="tgApiId" type="text" placeholder="API ID, e.g. 34415625" maxlength="32" autocomplete="off" />
+      <input class="tg-input" id="tgApiHash" type="text" placeholder="API Hash, e.g. b5a21951..." maxlength="128" autocomplete="off" />
+      <input class="tg-input" id="tgChannelId" type="text" placeholder="Channel ID, e.g. -1003816618687" maxlength="32" autocomplete="off" />
+      <div class="tg-error" id="tgErr1">⚠️ All three fields are required.</div>
+      <div class="tg-actions-row">
+        <button class="tg-btn-ghost" type="button" data-tg-back disabled>Back</button>
+        <button class="tg-btn-primary" type="button" id="tgNext1">Continue →</button>
+      </div>
+    </div>
+
+    <!-- STEP 2: Phone -->
+    <div class="tg-step" data-step="2">
+      <span class="tg-step-tag">Step 2 of 4</span>
+      <h3>Phone Number</h3>
+      <p>Enter the phone number tied to your Telegram account.<br>Include country code — e.g. <b>+251967358316</b></p>
+      <input class="tg-input" id="tgPhone" type="tel" placeholder="+2519xxxxxxxx" maxlength="24" autocomplete="off" />
+      <div class="tg-error" id="tgErr2">⚠️ Enter a valid phone number with country code.</div>
+      <div class="tg-actions-row">
+        <button class="tg-btn-ghost" type="button" data-tg-back>Back</button>
+        <button class="tg-btn-primary" type="button" id="tgNext2">Send Code →</button>
+      </div>
+    </div>
+
+    <!-- STEP 3: Code -->
+    <div class="tg-step" data-step="3">
+      <span class="tg-step-tag">Step 3 of 4</span>
+      <h3>Verification Code</h3>
+      <p>Telegram sent a code to your app. Open Telegram → look for the message from <b>"Telegram"</b> → enter the 5-digit code below.</p>
+      <div class="tg-note">📱 <b>Tip:</b> If the code doesn't arrive in 30 seconds, tap "Resend" on your phone.</div>
+      <input class="tg-input" id="tgCode" type="text" placeholder="e.g. 12345" maxlength="8" autocomplete="off" inputmode="numeric" />
+      <div class="tg-error" id="tgErr3">⚠️ Enter the code from Telegram.</div>
+      <div class="tg-actions-row">
+        <button class="tg-btn-ghost" type="button" data-tg-back>Back</button>
+        <button class="tg-btn-primary" type="button" id="tgNext3">Verify →</button>
+      </div>
+    </div>
+
+    <!-- STEP 4: 2FA -->
+    <div class="tg-step" data-step="4">
+      <span class="tg-step-tag">Step 4 of 4</span>
+      <h3>Two-Factor Password</h3>
+      <p>You have 2FA enabled on this Telegram account. Enter your password to finish.</p>
+      <div class="pw-wrap" style="margin-bottom:12px;">
+        <input class="tg-input" id="tg2fa" type="password" placeholder="Your 2FA password" autocomplete="current-password" style="margin-bottom:0;padding-right:52px;" />
+        <button type="button" class="pw-toggle" data-target="tg2fa" aria-label="Show/hide password">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+        </button>
+      </div>
+      <div class="tg-error" id="tgErr4">⚠️ Enter your 2FA password.</div>
+      <div class="tg-actions-row">
+        <button class="tg-btn-ghost" type="button" data-tg-back>Back</button>
+        <button class="tg-btn-primary" type="button" id="tgNext4">Verify & Save →</button>
+      </div>
+    </div>
+
+  </div>
+</div>
 
 <div class="adm-modal" id="admModal" role="dialog" aria-modal="true" aria-label="Result">
   <div class="adm-box">
@@ -416,18 +522,18 @@ function wirePwToggles(root){
       if (!input) return;
       const isPw = input.type === 'password';
       input.type = isPw ? 'text' : 'password';
-      /* Swap icon: eye ↔ eye-off */
       btn.innerHTML = isPw
         ? `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>`
         : `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>`;
-      /* Keep the input focused */
       input.focus();
-      /* Move cursor to end */
       try { const v = input.value; input.setSelectionRange(v.length, v.length); } catch {}
     });
   });
 }
 wirePwToggles(document);
+document.addEventListener('click', e => {
+  if (e.target.closest('.tab')) setTimeout(() => wirePwToggles(document), 20);
+});
 
 const admModalEl = document.getElementById('admModal');
 const admBadge   = document.getElementById('admBadge');
@@ -444,7 +550,6 @@ function showAdmModal(opts){
   admTitle.textContent = title || 'Success';
   admMsg.textContent   = message || '';
   admExtra.innerHTML   = extra;
-
   admActions.innerHTML = '';
   const list = buttons && buttons.length ? buttons : [{ label: 'OK', class: 'btn-gold' }];
   list.forEach(b => {
@@ -458,7 +563,6 @@ function showAdmModal(opts){
     });
     admActions.appendChild(el);
   });
-
   admModalEl.classList.add('open');
 }
 function hideAdmModal(){ admModalEl.classList.remove('open'); }
@@ -540,18 +644,14 @@ function showDash(){
   dashView.style.display = 'block';
   loginError.classList.remove('show');
   adminPass.value = '';
-
   dashTitle.textContent = state.full_name || state.username;
   welcomeLine.textContent = `Signed in as @${state.username} · ${state.role === 'super' ? 'Super Admin' : 'Admin'}`;
-
   document.querySelectorAll('.super-only').forEach(el => {
     el.style.display = state.role === 'super' ? '' : 'none';
   });
-
   document.getElementById('profRole').value     = state.role === 'super' ? 'Super Admin' : 'Admin';
   document.getElementById('profUsername').value = state.username;
   document.getElementById('profFullName').value = state.full_name;
-
   loadTab('pending');
   updateCounts();
 }
@@ -614,28 +714,21 @@ function render(box, status, items){
   box.innerHTML = items.map(r => {
     const created  = new Date(r.created_at).toLocaleString();
     const approved = r.approved_at ? new Date(r.approved_at).toLocaleString() : '—';
-
     const actions = r.status === 'pending'
       ? `<div class="actions">
            <button class="btn btn-approve" data-act="approve" data-id="${r.id}">✅ ${r.screenshot_url ? 'Approve (Screenshot Reviewed)' : 'Approve & Create Invite'}</button>
            <button class="btn btn-reject"  data-act="reject"  data-id="${r.id}">❌ Reject</button>
          </div>` : '';
-
     const invite = r.invite_link
       ? `<a class="invite-link" href="${esc(r.invite_link)}" target="_blank" rel="noopener">🔗 ${esc(r.invite_link)}</a>` : '';
-
     const reason = r.rejection_reason
       ? `<div style="margin-top:10px;padding:10px 14px;border-radius:10px;background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);font-size:13px;"><strong style="color:#f87171;">Reason:</strong> ${esc(r.rejection_reason)}</div>` : '';
-
-    const autoTag = r.auto_approved
-      ? `<span class="pill approved" style="margin-left:6px;">🤖 Auto</span>` : '';
-
+    const autoTag = r.auto_approved ? `<span class="pill approved" style="margin-left:6px;">🤖 Auto</span>` : '';
     const verifTag = r.verification_status === 'needs_manual'
       ? `<span class="pill pending" style="margin-left:6px;">📸 Manual Review</span>`
       : r.verification_status === 'screenshot_uploaded'
       ? `<span class="pill pending" style="margin-left:6px;">📸 Screenshot Uploaded</span>`
       : '';
-
     const screenshotBox = r.screenshot_url
       ? `<div style="margin-top:12px;">
            <div style="font-size:10.5px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,.55);margin-bottom:8px;">Payment Screenshot</div>
@@ -644,7 +737,6 @@ function render(box, status, items){
            </a>
            <a href="${esc(r.screenshot_url)}" target="_blank" rel="noopener" style="display:inline-block;margin-top:8px;font-size:11.5px;color:#f7e07a;text-decoration:underline;">🔍 Open full size</a>
          </div>` : '';
-
     const verifyErr = r.verify_error && r.status === 'pending'
       ? `<div style="margin-top:10px;padding:10px 14px;border-radius:10px;background:rgba(251,191,36,.08);border:1px solid rgba(251,191,36,.3);font-size:12.5px;color:#fbbf24;"><strong>API note:</strong> ${esc(r.verify_error)}</div>` : '';
 
@@ -781,7 +873,7 @@ document.getElementById('saveProfile').addEventListener('click', async () => {
 });
 
 /* ============================================================
-   VIDEOS / TESTIMONIALS / SETTINGS / SYSTEM / ADMINS
+   VIDEOS
    ============================================================ */
 async function loadVideos(){
   const box = document.getElementById('videoList');
@@ -829,6 +921,9 @@ document.getElementById('addVideoBtn').addEventListener('click', async () => {
   finally { btn.disabled = false; btn.textContent = orig; }
 });
 
+/* ============================================================
+   TESTIMONIALS
+   ============================================================ */
 async function loadTestimonials(){
   const box = document.getElementById('tstList');
   box.innerHTML = '<div class="empty"><div class="icon">⏳</div><p>Loading...</p></div>';
@@ -876,6 +971,9 @@ document.getElementById('addTstBtn').addEventListener('click', async () => {
   finally { btn.disabled = false; btn.textContent = orig; }
 });
 
+/* ============================================================
+   SETTINGS
+   ============================================================ */
 async function loadSettings(){
   try {
     const res = await fetch('/api/admin-settings', { headers: authHeaders() });
@@ -927,20 +1025,87 @@ document.getElementById('resetRateLimits')?.addEventListener('click', async () =
   finally { btn.disabled = false; btn.textContent = orig; }
 });
 
+/* ============================================================
+   SYSTEM — Telegram session card + wizard
+   ============================================================ */
+let tgCurrentSettings = {};
+
+function shortSession(s){
+  if (!s) return '—';
+  if (s.length <= 24) return s;
+  return s.slice(0, 14) + '…' + s.slice(-10);
+}
+function shortHash(h){
+  if (!h) return '—';
+  if (h.length <= 12) return h;
+  return h.slice(0, 8) + '…' + h.slice(-6);
+}
+
 async function loadSystem(){
   try {
     const res = await fetch('/api/admin-settings', { headers: authHeaders() });
     const data = await res.json();
     if (!res.ok) return;
     const s = data.settings || {};
-    document.getElementById('sysTgApiId').value     = s.tg_api_id     || '';
-    document.getElementById('sysTgApiHash').value   = s.tg_api_hash   || '';
-    document.getElementById('sysTgSession').value   = s.tg_session    || '';
-    document.getElementById('sysTgChannel').value   = s.tg_channel_id || '';
-    document.getElementById('sysVerifyUrl').value   = s.verify_api_url || '';
-    document.getElementById('sysVerifyKey').value   = s.verify_api_key || '';
-    admSuccess('System Settings Loaded', 'Current values shown. Edit and save to update.');
+    tgCurrentSettings = s;
+
+    document.getElementById('sysVerifyUrl').value = s.verify_api_url || '';
+    document.getElementById('sysVerifyKey').value = s.verify_api_key || '';
+
+    renderTgCard(s);
   } catch {}
+}
+
+function renderTgCard(s){
+  const card = document.getElementById('tgCard');
+  const hasApi   = !!(s.tg_api_id && s.tg_api_hash);
+  const hasSess  = !!s.tg_session;
+  const hasChan  = !!s.tg_channel_id;
+  const fullOk   = hasApi && hasSess && hasChan;
+
+  card.classList.toggle('ok', fullOk);
+  card.classList.toggle('bad', !fullOk);
+
+  if (fullOk){
+    card.innerHTML = `
+      <span class="tg-status ok"><span class="dot"></span> Connected</span>
+      <div class="tg-row"><span class="k">API ID</span><span class="v">${esc(s.tg_api_id)}</span></div>
+      <div class="tg-row"><span class="k">API Hash</span><span class="v">${esc(shortHash(s.tg_api_hash))}</span></div>
+      <div class="tg-row"><span class="k">Channel</span><span class="v">${esc(s.tg_channel_id)}</span></div>
+      <div class="tg-row"><span class="k">Session</span><span class="v">${esc(shortSession(s.tg_session))}</span></div>
+      <div class="tg-actions">
+        <button class="btn btn-gold" id="tgBtnReconfig" type="button">🔄 Reconfigure</button>
+        <button class="btn btn-ghost" id="tgBtnCopy" type="button">📋 Copy Session</button>
+        <button class="btn btn-danger" id="tgBtnClear" type="button">🗑 Clear</button>
+      </div>`;
+  } else {
+    const partial = hasApi || hasSess || hasChan;
+    card.innerHTML = `
+      <span class="tg-status bad"><span class="dot"></span> ${partial ? 'Incomplete' : 'Not Configured'}</span>
+      <p style="margin:0 0 8px;font-size:13.5px;color:rgba(255,255,255,.75);line-height:1.6;">
+        ${partial
+          ? 'Some Telegram settings are present but the session is incomplete. Reconfigure to finish setup.'
+          : 'Set up your Telegram account so students get one-time channel invites after approval.'}
+      </p>
+      <div class="tg-actions">
+        <button class="btn btn-gold" id="tgBtnReconfig" type="button">⚙️ Configure Session</button>
+      </div>`;
+  }
+
+  document.getElementById('tgBtnReconfig')?.addEventListener('click', openTgWizard);
+  document.getElementById('tgBtnCopy')?.addEventListener('click', () => {
+    if (s.tg_session) copyToClipboard(s.tg_session, 'Session string copied');
+  });
+  document.getElementById('tgBtnClear')?.addEventListener('click', async () => {
+    if (!confirm('Clear the Telegram session? Invites will stop working until you reconfigure.')) return;
+    try {
+      const r = await fetch('/api/admin-settings?action=tg-clear', {
+        method: 'POST', headers: authHeaders(true), body: JSON.stringify({})
+      });
+      if (r.ok){ admSuccess('Session Cleared', 'Configure a new session to re-enable invites.'); loadSystem(); }
+      else admError('Clear Failed', 'Could not clear session.');
+    } catch { admError('Network Error', 'Could not reach the server.'); }
+  });
 }
 
 document.getElementById('saveSystem').addEventListener('click', async () => {
@@ -948,22 +1113,181 @@ document.getElementById('saveSystem').addEventListener('click', async () => {
   const orig = btn.textContent;
   btn.disabled = true; btn.textContent = 'Saving...';
   const payload = {
-    tg_api_id:      document.getElementById('sysTgApiId').value.trim(),
-    tg_api_hash:    document.getElementById('sysTgApiHash').value.trim(),
-    tg_session:     document.getElementById('sysTgSession').value.trim(),
-    tg_channel_id:  document.getElementById('sysTgChannel').value.trim(),
     verify_api_url: document.getElementById('sysVerifyUrl').value.trim(),
     verify_api_key: document.getElementById('sysVerifyKey').value.trim(),
   };
   try {
     const res = await fetch('/api/admin-settings', { method: 'POST', headers: authHeaders(true), body: JSON.stringify(payload) });
     const data = await res.json();
-    if (!res.ok) { admError('Save Failed', data.error || 'Could not save system settings.'); return; }
-    admSuccess('System Settings Saved', 'Changes take effect within 60 seconds on the next API request.');
+    if (!res.ok) { admError('Save Failed', data.error || 'Could not save.'); return; }
+    admSuccess('Verify Settings Saved', 'Changes take effect within 60 seconds.');
   } catch { admError('Network Error', 'Could not reach the server.'); }
   finally { btn.disabled = false; btn.textContent = orig; }
 });
 
+/* ============================================================
+   TELEGRAM WIZARD
+   ============================================================ */
+const tgWiz = document.getElementById('tgWiz');
+const tgProg = document.getElementById('tgProg');
+let tgStep = 1;
+let tgNeeds2FA = false;
+
+function setTgStep(n){
+  tgStep = n;
+  document.querySelectorAll('.tg-step').forEach(el => {
+    el.classList.toggle('active', +el.dataset.step === n);
+  });
+  [...tgProg.children].forEach((el, i) => {
+    el.classList.remove('done','current');
+    if (i+1 < n) el.classList.add('done');
+    if (i+1 === n) el.classList.add('current');
+  });
+}
+
+function openTgWizard(){
+  document.getElementById('tgApiId').value    = tgCurrentSettings.tg_api_id || '';
+  document.getElementById('tgApiHash').value  = tgCurrentSettings.tg_api_hash || '';
+  document.getElementById('tgChannelId').value = tgCurrentSettings.tg_channel_id || '';
+  document.getElementById('tgPhone').value = '';
+  document.getElementById('tgCode').value = '';
+  document.getElementById('tg2fa').value = '';
+  ['tgErr1','tgErr2','tgErr3','tgErr4'].forEach(id => document.getElementById(id).classList.remove('show'));
+  tgNeeds2FA = false;
+  setTgStep(1);
+  tgWiz.classList.add('open');
+}
+
+function closeTgWizard(){
+  tgWiz.classList.remove('open');
+  fetch('/api/admin-settings?action=tg-cancel', {
+    method: 'POST', headers: authHeaders(true), body: JSON.stringify({})
+  }).catch(() => {});
+}
+
+document.getElementById('tgWizClose').addEventListener('click', closeTgWizard);
+tgWiz.addEventListener('click', e => { if (e.target === tgWiz) closeTgWizard(); });
+
+document.querySelectorAll('[data-tg-back]').forEach(b => b.addEventListener('click', () => {
+  if (tgStep > 1) setTgStep(tgStep - 1);
+}));
+
+document.getElementById('tgNext1').addEventListener('click', () => {
+  const id = document.getElementById('tgApiId').value.trim();
+  const h  = document.getElementById('tgApiHash').value.trim();
+  const c  = document.getElementById('tgChannelId').value.trim();
+  const err = document.getElementById('tgErr1');
+  if (!id || !h || !c){ err.textContent = '⚠️ All three fields are required.'; err.classList.add('show'); return; }
+  err.classList.remove('show');
+  setTgStep(2);
+});
+
+document.getElementById('tgNext2').addEventListener('click', async () => {
+  const btn = document.getElementById('tgNext2');
+  const orig = btn.textContent;
+  const phone = document.getElementById('tgPhone').value.trim();
+  const err = document.getElementById('tgErr2');
+  if (!/^\+?\d[\d\s\-]{6,}$/.test(phone)){ err.textContent = '⚠️ Enter a valid phone number with country code (e.g. +251967358316).'; err.classList.add('show'); return; }
+  err.classList.remove('show');
+
+  btn.disabled = true; btn.textContent = 'Sending code...';
+
+  try {
+    const res = await fetch('/api/admin-settings?action=tg-start', {
+      method: 'POST', headers: authHeaders(true),
+      body: JSON.stringify({
+        api_id:   document.getElementById('tgApiId').value.trim(),
+        api_hash: document.getElementById('tgApiHash').value.trim(),
+        phone,
+      }),
+    });
+    const data = await res.json();
+    if (!res.ok){
+      err.textContent = '⚠️ ' + (data.error || 'Could not send code.');
+      err.classList.add('show');
+      return;
+    }
+    setTgStep(3);
+  } catch {
+    err.textContent = '⚠️ Network error.';
+    err.classList.add('show');
+  } finally {
+    btn.disabled = false; btn.textContent = orig;
+  }
+});
+
+document.getElementById('tgNext3').addEventListener('click', async () => {
+  const btn = document.getElementById('tgNext3');
+  const orig = btn.textContent;
+  const code = document.getElementById('tgCode').value.trim();
+  const err = document.getElementById('tgErr3');
+  if (!code){ err.textContent = '⚠️ Enter the code from Telegram.'; err.classList.add('show'); return; }
+  err.classList.remove('show');
+
+  btn.disabled = true; btn.textContent = 'Verifying...';
+
+  try {
+    const res = await fetch('/api/admin-settings?action=tg-verify', {
+      method: 'POST', headers: authHeaders(true),
+      body: JSON.stringify({ code }),
+    });
+    const data = await res.json();
+    if (!res.ok){
+      err.textContent = '⚠️ ' + (data.error || 'Verification failed.');
+      err.classList.add('show');
+      return;
+    }
+    if (data.needs_2fa){
+      tgNeeds2FA = true;
+      setTgStep(4);
+      return;
+    }
+    admSuccess('Telegram Connected 🎉', 'Session saved. Auto-approval is now active.');
+    closeTgWizard();
+    loadSystem();
+  } catch {
+    err.textContent = '⚠️ Network error.';
+    err.classList.add('show');
+  } finally {
+    btn.disabled = false; btn.textContent = orig;
+  }
+});
+
+document.getElementById('tgNext4').addEventListener('click', async () => {
+  const btn = document.getElementById('tgNext4');
+  const orig = btn.textContent;
+  const pw = document.getElementById('tg2fa').value;
+  const err = document.getElementById('tgErr4');
+  if (!pw){ err.textContent = '⚠️ Enter your 2FA password.'; err.classList.add('show'); return; }
+  err.classList.remove('show');
+
+  btn.disabled = true; btn.textContent = 'Verifying...';
+
+  try {
+    const res = await fetch('/api/admin-settings?action=tg-password', {
+      method: 'POST', headers: authHeaders(true),
+      body: JSON.stringify({ password: pw }),
+    });
+    const data = await res.json();
+    if (!res.ok){
+      err.textContent = '⚠️ ' + (data.error || 'Password verification failed.');
+      err.classList.add('show');
+      return;
+    }
+    admSuccess('Telegram Connected 🎉', 'Session saved. Auto-approval is now active.');
+    closeTgWizard();
+    loadSystem();
+  } catch {
+    err.textContent = '⚠️ Network error.';
+    err.classList.add('show');
+  } finally {
+    btn.disabled = false; btn.textContent = orig;
+  }
+});
+
+/* ============================================================
+   ADMINS
+   ============================================================ */
 async function loadAdmins(){
   const listBox = document.getElementById('adminList');
   listBox.innerHTML = '<div class="empty"><div class="icon">⏳</div><p>Loading...</p></div>';
