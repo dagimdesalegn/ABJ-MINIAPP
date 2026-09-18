@@ -10,7 +10,46 @@
 <style>
 :root{--ink:#0f172a;--muted:#64748b;--line:#e6ebf3;--gold-2:#d4af37;--gold-1:#f7e07a;--bounce:cubic-bezier(.34,1.56,.64,1);}
 *,*::before,*::after{box-sizing:border-box;}
-body{margin:0;font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:linear-gradient(135deg,#0b1220 0%,#131f3d 100%);color:#fff;min-height:100vh;-webkit-font-smoothing:antialiased;}
+html,body{margin:0;padding:0;}
+body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:linear-gradient(135deg,#0b1220 0%,#131f3d 100%);color:#fff;min-height:100vh;-webkit-font-smoothing:antialiased;}
+
+/* ============ LOGIN — FULL SCREEN CENTER ============ */
+#loginView{
+  position:fixed;inset:0;
+  display:flex;align-items:center;justify-content:center;
+  padding:20px;
+  padding-top:calc(20px + env(safe-area-inset-top));
+  padding-bottom:calc(20px + env(safe-area-inset-bottom));
+  overflow-y:auto;z-index:1;
+}
+.login-card{width:100%;max-width:420px;margin:auto;padding:32px;background:linear-gradient(135deg,rgba(255,255,255,.06),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.1);border-radius:22px;}
+.login-card h2{margin:0 0 8px;font-size:22px;font-weight:800;}
+.login-card p{margin:0 0 24px;color:rgba(255,255,255,.6);font-size:14px;}
+.login-card label{display:block;font-size:11px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:rgba(255,255,255,.55);margin-bottom:8px;}
+.login-card input{width:100%;padding:14px 18px;border-radius:14px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);color:#fff;font-size:15px;font-weight:600;outline:none;transition:border-color .25s,background .25s;margin-bottom:14px;}
+.login-card input:focus{border-color:var(--gold-1);background:rgba(255,255,255,.12);}
+.login-card input::placeholder{color:rgba(255,255,255,.4);}
+.login-card .btn{width:100%;padding:15px;font-size:15px;}
+.login-error{margin-top:14px;color:#f87171;font-size:13px;font-weight:700;display:none;}
+.login-error.show{display:block;}
+
+/* ============ PASSWORD WRAPPER (with eye toggle) ============ */
+.pw-wrap{position:relative;margin-bottom:14px;}
+.pw-wrap input{margin-bottom:0 !important;padding-right:52px !important;}
+.pw-toggle{
+  position:absolute;top:50%;right:12px;transform:translateY(-50%);
+  width:36px;height:36px;border-radius:10px;
+  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);
+  color:rgba(255,255,255,.65);cursor:pointer;
+  display:grid;place-items:center;
+  transition:background .2s,color .2s,transform .25s var(--bounce);
+  padding:0;
+}
+.pw-toggle:hover{background:rgba(255,255,255,.14);color:#fff;}
+.pw-toggle:active{transform:translateY(-50%) scale(.92);}
+.pw-toggle svg{width:18px;height:18px;display:block;pointer-events:none;}
+
+/* ============ DASHBOARD ============ */
 .wrap{max-width:1100px;margin:0 auto;padding:28px 20px 60px;}
 .head{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-bottom:22px;margin-bottom:28px;border-bottom:1px solid rgba(255,255,255,.1);flex-wrap:wrap;}
 .head-left{display:flex;align-items:center;gap:14px;}
@@ -31,17 +70,6 @@ body{margin:0;font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:li
 .btn-danger:hover{transform:translateY(-2px);}
 .btn-add{background:linear-gradient(135deg,#2563eb,#1d4ed8);color:#fff;padding:12px 22px;font-size:13.5px;box-shadow:0 12px 26px -12px rgba(37,99,235,.9);}
 .btn-add:hover{transform:translateY(-2px);}
-
-.login-card{max-width:420px;margin:60px auto;padding:32px;background:linear-gradient(135deg,rgba(255,255,255,.06),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.1);border-radius:22px;}
-.login-card h2{margin:0 0 8px;font-size:22px;font-weight:800;}
-.login-card p{margin:0 0 24px;color:rgba(255,255,255,.6);font-size:14px;}
-.login-card label{display:block;font-size:11px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:rgba(255,255,255,.55);margin-bottom:8px;}
-.login-card input{width:100%;padding:14px 18px;border-radius:14px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);color:#fff;font-size:15px;font-weight:600;outline:none;transition:border-color .25s,background .25s;margin-bottom:14px;}
-.login-card input:focus{border-color:var(--gold-1);background:rgba(255,255,255,.12);}
-.login-card input::placeholder{color:rgba(255,255,255,.4);}
-.login-card .btn{width:100%;padding:15px;font-size:15px;}
-.login-error{margin-top:14px;color:#f87171;font-size:13px;font-weight:700;display:none;}
-.login-error.show{display:block;}
 
 .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:26px;}
 .stat{padding:20px 18px;border-radius:16px;background:linear-gradient(135deg,rgba(255,255,255,.06),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.1);transition:transform .3s var(--bounce),border-color .3s;}
@@ -82,8 +110,12 @@ body{margin:0;font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:li
 .field label{font-size:11.5px;font-weight:800;letter-spacing:1.3px;text-transform:uppercase;color:rgba(255,255,255,.6);}
 .field input,.field textarea,.field select{padding:14px 16px;border-radius:14px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);color:#fff;font-size:15px;font-weight:600;outline:none;font-family:inherit;}
 .field input:focus,.field textarea:focus,.field select:focus{border-color:var(--gold-1);background:rgba(255,255,255,.12);}
-.field textarea{min-height:100px;resize:vertical;line-height:1.5;}
+.field textarea{min-height:100px;resize:vertical;line-height:1.5;font-family:monospace;font-size:12px;word-break:break-all;}
 .field select option{background:#0b1220;color:#fff;}
+.sys-hr{border:none;border-top:1px solid rgba(255,255,255,.08);margin:14px 0;}
+
+/* field-scoped pw toggle uses same .pw-toggle but on dark bg */
+.field .pw-wrap{margin-bottom:0;}
 
 .admin-list{display:grid;gap:10px;margin-top:22px;}
 .admin-row{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 18px;border-radius:14px;background:linear-gradient(135deg,rgba(255,255,255,.05),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.1);}
@@ -91,6 +123,7 @@ body{margin:0;font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:li
 .admin-row .who .u{font-weight:800;font-size:14px;letter-spacing:-.2px;}
 .admin-row .who .n{font-size:11.5px;font-weight:700;color:rgba(255,255,255,.55);margin-top:3px;overflow-wrap:anywhere;}
 .super-pill{display:inline-block;margin-left:8px;padding:2px 8px;border-radius:999px;font-size:9.5px;font-weight:800;letter-spacing:1.1px;text-transform:uppercase;background:linear-gradient(135deg,#f7e07a,#d4af37);color:#0b1220;}
+.admin-pill{display:inline-block;margin-left:8px;padding:2px 8px;border-radius:999px;font-size:9.5px;font-weight:800;letter-spacing:1.1px;text-transform:uppercase;background:rgba(255,255,255,.1);color:#cbd5e1;border:1px solid rgba(255,255,255,.15);}
 
 .toast{position:fixed;top:20px;right:20px;padding:14px 20px;border-radius:12px;font-weight:800;font-size:13.5px;color:#fff;box-shadow:0 20px 40px -14px rgba(0,0,0,.6);transform:translateY(-120%);transition:transform .35s var(--bounce);z-index:100;}
 .toast.show{transform:translateY(0);}
@@ -119,7 +152,7 @@ body{margin:0;font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:li
 .adm-kv{display:flex;justify-content:space-between;gap:12px;padding:7px 0;font-size:12.5px;border-bottom:1px dashed rgba(255,255,255,.1);}
 .adm-kv:last-child{border-bottom:none;}
 .adm-kv span:first-child{color:rgba(255,255,255,.5);font-weight:800;font-size:10px;letter-spacing:.7px;text-transform:uppercase;flex:0 0 auto;}
-.adm-kv span:last-child{font-weight:800;color:#fff;text-align:right;overflow-wrap:anywhere;}
+.adm-kv span:last-child{font-weight:800;color:#fff;text-align:right;overflow-wrap:anywhere;font-family:monospace;font-size:11px;}
 .adm-actions{display:flex;gap:9px;margin-top:20px;flex-wrap:wrap;}
 .adm-actions .btn{flex:1;min-width:120px;padding:13px 18px;font-size:13.5px;border-radius:12px;display:inline-flex;align-items:center;justify-content:center;gap:7px;}
 
@@ -129,115 +162,204 @@ body{margin:0;font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:li
   .stat .n{font-size:22px;}
   .wrap{padding:20px 16px 40px;}
   .admin-row{flex-direction:column;align-items:flex-start;}
+  .login-card{padding:24px 20px;}
 }
 </style>
 </head>
 <body>
+
+<!-- ==================== LOGIN ==================== -->
+<div id="loginView">
+  <div class="login-card">
+    <div style="display:flex;align-items:center;gap:14px;margin-bottom:20px;">
+      <div class="logo"><img src="logo.jpg" alt="ABJ" /></div>
+      <div>
+        <h2 style="margin:0">Admin Sign In</h2>
+        <p style="margin:4px 0 0">ABJ Tutorial · Control Panel</p>
+      </div>
+    </div>
+    <label for="adminUser">Username</label>
+    <input id="adminUser" type="text" placeholder="super" autocomplete="username" value="super" />
+    <label for="adminPass">Password</label>
+    <div class="pw-wrap">
+      <input id="adminPass" type="password" placeholder="Admin password" autocomplete="current-password" />
+      <button type="button" class="pw-toggle" data-target="adminPass" aria-label="Show/hide password">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+      </button>
+    </div>
+    <button class="btn btn-gold" id="loginBtn" type="button" style="margin-top:4px;">Sign In →</button>
+    <div class="login-error" id="loginError">Invalid credentials.</div>
+  </div>
+</div>
+
+<!-- ==================== DASHBOARD ==================== -->
+<div id="dashView" style="display:none">
 <div class="wrap">
 
-  <div id="loginView">
-    <div class="login-card">
-      <div style="display:flex;align-items:center;gap:14px;margin-bottom:20px;">
-        <div class="logo"><img src="logo.jpg" alt="ABJ" /></div>
-        <div>
-          <h2 style="margin:0">Admin Sign In</h2>
-          <p style="margin:4px 0 0">ABJ Tutorial · Control Panel</p>
+  <div class="head">
+    <div class="head-left">
+      <div class="logo"><img src="logo.jpg" alt="ABJ" /></div>
+      <div>
+        <h1 id="dashTitle">Admin</h1>
+        <p id="welcomeLine">ABJ Tutorial · Control Panel</p>
+      </div>
+    </div>
+    <button class="btn btn-ghost" id="logoutBtn" type="button">Sign Out</button>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><div class="n" id="stTotal">0</div><div class="l">Total</div></div>
+    <div class="stat"><div class="n" id="stPending">0</div><div class="l">Pending</div></div>
+    <div class="stat"><div class="n" id="stApproved">0</div><div class="l">Approved</div></div>
+    <div class="stat"><div class="n" id="stRejected">0</div><div class="l">Rejected</div></div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab active" data-tab="pending" type="button">⏳ Pending</button>
+    <button class="tab" data-tab="approved" type="button">✅ Approved</button>
+    <button class="tab" data-tab="rejected" type="button">❌ Rejected</button>
+    <button class="tab" data-tab="profile" type="button">👤 Profile</button>
+    <button class="tab super-only" data-tab="videos" type="button" style="display:none">🎬 Videos</button>
+    <button class="tab super-only" data-tab="testimonials" type="button" style="display:none">💬 Testimonials</button>
+    <button class="tab super-only" data-tab="admins" type="button" style="display:none">👥 Admins</button>
+    <button class="tab super-only" data-tab="settings" type="button" style="display:none">⚙️ Settings</button>
+    <button class="tab super-only" data-tab="system" type="button" style="display:none">🔐 System</button>
+  </div>
+
+  <div class="tab-content active" id="tab-pending"><div class="list" id="listPending"></div></div>
+  <div class="tab-content" id="tab-approved"><div class="list" id="listApproved"></div></div>
+  <div class="tab-content" id="tab-rejected"><div class="list" id="listRejected"></div></div>
+
+  <!-- PROFILE -->
+  <div class="tab-content" id="tab-profile">
+    <div class="settings">
+      <div style="padding:14px 18px;border-radius:14px;background:rgba(59,130,246,.08);border:1px solid rgba(59,130,246,.35);font-size:12.5px;color:#93c5fd;line-height:1.65;max-width:560px;margin-bottom:8px;">
+        <strong>Your account.</strong> Change your username, display name, or password. Changing username or password signs you out.
+      </div>
+      <div class="field"><label>Role</label><input type="text" id="profRole" disabled /></div>
+      <div class="field"><label>Username</label><input type="text" id="profUsername" placeholder="lowercase a-z, 0-9, _" maxlength="24" autocomplete="off" /></div>
+      <div class="field"><label>Display Name</label><input type="text" id="profFullName" placeholder="e.g. Dagim Desalegn" maxlength="64" autocomplete="off" /></div>
+
+      <hr class="sys-hr" />
+
+      <h3 style="margin:4px 0;font-size:14px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--gold-1);">Change Password</h3>
+      <div class="field">
+        <label>Current Password</label>
+        <div class="pw-wrap">
+          <input type="password" id="profCurrentPass" placeholder="Required to change password" autocomplete="current-password" />
+          <button type="button" class="pw-toggle" data-target="profCurrentPass" aria-label="Show/hide password">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
         </div>
       </div>
-      <label for="adminUser">Username</label>
-      <input id="adminUser" type="text" placeholder="super" autocomplete="username" value="super" />
-      <label for="adminPass">Password</label>
-      <input id="adminPass" type="password" placeholder="Admin password" autocomplete="current-password" />
-      <button class="btn btn-gold" id="loginBtn" type="button">Sign In →</button>
-      <div class="login-error" id="loginError">Invalid credentials.</div>
+      <div class="field">
+        <label>New Password</label>
+        <div class="pw-wrap">
+          <input type="password" id="profNewPass" placeholder="At least 6 characters" autocomplete="new-password" />
+          <button type="button" class="pw-toggle" data-target="profNewPass" aria-label="Show/hide password">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <button class="btn btn-gold" id="saveProfile" type="button" style="padding:14px;font-size:14px;margin-top:8px;">Save Profile</button>
     </div>
   </div>
 
-  <div id="dashView" style="display:none">
-    <div class="head">
-      <div class="head-left">
-        <div class="logo"><img src="logo.jpg" alt="ABJ" /></div>
-        <div>
-          <h1>Admin Dashboard</h1>
-          <p id="welcomeLine">ABJ Tutorial · Control Panel</p>
-        </div>
-      </div>
-      <button class="btn btn-ghost" id="logoutBtn" type="button">Sign Out</button>
+  <!-- VIDEOS -->
+  <div class="tab-content" id="tab-videos">
+    <div class="settings" style="max-width:640px">
+      <div class="field"><label>Video Title</label><input type="text" id="vidTitle" placeholder="e.g. Maths Chapter 1 — Set Theory" maxlength="200" /></div>
+      <div class="field"><label>YouTube URL or Video ID</label><input type="text" id="vidUrl" placeholder="https://youtu.be/xxxx or xxxx" maxlength="500" /></div>
+      <div class="field"><label>Tag / Subject (short)</label><input type="text" id="vidTag" placeholder="Maths" maxlength="40" /></div>
+      <button class="btn btn-add" id="addVideoBtn" type="button">+ Add Video</button>
     </div>
-
-    <div class="stats">
-      <div class="stat"><div class="n" id="stTotal">0</div><div class="l">Total</div></div>
-      <div class="stat"><div class="n" id="stPending">0</div><div class="l">Pending</div></div>
-      <div class="stat"><div class="n" id="stApproved">0</div><div class="l">Approved</div></div>
-      <div class="stat"><div class="n" id="stRejected">0</div><div class="l">Rejected</div></div>
-    </div>
-
-    <div class="tabs">
-      <button class="tab active" data-tab="pending" type="button">⏳ Pending</button>
-      <button class="tab" data-tab="approved" type="button">✅ Approved</button>
-      <button class="tab" data-tab="rejected" type="button">❌ Rejected</button>
-      <button class="tab super-only" data-tab="videos" type="button" style="display:none">🎬 Videos</button>
-      <button class="tab super-only" data-tab="testimonials" type="button" style="display:none">💬 Testimonials</button>
-      <button class="tab super-only" data-tab="admins" type="button" style="display:none">👥 Admins</button>
-      <button class="tab super-only" data-tab="settings" type="button" style="display:none">⚙️ Settings</button>
-    </div>
-
-    <div class="tab-content active" id="tab-pending"><div class="list" id="listPending"></div></div>
-    <div class="tab-content" id="tab-approved"><div class="list" id="listApproved"></div></div>
-    <div class="tab-content" id="tab-rejected"><div class="list" id="listRejected"></div></div>
-
-    <div class="tab-content" id="tab-videos">
-      <div class="settings" style="max-width:640px">
-        <div class="field"><label>Video Title</label><input type="text" id="vidTitle" placeholder="e.g. Maths Chapter 1 — Set Theory" maxlength="200" /></div>
-        <div class="field"><label>YouTube URL or Video ID</label><input type="text" id="vidUrl" placeholder="https://youtu.be/xxxx or xxxx" maxlength="500" /></div>
-        <div class="field"><label>Tag / Subject (short)</label><input type="text" id="vidTag" placeholder="Maths" maxlength="40" /></div>
-        <button class="btn btn-add" id="addVideoBtn" type="button">+ Add Video</button>
-      </div>
-      <div class="admin-list" id="videoList"></div>
-    </div>
-
-    <div class="tab-content" id="tab-testimonials">
-      <div class="settings" style="max-width:640px">
-        <div class="field"><label>Student Name</label><input type="text" id="tstName" placeholder="e.g. Girum T." maxlength="64" /></div>
-        <div class="field"><label>Subject</label><input type="text" id="tstSubject" placeholder="Maths" maxlength="64" /></div>
-        <div class="field"><label>Stars (1–5)</label>
-          <select id="tstStars">
-            <option value="5" selected>5 ★★★★★</option>
-            <option value="4">4 ★★★★</option>
-            <option value="3">3 ★★★</option>
-            <option value="2">2 ★★</option>
-            <option value="1">1 ★</option>
-          </select>
-        </div>
-        <div class="field"><label>Testimonial Text</label><textarea id="tstText" placeholder="What the student said..." maxlength="1000"></textarea></div>
-        <button class="btn btn-add" id="addTstBtn" type="button">+ Add Testimonial</button>
-      </div>
-      <div class="admin-list" id="tstList"></div>
-    </div>
-
-    <div class="tab-content" id="tab-settings">
-      <div class="settings">
-        <div class="field"><label>Registration Fee (ETB)</label><input type="number" id="setFee" min="1" step="1" /></div>
-        <div class="field"><label>Telebirr Number</label><input type="text" id="setTelebirr" maxlength="32" /></div>
-        <div class="field"><label>CBE Account</label><input type="text" id="setCBE" maxlength="32" /></div>
-        <div class="field"><label>mPesa Number</label><input type="text" id="setMpesa" maxlength="32" /></div>
-        <div class="field"><label>Contact Telegram</label><input type="text" id="setContactUser" maxlength="64" /></div>
-        <div class="field"><label>Contact Phone</label><input type="text" id="setContactPhone" maxlength="32" /></div>
-        <button class="btn btn-gold" id="saveSettings" type="button" style="padding:14px;font-size:14px">Save Settings</button>
-      </div>
-    </div>
-
-    <div class="tab-content" id="tab-admins">
-      <div class="settings" style="max-width:640px">
-        <div class="field"><label>New Admin Username</label><input type="text" id="newAdminUser" placeholder="e.g. dagim" maxlength="24" /></div>
-        <div class="field"><label>New Admin Full Name (optional)</label><input type="text" id="newAdminName" placeholder="Dagim Desalegn" maxlength="64" /></div>
-        <div class="field"><label>New Admin Password</label><input type="password" id="newAdminPass" placeholder="At least 6 characters" /></div>
-        <button class="btn btn-add" id="addAdminBtn" type="button">+ Add Admin</button>
-      </div>
-      <div class="admin-list" id="adminList"></div>
-    </div>
-
+    <div class="admin-list" id="videoList"></div>
   </div>
+
+  <!-- TESTIMONIALS -->
+  <div class="tab-content" id="tab-testimonials">
+    <div class="settings" style="max-width:640px">
+      <div class="field"><label>Student Name</label><input type="text" id="tstName" placeholder="e.g. Girum T." maxlength="64" /></div>
+      <div class="field"><label>Subject</label><input type="text" id="tstSubject" placeholder="Maths" maxlength="64" /></div>
+      <div class="field"><label>Stars (1–5)</label>
+        <select id="tstStars">
+          <option value="5" selected>5 ★★★★★</option>
+          <option value="4">4 ★★★★</option>
+          <option value="3">3 ★★★</option>
+          <option value="2">2 ★★</option>
+          <option value="1">1 ★</option>
+        </select>
+      </div>
+      <div class="field"><label>Testimonial Text</label><textarea id="tstText" placeholder="What the student said..." maxlength="1000"></textarea></div>
+      <button class="btn btn-add" id="addTstBtn" type="button">+ Add Testimonial</button>
+    </div>
+    <div class="admin-list" id="tstList"></div>
+  </div>
+
+  <!-- SETTINGS -->
+  <div class="tab-content" id="tab-settings">
+    <div class="settings">
+      <div class="field"><label>Registration Fee (ETB)</label><input type="number" id="setFee" min="1" step="1" /></div>
+      <div class="field"><label>Telebirr Number</label><input type="text" id="setTelebirr" maxlength="32" /></div>
+      <div class="field"><label>CBE Account</label><input type="text" id="setCBE" maxlength="32" /></div>
+      <div class="field"><label>mPesa Number</label><input type="text" id="setMpesa" maxlength="32" /></div>
+      <div class="field"><label>Contact Telegram</label><input type="text" id="setContactUser" maxlength="64" /></div>
+      <div class="field"><label>Contact Phone</label><input type="text" id="setContactPhone" maxlength="32" /></div>
+      <button class="btn btn-gold" id="saveSettings" type="button" style="padding:14px;font-size:14px">Save Settings</button>
+      <button class="btn btn-ghost" id="resetRateLimits" type="button" style="padding:14px;font-size:14px;margin-top:4px">🔄 Reset Rate Limits</button>
+    </div>
+  </div>
+
+  <!-- SYSTEM -->
+  <div class="tab-content" id="tab-system">
+    <div class="settings">
+      <div style="padding:14px 18px;border-radius:14px;background:rgba(251,191,36,.08);border:1px solid rgba(251,191,36,.35);font-size:12.5px;color:#fbbf24;line-height:1.65;max-width:640px;margin-bottom:8px;">
+        <strong>⚠️ Sensitive.</strong> Powers Telegram invites and payment verification. Changes take effect within 60 seconds.
+      </div>
+
+      <h3 style="margin:18px 0 4px;font-size:14px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--gold-1);">Telegram API</h3>
+      <div class="field"><label>API ID</label><input type="text" id="sysTgApiId" placeholder="e.g. 34415625" maxlength="32" autocomplete="off" /></div>
+      <div class="field"><label>API Hash</label><input type="text" id="sysTgApiHash" placeholder="e.g. b5a21951..." maxlength="128" autocomplete="off" /></div>
+      <div class="field"><label>Session String</label><textarea id="sysTgSession" placeholder="The long session string from your script" autocomplete="off"></textarea></div>
+      <div class="field"><label>Channel ID</label><input type="text" id="sysTgChannel" placeholder="e.g. -1003816618687" maxlength="32" autocomplete="off" /></div>
+
+      <hr class="sys-hr" />
+
+      <h3 style="margin:4px 0;font-size:14px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--gold-1);">Verify.ET (Payment API)</h3>
+      <div class="field"><label>API URL</label><input type="text" id="sysVerifyUrl" placeholder="https://verify.et/api/verify" maxlength="200" autocomplete="off" /></div>
+      <div class="field"><label>API Key</label><input type="text" id="sysVerifyKey" placeholder="The Verify.ET API key" maxlength="256" autocomplete="off" /></div>
+
+      <button class="btn btn-gold" id="saveSystem" type="button" style="padding:14px;font-size:14px;margin-top:8px;">Save System Settings</button>
+    </div>
+  </div>
+
+  <!-- ADMINS -->
+  <div class="tab-content" id="tab-admins">
+    <div class="settings" style="max-width:640px">
+      <div class="field"><label>New Username</label><input type="text" id="newAdminUser" placeholder="e.g. dagim" maxlength="24" /></div>
+      <div class="field"><label>Full Name (optional)</label><input type="text" id="newAdminName" placeholder="Dagim Desalegn" maxlength="64" /></div>
+      <div class="field">
+        <label>Password</label>
+        <div class="pw-wrap">
+          <input type="password" id="newAdminPass" placeholder="At least 6 characters" autocomplete="new-password" />
+          <button type="button" class="pw-toggle" data-target="newAdminPass" aria-label="Show/hide password">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </div>
+      </div>
+      <div class="field"><label>Role</label>
+        <select id="newAdminRole">
+          <option value="admin" selected>Admin (regular)</option>
+          <option value="super">Super Admin (full access)</option>
+        </select>
+      </div>
+      <button class="btn btn-add" id="addAdminBtn" type="button">+ Add User</button>
+    </div>
+    <div class="admin-list" id="adminList"></div>
+  </div>
+
+</div>
 </div>
 
 <div class="toast" id="toast"></div>
@@ -266,6 +388,7 @@ const state = {
   token: sessionStorage.getItem('abj_admin_token') || '',
   role: sessionStorage.getItem('abj_admin_role') || '',
   username: sessionStorage.getItem('abj_admin_user') || '',
+  full_name: sessionStorage.getItem('abj_admin_name') || '',
 };
 
 const loginView = document.getElementById('loginView');
@@ -277,6 +400,34 @@ const loginError = document.getElementById('loginError');
 const logoutBtn = document.getElementById('logoutBtn');
 const toast = document.getElementById('toast');
 const welcomeLine = document.getElementById('welcomeLine');
+const dashTitle = document.getElementById('dashTitle');
+
+/* ============================================================
+   PASSWORD EYE TOGGLE
+   ============================================================ */
+function wirePwToggles(root){
+  (root || document).querySelectorAll('.pw-toggle').forEach(btn => {
+    if (btn._wired) return;
+    btn._wired = true;
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      const targetId = btn.dataset.target;
+      const input = document.getElementById(targetId);
+      if (!input) return;
+      const isPw = input.type === 'password';
+      input.type = isPw ? 'text' : 'password';
+      /* Swap icon: eye ↔ eye-off */
+      btn.innerHTML = isPw
+        ? `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>`
+        : `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>`;
+      /* Keep the input focused */
+      input.focus();
+      /* Move cursor to end */
+      try { const v = input.value; input.setSelectionRange(v.length, v.length); } catch {}
+    });
+  });
+}
+wirePwToggles(document);
 
 const admModalEl = document.getElementById('admModal');
 const admBadge   = document.getElementById('admBadge');
@@ -358,13 +509,15 @@ async function doLogin(){
       return;
     }
     state.token = data.token; state.role = data.role; state.username = data.username;
+    state.full_name = data.full_name || '';
     sessionStorage.setItem('abj_admin_token', state.token);
     sessionStorage.setItem('abj_admin_role', state.role);
     sessionStorage.setItem('abj_admin_user', state.username);
+    sessionStorage.setItem('abj_admin_name', state.full_name);
     showDash();
     setTimeout(() => showAdmModal({
       tone: 'ok', badge: '👋',
-      title: 'Welcome back, ' + state.username + '!',
+      title: 'Welcome back, ' + (state.full_name || state.username) + '!',
       message: 'Signed in as ' + (state.role === 'super' ? 'Super Admin' : 'Admin') + '. Dashboard is ready.',
     }), 250);
   } catch {
@@ -377,8 +530,8 @@ async function doLogin(){
 
 logoutBtn.addEventListener('click', () => {
   sessionStorage.clear();
-  state.token = ''; state.role = ''; state.username = '';
-  loginView.style.display = 'block';
+  state.token = ''; state.role = ''; state.username = ''; state.full_name = '';
+  loginView.style.display = 'flex';
   dashView.style.display = 'none';
 });
 
@@ -387,10 +540,18 @@ function showDash(){
   dashView.style.display = 'block';
   loginError.classList.remove('show');
   adminPass.value = '';
-  welcomeLine.textContent = `Signed in as ${state.username} · ${state.role === 'super' ? 'Super Admin' : 'Admin'}`;
+
+  dashTitle.textContent = state.full_name || state.username;
+  welcomeLine.textContent = `Signed in as @${state.username} · ${state.role === 'super' ? 'Super Admin' : 'Admin'}`;
+
   document.querySelectorAll('.super-only').forEach(el => {
     el.style.display = state.role === 'super' ? '' : 'none';
   });
+
+  document.getElementById('profRole').value     = state.role === 'super' ? 'Super Admin' : 'Admin';
+  document.getElementById('profUsername').value = state.username;
+  document.getElementById('profFullName').value = state.full_name;
+
   loadTab('pending');
   updateCounts();
 }
@@ -407,9 +568,11 @@ document.querySelectorAll('.tab').forEach(tab => {
     currentTab = tab.dataset.tab;
     if (['pending', 'approved', 'rejected'].includes(currentTab)) loadTab(currentTab);
     if (currentTab === 'settings') loadSettings();
+    if (currentTab === 'system') loadSystem();
     if (currentTab === 'admins') loadAdmins();
     if (currentTab === 'videos') loadVideos();
     if (currentTab === 'testimonials') loadTestimonials();
+    if (currentTab === 'profile') loadProfile();
   });
 });
 
@@ -487,10 +650,7 @@ function render(box, status, items){
 
     return `<div class="item">
       <div class="item-head">
-        <div>
-          <div class="item-name">${esc(r.full_name)}</div>
-          <div class="item-sub">${esc(r.public_id)}</div>
-        </div>
+        <div><div class="item-name">${esc(r.full_name)}</div><div class="item-sub">${esc(r.public_id)}</div></div>
         <div style="display:flex;flex-wrap:wrap;gap:4px;">
           <span class="pill ${r.status}">${r.status}</span>${autoTag}${verifTag}
         </div>
@@ -521,18 +681,14 @@ async function handleAction(act, id, btn){
   btn.textContent = act === 'approve' ? 'Creating invite...' : 'Rejecting...';
   try {
     let res, data;
-
     if (act === 'approve'){
-      res = await fetch('/api/admin-approve', {
-        method: 'POST', headers: authHeaders(true), body: JSON.stringify({ id })
-      });
+      res = await fetch('/api/admin-approve', { method: 'POST', headers: authHeaders(true), body: JSON.stringify({ id }) });
       data = await res.json();
       if (!res.ok) { admError('Approval Failed', data.error || 'Action failed.'); return; }
-
       showAdmModal({
         tone: 'ok', badge: '✅',
         title: 'Registration Approved',
-        message: 'A one-time invite link was created and is now live. Copy it or share it with the student.',
+        message: 'A one-time invite link was created and is now live.',
         extra: `<div class="adm-kv"><span>Student</span><span>${esc(data.public_id || '')}</span></div>
                 <div class="adm-link">${esc(data.invite_link || '')}</div>`,
         buttons: [
@@ -543,12 +699,9 @@ async function handleAction(act, id, btn){
       });
     } else {
       const reason = prompt('Reason for rejection (optional):');
-      res = await fetch('/api/admin-reject', {
-        method: 'POST', headers: authHeaders(true), body: JSON.stringify({ id, reason: reason || '' })
-      });
+      res = await fetch('/api/admin-reject', { method: 'POST', headers: authHeaders(true), body: JSON.stringify({ id, reason: reason || '' }) });
       data = await res.json();
       if (!res.ok) { admError('Rejection Failed', data.error || 'Action failed.'); return; }
-
       showAdmModal({
         tone: 'warn', badge: '❌',
         title: 'Registration Rejected',
@@ -556,7 +709,6 @@ async function handleAction(act, id, btn){
         extra: reason ? `<div class="adm-link" style="background:rgba(239,68,68,.12);border-color:rgba(239,68,68,.4);color:#fca5a5;">${esc(reason)}</div>` : ''
       });
     }
-
     await loadTab(currentTab);
     await updateCounts();
   } catch {
@@ -566,6 +718,71 @@ async function handleAction(act, id, btn){
   }
 }
 
+/* ============================================================
+   PROFILE
+   ============================================================ */
+async function loadProfile(){
+  try {
+    const res = await fetch('/api/admin-admins?action=profile', { headers: authHeaders() });
+    const data = await res.json();
+    if (!res.ok) return;
+    const p = data.profile || {};
+    state.username = p.username;
+    state.full_name = p.full_name || '';
+    sessionStorage.setItem('abj_admin_user', p.username);
+    sessionStorage.setItem('abj_admin_name', p.full_name || '');
+    document.getElementById('profRole').value     = p.role === 'super' ? 'Super Admin' : 'Admin';
+    document.getElementById('profUsername').value = p.username;
+    document.getElementById('profFullName').value = p.full_name || '';
+    document.getElementById('profCurrentPass').value = '';
+    document.getElementById('profNewPass').value = '';
+    dashTitle.textContent = p.full_name || p.username;
+  } catch {}
+}
+
+document.getElementById('saveProfile').addEventListener('click', async () => {
+  const btn = document.getElementById('saveProfile');
+  const orig = btn.textContent;
+  btn.disabled = true; btn.textContent = 'Saving...';
+  const payload = {
+    username:         document.getElementById('profUsername').value.trim().toLowerCase(),
+    full_name:        document.getElementById('profFullName').value.trim(),
+    current_password: document.getElementById('profCurrentPass').value,
+    new_password:     document.getElementById('profNewPass').value,
+  };
+  try {
+    const res = await fetch('/api/admin-admins?action=profile', {
+      method: 'POST', headers: authHeaders(true), body: JSON.stringify(payload)
+    });
+    const data = await res.json();
+    if (!res.ok) { admError('Save Failed', data.error || 'Could not save profile.'); return; }
+    showAdmModal({
+      tone: 'ok', badge: '👤',
+      title: 'Profile Updated',
+      message: data.reauth_required
+        ? 'Username or password changed. You will be signed out — sign in with your new credentials.'
+        : 'Your profile has been saved.',
+      extra: `<div class="adm-kv"><span>Username</span><span>${esc(data.profile.username)}</span></div>
+              <div class="adm-kv"><span>Name</span><span>${esc(data.profile.full_name || '—')}</span></div>`,
+      buttons: [{
+        label: 'OK', class: 'btn-gold',
+        onClick: () => {
+          if (data.reauth_required) { logoutBtn.click(); }
+          else {
+            state.full_name = data.profile.full_name || '';
+            sessionStorage.setItem('abj_admin_name', state.full_name);
+            dashTitle.textContent = state.full_name || state.username;
+          }
+        }
+      }]
+    });
+  } catch { admError('Network Error', 'Could not reach the server.'); }
+  finally { btn.disabled = false; btn.textContent = orig; }
+});
+
+/* ============================================================
+   VIDEOS / TESTIMONIALS / SETTINGS / SYSTEM / ADMINS
+   ============================================================ */
 async function loadVideos(){
   const box = document.getElementById('videoList');
   box.innerHTML = '<div class="empty"><div class="icon">⏳</div><p>Loading...</p></div>';
@@ -574,36 +791,28 @@ async function loadVideos(){
     if (!res.ok) { box.innerHTML = ''; return; }
     const data = await res.json();
     const items = data.items || [];
-    if (!items.length){
-      box.innerHTML = '<div class="empty"><div class="icon">🎬</div><p>No videos yet. Add one above.</p></div>';
-      return;
-    }
+    if (!items.length){ box.innerHTML = '<div class="empty"><div class="icon">🎬</div><p>No videos yet.</p></div>'; return; }
     box.innerHTML = items.map(v => `
       <div class="admin-row">
-        <div class="who">
-          <div class="u">${esc(v.title)}</div>
-          <div class="n">${esc(v.tag)} · ${esc(v.url)}</div>
-        </div>
+        <div class="who"><div class="u">${esc(v.title)}</div><div class="n">${esc(v.tag)} · ${esc(v.url)}</div></div>
         <button class="btn btn-danger" data-del-vid="${v.id}">Delete</button>
       </div>`).join('');
     box.querySelectorAll('[data-del-vid]').forEach(btn => {
       btn.addEventListener('click', async () => {
         if (!confirm('Delete this video?')) return;
         const r = await fetch('/api/admin-videos?id=' + encodeURIComponent(btn.dataset.delVid), { method: 'DELETE', headers: authHeaders() });
-        if (r.ok) { admSuccess('Video Removed', 'The lesson was deleted from the public playlist.'); loadVideos(); }
+        if (r.ok) { admSuccess('Video Removed', 'The lesson was deleted.'); loadVideos(); }
         else admError('Delete Failed', 'Could not remove the video.');
       });
     });
-  } catch {
-    box.innerHTML = '<div class="empty"><div class="icon">⚠️</div><p>Network error.</p></div>';
-  }
+  } catch { box.innerHTML = '<div class="empty"><div class="icon">⚠️</div><p>Network error.</p></div>'; }
 }
 
 document.getElementById('addVideoBtn').addEventListener('click', async () => {
   const title = document.getElementById('vidTitle').value.trim();
   const url   = document.getElementById('vidUrl').value.trim();
   const tag   = document.getElementById('vidTag').value.trim() || 'Lesson';
-  if (!title || !url) { admError('Missing Fields', 'Title and YouTube URL are required.'); return; }
+  if (!title || !url) { admError('Missing Fields', 'Title and URL are required.'); return; }
   const btn = document.getElementById('addVideoBtn');
   const orig = btn.textContent;
   btn.disabled = true; btn.textContent = 'Adding...';
@@ -611,16 +820,10 @@ document.getElementById('addVideoBtn').addEventListener('click', async () => {
     const res = await fetch('/api/admin-videos', { method: 'POST', headers: authHeaders(true), body: JSON.stringify({ title, url, tag }) });
     const data = await res.json();
     if (!res.ok) { admError('Could Not Add Video', data.error || 'Failed.'); return; }
-    showAdmModal({
-      tone: 'ok', badge: '🎬',
-      title: 'Video Added',
-      message: 'The lesson is now live on the home page playlist.',
-      extra: `<div class="adm-kv"><span>Title</span><span>${esc(title)}</span></div>
-              <div class="adm-kv"><span>Tag</span><span>${esc(tag)}</span></div>`
-    });
+    admSuccess('Video Added', 'The lesson is now live on the home page.');
     document.getElementById('vidTitle').value = '';
-    document.getElementById('vidUrl').value   = '';
-    document.getElementById('vidTag').value   = '';
+    document.getElementById('vidUrl').value = '';
+    document.getElementById('vidTag').value = '';
     loadVideos();
   } catch { admError('Network Error', 'Could not reach the server.'); }
   finally { btn.disabled = false; btn.textContent = orig; }
@@ -634,29 +837,21 @@ async function loadTestimonials(){
     if (!res.ok) { box.innerHTML = ''; return; }
     const data = await res.json();
     const items = data.items || [];
-    if (!items.length){
-      box.innerHTML = '<div class="empty"><div class="icon">💬</div><p>No testimonials yet. Add one above.</p></div>';
-      return;
-    }
+    if (!items.length){ box.innerHTML = '<div class="empty"><div class="icon">💬</div><p>No testimonials yet.</p></div>'; return; }
     box.innerHTML = items.map(t => `
       <div class="admin-row" style="align-items:flex-start">
-        <div class="who">
-          <div class="u">${esc(t.student_name)} — ${esc(t.subject)} ${'★'.repeat(t.stars)}</div>
-          <div class="n" style="line-height:1.5;margin-top:6px">${esc(t.text)}</div>
-        </div>
+        <div class="who"><div class="u">${esc(t.student_name)} — ${esc(t.subject)} ${'★'.repeat(t.stars)}</div><div class="n" style="line-height:1.5;margin-top:6px">${esc(t.text)}</div></div>
         <button class="btn btn-danger" data-del-tst="${t.id}">Delete</button>
       </div>`).join('');
     box.querySelectorAll('[data-del-tst]').forEach(btn => {
       btn.addEventListener('click', async () => {
         if (!confirm('Delete this testimonial?')) return;
         const r = await fetch('/api/admin-testimonials?id=' + encodeURIComponent(btn.dataset.delTst), { method: 'DELETE', headers: authHeaders() });
-        if (r.ok) { admSuccess('Testimonial Removed', 'It no longer appears on the home page.'); loadTestimonials(); }
-        else admError('Delete Failed', 'Could not remove the testimonial.');
+        if (r.ok) { admSuccess('Removed', 'No longer shown on home page.'); loadTestimonials(); }
+        else admError('Delete Failed', 'Could not remove.');
       });
     });
-  } catch {
-    box.innerHTML = '<div class="empty"><div class="icon">⚠️</div><p>Network error.</p></div>';
-  }
+  } catch { box.innerHTML = '<div class="empty"><div class="icon">⚠️</div><p>Network error.</p></div>'; }
 }
 
 document.getElementById('addTstBtn').addEventListener('click', async () => {
@@ -671,18 +866,11 @@ document.getElementById('addTstBtn').addEventListener('click', async () => {
   try {
     const res = await fetch('/api/admin-testimonials', { method: 'POST', headers: authHeaders(true), body: JSON.stringify({ student_name, subject, text, stars }) });
     const data = await res.json();
-    if (!res.ok) { admError('Could Not Add Testimonial', data.error || 'Failed.'); return; }
-    showAdmModal({
-      tone: 'ok', badge: '💬',
-      title: 'Testimonial Added',
-      message: 'It is now visible in the home-page slider.',
-      extra: `<div class="adm-kv"><span>Student</span><span>${esc(student_name)}</span></div>
-              <div class="adm-kv"><span>Subject</span><span>${esc(subject)}</span></div>
-              <div class="adm-kv"><span>Stars</span><span>${'★'.repeat(parseInt(stars,10))}</span></div>`
-    });
-    document.getElementById('tstName').value    = '';
+    if (!res.ok) { admError('Could Not Add', data.error || 'Failed.'); return; }
+    admSuccess('Testimonial Added', 'It is now visible on the home page.');
+    document.getElementById('tstName').value = '';
     document.getElementById('tstSubject').value = '';
-    document.getElementById('tstText').value    = '';
+    document.getElementById('tstText').value = '';
     loadTestimonials();
   } catch { admError('Network Error', 'Could not reach the server.'); }
   finally { btn.disabled = false; btn.textContent = orig; }
@@ -700,15 +888,7 @@ async function loadSettings(){
     document.getElementById('setMpesa').value        = s.account_mpesa || '';
     document.getElementById('setContactUser').value  = s.contact_username || '';
     document.getElementById('setContactPhone').value = s.contact_phone || '';
-    showAdmModal({
-      tone: 'ok', badge: '⚙️',
-      title: 'Settings Loaded',
-      message: 'Current fee and payment accounts are ready to edit.',
-      extra: `<div class="adm-kv"><span>Registration Fee</span><span>ETB ${Number(s.fee || 10000).toLocaleString()}</span></div>
-              <div class="adm-kv"><span>Telebirr</span><span>${esc(s.account_telebirr || '—')}</span></div>
-              <div class="adm-kv"><span>CBE</span><span>${esc(s.account_cbe || '—')}</span></div>
-              <div class="adm-kv"><span>mPesa</span><span>${esc(s.account_mpesa || '—')}</span></div>`
-    });
+    admSuccess('Settings Loaded', 'Current fee and accounts are ready to edit.');
   } catch {}
 }
 
@@ -728,15 +908,58 @@ document.getElementById('saveSettings').addEventListener('click', async () => {
     const res = await fetch('/api/admin-settings', { method: 'POST', headers: authHeaders(true), body: JSON.stringify(payload) });
     const data = await res.json();
     if (!res.ok) { admError('Save Failed', data.error || 'Could not save settings.'); return; }
-    showAdmModal({
-      tone: 'ok', badge: '💾',
-      title: 'Settings Saved',
-      message: 'The home-page registration form now shows the new fee and accounts immediately.',
-      extra: `<div class="adm-kv"><span>Registration Fee</span><span>ETB ${Number(payload.fee || 0).toLocaleString()}</span></div>
-              <div class="adm-kv"><span>Telebirr</span><span>${esc(payload.account_telebirr || '—')}</span></div>
-              <div class="adm-kv"><span>CBE</span><span>${esc(payload.account_cbe || '—')}</span></div>
-              <div class="adm-kv"><span>mPesa</span><span>${esc(payload.account_mpesa || '—')}</span></div>`
-    });
+    admSuccess('Settings Saved', 'Home page registration form shows new values immediately.');
+  } catch { admError('Network Error', 'Could not reach the server.'); }
+  finally { btn.disabled = false; btn.textContent = orig; }
+});
+
+document.getElementById('resetRateLimits')?.addEventListener('click', async () => {
+  if (!confirm('Clear all rate limits?')) return;
+  const btn = document.getElementById('resetRateLimits');
+  const orig = btn.textContent;
+  btn.disabled = true; btn.textContent = 'Clearing...';
+  try {
+    const res = await fetch('/api/admin-settings', { method: 'POST', headers: authHeaders(true), body: JSON.stringify({ reset_rate_limits: true }) });
+    const data = await res.json();
+    if (!res.ok) { admError('Reset Failed', data.error || 'Could not clear.'); return; }
+    admSuccess('Rate Limits Cleared', 'All users can register again immediately.');
+  } catch { admError('Network Error', 'Could not reach the server.'); }
+  finally { btn.disabled = false; btn.textContent = orig; }
+});
+
+async function loadSystem(){
+  try {
+    const res = await fetch('/api/admin-settings', { headers: authHeaders() });
+    const data = await res.json();
+    if (!res.ok) return;
+    const s = data.settings || {};
+    document.getElementById('sysTgApiId').value     = s.tg_api_id     || '';
+    document.getElementById('sysTgApiHash').value   = s.tg_api_hash   || '';
+    document.getElementById('sysTgSession').value   = s.tg_session    || '';
+    document.getElementById('sysTgChannel').value   = s.tg_channel_id || '';
+    document.getElementById('sysVerifyUrl').value   = s.verify_api_url || '';
+    document.getElementById('sysVerifyKey').value   = s.verify_api_key || '';
+    admSuccess('System Settings Loaded', 'Current values shown. Edit and save to update.');
+  } catch {}
+}
+
+document.getElementById('saveSystem').addEventListener('click', async () => {
+  const btn = document.getElementById('saveSystem');
+  const orig = btn.textContent;
+  btn.disabled = true; btn.textContent = 'Saving...';
+  const payload = {
+    tg_api_id:      document.getElementById('sysTgApiId').value.trim(),
+    tg_api_hash:    document.getElementById('sysTgApiHash').value.trim(),
+    tg_session:     document.getElementById('sysTgSession').value.trim(),
+    tg_channel_id:  document.getElementById('sysTgChannel').value.trim(),
+    verify_api_url: document.getElementById('sysVerifyUrl').value.trim(),
+    verify_api_key: document.getElementById('sysVerifyKey').value.trim(),
+  };
+  try {
+    const res = await fetch('/api/admin-settings', { method: 'POST', headers: authHeaders(true), body: JSON.stringify(payload) });
+    const data = await res.json();
+    if (!res.ok) { admError('Save Failed', data.error || 'Could not save system settings.'); return; }
+    admSuccess('System Settings Saved', 'Changes take effect within 60 seconds on the next API request.');
   } catch { admError('Network Error', 'Could not reach the server.'); }
   finally { btn.disabled = false; btn.textContent = orig; }
 });
@@ -749,23 +972,25 @@ async function loadAdmins(){
     if (!res.ok) { listBox.innerHTML = ''; return; }
     const data = await res.json();
     const items = data.admins || [];
-    listBox.innerHTML = `
-      <div class="admin-row" style="background:linear-gradient(135deg,rgba(247,224,122,.15),rgba(212,175,55,.08));border-color:rgba(247,224,122,.4);">
-        <div class="who"><div class="u">super <span class="super-pill">Super Admin</span></div><div class="n">Environment-configured super admin</div></div>
-      </div>` + items.map(a => `
-        <div class="admin-row">
-          <div class="who">
-            <div class="u">${esc(a.username)}</div>
-            <div class="n">${esc(a.full_name || 'No name')} · Added ${new Date(a.created_at).toLocaleDateString()}</div>
-          </div>
-          <button class="btn btn-danger" data-del="${a.id}">Delete</button>
-        </div>`).join('');
+    listBox.innerHTML = items.map(a => {
+      const isSuper = a.role === 'super';
+      const isMe = a.username === state.username;
+      const roleTag = isSuper ? `<span class="super-pill">Super Admin</span>` : `<span class="admin-pill">Admin</span>`;
+      const deleteBtn = (!isSuper && !isMe) ? `<button class="btn btn-danger" data-del="${a.id}">Delete</button>` : '';
+      return `<div class="admin-row">
+        <div class="who">
+          <div class="u">${esc(a.full_name || a.username)}${roleTag}</div>
+          <div class="n">@${esc(a.username)} · Added ${new Date(a.created_at).toLocaleDateString()}</div>
+        </div>
+        ${deleteBtn}
+      </div>`;
+    }).join('');
     listBox.querySelectorAll('[data-del]').forEach(btn => {
       btn.addEventListener('click', async () => {
-        if (!confirm('Delete this admin?')) return;
+        if (!confirm('Delete this user?')) return;
         const r = await fetch('/api/admin-admins?id=' + encodeURIComponent(btn.dataset.del), { method: 'DELETE', headers: authHeaders() });
-        if (r.ok) { admSuccess('Admin Removed', 'That admin can no longer sign in.'); loadAdmins(); }
-        else admError('Delete Failed', 'Could not remove the admin.');
+        if (r.ok) { admSuccess('User Removed', 'They can no longer sign in.'); loadAdmins(); }
+        else admError('Delete Failed', 'Could not remove.');
       });
     });
   } catch {
@@ -777,25 +1002,22 @@ document.getElementById('addAdminBtn').addEventListener('click', async () => {
   const u = document.getElementById('newAdminUser').value.trim().toLowerCase();
   const n = document.getElementById('newAdminName').value.trim();
   const p = document.getElementById('newAdminPass').value;
+  const r = document.getElementById('newAdminRole').value;
   if (!u || !p) { admError('Missing Fields', 'Username and password are required.'); return; }
   const btn = document.getElementById('addAdminBtn');
   const orig = btn.textContent;
   btn.disabled = true; btn.textContent = 'Adding...';
   try {
-    const res = await fetch('/api/admin-admins', { method: 'POST', headers: authHeaders(true), body: JSON.stringify({ username: u, password: p, full_name: n }) });
+    const res = await fetch('/api/admin-admins', { method: 'POST', headers: authHeaders(true), body: JSON.stringify({ username: u, password: p, full_name: n, role: r }) });
     const data = await res.json();
-    if (!res.ok) { admError('Could Not Add Admin', data.error || 'Failed.'); return; }
-    showAdmModal({
-      tone: 'ok', badge: '👤',
-      title: 'Admin Added',
-      message: 'This account can now sign in to the control panel.',
-      extra: `<div class="adm-kv"><span>Username</span><span>${esc(u)}</span></div>
-              <div class="adm-kv"><span>Name</span><span>${esc(n || '—')}</span></div>
-              <div class="adm-kv"><span>Role</span><span>Admin</span></div>`
-    });
+    if (!res.ok) { admError('Could Not Add User', data.error || 'Failed.'); return; }
+    admSuccess('User Added', 'They can now sign in to the control panel.',
+      `<div class="adm-kv"><span>Username</span><span>${esc(u)}</span></div>
+       <div class="adm-kv"><span>Role</span><span>${r === 'super' ? 'Super Admin' : 'Admin'}</span></div>`);
     document.getElementById('newAdminUser').value = '';
     document.getElementById('newAdminName').value = '';
     document.getElementById('newAdminPass').value = '';
+    document.getElementById('newAdminRole').value = 'admin';
     loadAdmins();
   } catch { admError('Network Error', 'Could not reach the server.'); }
   finally { btn.disabled = false; btn.textContent = orig; }
