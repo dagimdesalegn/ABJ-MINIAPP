@@ -13,26 +13,35 @@
 html,body{margin:0;padding:0;}
 body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:linear-gradient(135deg,#0b1220 0%,#131f3d 100%);color:#fff;min-height:100vh;-webkit-font-smoothing:antialiased;}
 
-/* ============ TELEGRAM / VERIFY CARD ============ */
-.tg-card{padding:22px 24px;border-radius:18px;background:linear-gradient(135deg,rgba(255,255,255,.06),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.1);position:relative;overflow:hidden;max-width:640px;}
-.tg-card.ok{border-color:rgba(52,211,153,.4);box-shadow:0 12px 32px -16px rgba(16,185,129,.4);}
+/* ============ CONFIG CARD ============ */
+.tg-card{padding:24px 26px;border-radius:20px;background:linear-gradient(135deg,rgba(255,255,255,.06),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.1);position:relative;overflow:hidden;max-width:640px;transition:border-color .3s,box-shadow .3s;}
+.tg-card.ok{border-color:rgba(52,211,153,.45);box-shadow:0 18px 40px -20px rgba(16,185,129,.55),0 0 0 1px rgba(52,211,153,.15);}
 .tg-card.bad{border-color:rgba(248,113,113,.35);}
-.tg-status{display:inline-flex;align-items:center;gap:8px;padding:6px 14px;border-radius:999px;font-size:11px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;margin-bottom:16px;}
-.tg-status.ok{background:rgba(52,211,153,.12);color:#34d399;border:1px solid rgba(52,211,153,.35);}
-.tg-status.bad{background:rgba(248,113,113,.12);color:#f87171;border:1px solid rgba(248,113,113,.35);}
-.tg-status .dot{width:7px;height:7px;border-radius:50%;background:currentColor;box-shadow:0 0 8px currentColor;animation:tgPulse 2s infinite;}
-@keyframes tgPulse{0%,100%{opacity:1;}50%{opacity:.4;}}
-.tg-row{display:flex;justify-content:space-between;align-items:center;gap:14px;padding:10px 0;border-bottom:1px dashed rgba(255,255,255,.08);font-size:13px;}
-.tg-row:last-child{border-bottom:none;padding-bottom:0;}
-.tg-row .k{color:rgba(255,255,255,.5);font-weight:800;font-size:10px;letter-spacing:.7px;text-transform:uppercase;flex:0 0 auto;}
-.tg-row .v{font-weight:700;color:#fff;text-align:right;font-family:monospace;font-size:12px;overflow-wrap:anywhere;min-width:0;}
-.tg-actions{display:flex;gap:8px;margin-top:18px;flex-wrap:wrap;}
-.tg-actions .btn{flex:1;min-width:140px;padding:12px 16px;font-size:13px;}
 
-/* ============ VERIFY CARD (same shape as tg-card, but distinct var for clarity) ============ */
-.vg-card{padding:22px 24px;border-radius:18px;background:linear-gradient(135deg,rgba(255,255,255,.06),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.1);position:relative;overflow:hidden;max-width:640px;}
-.vg-card.ok{border-color:rgba(52,211,153,.4);box-shadow:0 12px 32px -16px rgba(16,185,129,.4);}
-.vg-card.bad{border-color:rgba(248,113,113,.35);}
+/* Connected badge — top-right glowing pill */
+.tg-badge{position:absolute;top:20px;right:22px;display:inline-flex;align-items:center;gap:8px;padding:8px 16px;border-radius:999px;font-size:11px;font-weight:800;letter-spacing:1.3px;text-transform:uppercase;z-index:2;animation:badgeIn .5s var(--bounce) both;}
+@keyframes badgeIn{from{opacity:0;transform:scale(.7);}to{opacity:1;transform:scale(1);}}
+.tg-badge.ok{background:linear-gradient(135deg,rgba(52,211,153,.22),rgba(16,185,129,.14));color:#34d399;border:1px solid rgba(52,211,153,.5);box-shadow:0 0 22px -6px rgba(52,211,153,.7),inset 0 1px 0 rgba(255,255,255,.08);}
+.tg-badge.bad{background:linear-gradient(135deg,rgba(248,113,113,.18),rgba(239,68,68,.1));color:#f87171;border:1px solid rgba(248,113,113,.45);}
+.tg-badge .dot{width:8px;height:8px;border-radius:50%;background:currentColor;box-shadow:0 0 10px currentColor;animation:tgPulse 2s infinite;}
+@keyframes tgPulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.5;transform:scale(.75);}}
+
+.tg-card-head{padding-right:150px;margin-bottom:18px;}
+.tg-card-head h4{margin:0 0 4px;font-size:17px;font-weight:800;letter-spacing:-.3px;color:#fff;}
+.tg-card-head p{margin:0;font-size:12.5px;color:rgba(255,255,255,.6);line-height:1.5;}
+
+.tg-info{display:grid;grid-template-columns:1fr;gap:10px;margin-top:16px;}
+.tg-info-row{display:flex;align-items:center;gap:14px;padding:13px 16px;border-radius:12px;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.06);transition:background .2s,border-color .2s;}
+.tg-info-row:hover{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.12);}
+.tg-info-row .k{flex:0 0 92px;font-size:10.5px;font-weight:800;letter-spacing:1.1px;text-transform:uppercase;color:rgba(255,255,255,.5);}
+.tg-info-row .v{flex:1;min-width:0;font-size:13px;font-weight:700;color:#fff;font-family:monospace;letter-spacing:.4px;word-break:break-all;overflow-wrap:anywhere;line-height:1.4;text-align:right;}
+.tg-info-row .v.plain{font-family:inherit;letter-spacing:0;font-weight:800;font-size:14px;}
+
+.tg-actions{display:flex;gap:8px;margin-top:18px;flex-wrap:wrap;}
+.tg-actions .btn{flex:1;min-width:130px;padding:12px 16px;font-size:13px;}
+
+.tg-empty{padding:22px 0 8px;text-align:center;}
+.tg-empty p{margin:0 0 16px;font-size:13.5px;color:rgba(255,255,255,.72);line-height:1.6;}
 
 /* ============ TELEGRAM WIZARD MODAL ============ */
 .tg-wiz{position:fixed;inset:0;z-index:210;background:rgba(5,9,18,.88);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);display:flex;align-items:center;justify-content:center;padding:16px;padding-top:calc(16px + env(safe-area-inset-top));padding-bottom:calc(16px + env(safe-area-inset-bottom));opacity:0;visibility:hidden;transition:opacity .3s,visibility .3s;overflow-y:auto;}
@@ -202,6 +211,11 @@ body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:linear-grad
   .wrap{padding:20px 16px 40px;}
   .admin-row{flex-direction:column;align-items:flex-start;}
   .login-card{padding:24px 20px;}
+  .tg-card-head{padding-right:0;margin-bottom:14px;}
+  .tg-badge{position:static;margin-bottom:12px;display:inline-flex;}
+  .tg-info-row{flex-direction:column;align-items:flex-start;gap:4px;padding:11px 14px;}
+  .tg-info-row .k{flex:0 0 auto;}
+  .tg-info-row .v{text-align:left;font-size:12.5px;}
 }
 </style>
 </head>
@@ -352,8 +366,8 @@ body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:linear-grad
 
   <!-- SYSTEM -->
   <div class="tab-content" id="tab-system">
-    <div class="settings">
-      <div style="padding:14px 18px;border-radius:14px;background:rgba(251,191,36,.08);border:1px solid rgba(251,191,36,.35);font-size:12.5px;color:#fbbf24;line-height:1.65;max-width:640px;margin-bottom:8px;">
+    <div class="settings" style="max-width:640px">
+      <div style="padding:14px 18px;border-radius:14px;background:rgba(251,191,36,.08);border:1px solid rgba(251,191,36,.35);font-size:12.5px;color:#fbbf24;line-height:1.65;margin-bottom:8px;">
         <strong>⚠️ Sensitive.</strong> Powers Telegram invites and payment verification. Changes take effect within 60 seconds.
       </div>
 
@@ -367,7 +381,7 @@ body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:linear-grad
 
       <h3 style="margin:4px 0;font-size:14px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--gold-1);">Verify.ET (Payment API)</h3>
 
-      <div class="vg-card bad" id="vgCard">
+      <div class="tg-card bad" id="vgCard">
         <!-- filled by JS -->
       </div>
 
@@ -1042,18 +1056,18 @@ let tgCurrentSettings = {};
 
 function shortSession(s){
   if (!s) return '—';
-  if (s.length <= 24) return s;
-  return s.slice(0, 14) + '…' + s.slice(-10);
+  if (s.length <= 28) return s;
+  return s.slice(0, 16) + '…' + s.slice(-10);
 }
 function shortHash(h){
   if (!h) return '—';
-  if (h.length <= 12) return h;
-  return h.slice(0, 8) + '…' + h.slice(-6);
+  if (h.length <= 16) return h;
+  return h.slice(0, 10) + '…' + h.slice(-6);
 }
 function shortKey(k){
   if (!k) return '—';
-  if (k.length <= 20) return k;
-  return k.slice(0, 14) + '…' + k.slice(-6);
+  if (k.length <= 24) return k;
+  return k.slice(0, 16) + '…' + k.slice(-6);
 }
 
 async function loadSystem(){
@@ -1090,11 +1104,29 @@ function renderTgCard(s){
 
   if (fullOk){
     card.innerHTML = `
-      <span class="tg-status ok"><span class="dot"></span> Connected</span>
-      <div class="tg-row"><span class="k">API ID</span><span class="v">${esc(s.tg_api_id)}</span></div>
-      <div class="tg-row"><span class="k">API Hash</span><span class="v">${esc(shortHash(s.tg_api_hash))}</span></div>
-      <div class="tg-row"><span class="k">Channel</span><span class="v">${esc(s.tg_channel_id)}</span></div>
-      <div class="tg-row"><span class="k">Session</span><span class="v">${esc(shortSession(s.tg_session))}</span></div>
+      <div class="tg-badge ok"><span class="dot"></span> Connected</div>
+      <div class="tg-card-head">
+        <h4>Telegram Session</h4>
+        <p>Active account used to create one-time channel invites.</p>
+      </div>
+      <div class="tg-info">
+        <div class="tg-info-row">
+          <span class="k">API ID</span>
+          <span class="v">${esc(s.tg_api_id)}</span>
+        </div>
+        <div class="tg-info-row">
+          <span class="k">API Hash</span>
+          <span class="v">${esc(shortHash(s.tg_api_hash))}</span>
+        </div>
+        <div class="tg-info-row">
+          <span class="k">Channel ID</span>
+          <span class="v">${esc(s.tg_channel_id)}</span>
+        </div>
+        <div class="tg-info-row">
+          <span class="k">Session</span>
+          <span class="v">${esc(shortSession(s.tg_session))}</span>
+        </div>
+      </div>
       <div class="tg-actions">
         <button class="btn btn-gold" id="tgBtnReconfig" type="button">🔄 Reconfigure</button>
         <button class="btn btn-ghost" id="tgBtnCopy" type="button">📋 Copy Session</button>
@@ -1103,13 +1135,14 @@ function renderTgCard(s){
   } else {
     const partial = hasApi || hasSess || hasChan;
     card.innerHTML = `
-      <span class="tg-status bad"><span class="dot"></span> ${partial ? 'Incomplete' : 'Not Configured'}</span>
-      <p style="margin:0 0 8px;font-size:13.5px;color:rgba(255,255,255,.75);line-height:1.6;">
-        ${partial
+      <div class="tg-badge bad"><span class="dot"></span> ${partial ? 'Incomplete' : 'Not Configured'}</div>
+      <div class="tg-card-head">
+        <h4>Telegram Session</h4>
+        <p>${partial
           ? 'Some Telegram settings are present but the session is incomplete. Reconfigure to finish setup.'
-          : 'Set up your Telegram account so students get one-time channel invites after approval.'}
-      </p>
-      <div class="tg-actions">
+          : 'Set up your Telegram account so students get one-time channel invites after approval.'}</p>
+      </div>
+      <div class="tg-actions" style="margin-top:8px;">
         <button class="btn btn-gold" id="tgBtnReconfig" type="button">⚙️ Configure Session</button>
       </div>`;
   }
@@ -1143,9 +1176,21 @@ function renderVgCard(s){
 
   if (fullOk){
     card.innerHTML = `
-      <span class="tg-status ok"><span class="dot"></span> Connected</span>
-      <div class="tg-row"><span class="k">API URL</span><span class="v">${esc(s.verify_api_url)}</span></div>
-      <div class="tg-row"><span class="k">API Key</span><span class="v">${esc(shortKey(s.verify_api_key))}</span></div>
+      <div class="tg-badge ok"><span class="dot"></span> Connected</div>
+      <div class="tg-card-head">
+        <h4>Verify.ET</h4>
+        <p>Payment verification API used to auto-approve registrations.</p>
+      </div>
+      <div class="tg-info">
+        <div class="tg-info-row">
+          <span class="k">API URL</span>
+          <span class="v">${esc(s.verify_api_url)}</span>
+        </div>
+        <div class="tg-info-row">
+          <span class="k">API Key</span>
+          <span class="v">${esc(shortKey(s.verify_api_key))}</span>
+        </div>
+      </div>
       <div class="tg-actions">
         <button class="btn btn-gold" id="vgBtnEdit" type="button">✏️ Edit</button>
         <button class="btn btn-ghost" id="vgBtnCopy" type="button">📋 Copy Key</button>
@@ -1153,11 +1198,12 @@ function renderVgCard(s){
       </div>`;
   } else {
     card.innerHTML = `
-      <span class="tg-status bad"><span class="dot"></span> Not Configured</span>
-      <p style="margin:0 0 8px;font-size:13.5px;color:rgba(255,255,255,.75);line-height:1.6;">
-        Connect to Verify.ET so student payments are checked automatically after they submit their reference.
-      </p>
-      <div class="tg-actions">
+      <div class="tg-badge bad"><span class="dot"></span> Not Configured</div>
+      <div class="tg-card-head">
+        <h4>Verify.ET</h4>
+        <p>Connect to Verify.ET so student payments are checked automatically after they submit their reference.</p>
+      </div>
+      <div class="tg-actions" style="margin-top:8px;">
         <button class="btn btn-gold" id="vgBtnEdit" type="button">⚙️ Configure Verify</button>
       </div>`;
   }
@@ -1291,8 +1337,9 @@ document.getElementById('tgNext2').addEventListener('click', async () => {
     const res = await fetch('/api/admin-settings?action=tg-start', {
       method: 'POST', headers: authHeaders(true),
       body: JSON.stringify({
-        api_id:   document.getElementById('tgApiId').value.trim(),
-        api_hash: document.getElementById('tgApiHash').value.trim(),
+        api_id:     document.getElementById('tgApiId').value.trim(),
+        api_hash:   document.getElementById('tgApiHash').value.trim(),
+        channel_id: document.getElementById('tgChannelId').value.trim(),
         phone,
       }),
     });
