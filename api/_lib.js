@@ -3,14 +3,6 @@ const crypto = require('crypto');
 const {
   SUPABASE_URL,
   SUPABASE_SERVICE_KEY,
-  VERIFY_API_URL,
-  VERIFY_API_KEY,
-  TELEGRAM_BOT_TOKEN,
-  TELEGRAM_MAIN_CHANNEL_ID,
-  TELEGRAM_CHANNEL_ID,
-  TELEGRAM_API_ID,
-  TELEGRAM_API_HASH,
-  TELEGRAM_SESSION,
   JWT_SECRET,
   ADMIN_PASSWORD,
 } = process.env;
@@ -123,6 +115,41 @@ async function getPublicSettings() {
 }
 
 /* ============================================================
+   DYNAMIC CONFIG — reads Telegram + Verify settings from DB
+   Cached for 60 seconds per warm instance
+   ============================================================ */
+let _configCache = null;
+let _configCacheTime = 0;
+const CONFIG_CACHE_MS = 60 * 1000;
+
+async function getConfig() {
+  const now = Date.now();
+  if (_configCache && (now - _configCacheTime) < CONFIG_CACHE_MS) return _configCache;
+
+  let s = {};
+  try {
+    const q = await supabaseQuery('app_settings?select=key,value');
+    (q.data || []).forEach(r => { s[r.key] = r.value; });
+  } catch {}
+
+  _configCache = {
+    tgApiId:      s.tg_api_id     || '',
+    tgApiHash:    s.tg_api_hash   || '',
+    tgSession:    s.tg_session    || '',
+    tgChannelId:  s.tg_channel_id || '',
+    verifyApiUrl: s.verify_api_url || '',
+    verifyApiKey: s.verify_api_key || '',
+  };
+  _configCacheTime = now;
+  return _configCache;
+}
+
+function invalidateConfigCache() {
+  _configCache = null;
+  _configCacheTime = 0;
+}
+
+/* ============================================================
    Password hashing (scrypt)
    ============================================================ */
 function hashPassword(password) {
@@ -187,10 +214,10 @@ function requireSuper(req) {
    ============================================================ */
 function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
 
-async function _pollStatus(statusUrl) {
+async function _pollStatus(statusUrl, apiKey) {
   try {
     const url = statusUrl.startsWith('http') ? statusUrl : `https://verify.et${statusUrl}`;
-    const res = await fetch(url, { headers: { 'x-api-key': VERIFY_API_KEY } });
+    const res = await fetch(url, { headers: { 'x-api-key': apiKey } });
     const text = await res.text();
     let data = null;
     try { data = text ? JSON.parse(text) : null; } catch {}
@@ -233,19 +260,17 @@ function _interpret(body) {
 }
 
 async function verifyPayment(reference, suffix) {
-  if (!VERIFY_API_KEY) return { result: 'service_error', message: 'Verification service not configured.' };
+  const cfg = await getConfig();
+  if (!cfg.verifyApiKey) return { result: 'service_error', message: 'Verification service not configured. Please set it in the admin System tab.' };
+  if (!cfg.verifyApiUrl) return { result: 'service_error', message: 'Verification URL not configured. Please set it in the admin System tab.' };
 
-  /* Two full attempts.
-     Attempt 0 = generous (bank gets 20s to respond, we can wait 24s, then poll 20s).
-     Attempt 1 = quick confirmation (10s).
-     Total worst case ~50s — fits inside Vercel's 60s Hobby maxDuration. */
   for (let attempt = 0; attempt < 2; attempt++) {
     const waitMs    = attempt === 0 ? 20000 : 8000;
     const timeoutMs = attempt === 0 ? 24000 : 10000;
-    const url = `${VERIFY_API_URL}?waitMs=${waitMs}`;
+    const url = `${cfg.verifyApiUrl}?waitMs=${waitMs}`;
     const headers = {
       'Content-Type': 'application/json',
-      'x-api-key': VERIFY_API_KEY,
+      'x-api-key': cfg.verifyApiKey,
       'Idempotency-Key': `abj-${Date.now()}-${reference}-${attempt}`,
     };
 
@@ -261,36 +286,31 @@ async function verifyPayment(reference, suffix) {
       let body = null;
       try { body = text ? JSON.parse(text) : null; } catch {}
 
-      /* ---------- Hard failures — bail immediately (no retry) ---------- */
       if (res.status === 401 || res.status === 402 || res.status === 403) {
         return { result: 'service_error', message: 'Verification service unavailable.' };
       }
       if (res.status === 409) return { result: 'duplicate', message: 'This transaction reference has already been used.' };
       if (res.status === 422) return { result: 'invalid', message: "We couldn't read your transaction details." };
 
-      /* ---------- Rate limit / busy — retry ---------- */
       if (res.status === 429 || res.status === 503) {
         if (attempt < 1) { await sleep(3000); continue; }
         return { result: 'service_error', message: 'Bank service is busy. Try again shortly.' };
       }
 
-      /* ---------- Unexpected status — retry once ---------- */
       if (res.status !== 200 && res.status !== 202) {
         if (attempt < 1) { await sleep(1500); continue; }
         return { result: 'service_error', message: "We couldn't verify your payment." };
       }
 
-      /* ---------- 202 = bank still processing — poll generously ---------- */
       if (res.status === 202) {
         const rid = body?.requestId;
         const links = body?.links || {};
         const statusUrl = links.statusUrl || (rid ? `/api/verify/${rid}` : null);
 
         if (statusUrl) {
-          /* Poll up to ~22 seconds (10 tries with growing delay) */
           for (let i = 0; i < 10; i++) {
             await sleep(1500 + i * 200);
-            const poll = await _pollStatus(statusUrl);
+            const poll = await _pollStatus(statusUrl, cfg.verifyApiKey);
             if (poll.status !== 200 || !poll.data) continue;
             let it = poll.data.data;
             if (Array.isArray(it)) it = it[0];
@@ -300,24 +320,18 @@ async function verifyPayment(reference, suffix) {
           }
         }
 
-        /* Still pending — retry whole flow once before giving up */
         if (attempt < 1) { await sleep(2000); continue; }
         return { result: 'pending', message: 'The bank is still confirming your payment.' };
       }
 
-      /* ---------- 200 = interpret ---------- */
       const interpreted = _interpret(body);
-
-      /* If the bank says "pending", retry once before accepting it */
       if (interpreted.result === 'pending' && attempt < 1) {
         await sleep(2500);
         continue;
       }
-
       return interpreted;
 
     } catch (err) {
-      /* Network error or abort timeout */
       if (attempt < 1) { await sleep(2000); continue; }
       return { result: 'service_error', message: 'Network error reaching the bank.' };
     }
@@ -327,26 +341,17 @@ async function verifyPayment(reference, suffix) {
 }
 
 /* ============================================================
-   Telegram one-time invite links
-   ------------------------------------------------------------
-   MODE A — USER ACCOUNT (no bot):
-     TELEGRAM_API_ID, TELEGRAM_API_HASH, TELEGRAM_SESSION, TELEGRAM_CHANNEL_ID
-   MODE B — BOT (fallback):
-     TELEGRAM_BOT_TOKEN / BOT_TOKEN, TELEGRAM_CHANNEL_ID or TELEGRAM_MAIN_CHANNEL_ID
+   Telegram one-time invite links — reads from DB via getConfig()
    ============================================================ */
 
-function telegramChannelId() {
-  return TELEGRAM_CHANNEL_ID || TELEGRAM_MAIN_CHANNEL_ID || '';
-}
-
-async function createInviteViaUser({ channelId, title, expireDate }) {
+async function createInviteViaUser(cfg, { channelId, title, expireDate }) {
   const { TelegramClient, Api } = require('telegram');
   const { StringSession } = require('telegram/sessions');
 
   const client = new TelegramClient(
-    new StringSession(TELEGRAM_SESSION),
-    Number(TELEGRAM_API_ID),
-    TELEGRAM_API_HASH,
+    new StringSession(cfg.tgSession),
+    Number(cfg.tgApiId),
+    cfg.tgApiHash,
     {
       connectionRetries: 3,
       useWSS: true,
@@ -386,45 +391,18 @@ async function createInviteViaUser({ channelId, title, expireDate }) {
   }
 }
 
-async function createInviteViaBot({ token, channelId, title, expireDate }) {
-  const url = `https://api.telegram.org/bot${token}/createChatInviteLink`;
-  const res = await fetch(url, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      chat_id: channelId,
-      member_limit: 1,
-      name: title,
-      expire_date: expireDate,
-    }),
-  });
-  const data = await res.json();
-  if (!data.ok) throw new Error(data.description || 'Telegram error');
-  return {
-    invite_link: data.result.invite_link,
-    expire_date: data.result.expire_date,
-    member_limit: 1,
-    via: 'bot',
-  };
-}
-
 async function createTelegramInvite(linkName) {
-  const channelId = telegramChannelId();
-  if (!channelId) throw new Error('Telegram channel id is not configured.');
+  const cfg = await getConfig();
+
+  if (!cfg.tgChannelId) throw new Error('Telegram channel ID not configured. Set it in the admin System tab.');
+  if (!cfg.tgApiId || !cfg.tgApiHash || !cfg.tgSession) {
+    throw new Error('Telegram API credentials not configured. Set API ID, API Hash, and Session in the admin System tab.');
+  }
 
   const title = String(linkName || 'ABJ').slice(0, 32);
   const expireDate = Math.floor(Date.now() / 1000) + 7 * 24 * 3600;
 
-  if (TELEGRAM_API_ID && TELEGRAM_API_HASH && TELEGRAM_SESSION) {
-    return await createInviteViaUser({ channelId, title, expireDate });
-  }
-
-  const botToken = TELEGRAM_BOT_TOKEN || process.env.BOT_TOKEN;
-  if (botToken) {
-    return await createInviteViaBot({ token: botToken, channelId, title, expireDate });
-  }
-
-  throw new Error('Telegram not configured. Add TELEGRAM_SESSION (user account) or TELEGRAM_BOT_TOKEN (bot).');
+  return await createInviteViaUser(cfg, { channelId: cfg.tgChannelId, title, expireDate });
 }
 
 /* ============================================================
@@ -538,6 +516,7 @@ function json(res, status, body) {
 module.exports = {
   supabaseQuery, supabaseInsert, supabaseUpdate, supabaseDelete,
   getSetting, setSetting, getFee, getPublicSettings,
+  getConfig, invalidateConfigCache,
   hashPassword, verifyPassword,
   signJWT, verifyJWT, requireAdmin, requireSuper,
   verifyPayment, createTelegramInvite, uploadScreenshotToStorage,
