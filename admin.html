@@ -407,7 +407,7 @@ body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:linear-grad
       <i data-p="1"></i><i data-p="2"></i><i data-p="3"></i><i data-p="4"></i>
     </div>
 
-    <!-- STEP 1: API credentials -->
+    <!-- STEP 1 -->
     <div class="tg-step active" data-step="1">
       <span class="tg-step-tag">Step 1 of 4</span>
       <h3>API Credentials</h3>
@@ -422,7 +422,7 @@ body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:linear-grad
       </div>
     </div>
 
-    <!-- STEP 2: Phone -->
+    <!-- STEP 2 -->
     <div class="tg-step" data-step="2">
       <span class="tg-step-tag">Step 2 of 4</span>
       <h3>Phone Number</h3>
@@ -435,7 +435,7 @@ body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:linear-grad
       </div>
     </div>
 
-    <!-- STEP 3: Code -->
+    <!-- STEP 3 -->
     <div class="tg-step" data-step="3">
       <span class="tg-step-tag">Step 3 of 4</span>
       <h3>Verification Code</h3>
@@ -449,7 +449,7 @@ body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:linear-grad
       </div>
     </div>
 
-    <!-- STEP 4: 2FA -->
+    <!-- STEP 4 -->
     <div class="tg-step" data-step="4">
       <span class="tg-step-tag">Step 4 of 4</span>
       <h3>Two-Factor Password</h3>
@@ -1044,16 +1044,23 @@ function shortHash(h){
 async function loadSystem(){
   try {
     const res = await fetch('/api/admin-settings', { headers: authHeaders() });
-    const data = await res.json();
-    if (!res.ok) return;
-    const s = data.settings || {};
+    const text = await res.text();
+    let data = null;
+    try { data = text ? JSON.parse(text) : null; } catch {}
+    if (!res.ok) {
+      admError('Load Failed', (data && data.error) || ('Server returned ' + res.status + ': ' + text.slice(0, 200)));
+      return;
+    }
+    const s = (data && data.settings) || {};
     tgCurrentSettings = s;
 
     document.getElementById('sysVerifyUrl').value = s.verify_api_url || '';
     document.getElementById('sysVerifyKey').value = s.verify_api_key || '';
 
     renderTgCard(s);
-  } catch {}
+  } catch (e) {
+    admError('Load Failed', 'Network error: ' + (e.message || 'unknown'));
+  }
 }
 
 function renderTgCard(s){
@@ -1118,10 +1125,17 @@ document.getElementById('saveSystem').addEventListener('click', async () => {
   };
   try {
     const res = await fetch('/api/admin-settings', { method: 'POST', headers: authHeaders(true), body: JSON.stringify(payload) });
-    const data = await res.json();
-    if (!res.ok) { admError('Save Failed', data.error || 'Could not save.'); return; }
+    const text = await res.text();
+    let data = null;
+    try { data = text ? JSON.parse(text) : null; } catch {}
+    if (!res.ok) {
+      admError('Save Failed', (data && data.error) || ('Server returned ' + res.status + ': ' + text.slice(0, 200)));
+      return;
+    }
     admSuccess('Verify Settings Saved', 'Changes take effect within 60 seconds.');
-  } catch { admError('Network Error', 'Could not reach the server.'); }
+  } catch (e) {
+    admError('Save Failed', 'Network error: ' + (e.message || 'unknown') + '. Check Vercel logs.');
+  }
   finally { btn.disabled = false; btn.textContent = orig; }
 });
 
