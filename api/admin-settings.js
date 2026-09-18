@@ -27,7 +27,6 @@ module.exports = async (req, res) => {
     console.error('[admin-settings] unhandled:', err);
     return json(res, 500, {
       error: 'Server error: ' + (err.message || String(err)),
-      stack: String(err.stack || '').split('\n').slice(0, 3).join(' | '),
     });
   }
 };
@@ -63,6 +62,15 @@ async function handle(req, res) {
 
     const { TelegramClient, Api } = require('telegram');
     const { StringSession } = require('telegram/sessions');
+    const { computeCheck } = require('telegram/Password');
+
+    const CLIENT_OPTS = {
+      connectionRetries: 3,
+      useWSS: true,
+      deviceModel: 'ABJ Tutorial',
+      systemVersion: 'Vercel',
+      appVersion: '1.0.0',
+    };
 
     /* ---------- tg-start ---------- */
     if (action === 'tg-start') {
@@ -77,7 +85,7 @@ async function handle(req, res) {
           new StringSession(''),
           Number(api_id),
           String(api_hash),
-          { connectionRetries: 3, useWSS: true, deviceModel: 'ABJ Tutorial', systemVersion: 'Vercel', appVersion: '1.0.0' }
+          CLIENT_OPTS
         );
         await client.connect();
 
@@ -98,7 +106,7 @@ async function handle(req, res) {
         return json(res, 200, { ok: true });
       } catch (e) {
         try { if (client) await client.disconnect(); } catch {}
-        return json(res, 500, { error: e.message || 'Could not send code. Check API ID, Hash and phone.' });
+        return json(res, 500, { error: e.message || 'Could not send code.' });
       }
     }
 
@@ -123,7 +131,7 @@ async function handle(req, res) {
           new StringSession(tempSession),
           Number(apiIdStr),
           String(apiHashStr),
-          { connectionRetries: 3, useWSS: true, deviceModel: 'ABJ Tutorial', systemVersion: 'Vercel', appVersion: '1.0.0' }
+          CLIENT_OPTS
         );
         await client.connect();
 
@@ -138,6 +146,7 @@ async function handle(req, res) {
           return json(res, 400, { error: 'This phone number is not registered on Telegram.' });
         }
 
+        /* Full success — save final session */
         await setSetting('tg_session',  client.session.save());
         await setSetting('tg_api_id',   apiIdStr);
         await setSetting('tg_api_hash', apiHashStr);
@@ -149,16 +158,22 @@ async function handle(req, res) {
 
       } catch (e) {
         const msg = String(e.message || e);
+
+        /* 2FA required — MUST re-save session so reconnect keeps state */
         if (msg.includes('SESSION_PASSWORD_NEEDED') || msg.includes('SESSION_PASSWORD')) {
+          try {
+            await setSetting('tg_temp_session', client.session.save());
+          } catch {}
           try { await client.disconnect(); } catch {}
           return json(res, 200, { ok: true, needs_2fa: true });
         }
+
         try { if (client) await client.disconnect(); } catch {}
         return json(res, 500, { error: msg || 'Verification failed.' });
       }
     }
 
-    /* ---------- tg-password ---------- */
+    /* ---------- tg-password (SRP flow) ---------- */
     if (action === 'tg-password') {
       const { password } = req.body || {};
       if (!password) return json(res, 400, { error: '2FA password is required.' });
@@ -177,15 +192,20 @@ async function handle(req, res) {
           new StringSession(tempSession),
           Number(apiIdStr),
           String(apiHashStr),
-          { connectionRetries: 3, useWSS: true, deviceModel: 'ABJ Tutorial', systemVersion: 'Vercel', appVersion: '1.0.0' }
+          CLIENT_OPTS
         );
         await client.connect();
 
-        await client.signInWithPassword({
-          password: async () => String(password),
-          onError: (err) => { throw err; },
-        });
+        /* 1. Fetch SRP parameters from Telegram */
+        const passwordSrpResult = await client.invoke(new Api.account.GetPassword());
 
+        /* 2. Compute the SRP proof from the plain password */
+        const passwordSrpCheck = await computeCheck(passwordSrpResult, String(password));
+
+        /* 3. Submit to Telegram */
+        await client.invoke(new Api.auth.CheckPassword({ password: passwordSrpCheck }));
+
+        /* 4. Full success — save final session */
         await setSetting('tg_session',  client.session.save());
         await setSetting('tg_api_id',   apiIdStr);
         await setSetting('tg_api_hash', apiHashStr);
@@ -196,8 +216,9 @@ async function handle(req, res) {
         return json(res, 200, { ok: true });
 
       } catch (e) {
+        const msg = String(e.message || e);
         try { if (client) await client.disconnect(); } catch {}
-        return json(res, 500, { error: e.message || 'Password verification failed.' });
+        return json(res, 500, { error: msg || 'Password verification failed.' });
       }
     }
 
