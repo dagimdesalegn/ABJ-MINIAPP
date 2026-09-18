@@ -8,66 +8,258 @@
 <link rel="icon" type="image/jpeg" href="logo.jpg" />
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-:root{--ink:#0f172a;--muted:#64748b;--line:#e6ebf3;--gold-2:#d4af37;--gold-1:#f7e07a;--bounce:cubic-bezier(.34,1.56,.64,1);}
+:root{--ink:#0f172a;--muted:#64748b;--line:#e6ebf3;--gold-2:#d4af37;--gold-1:#f7e07a;--gold-3:#8a6516;--bounce:cubic-bezier(.34,1.56,.64,1);--ease:cubic-bezier(.4,0,.2,1);--sidebar-w:280px;}
 *,*::before,*::after{box-sizing:border-box;}
-html,body{margin:0;padding:0;}
-body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:linear-gradient(135deg,#0b1220 0%,#131f3d 100%);color:#fff;min-height:100vh;-webkit-font-smoothing:antialiased;}
+html,body{margin:0;padding:0;overflow-x:hidden;}
+body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:radial-gradient(1200px 800px at 10% -10%,#1e3a8a 0%,rgba(30,58,138,0) 50%),radial-gradient(900px 700px at 100% 110%,#4c1d95 0%,rgba(76,29,149,0) 55%),linear-gradient(135deg,#0b1220 0%,#0f1a2f 45%,#131f3d 100%);color:#fff;min-height:100vh;-webkit-font-smoothing:antialiased;}
 
-/* ============ CONFIG CARD ============ */
+/* Floating ambient orbs */
+.ambient{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;}
+.ambient::before,.ambient::after{content:'';position:absolute;border-radius:50%;filter:blur(90px);opacity:.35;}
+.ambient::before{width:500px;height:500px;background:radial-gradient(circle,#3b82f6,transparent 70%);top:-180px;left:-120px;animation:orbA 22s ease-in-out infinite;}
+.ambient::after{width:420px;height:420px;background:radial-gradient(circle,#a855f7,transparent 70%);bottom:-160px;right:-120px;animation:orbB 26s ease-in-out infinite;}
+@keyframes orbA{0%,100%{transform:translate(0,0) scale(1);}50%{transform:translate(60px,40px) scale(1.15);}}
+@keyframes orbB{0%,100%{transform:translate(0,0) scale(1);}50%{transform:translate(-50px,-30px) scale(1.1);}}
+
+/* ============================================================
+   LOGIN
+   ============================================================ */
+#loginView{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:20px;padding-top:calc(20px + env(safe-area-inset-top));padding-bottom:calc(20px + env(safe-area-inset-bottom));overflow-y:auto;z-index:5;}
+.login-card{position:relative;width:100%;max-width:440px;margin:auto;padding:44px 36px 36px;border-radius:28px;background:linear-gradient(135deg,rgba(255,255,255,.09),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.14);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);box-shadow:0 40px 90px -30px rgba(0,0,0,.85),0 0 80px -30px rgba(59,130,246,.55),inset 0 1px 0 rgba(255,255,255,.08);animation:loginIn .7s var(--bounce) both;}
+@keyframes loginIn{from{opacity:0;transform:translateY(20px) scale(.96);}to{opacity:1;transform:none;}}
+.login-card::before{content:'';position:absolute;inset:-2px;border-radius:30px;padding:2px;background:conic-gradient(from 0deg,#2563eb,#a855f7,#f7e07a,#d4af37,#2563eb);background-size:200% 200%;animation:borderSpin 8s linear infinite;-webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;z-index:-1;opacity:.8;}
+@keyframes borderSpin{0%{background-position:0% 50%;}100%{background-position:200% 50%;}}
+.login-logo-ring{position:relative;width:112px;height:112px;margin:0 auto 22px;border-radius:50%;display:grid;place-items:center;}
+.login-logo-ring::before{content:'';position:absolute;inset:-6px;border-radius:50%;padding:3px;background:conic-gradient(from 0deg,#f7e07a,#d4af37 25%,#8a6516 50%,#d4af37 75%,#f7e07a 100%);-webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;animation:borderSpin 6s linear infinite;}
+.login-logo{width:100px;height:100px;border-radius:50%;overflow:hidden;box-shadow:0 26px 60px -20px rgba(212,175,55,.9),0 0 60px -14px rgba(247,224,122,.7);}
+.login-logo img{width:100%;height:100%;object-fit:cover;display:block;}
+.login-brand{text-align:center;margin-bottom:32px;}
+.login-brand h1{margin:0 0 8px;font-size:26px;font-weight:800;letter-spacing:2.4px;background:linear-gradient(100deg,#ffffff 25%,#fde9a8 55%,#a5b4fc 90%);background-size:200% auto;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:shineText 5s linear infinite;}
+@keyframes shineText{0%{background-position:0% center;}100%{background-position:200% center;}}
+.login-moto{display:inline-block;font-size:11.5px;font-weight:800;letter-spacing:3.4px;text-transform:uppercase;background:linear-gradient(90deg,#8a6516 0%,#d4af37 30%,#f7e07a 50%,#d4af37 70%,#8a6516 100%);background-size:200% auto;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:mottoShine 6s linear infinite;}
+@keyframes mottoShine{0%{background-position:0% center;}100%{background-position:200% center;}}
+.login-card label{display:block;font-size:11px;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;color:rgba(255,255,255,.6);margin-bottom:8px;}
+.login-input{width:100%;padding:15px 18px;border-radius:14px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.16);color:#fff;font-size:15px;font-weight:600;outline:none;transition:all .3s var(--ease);margin-bottom:16px;font-family:inherit;}
+.login-input:focus{border-color:var(--gold-1);background:rgba(255,255,255,.13);box-shadow:0 0 0 4px rgba(247,224,122,.12),0 0 30px -10px rgba(247,224,122,.5);}
+.login-input::placeholder{color:rgba(255,255,255,.4);}
+.login-btn{position:relative;width:100%;padding:17px;border-radius:14px;font-size:15.5px;font-weight:800;letter-spacing:.4px;color:#0b1220;background:linear-gradient(135deg,#f7e07a 0%,#d4af37 45%,#8a6516 100%);background-size:200% 200%;border:none;cursor:pointer;box-shadow:0 20px 44px -16px rgba(212,175,55,1),inset 0 1px 0 rgba(255,255,255,.4);transition:transform .3s var(--bounce),box-shadow .35s var(--ease),background-position .6s var(--ease);overflow:hidden;margin-top:6px;}
+.login-btn::after{content:'';position:absolute;top:0;left:-60%;width:50%;height:100%;background:linear-gradient(120deg,transparent,rgba(255,255,255,.55),transparent);transform:skewX(-22deg);animation:sheen 4s ease-in-out infinite;}
+@keyframes sheen{0%,75%{left:-60%;}100%{left:130%;}}
+.login-btn:hover:not(:disabled){transform:translateY(-3px);background-position:100% 50%;box-shadow:0 28px 60px -16px rgba(212,175,55,1),inset 0 1px 0 rgba(255,255,255,.45);}
+.login-btn:disabled{opacity:.6;cursor:not-allowed;transform:none;}
+.login-error{margin-top:14px;color:#f87171;font-size:13px;font-weight:700;display:none;padding:12px 16px;border-radius:12px;background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);text-align:center;}
+.login-error.show{display:block;animation:shake .4s var(--ease);}
+@keyframes shake{0%,100%{transform:translateX(0);}25%{transform:translateX(-5px);}75%{transform:translateX(5px);}}
+
+.pw-wrap{position:relative;margin-bottom:16px;}
+.pw-wrap .login-input{margin-bottom:0;}
+.pw-toggle{position:absolute;top:50%;right:12px;transform:translateY(-50%);width:38px;height:38px;border-radius:11px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.65);cursor:pointer;display:grid;place-items:center;transition:background .2s,color .2s,transform .25s var(--bounce);padding:0;}
+.pw-toggle:hover{background:rgba(255,255,255,.14);color:#fff;}
+.pw-toggle svg{width:18px;height:18px;display:block;pointer-events:none;}
+
+/* ============================================================
+   DASHBOARD LAYOUT
+   ============================================================ */
+#dashView{position:relative;z-index:2;min-height:100vh;display:none;}
+#dashView.active{display:block;}
+
+.sidebar{position:fixed;top:0;left:0;bottom:0;width:var(--sidebar-w);background:linear-gradient(180deg,rgba(15,26,47,.96) 0%,rgba(19,31,61,.98) 100%);border-right:1px solid rgba(255,255,255,.08);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);display:flex;flex-direction:column;z-index:40;transition:transform .35s var(--ease);}
+.sidebar::before{content:'';position:absolute;top:0;right:0;bottom:0;width:1px;background:linear-gradient(180deg,transparent 0%,rgba(247,224,122,.5) 50%,transparent 100%);}
+
+.sb-brand{padding:26px 22px 22px;border-bottom:1px solid rgba(255,255,255,.08);display:flex;align-items:center;gap:14px;}
+.sb-logo{width:52px;height:52px;flex:0 0 52px;border-radius:15px;overflow:hidden;box-shadow:0 12px 28px -12px rgba(212,175,55,.85),0 0 0 2px rgba(247,224,122,.55);}
+.sb-logo img{width:100%;height:100%;object-fit:cover;display:block;}
+.sb-brand-txt{min-width:0;line-height:1.15;}
+.sb-name{font-size:13.5px;font-weight:800;letter-spacing:1.6px;color:#fff;white-space:nowrap;}
+.sb-moto{font-size:8.5px;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;background:linear-gradient(90deg,#8a6516 0%,#d4af37 30%,#f7e07a 50%,#d4af37 70%,#8a6516 100%);background-size:200% auto;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:mottoShine 6s linear infinite;margin-top:4px;}
+
+.sb-nav{flex:1;overflow-y:auto;padding:20px 14px;}
+.sb-nav::-webkit-scrollbar{width:0;}
+.nav-section{margin-bottom:22px;}
+.nav-section:last-child{margin-bottom:0;}
+.nav-label{padding:0 12px;font-size:9.5px;font-weight:800;letter-spacing:1.8px;text-transform:uppercase;color:rgba(255,255,255,.38);margin-bottom:10px;}
+.nav-item{position:relative;width:100%;display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:12px;background:transparent;border:none;color:rgba(255,255,255,.72);font-weight:700;font-size:13.5px;letter-spacing:.1px;cursor:pointer;text-align:left;transition:all .25s var(--ease);margin-bottom:4px;font-family:inherit;}
+.nav-item::before{content:'';position:absolute;left:0;top:50%;transform:translateY(-50%);width:3px;height:0;border-radius:2px;background:linear-gradient(180deg,#f7e07a,#d4af37);transition:height .3s var(--ease);}
+.nav-item:hover{background:rgba(255,255,255,.06);color:#fff;transform:translateX(2px);}
+.nav-item.active{background:linear-gradient(135deg,rgba(247,224,122,.18),rgba(212,175,55,.09));color:#fff;box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 8px 20px -12px rgba(212,175,55,.7);}
+.nav-item.active::before{height:60%;}
+.ni-icon{width:24px;height:24px;flex:0 0 24px;display:grid;place-items:center;font-size:15px;border-radius:7px;background:rgba(255,255,255,.06);transition:all .25s var(--ease);}
+.nav-item.active .ni-icon{background:linear-gradient(135deg,#f7e07a,#d4af37);color:#0b1220;}
+.nav-item .ni-text{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.nav-item .ni-badge{flex:0 0 auto;min-width:24px;height:22px;padding:0 8px;display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;border-radius:999px;background:rgba(251,191,36,.15);color:#fbbf24;border:1px solid rgba(251,191,36,.35);}
+.nav-item.active .ni-badge{background:linear-gradient(135deg,#f7e07a,#d4af37);color:#0b1220;border-color:transparent;}
+
+.sb-foot{padding:16px 14px;border-top:1px solid rgba(255,255,255,.08);}
+.user-chip{display:flex;align-items:center;gap:12px;padding:11px 12px;border-radius:14px;background:linear-gradient(135deg,rgba(255,255,255,.06),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.1);transition:border-color .25s,background .25s;}
+.user-chip:hover{border-color:rgba(247,224,122,.4);background:linear-gradient(135deg,rgba(247,224,122,.09),rgba(212,175,55,.03));}
+.uc-avatar{flex:0 0 42px;width:42px;height:42px;border-radius:12px;display:grid;place-items:center;font-size:15px;font-weight:800;color:#0b1220;background:linear-gradient(135deg,#f7e07a,#d4af37);box-shadow:0 10px 22px -10px rgba(212,175,55,.9);letter-spacing:-.5px;}
+.uc-info{min-width:0;flex:1;line-height:1.2;}
+.uc-name{font-size:13px;font-weight:800;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:-.1px;}
+.uc-role{font-size:10px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:var(--gold-1);margin-top:3px;}
+.uc-logout{flex:0 0 36px;width:36px;height:36px;border-radius:10px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.75);cursor:pointer;display:grid;place-items:center;font-size:15px;transition:all .25s var(--ease);}
+.uc-logout:hover{background:linear-gradient(135deg,#ef4444,#dc2626);color:#fff;border-color:transparent;transform:scale(1.05);}
+
+.main{margin-left:var(--sidebar-w);min-height:100vh;padding:28px 32px 60px;position:relative;}
+.main-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:26px;flex-wrap:wrap;}
+.mh-left{display:flex;align-items:center;gap:14px;min-width:0;}
+.mh-menu{width:44px;height:44px;flex:0 0 44px;border-radius:12px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:#fff;cursor:pointer;display:none;place-items:center;font-size:19px;transition:background .2s;}
+.mh-menu:hover{background:rgba(255,255,255,.14);}
+.mh-title{min-width:0;}
+.mh-title h1{margin:0;font-size:clamp(20px,2.6vw,26px);font-weight:800;letter-spacing:-.6px;background:linear-gradient(100deg,#ffffff 30%,#fde9a8 60%,#a5b4fc 90%);background-size:200% auto;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:shineText 6s linear infinite;line-height:1.2;}
+.mh-title p{margin:5px 0 0;font-size:12px;font-weight:700;letter-spacing:1.3px;text-transform:uppercase;color:rgba(255,255,255,.55);}
+
+/* Stats */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:28px;}
+.stat{position:relative;padding:22px 20px;border-radius:18px;background:linear-gradient(135deg,rgba(255,255,255,.07),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.1);overflow:hidden;transition:transform .35s var(--bounce),border-color .3s,box-shadow .3s;}
+.stat::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--c1,#f7e07a),var(--c2,#d4af37));opacity:.85;}
+.stat:hover{transform:translateY(-4px);border-color:rgba(247,224,122,.35);box-shadow:0 22px 44px -22px rgba(212,175,55,.5);}
+.stat.s1{--c1:#f7e07a;--c2:#d4af37;}
+.stat.s2{--c1:#fbbf24;--c2:#f59e0b;}
+.stat.s3{--c1:#34d399;--c2:#059669;}
+.stat.s4{--c1:#f87171;--c2:#dc2626;}
+.stat .si{position:absolute;top:18px;right:18px;font-size:20px;opacity:.35;}
+.stat .n{font-size:32px;font-weight:800;letter-spacing:-1.4px;line-height:1;background:linear-gradient(135deg,var(--c1),var(--c2));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}
+.stat .l{margin-top:10px;font-size:11px;font-weight:800;letter-spacing:1.3px;text-transform:uppercase;color:rgba(255,255,255,.6);}
+
+/* Tab content */
+.tab-content{display:none;}
+.tab-content.active{display:block;animation:fadeUp .4s var(--ease) both;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:none;}}
+
+.list{display:grid;gap:14px;}
+.item{padding:20px 22px;border-radius:18px;background:linear-gradient(135deg,rgba(255,255,255,.06),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.1);transition:border-color .3s,box-shadow .3s;}
+.item:hover{border-color:rgba(247,224,122,.25);box-shadow:0 14px 34px -22px rgba(212,175,55,.6);}
+.item-head{display:flex;justify-content:space-between;gap:14px;align-items:flex-start;flex-wrap:wrap;margin-bottom:12px;}
+.item-name{font-size:16px;font-weight:800;letter-spacing:-.2px;}
+.item-sub{font-size:11.5px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:rgba(255,255,255,.5);margin-top:4px;font-family:monospace;}
+.pill{padding:6px 13px;border-radius:999px;font-size:10.5px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;border:1px solid;}
+.pill.pending{color:#fbbf24;background:rgba(251,191,36,.12);border-color:rgba(251,191,36,.35);}
+.pill.approved{color:#34d399;background:rgba(52,211,153,.12);border-color:rgba(52,211,153,.35);}
+.pill.rejected{color:#f87171;background:rgba(248,113,113,.12);border-color:rgba(248,113,113,.35);}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px 22px;font-size:13px;margin-top:14px;padding-top:14px;border-top:1px dashed rgba(255,255,255,.1);}
+.pair{display:flex;flex-direction:column;gap:3px;}
+.pair .k{font-size:10.5px;font-weight:700;letter-spacing:1.1px;text-transform:uppercase;color:rgba(255,255,255,.42);}
+.pair .v{font-size:13px;font-weight:700;color:#fff;overflow-wrap:anywhere;}
+.pair .v.mono{font-family:monospace;letter-spacing:.5px;}
+.actions{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap;}
+.invite-link{display:inline-flex;align-items:center;gap:8px;margin-top:12px;padding:11px 15px;border-radius:11px;background:rgba(247,224,122,.12);border:1px solid rgba(247,224,122,.35);color:var(--gold-1);font-family:monospace;font-size:12px;font-weight:700;text-decoration:none;overflow-wrap:anywhere;word-break:break-all;}
+
+.empty{text-align:center;padding:70px 24px;color:rgba(255,255,255,.5);border:2px dashed rgba(255,255,255,.15);border-radius:20px;background:rgba(255,255,255,.02);}
+.empty .icon{font-size:54px;margin-bottom:16px;opacity:.6;}
+
+/* Buttons */
+.btn{padding:12px 22px;border-radius:12px;font-weight:800;font-size:13.5px;letter-spacing:.3px;cursor:pointer;border:none;transition:transform .25s var(--bounce),box-shadow .25s var(--ease),background .25s var(--ease);font-family:inherit;}
+.btn-ghost{background:rgba(255,255,255,.08);color:#fff;border:1px solid rgba(255,255,255,.14);}
+.btn-ghost:hover{background:rgba(255,255,255,.18);transform:translateY(-2px);}
+.btn-gold{background:linear-gradient(135deg,var(--gold-1),var(--gold-2));color:#0b1220;box-shadow:0 14px 30px -14px rgba(212,175,55,.95);}
+.btn-gold:hover{transform:translateY(-2px);box-shadow:0 20px 40px -14px rgba(212,175,55,1);}
+.btn-approve{background:linear-gradient(135deg,#10b981,#059669);color:#fff;box-shadow:0 12px 26px -12px rgba(16,185,129,.75);}
+.btn-approve:hover{transform:translateY(-2px);}
+.btn-reject{background:linear-gradient(135deg,#ef4444,#dc2626);color:#fff;box-shadow:0 12px 26px -12px rgba(239,68,68,.75);}
+.btn-reject:hover{transform:translateY(-2px);}
+.btn-danger{background:linear-gradient(135deg,#ef4444,#b91c1c);color:#fff;padding:10px 16px;font-size:12.5px;}
+.btn-danger:hover{transform:translateY(-2px);}
+.btn-add{background:linear-gradient(135deg,#2563eb,#1d4ed8);color:#fff;padding:14px 26px;font-size:14px;box-shadow:0 14px 30px -14px rgba(37,99,235,.9);}
+.btn-add:hover{transform:translateY(-2px);}
+
+/* Forms */
+.settings{display:grid;gap:18px;max-width:640px;}
+.field{display:flex;flex-direction:column;gap:8px;}
+.field label{font-size:11.5px;font-weight:800;letter-spacing:1.3px;text-transform:uppercase;color:rgba(255,255,255,.6);}
+.field input,.field textarea,.field select{padding:14px 16px;border-radius:14px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);color:#fff;font-size:15px;font-weight:600;outline:none;font-family:inherit;transition:all .25s var(--ease);}
+.field input:focus,.field textarea:focus,.field select:focus{border-color:var(--gold-1);background:rgba(255,255,255,.12);box-shadow:0 0 0 4px rgba(247,224,122,.1);}
+.field textarea{min-height:110px;resize:vertical;line-height:1.55;font-family:monospace;font-size:12.5px;word-break:break-all;}
+.field select option{background:#0b1220;color:#fff;}
+.field .pw-wrap{margin-bottom:0;}
+.sys-hr{border:none;border-top:1px solid rgba(255,255,255,.08);margin:14px 0;}
+
+/* Admin rows */
+.admin-list{display:grid;gap:12px;margin-top:24px;}
+.admin-row{display:flex;justify-content:space-between;align-items:center;gap:14px;padding:16px 20px;border-radius:16px;background:linear-gradient(135deg,rgba(255,255,255,.05),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.1);transition:border-color .25s;}
+.admin-row:hover{border-color:rgba(247,224,122,.25);}
+.admin-row .who{min-width:0;flex:1;}
+.admin-row .who .u{font-weight:800;font-size:14.5px;letter-spacing:-.2px;}
+.admin-row .who .n{font-size:12px;font-weight:700;color:rgba(255,255,255,.55);margin-top:4px;overflow-wrap:anywhere;}
+.super-pill{display:inline-block;margin-left:8px;padding:3px 9px;border-radius:999px;font-size:9.5px;font-weight:800;letter-spacing:1.1px;text-transform:uppercase;background:linear-gradient(135deg,#f7e07a,#d4af37);color:#0b1220;}
+.admin-pill{display:inline-block;margin-left:8px;padding:3px 9px;border-radius:999px;font-size:9.5px;font-weight:800;letter-spacing:1.1px;text-transform:uppercase;background:rgba(255,255,255,.1);color:#cbd5e1;border:1px solid rgba(255,255,255,.15);}
+
+/* Toast */
+.toast{position:fixed;top:20px;right:20px;padding:15px 22px;border-radius:14px;font-weight:800;font-size:13.5px;color:#fff;box-shadow:0 20px 44px -14px rgba(0,0,0,.6);transform:translateY(-140%);transition:transform .4s var(--bounce);z-index:200;}
+.toast.show{transform:translateY(0);}
+.toast.ok{background:linear-gradient(135deg,#10b981,#059669);}
+.toast.err{background:linear-gradient(135deg,#ef4444,#dc2626);}
+
+/* Branded modal */
+.adm-modal{position:fixed;inset:0;z-index:250;background:rgba(5,9,18,.85);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);display:flex;align-items:center;justify-content:center;padding:18px;opacity:0;visibility:hidden;transition:opacity .35s var(--bounce),visibility .35s;overflow-y:auto;}
+.adm-modal.open{opacity:1;visibility:visible;}
+.adm-box{position:relative;width:100%;max-width:440px;max-height:calc(100dvh - 36px);overflow-y:auto;background:radial-gradient(420px 220px at 50% -10%,rgba(59,130,246,.30),transparent 70%),linear-gradient(160deg,#0f1a2f 0%,#131f3d 100%);border:1px solid rgba(255,255,255,.14);border-radius:26px;padding:26px 24px 24px;text-align:center;color:#fff;box-shadow:0 50px 100px -40px rgba(0,0,0,.95),0 0 90px -25px rgba(37,99,235,.55),inset 0 1px 0 rgba(255,255,255,.08);transform:translateY(28px) scale(.94);opacity:0;transition:transform .55s var(--bounce),opacity .4s;}
+.adm-modal.open .adm-box{transform:translateY(0) scale(1);opacity:1;}
+.adm-brand{display:flex;align-items:center;justify-content:center;gap:12px;padding-bottom:18px;margin-bottom:20px;border-bottom:1px solid rgba(255,255,255,.1);}
+.adm-brand-logo{width:48px;height:48px;border-radius:14px;overflow:hidden;flex:0 0 48px;box-shadow:0 10px 26px -10px rgba(212,175,55,.9),0 0 0 2px rgba(247,224,122,.6);}
+.adm-brand-logo img{width:100%;height:100%;object-fit:cover;display:block;}
+.adm-brand-text{text-align:left;line-height:1.15;}
+.adm-brand-name{font-size:13px;font-weight:800;letter-spacing:1.6px;color:#fff;}
+.adm-brand-moto{font-size:8px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;background:linear-gradient(90deg,#8a6516 0%,#d4af37 30%,#f7e07a 50%,#d4af37 70%,#8a6516 100%);background-size:200% auto;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:mottoShine 6s linear infinite;margin-top:4px;}
+.adm-badge{width:76px;height:76px;border-radius:50%;display:grid;place-items:center;margin:0 auto 18px;font-size:36px;font-weight:800;background:linear-gradient(135deg,#d1fae5,#a7f3d0);color:#059669;box-shadow:0 20px 42px -18px rgba(16,185,129,.85),inset 0 0 0 3px rgba(255,255,255,.9),inset 0 0 0 4px rgba(16,185,129,.3);animation:admPop .7s var(--bounce) both;}
+@keyframes admPop{from{transform:scale(.3);opacity:0;}to{transform:scale(1);opacity:1;}}
+.adm-modal.err .adm-badge{background:linear-gradient(135deg,#fee2e2,#fecaca);color:#dc2626;box-shadow:0 20px 42px -18px rgba(239,68,68,.85),inset 0 0 0 3px rgba(255,255,255,.9),inset 0 0 0 4px rgba(239,68,68,.3);}
+.adm-modal.warn .adm-badge{background:linear-gradient(135deg,#fff8e1,#fde9a8);color:#8a6516;box-shadow:0 20px 42px -18px rgba(212,175,55,.85),inset 0 0 0 3px rgba(255,255,255,.9),inset 0 0 0 4px rgba(212,175,55,.3);}
+.adm-box h4{margin:0 0 10px;font-size:20px;font-weight:800;letter-spacing:-.4px;color:#fff;}
+.adm-box p#admMsg{margin:0;font-size:13.5px;line-height:1.7;color:rgba(255,255,255,.72);font-weight:500;}
+.adm-extra{margin-top:16px;text-align:left;}
+.adm-link{margin-top:12px;padding:13px 15px;border-radius:12px;background:rgba(247,224,122,.12);border:1px solid rgba(247,224,122,.4);color:var(--gold-1);font-family:monospace;font-size:11.5px;font-weight:700;word-break:break-all;line-height:1.55;}
+.adm-kv{display:flex;justify-content:space-between;gap:12px;padding:8px 0;font-size:12.5px;border-bottom:1px dashed rgba(255,255,255,.1);}
+.adm-kv:last-child{border-bottom:none;}
+.adm-kv span:first-child{color:rgba(255,255,255,.5);font-weight:800;font-size:10px;letter-spacing:.7px;text-transform:uppercase;flex:0 0 auto;}
+.adm-kv span:last-child{font-weight:800;color:#fff;text-align:right;overflow-wrap:anywhere;font-family:monospace;font-size:11.5px;}
+.adm-actions{display:flex;gap:10px;margin-top:22px;flex-wrap:wrap;}
+.adm-actions .btn{flex:1;min-width:130px;padding:14px 18px;font-size:13.5px;border-radius:12px;display:inline-flex;align-items:center;justify-content:center;gap:8px;}
+
+/* Telegram + Verify cards */
 .tg-card{padding:24px 26px;border-radius:20px;background:linear-gradient(135deg,rgba(255,255,255,.06),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.1);position:relative;overflow:hidden;max-width:640px;transition:border-color .3s,box-shadow .3s;}
 .tg-card.ok{border-color:rgba(52,211,153,.45);box-shadow:0 18px 40px -20px rgba(16,185,129,.55),0 0 0 1px rgba(52,211,153,.15);}
 .tg-card.bad{border-color:rgba(248,113,113,.35);}
-
-/* Connected badge — top-right glowing pill */
 .tg-badge{position:absolute;top:20px;right:22px;display:inline-flex;align-items:center;gap:8px;padding:8px 16px;border-radius:999px;font-size:11px;font-weight:800;letter-spacing:1.3px;text-transform:uppercase;z-index:2;animation:badgeIn .5s var(--bounce) both;}
 @keyframes badgeIn{from{opacity:0;transform:scale(.7);}to{opacity:1;transform:scale(1);}}
 .tg-badge.ok{background:linear-gradient(135deg,rgba(52,211,153,.22),rgba(16,185,129,.14));color:#34d399;border:1px solid rgba(52,211,153,.5);box-shadow:0 0 22px -6px rgba(52,211,153,.7),inset 0 1px 0 rgba(255,255,255,.08);}
 .tg-badge.bad{background:linear-gradient(135deg,rgba(248,113,113,.18),rgba(239,68,68,.1));color:#f87171;border:1px solid rgba(248,113,113,.45);}
 .tg-badge .dot{width:8px;height:8px;border-radius:50%;background:currentColor;box-shadow:0 0 10px currentColor;animation:tgPulse 2s infinite;}
 @keyframes tgPulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.5;transform:scale(.75);}}
-
 .tg-card-head{padding-right:150px;margin-bottom:18px;}
 .tg-card-head h4{margin:0 0 4px;font-size:17px;font-weight:800;letter-spacing:-.3px;color:#fff;}
 .tg-card-head p{margin:0;font-size:12.5px;color:rgba(255,255,255,.6);line-height:1.5;}
-
 .tg-info{display:grid;grid-template-columns:1fr;gap:10px;margin-top:16px;}
 .tg-info-row{display:flex;align-items:center;gap:14px;padding:13px 16px;border-radius:12px;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.06);transition:background .2s,border-color .2s;}
 .tg-info-row:hover{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.12);}
 .tg-info-row .k{flex:0 0 92px;font-size:10.5px;font-weight:800;letter-spacing:1.1px;text-transform:uppercase;color:rgba(255,255,255,.5);}
 .tg-info-row .v{flex:1;min-width:0;font-size:13px;font-weight:700;color:#fff;font-family:monospace;letter-spacing:.4px;word-break:break-all;overflow-wrap:anywhere;line-height:1.4;text-align:right;}
-.tg-info-row .v.plain{font-family:inherit;letter-spacing:0;font-weight:800;font-size:14px;}
-
 .tg-actions{display:flex;gap:8px;margin-top:18px;flex-wrap:wrap;}
 .tg-actions .btn{flex:1;min-width:130px;padding:12px 16px;font-size:13px;}
 
-.tg-empty{padding:22px 0 8px;text-align:center;}
-.tg-empty p{margin:0 0 16px;font-size:13.5px;color:rgba(255,255,255,.72);line-height:1.6;}
-
-/* ============ TELEGRAM WIZARD MODAL ============ */
-.tg-wiz{position:fixed;inset:0;z-index:210;background:rgba(5,9,18,.88);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);display:flex;align-items:center;justify-content:center;padding:16px;padding-top:calc(16px + env(safe-area-inset-top));padding-bottom:calc(16px + env(safe-area-inset-bottom));opacity:0;visibility:hidden;transition:opacity .3s,visibility .3s;overflow-y:auto;}
+/* Telegram wizard */
+.tg-wiz{position:fixed;inset:0;z-index:260;background:rgba(5,9,18,.9);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);display:flex;align-items:center;justify-content:center;padding:16px;padding-top:calc(16px + env(safe-area-inset-top));padding-bottom:calc(16px + env(safe-area-inset-bottom));opacity:0;visibility:hidden;transition:opacity .3s,visibility .3s;overflow-y:auto;}
 .tg-wiz.open{opacity:1;visibility:visible;}
-.tg-wiz-box{position:relative;width:100%;max-width:420px;max-height:calc(100dvh - 32px);overflow-y:auto;background:radial-gradient(400px 200px at 50% -10%,rgba(59,130,246,.3),transparent 70%),linear-gradient(160deg,#0f1a2f 0%,#131f3d 100%);border:1px solid rgba(255,255,255,.12);border-radius:24px;padding:28px 24px 24px;color:#fff;box-shadow:0 50px 100px -40px rgba(0,0,0,.95),0 0 90px -25px rgba(37,99,235,.55);transform:translateY(24px) scale(.95);opacity:0;transition:transform .5s var(--bounce),opacity .35s;}
+.tg-wiz-box{position:relative;width:100%;max-width:440px;max-height:calc(100dvh - 32px);overflow-y:auto;background:radial-gradient(400px 200px at 50% -10%,rgba(59,130,246,.3),transparent 70%),linear-gradient(160deg,#0f1a2f 0%,#131f3d 100%);border:1px solid rgba(255,255,255,.14);border-radius:26px;padding:32px 26px 26px;color:#fff;box-shadow:0 50px 100px -40px rgba(0,0,0,.95),0 0 90px -25px rgba(37,99,235,.55);transform:translateY(24px) scale(.95);opacity:0;transition:transform .5s var(--bounce),opacity .35s;}
 .tg-wiz.open .tg-wiz-box{transform:translateY(0) scale(1);opacity:1;}
-.tg-prog{display:flex;gap:6px;justify-content:center;margin-bottom:22px;}
-.tg-prog i{width:28px;height:4px;border-radius:999px;background:rgba(255,255,255,.1);transition:background .3s;}
+.tg-prog{display:flex;gap:6px;justify-content:center;margin-bottom:24px;}
+.tg-prog i{width:36px;height:4px;border-radius:999px;background:rgba(255,255,255,.1);transition:background .3s;}
 .tg-prog i.done{background:linear-gradient(90deg,#f7e07a,#d4af37);}
 .tg-prog i.current{background:linear-gradient(90deg,#f7e07a,#d4af37);animation:progressGlow 2s ease-in-out infinite;}
 @keyframes progressGlow{0%,100%{box-shadow:0 0 0 0 rgba(212,175,55,.6);}50%{box-shadow:0 0 0 4px rgba(212,175,55,0);}}
-.tg-wiz-close{position:absolute;top:16px;right:16px;width:34px;height:34px;border-radius:10px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.1);color:#fff;display:grid;place-items:center;font-size:14px;cursor:pointer;transition:background .2s,transform .3s var(--bounce);z-index:5;}
+.tg-wiz-close{position:absolute;top:16px;right:16px;width:36px;height:36px;border-radius:11px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.1);color:#fff;display:grid;place-items:center;font-size:14px;cursor:pointer;transition:background .2s,transform .3s var(--bounce);z-index:5;}
 .tg-wiz-close:hover{background:linear-gradient(135deg,#ef4444,#dc2626);transform:rotate(90deg);}
 .tg-step{display:none;}
 .tg-step.active{display:block;animation:fadeUp .35s var(--bounce) both;}
-@keyframes fadeUp{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
-.tg-step-tag{display:inline-block;font-size:10px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:#f7e07a;background:rgba(247,224,122,.12);padding:4px 11px;border-radius:999px;margin-bottom:14px;}
-.tg-step h3{margin:0 0 8px;font-size:18px;font-weight:800;letter-spacing:-.3px;color:#fff;}
-.tg-step p{margin:0 0 18px;font-size:13px;color:rgba(255,255,255,.68);line-height:1.6;}
+.tg-step-tag{display:inline-block;font-size:10px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:#f7e07a;background:rgba(247,224,122,.12);padding:5px 12px;border-radius:999px;margin-bottom:14px;}
+.tg-step h3{margin:0 0 8px;font-size:19px;font-weight:800;letter-spacing:-.3px;color:#fff;}
+.tg-step p{margin:0 0 18px;font-size:13px;color:rgba(255,255,255,.68);line-height:1.65;}
 .tg-step p b{color:#f7e07a;font-weight:800;}
-.tg-input{width:100%;padding:13px 16px;border-radius:12px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);color:#fff;font-size:14.5px;font-weight:600;outline:none;font-family:inherit;margin-bottom:12px;transition:border-color .2s,background .2s;}
+.tg-input{width:100%;padding:14px 16px;border-radius:12px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);color:#fff;font-size:14.5px;font-weight:600;outline:none;font-family:inherit;margin-bottom:12px;transition:border-color .2s,background .2s;}
 .tg-input:focus{border-color:#f7e07a;background:rgba(255,255,255,.1);}
 .tg-input::placeholder{color:rgba(255,255,255,.35);font-weight:500;}
 .tg-actions-row{display:flex;gap:8px;margin-top:16px;}
-.tg-actions-row button{flex:1;padding:13px 16px;border-radius:12px;font-size:14px;font-weight:800;cursor:pointer;border:none;transition:all .25s var(--bounce);font-family:inherit;}
-.tg-btn-primary{background:linear-gradient(135deg,#f7e07a,#d4af37);color:#0b1220;box-shadow:0 12px 28px -12px rgba(212,175,55,.9);}
+.tg-actions-row button{flex:1;padding:14px 18px;border-radius:12px;font-size:14px;font-weight:800;cursor:pointer;border:none;transition:all .25s var(--bounce);font-family:inherit;}
+.tg-btn-primary{background:linear-gradient(135deg,#f7e07a,#d4af37);color:#0b1220;box-shadow:0 14px 30px -14px rgba(212,175,55,.95);}
 .tg-btn-primary:hover:not(:disabled){transform:translateY(-2px);}
 .tg-btn-primary:disabled{opacity:.5;cursor:not-allowed;transform:none;}
 .tg-btn-ghost{background:rgba(255,255,255,.08);color:#fff;border:1px solid rgba(255,255,255,.14);flex:0 0 auto;padding-left:22px;padding-right:22px;}
@@ -75,144 +267,33 @@ body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:linear-grad
 .tg-btn-ghost:disabled{opacity:.4;cursor:not-allowed;}
 .tg-error{color:#f87171;font-size:12.5px;font-weight:700;margin-top:10px;display:none;}
 .tg-error.show{display:block;}
-.tg-note{font-size:12px;color:#93c5fd;background:rgba(59,130,246,.08);border:1px solid rgba(59,130,246,.3);padding:11px 13px;border-radius:10px;line-height:1.55;margin-bottom:14px;}
+.tg-note{font-size:12px;color:#93c5fd;background:rgba(59,130,246,.08);border:1px solid rgba(59,130,246,.3);padding:12px 14px;border-radius:10px;line-height:1.55;margin-bottom:14px;}
 .tg-note b{color:#bfdbfe;}
 
-/* ============ LOGIN ============ */
-#loginView{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:20px;padding-top:calc(20px + env(safe-area-inset-top));padding-bottom:calc(20px + env(safe-area-inset-bottom));overflow-y:auto;z-index:1;}
-.login-card{width:100%;max-width:420px;margin:auto;padding:32px;background:linear-gradient(135deg,rgba(255,255,255,.06),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.1);border-radius:22px;}
-.login-card h2{margin:0 0 8px;font-size:22px;font-weight:800;}
-.login-card p{margin:0 0 24px;color:rgba(255,255,255,.6);font-size:14px;}
-.login-card label{display:block;font-size:11px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:rgba(255,255,255,.55);margin-bottom:8px;}
-.login-card input{width:100%;padding:14px 18px;border-radius:14px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);color:#fff;font-size:15px;font-weight:600;outline:none;transition:border-color .25s,background .25s;margin-bottom:14px;}
-.login-card input:focus{border-color:var(--gold-1);background:rgba(255,255,255,.12);}
-.login-card input::placeholder{color:rgba(255,255,255,.4);}
-.login-card .btn{width:100%;padding:15px;font-size:15px;}
-.login-error{margin-top:14px;color:#f87171;font-size:13px;font-weight:700;display:none;}
-.login-error.show{display:block;}
+/* Sidebar overlay (mobile) */
+.sb-overlay{position:fixed;inset:0;background:rgba(5,9,18,.7);z-index:35;opacity:0;visibility:hidden;transition:opacity .3s,visibility .3s;}
+.sb-overlay.show{opacity:1;visibility:visible;}
 
-/* ============ PASSWORD WRAPPER ============ */
-.pw-wrap{position:relative;margin-bottom:14px;}
-.pw-wrap input{margin-bottom:0 !important;padding-right:52px !important;}
-.pw-toggle{position:absolute;top:50%;right:12px;transform:translateY(-50%);width:36px;height:36px;border-radius:10px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.65);cursor:pointer;display:grid;place-items:center;transition:background .2s,color .2s,transform .25s var(--bounce);padding:0;}
-.pw-toggle:hover{background:rgba(255,255,255,.14);color:#fff;}
-.pw-toggle:active{transform:translateY(-50%) scale(.92);}
-.pw-toggle svg{width:18px;height:18px;display:block;pointer-events:none;}
-
-/* ============ DASHBOARD ============ */
-.wrap{max-width:1100px;margin:0 auto;padding:28px 20px 60px;}
-.head{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-bottom:22px;margin-bottom:28px;border-bottom:1px solid rgba(255,255,255,.1);flex-wrap:wrap;}
-.head-left{display:flex;align-items:center;gap:14px;}
-.logo{width:52px;height:52px;border-radius:14px;overflow:hidden;flex:0 0 52px;box-shadow:0 10px 26px -10px rgba(212,175,55,.85),0 0 0 2px rgba(247,224,122,.6);}
-.logo img{width:100%;height:100%;object-fit:cover;}
-.head h1{margin:0;font-size:20px;font-weight:800;letter-spacing:-.3px;}
-.head p{margin:4px 0 0;font-size:12px;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;color:var(--gold-1);}
-.btn{padding:11px 20px;border-radius:12px;font-weight:800;font-size:13.5px;letter-spacing:.3px;cursor:pointer;border:none;transition:transform .25s var(--bounce),background .25s;}
-.btn-ghost{background:rgba(255,255,255,.08);color:#fff;border:1px solid rgba(255,255,255,.14);}
-.btn-ghost:hover{background:rgba(255,255,255,.18);transform:translateY(-2px);}
-.btn-gold{background:linear-gradient(135deg,var(--gold-1),var(--gold-2));color:#0b1220;box-shadow:0 12px 28px -12px rgba(212,175,55,.9);}
-.btn-gold:hover{transform:translateY(-2px);}
-.btn-approve{background:linear-gradient(135deg,#10b981,#059669);color:#fff;padding:10px 18px;font-size:12.5px;}
-.btn-approve:hover{transform:translateY(-2px);}
-.btn-reject{background:linear-gradient(135deg,#ef4444,#dc2626);color:#fff;padding:10px 18px;font-size:12.5px;}
-.btn-reject:hover{transform:translateY(-2px);}
-.btn-danger{background:linear-gradient(135deg,#ef4444,#b91c1c);color:#fff;padding:8px 14px;font-size:12px;}
-.btn-danger:hover{transform:translateY(-2px);}
-.btn-add{background:linear-gradient(135deg,#2563eb,#1d4ed8);color:#fff;padding:12px 22px;font-size:13.5px;box-shadow:0 12px 26px -12px rgba(37,99,235,.9);}
-.btn-add:hover{transform:translateY(-2px);}
-
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:26px;}
-.stat{padding:20px 18px;border-radius:16px;background:linear-gradient(135deg,rgba(255,255,255,.06),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.1);transition:transform .3s var(--bounce),border-color .3s;}
-.stat:hover{transform:translateY(-3px);border-color:rgba(247,224,122,.4);}
-.stat .n{font-size:28px;font-weight:800;letter-spacing:-1px;background:linear-gradient(135deg,var(--gold-1),var(--gold-2));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;line-height:1;}
-.stat .l{margin-top:8px;font-size:11.5px;font-weight:700;letter-spacing:1.1px;text-transform:uppercase;color:rgba(255,255,255,.6);}
-
-.tabs{display:flex;gap:8px;margin-bottom:22px;flex-wrap:wrap;}
-.tab{padding:11px 20px;border-radius:12px;background:rgba(255,255,255,.06);color:rgba(255,255,255,.75);font-weight:800;font-size:13px;cursor:pointer;border:1px solid rgba(255,255,255,.1);transition:all .25s;}
-.tab:hover{background:rgba(255,255,255,.12);color:#fff;}
-.tab.active{background:linear-gradient(135deg,var(--gold-1),var(--gold-2));color:#0b1220;border-color:transparent;box-shadow:0 12px 28px -12px rgba(212,175,55,.9);}
-.tab-content{display:none;}
-.tab-content.active{display:block;animation:fade .35s var(--bounce) both;}
-@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
-
-.list{display:grid;gap:12px;}
-.item{padding:18px 20px;border-radius:16px;background:linear-gradient(135deg,rgba(255,255,255,.06),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.1);}
-.item-head{display:flex;justify-content:space-between;gap:14px;align-items:flex-start;flex-wrap:wrap;margin-bottom:10px;}
-.item-name{font-size:16px;font-weight:800;letter-spacing:-.2px;}
-.item-sub{font-size:11.5px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:rgba(255,255,255,.55);margin-top:3px;font-family:monospace;}
-.pill{padding:5px 12px;border-radius:999px;font-size:10.5px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;border:1px solid;}
-.pill.pending{color:#fbbf24;background:rgba(251,191,36,.12);border-color:rgba(251,191,36,.35);}
-.pill.approved{color:#34d399;background:rgba(52,211,153,.12);border-color:rgba(52,211,153,.35);}
-.pill.rejected{color:#f87171;background:rgba(248,113,113,.12);border-color:rgba(248,113,113,.35);}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:8px 20px;font-size:13px;margin-top:12px;padding-top:12px;border-top:1px dashed rgba(255,255,255,.1);}
-.pair{display:flex;flex-direction:column;gap:2px;}
-.pair .k{font-size:10.5px;font-weight:700;letter-spacing:1.1px;text-transform:uppercase;color:rgba(255,255,255,.45);}
-.pair .v{font-size:13px;font-weight:700;color:#fff;overflow-wrap:anywhere;}
-.pair .v.mono{font-family:monospace;letter-spacing:.5px;}
-.actions{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap;}
-.invite-link{display:inline-flex;align-items:center;gap:8px;margin-top:12px;padding:10px 14px;border-radius:10px;background:rgba(247,224,122,.12);border:1px solid rgba(247,224,122,.35);color:var(--gold-1);font-family:monospace;font-size:12px;font-weight:700;text-decoration:none;overflow-wrap:anywhere;word-break:break-all;}
-
-.empty{text-align:center;padding:60px 20px;color:rgba(255,255,255,.5);border:2px dashed rgba(255,255,255,.15);border-radius:18px;}
-.empty .icon{font-size:48px;margin-bottom:14px;opacity:.6;}
-
-.settings{display:grid;gap:16px;max-width:560px;}
-.field{display:flex;flex-direction:column;gap:8px;}
-.field label{font-size:11.5px;font-weight:800;letter-spacing:1.3px;text-transform:uppercase;color:rgba(255,255,255,.6);}
-.field input,.field textarea,.field select{padding:14px 16px;border-radius:14px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);color:#fff;font-size:15px;font-weight:600;outline:none;font-family:inherit;}
-.field input:focus,.field textarea:focus,.field select:focus{border-color:var(--gold-1);background:rgba(255,255,255,.12);}
-.field textarea{min-height:100px;resize:vertical;line-height:1.5;font-family:monospace;font-size:12px;word-break:break-all;}
-.field select option{background:#0b1220;color:#fff;}
-.sys-hr{border:none;border-top:1px solid rgba(255,255,255,.08);margin:14px 0;}
-.field .pw-wrap{margin-bottom:0;}
-
-.admin-list{display:grid;gap:10px;margin-top:22px;}
-.admin-row{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 18px;border-radius:14px;background:linear-gradient(135deg,rgba(255,255,255,.05),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.1);}
-.admin-row .who{min-width:0;flex:1;}
-.admin-row .who .u{font-weight:800;font-size:14px;letter-spacing:-.2px;}
-.admin-row .who .n{font-size:11.5px;font-weight:700;color:rgba(255,255,255,.55);margin-top:3px;overflow-wrap:anywhere;}
-.super-pill{display:inline-block;margin-left:8px;padding:2px 8px;border-radius:999px;font-size:9.5px;font-weight:800;letter-spacing:1.1px;text-transform:uppercase;background:linear-gradient(135deg,#f7e07a,#d4af37);color:#0b1220;}
-.admin-pill{display:inline-block;margin-left:8px;padding:2px 8px;border-radius:999px;font-size:9.5px;font-weight:800;letter-spacing:1.1px;text-transform:uppercase;background:rgba(255,255,255,.1);color:#cbd5e1;border:1px solid rgba(255,255,255,.15);}
-
-.toast{position:fixed;top:20px;right:20px;padding:14px 20px;border-radius:12px;font-weight:800;font-size:13.5px;color:#fff;box-shadow:0 20px 40px -14px rgba(0,0,0,.6);transform:translateY(-120%);transition:transform .35s var(--bounce);z-index:100;}
-.toast.show{transform:translateY(0);}
-.toast.ok{background:linear-gradient(135deg,#10b981,#059669);}
-.toast.err{background:linear-gradient(135deg,#ef4444,#dc2626);}
-
-.adm-modal{position:fixed;inset:0;z-index:200;background:rgba(5,9,18,.84);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);display:flex;align-items:center;justify-content:center;padding:18px;opacity:0;visibility:hidden;transition:opacity .32s var(--bounce),visibility .32s;overflow-y:auto;}
-.adm-modal.open{opacity:1;visibility:visible;}
-.adm-box{position:relative;width:100%;max-width:430px;max-height:calc(100dvh - 36px);overflow-y:auto;background:radial-gradient(420px 220px at 50% -10%,rgba(59,130,246,.30),transparent 70%),linear-gradient(160deg,#0f1a2f 0%,#131f3d 100%);border:1px solid rgba(255,255,255,.12);border-radius:24px;padding:24px 22px 22px;text-align:center;color:#fff;box-shadow:0 50px 100px -40px rgba(0,0,0,.95),0 0 90px -25px rgba(37,99,235,.55),inset 0 1px 0 rgba(255,255,255,.08);transform:translateY(26px) scale(.95);opacity:0;transition:transform .5s var(--bounce),opacity .35s;}
-.adm-modal.open .adm-box{transform:translateY(0) scale(1);opacity:1;}
-.adm-brand{display:flex;align-items:center;justify-content:center;gap:11px;padding-bottom:16px;margin-bottom:18px;border-bottom:1px solid rgba(255,255,255,.1);}
-.adm-brand-logo{width:44px;height:44px;border-radius:13px;overflow:hidden;flex:0 0 44px;box-shadow:0 10px 26px -10px rgba(212,175,55,.85),0 0 0 2px rgba(247,224,122,.6);}
-.adm-brand-logo img{width:100%;height:100%;object-fit:cover;display:block;}
-.adm-brand-text{text-align:left;line-height:1.1;}
-.adm-brand-name{font-size:13px;font-weight:800;letter-spacing:1.6px;color:#fff;}
-.adm-brand-moto{font-size:8px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;background:linear-gradient(90deg,#8a6516 0%,#d4af37 30%,#f7e07a 50%,#d4af37 70%,#8a6516 100%);background-size:200% auto;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:mottoShine 6s linear infinite;margin-top:3px;}
-@keyframes mottoShine{0%{background-position:0% center;}100%{background-position:200% center;}}
-.adm-badge{width:70px;height:70px;border-radius:50%;display:grid;place-items:center;margin:0 auto 16px;font-size:34px;font-weight:800;background:linear-gradient(135deg,#d1fae5,#a7f3d0);color:#059669;box-shadow:0 18px 38px -16px rgba(16,185,129,.85),inset 0 0 0 3px rgba(255,255,255,.9),inset 0 0 0 4px rgba(16,185,129,.3);animation:admPop .6s var(--bounce) both;}
-@keyframes admPop{from{transform:scale(.3);opacity:0;}to{transform:scale(1);opacity:1;}}
-.adm-modal.err .adm-badge{background:linear-gradient(135deg,#fee2e2,#fecaca);color:#dc2626;box-shadow:0 18px 38px -16px rgba(239,68,68,.85),inset 0 0 0 3px rgba(255,255,255,.9),inset 0 0 0 4px rgba(239,68,68,.3);}
-.adm-modal.warn .adm-badge{background:linear-gradient(135deg,#fff8e1,#fde9a8);color:#8a6516;box-shadow:0 18px 38px -16px rgba(212,175,55,.85),inset 0 0 0 3px rgba(255,255,255,.9),inset 0 0 0 4px rgba(212,175,55,.3);}
-.adm-box h4{margin:0 0 8px;font-size:19px;font-weight:800;letter-spacing:-.3px;color:#fff;}
-.adm-box p#admMsg{margin:0;font-size:13.5px;line-height:1.65;color:rgba(255,255,255,.72);font-weight:500;}
-.adm-extra{margin-top:14px;text-align:left;}
-.adm-link{margin-top:10px;padding:12px 14px;border-radius:12px;background:rgba(247,224,122,.12);border:1px solid rgba(247,224,122,.4);color:var(--gold-1);font-family:monospace;font-size:11.5px;font-weight:700;word-break:break-all;line-height:1.5;}
-.adm-kv{display:flex;justify-content:space-between;gap:12px;padding:7px 0;font-size:12.5px;border-bottom:1px dashed rgba(255,255,255,.1);}
-.adm-kv:last-child{border-bottom:none;}
-.adm-kv span:first-child{color:rgba(255,255,255,.5);font-weight:800;font-size:10px;letter-spacing:.7px;text-transform:uppercase;flex:0 0 auto;}
-.adm-kv span:last-child{font-weight:800;color:#fff;text-align:right;overflow-wrap:anywhere;font-family:monospace;font-size:11px;}
-.adm-actions{display:flex;gap:9px;margin-top:20px;flex-wrap:wrap;}
-.adm-actions .btn{flex:1;min-width:120px;padding:13px 18px;font-size:13.5px;border-radius:12px;display:inline-flex;align-items:center;justify-content:center;gap:7px;}
-
-@media (max-width:640px){
-  .stats{grid-template-columns:repeat(2,1fr);gap:10px;}
-  .stat{padding:16px 14px;}
-  .stat .n{font-size:22px;}
-  .wrap{padding:20px 16px 40px;}
-  .admin-row{flex-direction:column;align-items:flex-start;}
-  .login-card{padding:24px 20px;}
-  .tg-card-head{padding-right:0;margin-bottom:14px;}
+/* Responsive */
+@media (max-width:960px){
+  .sidebar{transform:translateX(-100%);}
+  .sidebar.show{transform:translateX(0);}
+  .main{margin-left:0;padding:20px 18px 48px;}
+  .mh-menu{display:grid;}
+  .stats{grid-template-columns:repeat(2,1fr);gap:12px;}
+  .stat{padding:18px 16px;}
+  .stat .n{font-size:24px;}
   .tg-badge{position:static;margin-bottom:12px;display:inline-flex;}
+  .tg-card-head{padding-right:0;}
+}
+@media (max-width:520px){
+  .login-card{padding:32px 22px 26px;border-radius:22px;}
+  .login-logo-ring{width:96px;height:96px;}
+  .login-logo{width:84px;height:84px;}
+  .login-brand h1{font-size:22px;letter-spacing:1.8px;}
+  .login-moto{font-size:10px;letter-spacing:2.6px;}
+  .stats{grid-template-columns:1fr 1fr;}
+  .item{padding:16px 16px;}
   .tg-info-row{flex-direction:column;align-items:flex-start;gap:4px;padding:11px 14px;}
   .tg-info-row .k{flex:0 0 auto;}
   .tg-info-row .v{text-align:left;font-size:12.5px;}
@@ -221,261 +302,305 @@ body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:linear-grad
 </head>
 <body>
 
-<!-- ==================== LOGIN ==================== -->
+<div class="ambient" aria-hidden="true"></div>
+
+<!-- ============================================================
+     LOGIN
+     ============================================================ -->
 <div id="loginView">
   <div class="login-card">
-    <div style="display:flex;align-items:center;gap:14px;margin-bottom:20px;">
-      <div class="logo"><img src="logo.jpg" alt="ABJ" /></div>
-      <div>
-        <h2 style="margin:0">Admin Sign In</h2>
-        <p style="margin:4px 0 0">ABJ Tutorial · Control Panel</p>
-      </div>
+    <div class="login-logo-ring">
+      <div class="login-logo"><img src="logo.jpg" alt="ABJ Tutorial" /></div>
     </div>
+    <div class="login-brand">
+      <h1>ABJ TUTORIAL</h1>
+      <div class="login-moto">Empowering Tomorrow, Today.</div>
+    </div>
+
     <label for="adminUser">Username</label>
-    <input id="adminUser" type="text" placeholder="super" autocomplete="username" value="super" />
+    <input class="login-input" id="adminUser" type="text" placeholder="super" autocomplete="username" value="super" />
     <label for="adminPass">Password</label>
     <div class="pw-wrap">
-      <input id="adminPass" type="password" placeholder="Admin password" autocomplete="current-password" />
+      <input class="login-input" id="adminPass" type="password" placeholder="Admin password" autocomplete="current-password" />
       <button type="button" class="pw-toggle" data-target="adminPass" aria-label="Show/hide password">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
       </button>
     </div>
-    <button class="btn btn-gold" id="loginBtn" type="button" style="margin-top:4px;">Sign In →</button>
+    <button class="login-btn" id="loginBtn" type="button">Sign In →</button>
     <div class="login-error" id="loginError">Invalid credentials.</div>
   </div>
 </div>
 
-<!-- ==================== DASHBOARD ==================== -->
-<div id="dashView" style="display:none">
-<div class="wrap">
+<!-- ============================================================
+     DASHBOARD
+     ============================================================ -->
+<div id="dashView">
 
-  <div class="head">
-    <div class="head-left">
-      <div class="logo"><img src="logo.jpg" alt="ABJ" /></div>
-      <div>
-        <h1 id="dashTitle">Admin</h1>
-        <p id="welcomeLine">ABJ Tutorial · Control Panel</p>
+  <div class="sb-overlay" id="sbOverlay"></div>
+
+  <aside class="sidebar" id="sidebar">
+    <div class="sb-brand">
+      <div class="sb-logo"><img src="logo.jpg" alt="ABJ" /></div>
+      <div class="sb-brand-txt">
+        <div class="sb-name">ABJ TUTORIAL</div>
+        <div class="sb-moto">Empowering Tomorrow, Today.</div>
       </div>
     </div>
-    <button class="btn btn-ghost" id="logoutBtn" type="button">Sign Out</button>
-  </div>
 
-  <div class="stats">
-    <div class="stat"><div class="n" id="stTotal">0</div><div class="l">Total</div></div>
-    <div class="stat"><div class="n" id="stPending">0</div><div class="l">Pending</div></div>
-    <div class="stat"><div class="n" id="stApproved">0</div><div class="l">Approved</div></div>
-    <div class="stat"><div class="n" id="stRejected">0</div><div class="l">Rejected</div></div>
-  </div>
-
-  <div class="tabs">
-    <button class="tab active" data-tab="pending" type="button">⏳ Pending</button>
-    <button class="tab" data-tab="approved" type="button">✅ Approved</button>
-    <button class="tab" data-tab="rejected" type="button">❌ Rejected</button>
-    <button class="tab" data-tab="profile" type="button">👤 Profile</button>
-    <button class="tab super-only" data-tab="videos" type="button" style="display:none">🎬 Videos</button>
-    <button class="tab super-only" data-tab="testimonials" type="button" style="display:none">💬 Testimonials</button>
-    <button class="tab super-only" data-tab="admins" type="button" style="display:none">👥 Admins</button>
-    <button class="tab super-only" data-tab="settings" type="button" style="display:none">⚙️ Settings</button>
-    <button class="tab super-only" data-tab="system" type="button" style="display:none">🔐 System</button>
-  </div>
-
-  <div class="tab-content active" id="tab-pending"><div class="list" id="listPending"></div></div>
-  <div class="tab-content" id="tab-approved"><div class="list" id="listApproved"></div></div>
-  <div class="tab-content" id="tab-rejected"><div class="list" id="listRejected"></div></div>
-
-  <!-- PROFILE -->
-  <div class="tab-content" id="tab-profile">
-    <div class="settings">
-      <div style="padding:14px 18px;border-radius:14px;background:rgba(59,130,246,.08);border:1px solid rgba(59,130,246,.35);font-size:12.5px;color:#93c5fd;line-height:1.65;max-width:560px;margin-bottom:8px;">
-        <strong>Your account.</strong> Change your username, display name, or password. Changing username or password signs you out.
+    <nav class="sb-nav">
+      <div class="nav-section">
+        <div class="nav-label">Registrations</div>
+        <button class="nav-item active tab" data-tab="pending" type="button">
+          <span class="ni-icon">⏳</span>
+          <span class="ni-text">Pending</span>
+          <span class="ni-badge" id="navPending">0</span>
+        </button>
+        <button class="nav-item tab" data-tab="approved" type="button">
+          <span class="ni-icon">✅</span>
+          <span class="ni-text">Approved</span>
+          <span class="ni-badge" id="navApproved">0</span>
+        </button>
+        <button class="nav-item tab" data-tab="rejected" type="button">
+          <span class="ni-icon">❌</span>
+          <span class="ni-text">Rejected</span>
+          <span class="ni-badge" id="navRejected">0</span>
+        </button>
       </div>
-      <div class="field"><label>Role</label><input type="text" id="profRole" disabled /></div>
-      <div class="field"><label>Username</label><input type="text" id="profUsername" placeholder="lowercase a-z, 0-9, _" maxlength="24" autocomplete="off" /></div>
-      <div class="field"><label>Display Name</label><input type="text" id="profFullName" placeholder="e.g. Dagim Desalegn" maxlength="64" autocomplete="off" /></div>
 
-      <hr class="sys-hr" />
+      <div class="nav-section super-only" style="display:none">
+        <div class="nav-label">Content</div>
+        <button class="nav-item tab" data-tab="videos" type="button">
+          <span class="ni-icon">🎬</span>
+          <span class="ni-text">Videos</span>
+        </button>
+        <button class="nav-item tab" data-tab="testimonials" type="button">
+          <span class="ni-icon">💬</span>
+          <span class="ni-text">Testimonials</span>
+        </button>
+      </div>
 
-      <h3 style="margin:4px 0;font-size:14px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--gold-1);">Change Password</h3>
-      <div class="field">
-        <label>Current Password</label>
-        <div class="pw-wrap">
-          <input type="password" id="profCurrentPass" placeholder="Required to change password" autocomplete="current-password" />
-          <button type="button" class="pw-toggle" data-target="profCurrentPass" aria-label="Show/hide password">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-          </button>
+      <div class="nav-section">
+        <div class="nav-label">Account</div>
+        <button class="nav-item tab" data-tab="profile" type="button">
+          <span class="ni-icon">👤</span>
+          <span class="ni-text">My Profile</span>
+        </button>
+      </div>
+
+      <div class="nav-section super-only" style="display:none">
+        <div class="nav-label">System</div>
+        <button class="nav-item tab" data-tab="settings" type="button">
+          <span class="ni-icon">⚙️</span>
+          <span class="ni-text">Settings</span>
+        </button>
+        <button class="nav-item tab" data-tab="system" type="button">
+          <span class="ni-icon">🔐</span>
+          <span class="ni-text">System</span>
+        </button>
+        <button class="nav-item tab" data-tab="admins" type="button">
+          <span class="ni-icon">👥</span>
+          <span class="ni-text">Admins</span>
+        </button>
+      </div>
+    </nav>
+
+    <div class="sb-foot">
+      <div class="user-chip">
+        <div class="uc-avatar" id="ucAvatar">A</div>
+        <div class="uc-info">
+          <div class="uc-name" id="ucName">Admin</div>
+          <div class="uc-role" id="ucRole">Admin</div>
         </div>
+        <button class="uc-logout" id="logoutBtn" type="button" aria-label="Sign out" title="Sign Out">↪</button>
       </div>
-      <div class="field">
-        <label>New Password</label>
-        <div class="pw-wrap">
-          <input type="password" id="profNewPass" placeholder="At least 6 characters" autocomplete="new-password" />
-          <button type="button" class="pw-toggle" data-target="profNewPass" aria-label="Show/hide password">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-          </button>
-        </div>
-      </div>
-
-      <button class="btn btn-gold" id="saveProfile" type="button" style="padding:14px;font-size:14px;margin-top:8px;">Save Profile</button>
     </div>
-  </div>
+  </aside>
 
-  <!-- VIDEOS -->
-  <div class="tab-content" id="tab-videos">
-    <div class="settings" style="max-width:640px">
-      <div class="field"><label>Video Title</label><input type="text" id="vidTitle" placeholder="e.g. Maths Chapter 1 — Set Theory" maxlength="200" /></div>
-      <div class="field"><label>YouTube URL or Video ID</label><input type="text" id="vidUrl" placeholder="https://youtu.be/xxxx or xxxx" maxlength="500" /></div>
-      <div class="field"><label>Tag / Subject (short)</label><input type="text" id="vidTag" placeholder="Maths" maxlength="40" /></div>
-      <button class="btn btn-add" id="addVideoBtn" type="button">+ Add Video</button>
-    </div>
-    <div class="admin-list" id="videoList"></div>
-  </div>
-
-  <!-- TESTIMONIALS -->
-  <div class="tab-content" id="tab-testimonials">
-    <div class="settings" style="max-width:640px">
-      <div class="field"><label>Student Name</label><input type="text" id="tstName" placeholder="e.g. Girum T." maxlength="64" /></div>
-      <div class="field"><label>Subject</label><input type="text" id="tstSubject" placeholder="Maths" maxlength="64" /></div>
-      <div class="field"><label>Stars (1–5)</label>
-        <select id="tstStars">
-          <option value="5" selected>5 ★★★★★</option>
-          <option value="4">4 ★★★★</option>
-          <option value="3">3 ★★★</option>
-          <option value="2">2 ★★</option>
-          <option value="1">1 ★</option>
-        </select>
-      </div>
-      <div class="field"><label>Testimonial Text</label><textarea id="tstText" placeholder="What the student said..." maxlength="1000"></textarea></div>
-      <button class="btn btn-add" id="addTstBtn" type="button">+ Add Testimonial</button>
-    </div>
-    <div class="admin-list" id="tstList"></div>
-  </div>
-
-  <!-- SETTINGS -->
-  <div class="tab-content" id="tab-settings">
-    <div class="settings">
-      <div class="field"><label>Registration Fee (ETB)</label><input type="number" id="setFee" min="1" step="1" /></div>
-      <div class="field"><label>Telebirr Number</label><input type="text" id="setTelebirr" maxlength="32" /></div>
-      <div class="field"><label>CBE Account</label><input type="text" id="setCBE" maxlength="32" /></div>
-      <div class="field"><label>mPesa Number</label><input type="text" id="setMpesa" maxlength="32" /></div>
-      <div class="field"><label>Contact Telegram</label><input type="text" id="setContactUser" maxlength="64" /></div>
-      <div class="field"><label>Contact Phone</label><input type="text" id="setContactPhone" maxlength="32" /></div>
-      <button class="btn btn-gold" id="saveSettings" type="button" style="padding:14px;font-size:14px">Save Settings</button>
-      <button class="btn btn-ghost" id="resetRateLimits" type="button" style="padding:14px;font-size:14px;margin-top:4px">🔄 Reset Rate Limits</button>
-    </div>
-  </div>
-
-  <!-- SYSTEM -->
-  <div class="tab-content" id="tab-system">
-    <div class="settings" style="max-width:640px">
-      <div style="padding:14px 18px;border-radius:14px;background:rgba(251,191,36,.08);border:1px solid rgba(251,191,36,.35);font-size:12.5px;color:#fbbf24;line-height:1.65;margin-bottom:8px;">
-        <strong>⚠️ Sensitive.</strong> Powers Telegram invites and payment verification. Changes take effect within 60 seconds.
-      </div>
-
-      <h3 style="margin:6px 0 4px;font-size:14px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--gold-1);">Telegram Session</h3>
-
-      <div class="tg-card bad" id="tgCard">
-        <!-- filled by JS -->
-      </div>
-
-      <hr class="sys-hr" />
-
-      <h3 style="margin:4px 0;font-size:14px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--gold-1);">Verify.ET (Payment API)</h3>
-
-      <div class="tg-card bad" id="vgCard">
-        <!-- filled by JS -->
-      </div>
-
-      <div id="vgEditForm" style="display:none;margin-top:14px;max-width:640px;">
-        <div class="field"><label>API URL</label><input type="text" id="sysVerifyUrl" placeholder="https://verify.et/api/verify" maxlength="200" autocomplete="off" /></div>
-        <div class="field"><label>API Key</label><input type="text" id="sysVerifyKey" placeholder="The Verify.ET API key" maxlength="256" autocomplete="off" /></div>
-        <div style="display:flex;gap:8px;margin-top:16px;">
-          <button class="btn btn-ghost" id="vgCancel" type="button" style="padding:14px 22px;font-size:14px;">Cancel</button>
-          <button class="btn btn-gold" id="saveSystem" type="button" style="padding:14px;font-size:14px;flex:1;">Save Verify Settings</button>
+  <main class="main">
+    <div class="main-head">
+      <div class="mh-left">
+        <button class="mh-menu" id="sidebarToggle" type="button" aria-label="Toggle menu">☰</button>
+        <div class="mh-title">
+          <h1 id="dashTitle">Dashboard</h1>
+          <p id="welcomeLine">Welcome back</p>
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- ADMINS -->
-  <div class="tab-content" id="tab-admins">
-    <div class="settings" style="max-width:640px">
-      <div class="field"><label>New Username</label><input type="text" id="newAdminUser" placeholder="e.g. dagim" maxlength="24" /></div>
-      <div class="field"><label>Full Name (optional)</label><input type="text" id="newAdminName" placeholder="Dagim Desalegn" maxlength="64" /></div>
-      <div class="field">
-        <label>Password</label>
-        <div class="pw-wrap">
-          <input type="password" id="newAdminPass" placeholder="At least 6 characters" autocomplete="new-password" />
-          <button type="button" class="pw-toggle" data-target="newAdminPass" aria-label="Show/hide password">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-          </button>
+    <div class="stats">
+      <div class="stat s1"><div class="si">📊</div><div class="n" id="stTotal">0</div><div class="l">Total</div></div>
+      <div class="stat s2"><div class="si">⏳</div><div class="n" id="stPending">0</div><div class="l">Pending</div></div>
+      <div class="stat s3"><div class="si">✅</div><div class="n" id="stApproved">0</div><div class="l">Approved</div></div>
+      <div class="stat s4"><div class="si">❌</div><div class="n" id="stRejected">0</div><div class="l">Rejected</div></div>
+    </div>
+
+    <div class="tab-content active" id="tab-pending"><div class="list" id="listPending"></div></div>
+    <div class="tab-content" id="tab-approved"><div class="list" id="listApproved"></div></div>
+    <div class="tab-content" id="tab-rejected"><div class="list" id="listRejected"></div></div>
+
+    <div class="tab-content" id="tab-profile">
+      <div class="settings">
+        <div style="padding:16px 20px;border-radius:14px;background:rgba(59,130,246,.08);border:1px solid rgba(59,130,246,.35);font-size:12.5px;color:#93c5fd;line-height:1.7;">
+          <strong>Your account.</strong> Change your username, display name, or password. Changing username or password signs you out.
+        </div>
+        <div class="field"><label>Role</label><input type="text" id="profRole" disabled /></div>
+        <div class="field"><label>Username</label><input type="text" id="profUsername" placeholder="lowercase a-z, 0-9, _" maxlength="24" autocomplete="off" /></div>
+        <div class="field"><label>Display Name</label><input type="text" id="profFullName" placeholder="e.g. Dagim Desalegn" maxlength="64" autocomplete="off" /></div>
+        <hr class="sys-hr" />
+        <h3 style="margin:4px 0;font-size:14px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--gold-1);">Change Password</h3>
+        <div class="field">
+          <label>Current Password</label>
+          <div class="pw-wrap">
+            <input type="password" id="profCurrentPass" placeholder="Required to change password" autocomplete="current-password" />
+            <button type="button" class="pw-toggle" data-target="profCurrentPass" aria-label="Show/hide password">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+        </div>
+        <div class="field">
+          <label>New Password</label>
+          <div class="pw-wrap">
+            <input type="password" id="profNewPass" placeholder="At least 6 characters" autocomplete="new-password" />
+            <button type="button" class="pw-toggle" data-target="profNewPass" aria-label="Show/hide password">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+        </div>
+        <button class="btn btn-gold" id="saveProfile" type="button" style="padding:15px;font-size:14px;">Save Profile</button>
+      </div>
+    </div>
+
+    <div class="tab-content" id="tab-videos">
+      <div class="settings">
+        <div class="field"><label>Video Title</label><input type="text" id="vidTitle" placeholder="e.g. Maths Chapter 1 — Set Theory" maxlength="200" /></div>
+        <div class="field"><label>YouTube URL or Video ID</label><input type="text" id="vidUrl" placeholder="https://youtu.be/xxxx or xxxx" maxlength="500" /></div>
+        <div class="field"><label>Tag / Subject (short)</label><input type="text" id="vidTag" placeholder="Maths" maxlength="40" /></div>
+        <button class="btn btn-add" id="addVideoBtn" type="button">+ Add Video</button>
+      </div>
+      <div class="admin-list" id="videoList"></div>
+    </div>
+
+    <div class="tab-content" id="tab-testimonials">
+      <div class="settings">
+        <div class="field"><label>Student Name</label><input type="text" id="tstName" placeholder="e.g. Girum T." maxlength="64" /></div>
+        <div class="field"><label>Subject</label><input type="text" id="tstSubject" placeholder="Maths" maxlength="64" /></div>
+        <div class="field"><label>Stars (1–5)</label>
+          <select id="tstStars">
+            <option value="5" selected>5 ★★★★★</option>
+            <option value="4">4 ★★★★</option>
+            <option value="3">3 ★★★</option>
+            <option value="2">2 ★★</option>
+            <option value="1">1 ★</option>
+          </select>
+        </div>
+        <div class="field"><label>Testimonial Text</label><textarea id="tstText" placeholder="What the student said..." maxlength="1000"></textarea></div>
+        <button class="btn btn-add" id="addTstBtn" type="button">+ Add Testimonial</button>
+      </div>
+      <div class="admin-list" id="tstList"></div>
+    </div>
+
+    <div class="tab-content" id="tab-settings">
+      <div class="settings">
+        <div class="field"><label>Registration Fee (ETB)</label><input type="number" id="setFee" min="1" step="1" /></div>
+        <div class="field"><label>Telebirr Number</label><input type="text" id="setTelebirr" maxlength="32" /></div>
+        <div class="field"><label>CBE Account</label><input type="text" id="setCBE" maxlength="32" /></div>
+        <div class="field"><label>mPesa Number</label><input type="text" id="setMpesa" maxlength="32" /></div>
+        <div class="field"><label>Contact Telegram</label><input type="text" id="setContactUser" maxlength="64" /></div>
+        <div class="field"><label>Contact Phone</label><input type="text" id="setContactPhone" maxlength="32" /></div>
+        <button class="btn btn-gold" id="saveSettings" type="button" style="padding:15px;font-size:14px;">Save Settings</button>
+        <button class="btn btn-ghost" id="resetRateLimits" type="button" style="padding:15px;font-size:14px;">🔄 Reset Rate Limits</button>
+      </div>
+    </div>
+
+    <div class="tab-content" id="tab-system">
+      <div class="settings">
+        <div style="padding:16px 20px;border-radius:14px;background:rgba(251,191,36,.08);border:1px solid rgba(251,191,36,.35);font-size:12.5px;color:#fbbf24;line-height:1.7;">
+          <strong>⚠️ Sensitive.</strong> Powers Telegram invites and payment verification. Changes take effect within 60 seconds.
+        </div>
+
+        <h3 style="margin:6px 0 4px;font-size:14px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--gold-1);">Telegram Session</h3>
+
+        <div class="tg-card bad" id="tgCard"></div>
+
+        <hr class="sys-hr" />
+
+        <h3 style="margin:4px 0;font-size:14px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--gold-1);">Verify.ET (Payment API)</h3>
+
+        <div class="tg-card bad" id="vgCard"></div>
+
+        <div id="vgEditForm" style="display:none;margin-top:14px;">
+          <div class="field"><label>API URL</label><input type="text" id="sysVerifyUrl" placeholder="https://verify.et/api/verify" maxlength="200" autocomplete="off" /></div>
+          <div class="field"><label>API Key</label><input type="text" id="sysVerifyKey" placeholder="The Verify.ET API key" maxlength="256" autocomplete="off" /></div>
+          <div style="display:flex;gap:10px;margin-top:16px;">
+            <button class="btn btn-ghost" id="vgCancel" type="button" style="padding:14px 22px;font-size:14px;">Cancel</button>
+            <button class="btn btn-gold" id="saveSystem" type="button" style="padding:14px;font-size:14px;flex:1;">Save Verify Settings</button>
+          </div>
         </div>
       </div>
-      <div class="field"><label>Role</label>
-        <select id="newAdminRole">
-          <option value="admin" selected>Admin (regular)</option>
-          <option value="super">Super Admin (full access)</option>
-        </select>
-      </div>
-      <button class="btn btn-add" id="addAdminBtn" type="button">+ Add User</button>
     </div>
-    <div class="admin-list" id="adminList"></div>
-  </div>
 
-</div>
+    <div class="tab-content" id="tab-admins">
+      <div class="settings">
+        <div class="field"><label>New Username</label><input type="text" id="newAdminUser" placeholder="e.g. dagim" maxlength="24" /></div>
+        <div class="field"><label>Full Name (optional)</label><input type="text" id="newAdminName" placeholder="Dagim Desalegn" maxlength="64" /></div>
+        <div class="field">
+          <label>Password</label>
+          <div class="pw-wrap">
+            <input type="password" id="newAdminPass" placeholder="At least 6 characters" autocomplete="new-password" />
+            <button type="button" class="pw-toggle" data-target="newAdminPass" aria-label="Show/hide password">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+        </div>
+        <div class="field"><label>Role</label>
+          <select id="newAdminRole">
+            <option value="admin" selected>Admin (regular)</option>
+            <option value="super">Super Admin (full access)</option>
+          </select>
+        </div>
+        <button class="btn btn-add" id="addAdminBtn" type="button">+ Add User</button>
+      </div>
+      <div class="admin-list" id="adminList"></div>
+    </div>
+
+  </main>
 </div>
 
 <div class="toast" id="toast"></div>
 
-<!-- ============ TELEGRAM SESSION WIZARD ============ -->
+<!-- ============ TELEGRAM WIZARD ============ -->
 <div class="tg-wiz" id="tgWiz" role="dialog" aria-modal="true" aria-label="Telegram setup">
   <div class="tg-wiz-box">
     <button class="tg-wiz-close" id="tgWizClose" type="button" aria-label="Close">✕</button>
+    <div class="tg-prog" id="tgProg"></div>
 
-    <div class="tg-prog" id="tgProg">
-      <i data-p="1"></i><i data-p="2"></i><i data-p="3"></i><i data-p="4"></i>
-    </div>
-
-    <div class="tg-step active" data-step="1">
-      <span class="tg-step-tag">Step 1 of 4</span>
-      <h3>API Credentials</h3>
-      <p>Paste your Telegram <b>API ID</b> and <b>API Hash</b>.<br>Get them from <b>my.telegram.org → API development tools</b>.</p>
-      <input class="tg-input" id="tgApiId" type="text" placeholder="API ID, e.g. 34415625" maxlength="32" autocomplete="off" />
-      <input class="tg-input" id="tgApiHash" type="text" placeholder="API Hash, e.g. b5a21951..." maxlength="128" autocomplete="off" />
-      <input class="tg-input" id="tgChannelId" type="text" placeholder="Channel ID, e.g. -1003816618687" maxlength="32" autocomplete="off" />
-      <div class="tg-error" id="tgErr1">⚠️ All three fields are required.</div>
+    <div class="tg-step" data-step="1">
+      <span class="tg-step-tag" id="tgTag1">Step 1</span>
+      <h3>Phone Number</h3>
+      <p>Enter the phone number tied to your Telegram account.<br>Include country code — e.g. <b>+251967358316</b></p>
+      <input class="tg-input" id="tgPhone" type="tel" placeholder="+2519xxxxxxxx" maxlength="24" autocomplete="off" />
+      <div class="tg-error" id="tgErr1">⚠️ Enter a valid phone number with country code.</div>
       <div class="tg-actions-row">
         <button class="tg-btn-ghost" type="button" data-tg-back disabled>Back</button>
-        <button class="tg-btn-primary" type="button" id="tgNext1">Continue →</button>
+        <button class="tg-btn-primary" type="button" id="tgNext1">Send Code →</button>
       </div>
     </div>
 
     <div class="tg-step" data-step="2">
-      <span class="tg-step-tag">Step 2 of 4</span>
-      <h3>Phone Number</h3>
-      <p>Enter the phone number tied to your Telegram account.<br>Include country code — e.g. <b>+251967358316</b></p>
-      <input class="tg-input" id="tgPhone" type="tel" placeholder="+2519xxxxxxxx" maxlength="24" autocomplete="off" />
-      <div class="tg-error" id="tgErr2">⚠️ Enter a valid phone number with country code.</div>
-      <div class="tg-actions-row">
-        <button class="tg-btn-ghost" type="button" data-tg-back>Back</button>
-        <button class="tg-btn-primary" type="button" id="tgNext2">Send Code →</button>
-      </div>
-    </div>
-
-    <div class="tg-step" data-step="3">
-      <span class="tg-step-tag">Step 3 of 4</span>
+      <span class="tg-step-tag" id="tgTag2">Step 2</span>
       <h3>Verification Code</h3>
       <p>Telegram sent a code to your app. Open Telegram → look for the message from <b>"Telegram"</b> → enter the 5-digit code below.</p>
       <div class="tg-note">📱 <b>Tip:</b> If the code doesn't arrive in 30 seconds, tap "Resend" on your phone.</div>
       <input class="tg-input" id="tgCode" type="text" placeholder="e.g. 12345" maxlength="8" autocomplete="off" inputmode="numeric" />
-      <div class="tg-error" id="tgErr3">⚠️ Enter the code from Telegram.</div>
+      <div class="tg-error" id="tgErr2">⚠️ Enter the code from Telegram.</div>
       <div class="tg-actions-row">
         <button class="tg-btn-ghost" type="button" data-tg-back>Back</button>
-        <button class="tg-btn-primary" type="button" id="tgNext3">Verify →</button>
+        <button class="tg-btn-primary" type="button" id="tgNext2">Verify →</button>
       </div>
     </div>
 
-    <div class="tg-step" data-step="4">
-      <span class="tg-step-tag">Step 4 of 4</span>
+    <div class="tg-step" data-step="3">
+      <span class="tg-step-tag" id="tgTag3">Step 3</span>
       <h3>Two-Factor Password</h3>
       <p>You have 2FA enabled on this Telegram account. Enter your password to finish.</p>
       <div class="pw-wrap" style="margin-bottom:12px;">
@@ -484,16 +609,29 @@ body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:linear-grad
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
         </button>
       </div>
-      <div class="tg-error" id="tgErr4">⚠️ Enter your 2FA password.</div>
+      <div class="tg-error" id="tgErr3">⚠️ Enter your 2FA password.</div>
       <div class="tg-actions-row">
         <button class="tg-btn-ghost" type="button" data-tg-back>Back</button>
-        <button class="tg-btn-primary" type="button" id="tgNext4">Verify & Save →</button>
+        <button class="tg-btn-primary" type="button" id="tgNext3">Verify →</button>
+      </div>
+    </div>
+
+    <div class="tg-step" data-step="4">
+      <span class="tg-step-tag" id="tgTag4">Final</span>
+      <h3>Channel ID</h3>
+      <p>Almost done. Paste the numeric ID of the Telegram channel where students will join.<br>Example: <b>-1003816618687</b></p>
+      <input class="tg-input" id="tgChannelId" type="text" placeholder="-1003816618687" maxlength="64" autocomplete="off" />
+      <div class="tg-error" id="tgErr4">⚠️ Channel ID is required.</div>
+      <div class="tg-actions-row">
+        <button class="tg-btn-ghost" type="button" data-tg-back>Back</button>
+        <button class="tg-btn-primary" type="button" id="tgNext4">Save & Finish ✓</button>
       </div>
     </div>
 
   </div>
 </div>
 
+<!-- ============ RESULT MODAL ============ -->
 <div class="adm-modal" id="admModal" role="dialog" aria-modal="true" aria-label="Result">
   <div class="adm-box">
     <div class="adm-brand">
@@ -531,18 +669,21 @@ const logoutBtn = document.getElementById('logoutBtn');
 const toast = document.getElementById('toast');
 const welcomeLine = document.getElementById('welcomeLine');
 const dashTitle = document.getElementById('dashTitle');
+const ucAvatar = document.getElementById('ucAvatar');
+const ucName = document.getElementById('ucName');
+const ucRole = document.getElementById('ucRole');
+const sidebar = document.getElementById('sidebar');
+const sbOverlay = document.getElementById('sbOverlay');
+const sidebarToggle = document.getElementById('sidebarToggle');
 
-/* ============================================================
-   PASSWORD EYE TOGGLE
-   ============================================================ */
+/* ---------- Password toggles ---------- */
 function wirePwToggles(root){
   (root || document).querySelectorAll('.pw-toggle').forEach(btn => {
     if (btn._wired) return;
     btn._wired = true;
     btn.addEventListener('click', (e) => {
       e.preventDefault();
-      const targetId = btn.dataset.target;
-      const input = document.getElementById(targetId);
+      const input = document.getElementById(btn.dataset.target);
       if (!input) return;
       const isPw = input.type === 'password';
       input.type = isPw ? 'text' : 'password';
@@ -559,6 +700,7 @@ document.addEventListener('click', e => {
   if (e.target.closest('.tab')) setTimeout(() => wirePwToggles(document), 20);
 });
 
+/* ---------- Modal ---------- */
 const admModalEl = document.getElementById('admModal');
 const admBadge   = document.getElementById('admBadge');
 const admTitle   = document.getElementById('admTitle');
@@ -594,6 +736,7 @@ admModalEl.addEventListener('click', e => { if (e.target === admModalEl) hideAdm
 function admSuccess(title, message, extra){ showAdmModal({ tone:'ok', title, message, extra }); }
 function admError(title, message){ showAdmModal({ tone:'err', badge:'!', title, message }); }
 
+/* ---------- Clipboard ---------- */
 function copyToClipboard(text, okMsg){
   const done = () => toastMsg('📋 ' + (okMsg || 'Copied'), 'ok');
   try {
@@ -616,6 +759,17 @@ function copyToClipboard(text, okMsg){
   }
 }
 
+/* ---------- Sidebar toggle (mobile) ---------- */
+function toggleSidebar(show){
+  const open = show === undefined ? !sidebar.classList.contains('show') : show;
+  sidebar.classList.toggle('show', open);
+  sbOverlay.classList.toggle('show', open);
+}
+sidebarToggle.addEventListener('click', () => toggleSidebar());
+sbOverlay.addEventListener('click', () => toggleSidebar(false));
+window.addEventListener('resize', () => { if (window.innerWidth > 960) toggleSidebar(false); });
+
+/* ---------- Login ---------- */
 loginBtn.addEventListener('click', doLogin);
 adminPass.addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
 adminUser.addEventListener('keydown', e => { if (e.key === 'Enter') adminPass.focus(); });
@@ -631,11 +785,7 @@ async function doLogin(){
       body: JSON.stringify({ username: u, password: p })
     });
     const data = await res.json();
-    if (!res.ok) {
-      loginError.textContent = data.error || 'Login failed.';
-      loginError.classList.add('show');
-      return;
-    }
+    if (!res.ok) { loginError.textContent = data.error || 'Login failed.'; loginError.classList.add('show'); return; }
     state.token = data.token; state.role = data.role; state.username = data.username;
     state.full_name = data.full_name || '';
     sessionStorage.setItem('abj_admin_token', state.token);
@@ -647,7 +797,7 @@ async function doLogin(){
       tone: 'ok', badge: '👋',
       title: 'Welcome back, ' + (state.full_name || state.username) + '!',
       message: 'Signed in as ' + (state.role === 'super' ? 'Super Admin' : 'Admin') + '. Dashboard is ready.',
-    }), 250);
+    }), 260);
   } catch {
     loginError.textContent = 'Network error.';
     loginError.classList.add('show');
@@ -660,28 +810,38 @@ logoutBtn.addEventListener('click', () => {
   sessionStorage.clear();
   state.token = ''; state.role = ''; state.username = ''; state.full_name = '';
   loginView.style.display = 'flex';
-  dashView.style.display = 'none';
+  dashView.classList.remove('active');
+  toggleSidebar(false);
 });
 
 function showDash(){
   loginView.style.display = 'none';
-  dashView.style.display = 'block';
+  dashView.classList.add('active');
   loginError.classList.remove('show');
   adminPass.value = '';
-  dashTitle.textContent = state.full_name || state.username;
+
+  const displayName = state.full_name || state.username;
+  dashTitle.textContent = 'Welcome back, ' + displayName.split(' ')[0];
   welcomeLine.textContent = `Signed in as @${state.username} · ${state.role === 'super' ? 'Super Admin' : 'Admin'}`;
+  ucName.textContent = displayName;
+  ucRole.textContent = state.role === 'super' ? 'Super Admin' : 'Admin';
+  ucAvatar.textContent = (displayName.charAt(0) || 'A').toUpperCase();
+
   document.querySelectorAll('.super-only').forEach(el => {
     el.style.display = state.role === 'super' ? '' : 'none';
   });
+
   document.getElementById('profRole').value     = state.role === 'super' ? 'Super Admin' : 'Admin';
   document.getElementById('profUsername').value = state.username;
   document.getElementById('profFullName').value = state.full_name;
+
   loadTab('pending');
   updateCounts();
 }
 
 if (state.token) showDash();
 
+/* ---------- Tab switching ---------- */
 let currentTab = 'pending';
 document.querySelectorAll('.tab').forEach(tab => {
   tab.addEventListener('click', () => {
@@ -697,9 +857,11 @@ document.querySelectorAll('.tab').forEach(tab => {
     if (currentTab === 'videos') loadVideos();
     if (currentTab === 'testimonials') loadTestimonials();
     if (currentTab === 'profile') loadProfile();
+    if (window.innerWidth <= 960) toggleSidebar(false);
   });
 });
 
+/* ---------- Registrations ---------- */
 async function loadTab(status){
   const boxMap = { pending: 'listPending', approved: 'listApproved', rejected: 'listRejected' };
   const box = document.getElementById(boxMap[status]);
@@ -721,10 +883,14 @@ async function updateCounts(){
       fetch('/api/admin-list?status=approved', { headers: authHeaders() }).then(r => r.json()),
       fetch('/api/admin-list?status=rejected', { headers: authHeaders() }).then(r => r.json()),
     ]);
-    document.getElementById('stTotal').textContent    = (p.items?.length||0) + (a.items?.length||0) + (r.items?.length||0);
-    document.getElementById('stPending').textContent  = p.items?.length || 0;
-    document.getElementById('stApproved').textContent = a.items?.length || 0;
-    document.getElementById('stRejected').textContent = r.items?.length || 0;
+    const c1 = p.items?.length || 0, c2 = a.items?.length || 0, c3 = r.items?.length || 0;
+    document.getElementById('stTotal').textContent    = c1 + c2 + c3;
+    document.getElementById('stPending').textContent  = c1;
+    document.getElementById('stApproved').textContent = c2;
+    document.getElementById('stRejected').textContent = c3;
+    const np = document.getElementById('navPending'); if (np) np.textContent = c1;
+    const na = document.getElementById('navApproved'); if (na) na.textContent = c2;
+    const nr = document.getElementById('navRejected'); if (nr) nr.textContent = c3;
   } catch {}
 }
 
@@ -746,7 +912,7 @@ function render(box, status, items){
     const invite = r.invite_link
       ? `<a class="invite-link" href="${esc(r.invite_link)}" target="_blank" rel="noopener">🔗 ${esc(r.invite_link)}</a>` : '';
     const reason = r.rejection_reason
-      ? `<div style="margin-top:10px;padding:10px 14px;border-radius:10px;background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);font-size:13px;"><strong style="color:#f87171;">Reason:</strong> ${esc(r.rejection_reason)}</div>` : '';
+      ? `<div style="margin-top:12px;padding:12px 16px;border-radius:12px;background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);font-size:13px;"><strong style="color:#f87171;">Reason:</strong> ${esc(r.rejection_reason)}</div>` : '';
     const autoTag = r.auto_approved ? `<span class="pill approved" style="margin-left:6px;">🤖 Auto</span>` : '';
     const verifTag = r.verification_status === 'needs_manual'
       ? `<span class="pill pending" style="margin-left:6px;">📸 Manual Review</span>`
@@ -754,7 +920,7 @@ function render(box, status, items){
       ? `<span class="pill pending" style="margin-left:6px;">📸 Screenshot Uploaded</span>`
       : '';
     const screenshotBox = r.screenshot_url
-      ? `<div style="margin-top:12px;">
+      ? `<div style="margin-top:14px;">
            <div style="font-size:10.5px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,.55);margin-bottom:8px;">Payment Screenshot</div>
            <a href="${esc(r.screenshot_url)}" target="_blank" rel="noopener">
              <img src="${esc(r.screenshot_url)}" alt="Screenshot" style="max-width:280px;max-height:280px;border-radius:12px;border:2px solid rgba(247,224,122,.5);display:block;" />
@@ -762,7 +928,7 @@ function render(box, status, items){
            <a href="${esc(r.screenshot_url)}" target="_blank" rel="noopener" style="display:inline-block;margin-top:8px;font-size:11.5px;color:#f7e07a;text-decoration:underline;">🔍 Open full size</a>
          </div>` : '';
     const verifyErr = r.verify_error && r.status === 'pending'
-      ? `<div style="margin-top:10px;padding:10px 14px;border-radius:10px;background:rgba(251,191,36,.08);border:1px solid rgba(251,191,36,.3);font-size:12.5px;color:#fbbf24;"><strong>API note:</strong> ${esc(r.verify_error)}</div>` : '';
+      ? `<div style="margin-top:12px;padding:12px 16px;border-radius:12px;background:rgba(251,191,36,.08);border:1px solid rgba(251,191,36,.3);font-size:12.5px;color:#fbbf24;"><strong>API note:</strong> ${esc(r.verify_error)}</div>` : '';
 
     return `<div class="item">
       <div class="item-head">
@@ -834,9 +1000,7 @@ async function handleAction(act, id, btn){
   }
 }
 
-/* ============================================================
-   PROFILE
-   ============================================================ */
+/* ---------- Profile ---------- */
 async function loadProfile(){
   try {
     const res = await fetch('/api/admin-admins?action=profile', { headers: authHeaders() });
@@ -852,7 +1016,10 @@ async function loadProfile(){
     document.getElementById('profFullName').value = p.full_name || '';
     document.getElementById('profCurrentPass').value = '';
     document.getElementById('profNewPass').value = '';
-    dashTitle.textContent = p.full_name || p.username;
+    const displayName = p.full_name || p.username;
+    dashTitle.textContent = 'Welcome back, ' + displayName.split(' ')[0];
+    ucName.textContent = displayName;
+    ucAvatar.textContent = (displayName.charAt(0) || 'A').toUpperCase();
   } catch {}
 }
 
@@ -887,7 +1054,10 @@ document.getElementById('saveProfile').addEventListener('click', async () => {
           else {
             state.full_name = data.profile.full_name || '';
             sessionStorage.setItem('abj_admin_name', state.full_name);
-            dashTitle.textContent = state.full_name || state.username;
+            const dn = state.full_name || state.username;
+            dashTitle.textContent = 'Welcome back, ' + dn.split(' ')[0];
+            ucName.textContent = dn;
+            ucAvatar.textContent = (dn.charAt(0) || 'A').toUpperCase();
           }
         }
       }]
@@ -896,9 +1066,7 @@ document.getElementById('saveProfile').addEventListener('click', async () => {
   finally { btn.disabled = false; btn.textContent = orig; }
 });
 
-/* ============================================================
-   VIDEOS
-   ============================================================ */
+/* ---------- Videos ---------- */
 async function loadVideos(){
   const box = document.getElementById('videoList');
   box.innerHTML = '<div class="empty"><div class="icon">⏳</div><p>Loading...</p></div>';
@@ -945,9 +1113,7 @@ document.getElementById('addVideoBtn').addEventListener('click', async () => {
   finally { btn.disabled = false; btn.textContent = orig; }
 });
 
-/* ============================================================
-   TESTIMONIALS
-   ============================================================ */
+/* ---------- Testimonials ---------- */
 async function loadTestimonials(){
   const box = document.getElementById('tstList');
   box.innerHTML = '<div class="empty"><div class="icon">⏳</div><p>Loading...</p></div>';
@@ -959,7 +1125,7 @@ async function loadTestimonials(){
     if (!items.length){ box.innerHTML = '<div class="empty"><div class="icon">💬</div><p>No testimonials yet.</p></div>'; return; }
     box.innerHTML = items.map(t => `
       <div class="admin-row" style="align-items:flex-start">
-        <div class="who"><div class="u">${esc(t.student_name)} — ${esc(t.subject)} ${'★'.repeat(t.stars)}</div><div class="n" style="line-height:1.5;margin-top:6px">${esc(t.text)}</div></div>
+        <div class="who"><div class="u">${esc(t.student_name)} — ${esc(t.subject)} ${'★'.repeat(t.stars)}</div><div class="n" style="line-height:1.55;margin-top:6px">${esc(t.text)}</div></div>
         <button class="btn btn-danger" data-del-tst="${t.id}">Delete</button>
       </div>`).join('');
     box.querySelectorAll('[data-del-tst]').forEach(btn => {
@@ -995,9 +1161,7 @@ document.getElementById('addTstBtn').addEventListener('click', async () => {
   finally { btn.disabled = false; btn.textContent = orig; }
 });
 
-/* ============================================================
-   SETTINGS
-   ============================================================ */
+/* ---------- Settings ---------- */
 async function loadSettings(){
   try {
     const res = await fetch('/api/admin-settings', { headers: authHeaders() });
@@ -1049,26 +1213,11 @@ document.getElementById('resetRateLimits')?.addEventListener('click', async () =
   finally { btn.disabled = false; btn.textContent = orig; }
 });
 
-/* ============================================================
-   SYSTEM — Telegram + Verify cards
-   ============================================================ */
+/* ---------- System ---------- */
 let tgCurrentSettings = {};
 
-function shortSession(s){
-  if (!s) return '—';
-  if (s.length <= 28) return s;
-  return s.slice(0, 16) + '…' + s.slice(-10);
-}
-function shortHash(h){
-  if (!h) return '—';
-  if (h.length <= 16) return h;
-  return h.slice(0, 10) + '…' + h.slice(-6);
-}
-function shortKey(k){
-  if (!k) return '—';
-  if (k.length <= 24) return k;
-  return k.slice(0, 16) + '…' + k.slice(-6);
-}
+function shortSession(s){ if (!s) return '—'; return s.length <= 28 ? s : s.slice(0, 16) + '…' + s.slice(-10); }
+function shortKey(k){ if (!k) return '—'; return k.length <= 24 ? k : k.slice(0, 16) + '…' + k.slice(-6); }
 
 async function loadSystem(){
   try {
@@ -1076,28 +1225,20 @@ async function loadSystem(){
     const text = await res.text();
     let data = null;
     try { data = text ? JSON.parse(text) : null; } catch {}
-    if (!res.ok) {
-      admError('Load Failed', (data && data.error) || ('Server returned ' + res.status + ': ' + text.slice(0, 200)));
-      return;
-    }
+    if (!res.ok) { admError('Load Failed', (data && data.error) || ('Server returned ' + res.status)); return; }
     const s = (data && data.settings) || {};
     tgCurrentSettings = s;
-
     closeVgEditor();
     renderTgCard(s);
     renderVgCard(s);
-  } catch (e) {
-    admError('Load Failed', 'Network error: ' + (e.message || 'unknown'));
-  }
+  } catch (e) { admError('Load Failed', 'Network error: ' + (e.message || 'unknown')); }
 }
 
-/* ---------- Telegram card ---------- */
 function renderTgCard(s){
   const card = document.getElementById('tgCard');
-  const hasApi   = !!(s.tg_api_id && s.tg_api_hash);
-  const hasSess  = !!s.tg_session;
-  const hasChan  = !!s.tg_channel_id;
-  const fullOk   = hasApi && hasSess && hasChan;
+  const hasSess = !!s.tg_session;
+  const hasChan = !!s.tg_channel_id;
+  const fullOk  = hasSess && hasChan;
 
   card.classList.toggle('ok', fullOk);
   card.classList.toggle('bad', !fullOk);
@@ -1110,40 +1251,27 @@ function renderTgCard(s){
         <p>Active account used to create one-time channel invites.</p>
       </div>
       <div class="tg-info">
-        <div class="tg-info-row">
-          <span class="k">API ID</span>
-          <span class="v">${esc(s.tg_api_id)}</span>
-        </div>
-        <div class="tg-info-row">
-          <span class="k">API Hash</span>
-          <span class="v">${esc(shortHash(s.tg_api_hash))}</span>
-        </div>
-        <div class="tg-info-row">
-          <span class="k">Channel ID</span>
-          <span class="v">${esc(s.tg_channel_id)}</span>
-        </div>
-        <div class="tg-info-row">
-          <span class="k">Session</span>
-          <span class="v">${esc(shortSession(s.tg_session))}</span>
-        </div>
+        <div class="tg-info-row"><span class="k">Phone</span><span class="v">${esc(s.tg_phone || '—')}</span></div>
+        <div class="tg-info-row"><span class="k">Channel ID</span><span class="v">${esc(s.tg_channel_id)}</span></div>
+        <div class="tg-info-row"><span class="k">Session</span><span class="v">${esc(shortSession(s.tg_session))}</span></div>
       </div>
       <div class="tg-actions">
-        <button class="btn btn-gold" id="tgBtnReconfig" type="button">🔄 Reconfigure</button>
+        <button class="btn btn-gold" id="tgBtnReconfig" type="button">🔄 Reconnect</button>
         <button class="btn btn-ghost" id="tgBtnCopy" type="button">📋 Copy Session</button>
         <button class="btn btn-danger" id="tgBtnClear" type="button">🗑 Clear</button>
       </div>`;
   } else {
-    const partial = hasApi || hasSess || hasChan;
+    const partial = hasSess || hasChan;
     card.innerHTML = `
       <div class="tg-badge bad"><span class="dot"></span> ${partial ? 'Incomplete' : 'Not Configured'}</div>
       <div class="tg-card-head">
         <h4>Telegram Session</h4>
         <p>${partial
-          ? 'Some Telegram settings are present but the session is incomplete. Reconfigure to finish setup.'
-          : 'Set up your Telegram account so students get one-time channel invites after approval.'}</p>
+          ? 'Setup is incomplete. Reconnect to finish.'
+          : 'Connect your Telegram account so students get one-time channel invites after approval.'}</p>
       </div>
       <div class="tg-actions" style="margin-top:8px;">
-        <button class="btn btn-gold" id="tgBtnReconfig" type="button">⚙️ Configure Session</button>
+        <button class="btn btn-gold" id="tgBtnReconfig" type="button">📱 Connect Telegram</button>
       </div>`;
   }
 
@@ -1152,18 +1280,15 @@ function renderTgCard(s){
     if (s.tg_session) copyToClipboard(s.tg_session, 'Session string copied');
   });
   document.getElementById('tgBtnClear')?.addEventListener('click', async () => {
-    if (!confirm('Clear the Telegram session? Invites will stop working until you reconfigure.')) return;
+    if (!confirm('Clear the Telegram session? Invites will stop working until you reconnect.')) return;
     try {
-      const r = await fetch('/api/admin-settings?action=tg-clear', {
-        method: 'POST', headers: authHeaders(true), body: JSON.stringify({})
-      });
-      if (r.ok){ admSuccess('Session Cleared', 'Configure a new session to re-enable invites.'); loadSystem(); }
+      const r = await fetch('/api/admin-settings?action=tg-clear', { method: 'POST', headers: authHeaders(true), body: JSON.stringify({}) });
+      if (r.ok){ admSuccess('Session Cleared', 'Reconnect to re-enable invites.'); loadSystem(); }
       else admError('Clear Failed', 'Could not clear session.');
     } catch { admError('Network Error', 'Could not reach the server.'); }
   });
 }
 
-/* ---------- Verify.ET card ---------- */
 function renderVgCard(s){
   const card = document.getElementById('vgCard');
   const hasUrl = !!s.verify_api_url;
@@ -1182,14 +1307,8 @@ function renderVgCard(s){
         <p>Payment verification API used to auto-approve registrations.</p>
       </div>
       <div class="tg-info">
-        <div class="tg-info-row">
-          <span class="k">API URL</span>
-          <span class="v">${esc(s.verify_api_url)}</span>
-        </div>
-        <div class="tg-info-row">
-          <span class="k">API Key</span>
-          <span class="v">${esc(shortKey(s.verify_api_key))}</span>
-        </div>
+        <div class="tg-info-row"><span class="k">API URL</span><span class="v">${esc(s.verify_api_url)}</span></div>
+        <div class="tg-info-row"><span class="k">API Key</span><span class="v">${esc(shortKey(s.verify_api_key))}</span></div>
       </div>
       <div class="tg-actions">
         <button class="btn btn-gold" id="vgBtnEdit" type="button">✏️ Edit</button>
@@ -1213,14 +1332,11 @@ function renderVgCard(s){
     if (s.verify_api_key) copyToClipboard(s.verify_api_key, 'API Key copied');
   });
   document.getElementById('vgBtnClear')?.addEventListener('click', async () => {
-    if (!confirm('Clear Verify.ET settings? Auto-verification will stop working until reconfigured.')) return;
+    if (!confirm('Clear Verify.ET settings?')) return;
     try {
-      const r = await fetch('/api/admin-settings', {
-        method: 'POST', headers: authHeaders(true),
-        body: JSON.stringify({ verify_api_url: '', verify_api_key: '' })
-      });
-      if (r.ok){ admSuccess('Verify Cleared', 'Configure a new key to re-enable verification.'); loadSystem(); }
-      else admError('Clear Failed', 'Could not clear settings.');
+      const r = await fetch('/api/admin-settings', { method: 'POST', headers: authHeaders(true), body: JSON.stringify({ verify_api_url: '', verify_api_key: '' }) });
+      if (r.ok){ admSuccess('Verify Cleared', 'Configure a new key to re-enable.'); loadSystem(); }
+      else admError('Clear Failed', 'Could not clear.');
     } catch { admError('Network Error', 'Could not reach the server.'); }
   });
 }
@@ -1233,12 +1349,10 @@ function openVgEditor(){
   document.getElementById('vgCard').style.display = 'none';
   setTimeout(() => document.getElementById('sysVerifyUrl').focus(), 100);
 }
-
 function closeVgEditor(){
   document.getElementById('vgEditForm').style.display = 'none';
   document.getElementById('vgCard').style.display = '';
 }
-
 document.getElementById('vgCancel')?.addEventListener('click', closeVgEditor);
 
 document.getElementById('saveSystem').addEventListener('click', async () => {
@@ -1254,182 +1368,145 @@ document.getElementById('saveSystem').addEventListener('click', async () => {
     const text = await res.text();
     let data = null;
     try { data = text ? JSON.parse(text) : null; } catch {}
-    if (!res.ok) {
-      admError('Save Failed', (data && data.error) || ('Server returned ' + res.status + ': ' + text.slice(0, 200)));
-      return;
-    }
+    if (!res.ok) { admError('Save Failed', (data && data.error) || ('Server returned ' + res.status)); return; }
     admSuccess('Verify Settings Saved', 'Changes take effect within 60 seconds.');
     setTimeout(loadSystem, 500);
-  } catch (e) {
-    admError('Save Failed', 'Network error: ' + (e.message || 'unknown') + '. Check Vercel logs.');
-  }
+  } catch (e) { admError('Save Failed', 'Network error: ' + (e.message || 'unknown')); }
   finally { btn.disabled = false; btn.textContent = orig; }
 });
 
-/* ============================================================
-   TELEGRAM WIZARD
-   ============================================================ */
+/* ---------- Telegram wizard ---------- */
 const tgWiz = document.getElementById('tgWiz');
 const tgProg = document.getElementById('tgProg');
 let tgStep = 1;
-let tgNeeds2FA = false;
+let needs2FA = false;
 
 function setTgStep(n){
   tgStep = n;
-  document.querySelectorAll('.tg-step').forEach(el => {
-    el.classList.toggle('active', +el.dataset.step === n);
+  const total = needs2FA ? 4 : 3;
+  document.querySelectorAll('.tg-step').forEach(el => el.classList.toggle('active', +el.dataset.step === n));
+
+  [1,2,3,4].forEach(i => {
+    const tag = document.getElementById('tgTag' + i);
+    if (!tag) return;
+    if (i === 3 && !needs2FA) { tag.textContent = ''; return; }
+    const num = (i === 4 && !needs2FA) ? 3 : i;
+    tag.textContent = i === 4 ? `Step ${num} of ${total} · Final` : `Step ${num} of ${total}`;
   });
-  [...tgProg.children].forEach((el, i) => {
-    el.classList.remove('done','current');
-    if (i+1 < n) el.classList.add('done');
-    if (i+1 === n) el.classList.add('current');
+
+  const visibleSteps = needs2FA ? [1,2,3,4] : [1,2,4];
+  tgProg.innerHTML = '';
+  visibleSteps.forEach(s => {
+    const dot = document.createElement('i');
+    if (s < n) dot.classList.add('done');
+    if (s === n) dot.classList.add('current');
+    tgProg.appendChild(dot);
   });
 }
 
 function openTgWizard(){
-  document.getElementById('tgApiId').value    = tgCurrentSettings.tg_api_id || '';
-  document.getElementById('tgApiHash').value  = tgCurrentSettings.tg_api_hash || '';
-  document.getElementById('tgChannelId').value = tgCurrentSettings.tg_channel_id || '';
+  needs2FA = false;
   document.getElementById('tgPhone').value = '';
   document.getElementById('tgCode').value = '';
   document.getElementById('tg2fa').value = '';
+  document.getElementById('tgChannelId').value = tgCurrentSettings.tg_channel_id || '';
   ['tgErr1','tgErr2','tgErr3','tgErr4'].forEach(id => document.getElementById(id).classList.remove('show'));
-  tgNeeds2FA = false;
   setTgStep(1);
   tgWiz.classList.add('open');
 }
 
 function closeTgWizard(){
   tgWiz.classList.remove('open');
-  fetch('/api/admin-settings?action=tg-cancel', {
-    method: 'POST', headers: authHeaders(true), body: JSON.stringify({})
-  }).catch(() => {});
+  fetch('/api/admin-settings?action=tg-cancel', { method: 'POST', headers: authHeaders(true), body: JSON.stringify({}) }).catch(() => {});
 }
 
 document.getElementById('tgWizClose').addEventListener('click', closeTgWizard);
 tgWiz.addEventListener('click', e => { if (e.target === tgWiz) closeTgWizard(); });
-
 document.querySelectorAll('[data-tg-back]').forEach(b => b.addEventListener('click', () => {
+  if (tgStep === 4 && !needs2FA) { setTgStep(2); return; }
   if (tgStep > 1) setTgStep(tgStep - 1);
 }));
 
-document.getElementById('tgNext1').addEventListener('click', () => {
-  const id = document.getElementById('tgApiId').value.trim();
-  const h  = document.getElementById('tgApiHash').value.trim();
-  const c  = document.getElementById('tgChannelId').value.trim();
+document.getElementById('tgNext1').addEventListener('click', async () => {
+  const btn = document.getElementById('tgNext1');
+  const orig = btn.textContent;
+  const phone = document.getElementById('tgPhone').value.trim();
   const err = document.getElementById('tgErr1');
-  if (!id || !h || !c){ err.textContent = '⚠️ All three fields are required.'; err.classList.add('show'); return; }
+  if (!/^\+?\d[\d\s\-]{6,}$/.test(phone)){ err.textContent = '⚠️ Enter a valid phone number with country code.'; err.classList.add('show'); return; }
   err.classList.remove('show');
-  setTgStep(2);
+  btn.disabled = true; btn.textContent = 'Sending code...';
+  try {
+    const res = await fetch('/api/admin-settings?action=tg-start', {
+      method: 'POST', headers: authHeaders(true), body: JSON.stringify({ phone }),
+    });
+    const data = await res.json();
+    if (!res.ok){ err.textContent = '⚠️ ' + (data.error || 'Could not send code.'); err.classList.add('show'); return; }
+    setTgStep(2);
+  } catch { err.textContent = '⚠️ Network error.'; err.classList.add('show'); }
+  finally { btn.disabled = false; btn.textContent = orig; }
 });
 
 document.getElementById('tgNext2').addEventListener('click', async () => {
   const btn = document.getElementById('tgNext2');
   const orig = btn.textContent;
-  const phone = document.getElementById('tgPhone').value.trim();
+  const code = document.getElementById('tgCode').value.trim();
   const err = document.getElementById('tgErr2');
-  if (!/^\+?\d[\d\s\-]{6,}$/.test(phone)){ err.textContent = '⚠️ Enter a valid phone number with country code (e.g. +251967358316).'; err.classList.add('show'); return; }
+  if (!code){ err.textContent = '⚠️ Enter the code from Telegram.'; err.classList.add('show'); return; }
   err.classList.remove('show');
-
-  btn.disabled = true; btn.textContent = 'Sending code...';
-
+  btn.disabled = true; btn.textContent = 'Verifying...';
   try {
-    const res = await fetch('/api/admin-settings?action=tg-start', {
-      method: 'POST', headers: authHeaders(true),
-      body: JSON.stringify({
-        api_id:     document.getElementById('tgApiId').value.trim(),
-        api_hash:   document.getElementById('tgApiHash').value.trim(),
-        channel_id: document.getElementById('tgChannelId').value.trim(),
-        phone,
-      }),
+    const res = await fetch('/api/admin-settings?action=tg-verify', {
+      method: 'POST', headers: authHeaders(true), body: JSON.stringify({ code }),
     });
     const data = await res.json();
-    if (!res.ok){
-      err.textContent = '⚠️ ' + (data.error || 'Could not send code.');
-      err.classList.add('show');
-      return;
-    }
-    setTgStep(3);
-  } catch {
-    err.textContent = '⚠️ Network error.';
-    err.classList.add('show');
-  } finally {
-    btn.disabled = false; btn.textContent = orig;
-  }
+    if (!res.ok){ err.textContent = '⚠️ ' + (data.error || 'Verification failed.'); err.classList.add('show'); return; }
+    if (data.needs_2fa){ needs2FA = true; setTgStep(3); return; }
+    setTgStep(4);
+  } catch { err.textContent = '⚠️ Network error.'; err.classList.add('show'); }
+  finally { btn.disabled = false; btn.textContent = orig; }
 });
 
 document.getElementById('tgNext3').addEventListener('click', async () => {
   const btn = document.getElementById('tgNext3');
   const orig = btn.textContent;
-  const code = document.getElementById('tgCode').value.trim();
+  const pw = document.getElementById('tg2fa').value;
   const err = document.getElementById('tgErr3');
-  if (!code){ err.textContent = '⚠️ Enter the code from Telegram.'; err.classList.add('show'); return; }
+  if (!pw){ err.textContent = '⚠️ Enter your 2FA password.'; err.classList.add('show'); return; }
   err.classList.remove('show');
-
   btn.disabled = true; btn.textContent = 'Verifying...';
-
   try {
-    const res = await fetch('/api/admin-settings?action=tg-verify', {
-      method: 'POST', headers: authHeaders(true),
-      body: JSON.stringify({ code }),
+    const res = await fetch('/api/admin-settings?action=tg-password', {
+      method: 'POST', headers: authHeaders(true), body: JSON.stringify({ password: pw }),
     });
     const data = await res.json();
-    if (!res.ok){
-      err.textContent = '⚠️ ' + (data.error || 'Verification failed.');
-      err.classList.add('show');
-      return;
-    }
-    if (data.needs_2fa){
-      tgNeeds2FA = true;
-      setTgStep(4);
-      return;
-    }
-    admSuccess('Telegram Connected 🎉', 'Session saved. Auto-approval is now active.');
-    closeTgWizard();
-    loadSystem();
-  } catch {
-    err.textContent = '⚠️ Network error.';
-    err.classList.add('show');
-  } finally {
-    btn.disabled = false; btn.textContent = orig;
-  }
+    if (!res.ok){ err.textContent = '⚠️ ' + (data.error || 'Password verification failed.'); err.classList.add('show'); return; }
+    setTgStep(4);
+  } catch { err.textContent = '⚠️ Network error.'; err.classList.add('show'); }
+  finally { btn.disabled = false; btn.textContent = orig; }
 });
 
 document.getElementById('tgNext4').addEventListener('click', async () => {
   const btn = document.getElementById('tgNext4');
   const orig = btn.textContent;
-  const pw = document.getElementById('tg2fa').value;
+  const channel_id = document.getElementById('tgChannelId').value.trim();
   const err = document.getElementById('tgErr4');
-  if (!pw){ err.textContent = '⚠️ Enter your 2FA password.'; err.classList.add('show'); return; }
+  if (!channel_id){ err.textContent = '⚠️ Channel ID is required.'; err.classList.add('show'); return; }
   err.classList.remove('show');
-
-  btn.disabled = true; btn.textContent = 'Verifying...';
-
+  btn.disabled = true; btn.textContent = 'Saving...';
   try {
-    const res = await fetch('/api/admin-settings?action=tg-password', {
-      method: 'POST', headers: authHeaders(true),
-      body: JSON.stringify({ password: pw }),
+    const res = await fetch('/api/admin-settings?action=tg-finalize', {
+      method: 'POST', headers: authHeaders(true), body: JSON.stringify({ channel_id }),
     });
     const data = await res.json();
-    if (!res.ok){
-      err.textContent = '⚠️ ' + (data.error || 'Password verification failed.');
-      err.classList.add('show');
-      return;
-    }
+    if (!res.ok){ err.textContent = '⚠️ ' + (data.error || 'Could not save.'); err.classList.add('show'); return; }
     admSuccess('Telegram Connected 🎉', 'Session saved. Auto-approval is now active.');
     closeTgWizard();
     loadSystem();
-  } catch {
-    err.textContent = '⚠️ Network error.';
-    err.classList.add('show');
-  } finally {
-    btn.disabled = false; btn.textContent = orig;
-  }
+  } catch { err.textContent = '⚠️ Network error.'; err.classList.add('show'); }
+  finally { btn.disabled = false; btn.textContent = orig; }
 });
 
-/* ============================================================
-   ADMINS
-   ============================================================ */
+/* ---------- Admins ---------- */
 async function loadAdmins(){
   const listBox = document.getElementById('adminList');
   listBox.innerHTML = '<div class="empty"><div class="icon">⏳</div><p>Loading...</p></div>';
@@ -1489,6 +1566,7 @@ document.getElementById('addAdminBtn').addEventListener('click', async () => {
   finally { btn.disabled = false; btn.textContent = orig; }
 });
 
+/* ---------- Helpers ---------- */
 function authHeaders(isJson){
   const h = { Authorization: 'Bearer ' + state.token };
   if (isJson) h['Content-Type'] = 'application/json';
