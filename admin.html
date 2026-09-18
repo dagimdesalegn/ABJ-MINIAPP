@@ -13,7 +13,7 @@
 html,body{margin:0;padding:0;}
 body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:linear-gradient(135deg,#0b1220 0%,#131f3d 100%);color:#fff;min-height:100vh;-webkit-font-smoothing:antialiased;}
 
-/* ============ TELEGRAM CARD ============ */
+/* ============ TELEGRAM / VERIFY CARD ============ */
 .tg-card{padding:22px 24px;border-radius:18px;background:linear-gradient(135deg,rgba(255,255,255,.06),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.1);position:relative;overflow:hidden;max-width:640px;}
 .tg-card.ok{border-color:rgba(52,211,153,.4);box-shadow:0 12px 32px -16px rgba(16,185,129,.4);}
 .tg-card.bad{border-color:rgba(248,113,113,.35);}
@@ -28,6 +28,11 @@ body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:linear-grad
 .tg-row .v{font-weight:700;color:#fff;text-align:right;font-family:monospace;font-size:12px;overflow-wrap:anywhere;min-width:0;}
 .tg-actions{display:flex;gap:8px;margin-top:18px;flex-wrap:wrap;}
 .tg-actions .btn{flex:1;min-width:140px;padding:12px 16px;font-size:13px;}
+
+/* ============ VERIFY CARD (same shape as tg-card, but distinct var for clarity) ============ */
+.vg-card{padding:22px 24px;border-radius:18px;background:linear-gradient(135deg,rgba(255,255,255,.06),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.1);position:relative;overflow:hidden;max-width:640px;}
+.vg-card.ok{border-color:rgba(52,211,153,.4);box-shadow:0 12px 32px -16px rgba(16,185,129,.4);}
+.vg-card.bad{border-color:rgba(248,113,113,.35);}
 
 /* ============ TELEGRAM WIZARD MODAL ============ */
 .tg-wiz{position:fixed;inset:0;z-index:210;background:rgba(5,9,18,.88);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);display:flex;align-items:center;justify-content:center;padding:16px;padding-top:calc(16px + env(safe-area-inset-top));padding-bottom:calc(16px + env(safe-area-inset-bottom));opacity:0;visibility:hidden;transition:opacity .3s,visibility .3s;overflow-y:auto;}
@@ -64,7 +69,7 @@ body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:linear-grad
 .tg-note{font-size:12px;color:#93c5fd;background:rgba(59,130,246,.08);border:1px solid rgba(59,130,246,.3);padding:11px 13px;border-radius:10px;line-height:1.55;margin-bottom:14px;}
 .tg-note b{color:#bfdbfe;}
 
-/* ============ LOGIN — FULL SCREEN CENTER ============ */
+/* ============ LOGIN ============ */
 #loginView{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:20px;padding-top:calc(20px + env(safe-area-inset-top));padding-bottom:calc(20px + env(safe-area-inset-bottom));overflow-y:auto;z-index:1;}
 .login-card{width:100%;max-width:420px;margin:auto;padding:32px;background:linear-gradient(135deg,rgba(255,255,255,.06),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.1);border-radius:22px;}
 .login-card h2{margin:0 0 8px;font-size:22px;font-weight:800;}
@@ -361,10 +366,19 @@ body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:linear-grad
       <hr class="sys-hr" />
 
       <h3 style="margin:4px 0;font-size:14px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--gold-1);">Verify.ET (Payment API)</h3>
-      <div class="field"><label>API URL</label><input type="text" id="sysVerifyUrl" placeholder="https://verify.et/api/verify" maxlength="200" autocomplete="off" /></div>
-      <div class="field"><label>API Key</label><input type="text" id="sysVerifyKey" placeholder="The Verify.ET API key" maxlength="256" autocomplete="off" /></div>
 
-      <button class="btn btn-gold" id="saveSystem" type="button" style="padding:14px;font-size:14px;margin-top:8px;">Save Verify Settings</button>
+      <div class="vg-card bad" id="vgCard">
+        <!-- filled by JS -->
+      </div>
+
+      <div id="vgEditForm" style="display:none;margin-top:14px;max-width:640px;">
+        <div class="field"><label>API URL</label><input type="text" id="sysVerifyUrl" placeholder="https://verify.et/api/verify" maxlength="200" autocomplete="off" /></div>
+        <div class="field"><label>API Key</label><input type="text" id="sysVerifyKey" placeholder="The Verify.ET API key" maxlength="256" autocomplete="off" /></div>
+        <div style="display:flex;gap:8px;margin-top:16px;">
+          <button class="btn btn-ghost" id="vgCancel" type="button" style="padding:14px 22px;font-size:14px;">Cancel</button>
+          <button class="btn btn-gold" id="saveSystem" type="button" style="padding:14px;font-size:14px;flex:1;">Save Verify Settings</button>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -407,7 +421,6 @@ body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:linear-grad
       <i data-p="1"></i><i data-p="2"></i><i data-p="3"></i><i data-p="4"></i>
     </div>
 
-    <!-- STEP 1 -->
     <div class="tg-step active" data-step="1">
       <span class="tg-step-tag">Step 1 of 4</span>
       <h3>API Credentials</h3>
@@ -422,7 +435,6 @@ body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:linear-grad
       </div>
     </div>
 
-    <!-- STEP 2 -->
     <div class="tg-step" data-step="2">
       <span class="tg-step-tag">Step 2 of 4</span>
       <h3>Phone Number</h3>
@@ -435,7 +447,6 @@ body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:linear-grad
       </div>
     </div>
 
-    <!-- STEP 3 -->
     <div class="tg-step" data-step="3">
       <span class="tg-step-tag">Step 3 of 4</span>
       <h3>Verification Code</h3>
@@ -449,7 +460,6 @@ body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:linear-grad
       </div>
     </div>
 
-    <!-- STEP 4 -->
     <div class="tg-step" data-step="4">
       <span class="tg-step-tag">Step 4 of 4</span>
       <h3>Two-Factor Password</h3>
@@ -1026,7 +1036,7 @@ document.getElementById('resetRateLimits')?.addEventListener('click', async () =
 });
 
 /* ============================================================
-   SYSTEM — Telegram session card + wizard
+   SYSTEM — Telegram + Verify cards
    ============================================================ */
 let tgCurrentSettings = {};
 
@@ -1039,6 +1049,11 @@ function shortHash(h){
   if (!h) return '—';
   if (h.length <= 12) return h;
   return h.slice(0, 8) + '…' + h.slice(-6);
+}
+function shortKey(k){
+  if (!k) return '—';
+  if (k.length <= 20) return k;
+  return k.slice(0, 14) + '…' + k.slice(-6);
 }
 
 async function loadSystem(){
@@ -1054,15 +1069,15 @@ async function loadSystem(){
     const s = (data && data.settings) || {};
     tgCurrentSettings = s;
 
-    document.getElementById('sysVerifyUrl').value = s.verify_api_url || '';
-    document.getElementById('sysVerifyKey').value = s.verify_api_key || '';
-
+    closeVgEditor();
     renderTgCard(s);
+    renderVgCard(s);
   } catch (e) {
     admError('Load Failed', 'Network error: ' + (e.message || 'unknown'));
   }
 }
 
+/* ---------- Telegram card ---------- */
 function renderTgCard(s){
   const card = document.getElementById('tgCard');
   const hasApi   = !!(s.tg_api_id && s.tg_api_hash);
@@ -1115,6 +1130,71 @@ function renderTgCard(s){
   });
 }
 
+/* ---------- Verify.ET card ---------- */
+function renderVgCard(s){
+  const card = document.getElementById('vgCard');
+  const hasUrl = !!s.verify_api_url;
+  const hasKey = !!s.verify_api_key;
+  const fullOk = hasUrl && hasKey;
+
+  card.classList.toggle('ok', fullOk);
+  card.classList.toggle('bad', !fullOk);
+  card.innerHTML = '';
+
+  if (fullOk){
+    card.innerHTML = `
+      <span class="tg-status ok"><span class="dot"></span> Connected</span>
+      <div class="tg-row"><span class="k">API URL</span><span class="v">${esc(s.verify_api_url)}</span></div>
+      <div class="tg-row"><span class="k">API Key</span><span class="v">${esc(shortKey(s.verify_api_key))}</span></div>
+      <div class="tg-actions">
+        <button class="btn btn-gold" id="vgBtnEdit" type="button">✏️ Edit</button>
+        <button class="btn btn-ghost" id="vgBtnCopy" type="button">📋 Copy Key</button>
+        <button class="btn btn-danger" id="vgBtnClear" type="button">🗑 Clear</button>
+      </div>`;
+  } else {
+    card.innerHTML = `
+      <span class="tg-status bad"><span class="dot"></span> Not Configured</span>
+      <p style="margin:0 0 8px;font-size:13.5px;color:rgba(255,255,255,.75);line-height:1.6;">
+        Connect to Verify.ET so student payments are checked automatically after they submit their reference.
+      </p>
+      <div class="tg-actions">
+        <button class="btn btn-gold" id="vgBtnEdit" type="button">⚙️ Configure Verify</button>
+      </div>`;
+  }
+
+  document.getElementById('vgBtnEdit')?.addEventListener('click', openVgEditor);
+  document.getElementById('vgBtnCopy')?.addEventListener('click', () => {
+    if (s.verify_api_key) copyToClipboard(s.verify_api_key, 'API Key copied');
+  });
+  document.getElementById('vgBtnClear')?.addEventListener('click', async () => {
+    if (!confirm('Clear Verify.ET settings? Auto-verification will stop working until reconfigured.')) return;
+    try {
+      const r = await fetch('/api/admin-settings', {
+        method: 'POST', headers: authHeaders(true),
+        body: JSON.stringify({ verify_api_url: '', verify_api_key: '' })
+      });
+      if (r.ok){ admSuccess('Verify Cleared', 'Configure a new key to re-enable verification.'); loadSystem(); }
+      else admError('Clear Failed', 'Could not clear settings.');
+    } catch { admError('Network Error', 'Could not reach the server.'); }
+  });
+}
+
+function openVgEditor(){
+  const s = tgCurrentSettings || {};
+  document.getElementById('sysVerifyUrl').value = s.verify_api_url || '';
+  document.getElementById('sysVerifyKey').value = s.verify_api_key || '';
+  document.getElementById('vgEditForm').style.display = 'block';
+  document.getElementById('vgCard').style.display = 'none';
+  setTimeout(() => document.getElementById('sysVerifyUrl').focus(), 100);
+}
+
+function closeVgEditor(){
+  document.getElementById('vgEditForm').style.display = 'none';
+  document.getElementById('vgCard').style.display = '';
+}
+
+document.getElementById('vgCancel')?.addEventListener('click', closeVgEditor);
+
 document.getElementById('saveSystem').addEventListener('click', async () => {
   const btn = document.getElementById('saveSystem');
   const orig = btn.textContent;
@@ -1133,6 +1213,7 @@ document.getElementById('saveSystem').addEventListener('click', async () => {
       return;
     }
     admSuccess('Verify Settings Saved', 'Changes take effect within 60 seconds.');
+    setTimeout(loadSystem, 500);
   } catch (e) {
     admError('Save Failed', 'Network error: ' + (e.message || 'unknown') + '. Check Vercel logs.');
   }
