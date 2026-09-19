@@ -136,6 +136,8 @@ async function getConfig() {
     tgApiHash:    s.tg_api_hash   || '',
     tgSession:    s.tg_session    || '',
     tgChannelId:  s.tg_channel_id || '',
+    tgBotToken:   s.tg_bot_token  || '',
+    tgInviteMode: s.tg_invite_mode || 'session',
     verifyApiUrl: s.verify_api_url || '',
     verifyApiKey: s.verify_api_key || '',
   };
@@ -209,7 +211,7 @@ function requireSuper(req) {
 }
 
 /* ============================================================
-   Verify.ET — OPTIMIZED for production (shorter retries)
+   Verify.ET — OPTIMIZED
    ============================================================ */
 function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
 
@@ -258,10 +260,6 @@ function _interpret(body) {
   return { result: 'success', message: 'Verified', amount, receiver: settle.receiverAccount || item.receiverAccount || null };
 }
 
-/* OPTIMIZED: 
-   - Single attempt for most cases (~10s max)
-   - Second attempt only for transient errors (429/503), short wait
-   - Worst case: ~15s instead of 50s */
 async function verifyPayment(reference, suffix) {
   const cfg = await getConfig();
   if (!cfg.verifyApiKey) return { result: 'service_error', message: 'Verification service not configured. Please set it in the admin System tab.' };
@@ -295,7 +293,6 @@ async function verifyPayment(reference, suffix) {
     if (r1.status === 409) return { result: 'duplicate', message: 'This transaction reference has already been used.' };
     if (r1.status === 422) return { result: 'invalid', message: "We couldn't read your transaction details." };
 
-    // Retry once ONLY for rate limit / service busy
     if (r1.status === 429 || r1.status === 503) {
       await sleep(2000);
       const r2 = await attempt(8000, 10000);
@@ -316,24 +313,9 @@ async function verifyPayment(reference, suffix) {
 async function _handleSuccess(res, cfg) {
   if (res.status === 200) {
     const interpreted = _interpret(res.body);
-    if (interpreted.result === 'pending') {
-      // Small second-look for pending
-      await sleep(2500);
-      try {
-        const url = `${cfg.verifyApiUrl}?waitMs=6000`;
-        const r = await fetch(url, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'x-api-key': cfg.verifyApiKey, 'Idempotency-Key': `abj-recheck-${Date.now()}` },
-          body: JSON.stringify({}),
-          signal: AbortSignal.timeout(8000),
-        });
-        // Intentionally ignore — first result stands
-      } catch {}
-    }
     return interpreted;
   }
 
-  // 202 = pending acceptance, poll status endpoint
   const rid = res.body?.requestId;
   const links = res.body?.links || {};
   const statusUrl = links.statusUrl || (rid ? `/api/verify/${rid}` : null);
@@ -354,9 +336,8 @@ async function _handleSuccess(res, cfg) {
 }
 
 /* ============================================================
-   Telegram — WITH MUTEX LOCK (prevents concurrent collisions)
+   Telegram — MUTEX LOCK (for session mode)
    ============================================================ */
-
 async function acquireTgLock() {
   try {
     const res = await fetch(`${SUPABASE_URL}/rest/v1/rpc/acquire_tg_lock`, {
@@ -436,18 +417,78 @@ async function createInviteViaUser(cfg, { channelId, title, expireDate }) {
   }
 }
 
+/* ============================================================
+   Bot-mode invite — pure HTTP, stateless, parallel-safe
+   ============================================================ */
+async function createBotInvite(cfg, { channelId, title, expireDate }) {
+  if (!cfg.tgBotToken) throw new Error('Bot token not configured.');
+  if (!channelId) throw new Error('Channel ID not configured.');
+
+  const chatId = String(channelId).trim();
+
+  const res = await fetch(`https://api.telegram.org/bot${cfg.tgBotToken}/createChatInviteLink`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      chat_id: chatId,
+      name: title,
+      expire_date: expireDate,
+      member_limit: 1,
+    }),
+    signal: AbortSignal.timeout(8000),
+  });
+
+  const text = await res.text();
+  let data = null;
+  try { data = text ? JSON.parse(text) : null; } catch {}
+
+  if (!res.ok || !data || !data.ok) {
+    const desc = (data && data.description) || `HTTP ${res.status}`;
+    if (/not enough rights/i.test(desc)) {
+      throw new Error('Bot is not an admin in the channel. Add it as admin with "Invite Users" permission.');
+    }
+    if (/chat not found/i.test(desc)) {
+      throw new Error('Channel ID is wrong or bot is not in the channel.');
+    }
+    if (/too many requests/i.test(desc)) {
+      throw new Error('Telegram rate limit hit — retry in a moment.');
+    }
+    throw new Error('Bot invite failed: ' + desc);
+  }
+
+  return {
+    invite_link: data.result.invite_link,
+    expire_date: data.result.expire_date,
+    member_limit: 1,
+    via: 'bot',
+  };
+}
+
+/* ============================================================
+   Unified invite creator — branches on mode
+   ============================================================ */
 async function createTelegramInvite(linkName) {
   const cfg = await getConfig();
+  const mode = (cfg.tgInviteMode || 'session').toLowerCase();
 
-  if (!cfg.tgChannelId) throw new Error('Telegram channel ID not configured.');
-  if (!cfg.tgApiId || !cfg.tgApiHash || !cfg.tgSession) {
-    throw new Error('Telegram API credentials not configured.');
-  }
+  if (!cfg.tgChannelId) throw new Error('Telegram channel ID not configured. Set it in the admin System tab.');
 
   const title = String(linkName || 'ABJ').slice(0, 32);
   const expireDate = Math.floor(Date.now() / 1000) + 7 * 24 * 3600;
 
-  // Acquire lock — wait up to 25 seconds, then fail
+  /* ---------- BOT MODE ---------- */
+  if (mode === 'bot') {
+    if (!cfg.tgBotToken) {
+      throw new Error('Bot token not configured. Add it in System tab or switch to Session mode.');
+    }
+    return await createBotInvite(cfg, { channelId: cfg.tgChannelId, title, expireDate });
+  }
+
+  /* ---------- SESSION MODE ---------- */
+  if (!cfg.tgApiId || !cfg.tgApiHash || !cfg.tgSession) {
+    throw new Error('Telegram API credentials not configured. Set API ID, API Hash, and Session in the admin System tab.');
+  }
+
   const start = Date.now();
   const MAX_WAIT = 25000;
   let acquired = false;
@@ -551,7 +592,7 @@ function randomSessionId() {
 }
 
 /* ============================================================
-   Rate limiting — sliding window
+   Rate limiting
    ============================================================ */
 async function checkRateLimit(ip, maxPerHour = 10) {
   if (!ip || ip === 'unknown') return true;
