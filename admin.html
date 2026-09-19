@@ -81,6 +81,7 @@ body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:radial-grad
 .nav-item .ni-text{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .nav-item .ni-badge{flex:0 0 auto;min-width:24px;height:22px;padding:0 8px;display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;border-radius:999px;background:rgba(251,191,36,.15);color:#fbbf24;border:1px solid rgba(251,191,36,.35);}
 .nav-item.active .ni-badge{background:linear-gradient(135deg,#f7e07a,#d4af37);color:#0b1220;border-color:transparent;}
+.nav-item .ni-badge.green{background:rgba(34,197,94,.15);color:#22c55e;border-color:rgba(34,197,94,.4);}
 
 .sb-foot{padding:16px 14px;border-top:1px solid rgba(255,255,255,.08);}
 .user-chip{display:flex;align-items:center;gap:12px;padding:11px 12px;border-radius:14px;background:linear-gradient(135deg,rgba(255,255,255,.06),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.1);transition:border-color .25s,background .25s;}
@@ -93,13 +94,19 @@ body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:radial-grad
 .uc-logout:hover{background:linear-gradient(135deg,#ef4444,#dc2626);color:#fff;border-color:transparent;transform:scale(1.05);}
 
 .main{margin-left:var(--sidebar-w);min-height:100vh;padding:28px 32px 60px;position:relative;}
-.main-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:26px;flex-wrap:wrap;}
+.main-head{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:26px;flex-wrap:wrap;}
 .mh-left{display:flex;align-items:center;gap:14px;min-width:0;}
 .mh-menu{width:44px;height:44px;flex:0 0 44px;border-radius:12px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:#fff;cursor:pointer;display:none;place-items:center;font-size:19px;transition:background .2s;}
 .mh-menu:hover{background:rgba(255,255,255,.14);}
 .mh-title{min-width:0;}
 .mh-title h1{margin:0;font-size:clamp(20px,2.6vw,26px);font-weight:800;letter-spacing:-.6px;background:linear-gradient(100deg,#ffffff 30%,#fde9a8 60%,#a5b4fc 90%);background-size:200% auto;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:shineText 6s linear infinite;line-height:1.2;}
 .mh-title p{margin:5px 0 0;font-size:12px;font-weight:700;letter-spacing:1.3px;text-transform:uppercase;color:rgba(255,255,255,.55);}
+.mh-refresh{display:inline-flex;align-items:center;gap:8px;padding:11px 18px;border-radius:12px;background:linear-gradient(135deg,rgba(247,224,122,.18),rgba(212,175,55,.09));color:#f7e07a;border:1px solid rgba(247,224,122,.4);font-weight:800;font-size:13px;letter-spacing:.3px;cursor:pointer;font-family:inherit;transition:transform .25s var(--bounce),background .25s,box-shadow .25s;flex:0 0 auto;}
+.mh-refresh:hover{transform:translateY(-2px);background:linear-gradient(135deg,rgba(247,224,122,.28),rgba(212,175,55,.16));box-shadow:0 12px 26px -14px rgba(212,175,55,.85);}
+.mh-refresh:disabled{opacity:.6;cursor:not-allowed;transform:none;}
+.mh-refresh svg{width:16px;height:16px;display:block;}
+.mh-refresh.spinning svg{animation:mhSpin .8s linear infinite;}
+@keyframes mhSpin{to{transform:rotate(360deg);}}
 
 .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:28px;}
 .stat{position:relative;padding:22px 20px;border-radius:18px;background:linear-gradient(135deg,rgba(255,255,255,.07),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.1);overflow:hidden;transition:transform .35s var(--bounce),border-color .3s,box-shadow .3s;}
@@ -170,6 +177,30 @@ body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:radial-grad
 .admin-row .who .n{font-size:12px;font-weight:700;color:rgba(255,255,255,.55);margin-top:4px;overflow-wrap:anywhere;}
 .super-pill{display:inline-block;margin-left:8px;padding:3px 9px;border-radius:999px;font-size:9.5px;font-weight:800;letter-spacing:1.1px;text-transform:uppercase;background:linear-gradient(135deg,#f7e07a,#d4af37);color:#0b1220;}
 .admin-pill{display:inline-block;margin-left:8px;padding:3px 9px;border-radius:999px;font-size:9.5px;font-weight:800;letter-spacing:1.1px;text-transform:uppercase;background:rgba(255,255,255,.1);color:#cbd5e1;border:1px solid rgba(255,255,255,.15);}
+
+/* ---------- FINANCE TAB ---------- */
+.fin-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-bottom:22px;}
+.fin-card{position:relative;padding:20px 22px;border-radius:18px;background:linear-gradient(135deg,rgba(255,255,255,.07),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.1);overflow:hidden;transition:transform .35s var(--bounce),border-color .3s,box-shadow .3s;}
+.fin-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--c1,#f7e07a),var(--c2,#d4af37));opacity:.85;}
+.fin-card:hover{transform:translateY(-4px);border-color:rgba(247,224,122,.35);box-shadow:0 22px 44px -22px rgba(212,175,55,.5);}
+.fin-card.green{--c1:#34d399;--c2:#059669;}
+.fin-card.blue{--c1:#60a5fa;--c2:#2563eb;}
+.fin-card.purple{--c1:#c084fc;--c2:#9333ea;}
+.fin-card.pink{--c1:#f472b6;--c2:#db2777;}
+.fin-card .fi{position:absolute;top:16px;right:18px;font-size:22px;opacity:.35;}
+.fin-card .fv{font-size:26px;font-weight:800;letter-spacing:-1px;line-height:1.1;background:linear-gradient(135deg,var(--c1),var(--c2));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}
+.fin-card .fl{margin-top:8px;font-size:11px;font-weight:800;letter-spacing:1.3px;text-transform:uppercase;color:rgba(255,255,255,.6);}
+.fin-card .fsub{margin-top:6px;font-size:11.5px;font-weight:700;color:rgba(255,255,255,.45);}
+.fin-table{width:100%;border-collapse:collapse;background:linear-gradient(135deg,rgba(255,255,255,.05),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.1);border-radius:16px;overflow:hidden;font-size:13.5px;}
+.fin-table th{background:rgba(255,255,255,.05);padding:14px 18px;text-align:left;font-size:10.5px;font-weight:800;letter-spacing:1.3px;text-transform:uppercase;color:rgba(255,255,255,.65);border-bottom:1px solid rgba(255,255,255,.08);}
+.fin-table td{padding:13px 18px;border-bottom:1px solid rgba(255,255,255,.06);font-weight:700;color:#fff;}
+.fin-table tbody tr:last-child td{border-bottom:none;}
+.fin-table tbody tr:hover{background:rgba(255,255,255,.03);}
+.fin-table td.amt{text-align:right;font-family:monospace;color:#f7e07a;font-weight:800;}
+.fin-table td.cnt{text-align:right;font-family:monospace;color:rgba(255,255,255,.85);}
+.fin-table td.total-row{color:#f7e07a;font-weight:800;font-size:14px;background:rgba(247,224,122,.06);}
+.fin-head-title{font-size:13px;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;color:var(--gold-1);margin:22px 0 12px;display:flex;align-items:center;gap:10px;}
+.fin-head-title::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,rgba(247,224,122,.4),transparent);}
 
 .toast{position:fixed;top:20px;right:20px;padding:15px 22px;border-radius:14px;font-weight:800;font-size:13.5px;color:#fff;box-shadow:0 20px 44px -14px rgba(0,0,0,.6);transform:translateY(-140%);transition:transform .4s var(--bounce);z-index:200;}
 .toast.show{transform:translateY(0);}
@@ -264,7 +295,7 @@ body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:radial-grad
 .chat-session-item .cs-id{font-size:12.5px;font-weight:800;letter-spacing:-.1px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .chat-session-item .cs-last{font-size:11px;color:rgba(255,255,255,.5);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .chat-session-item .cs-time{font-size:10px;color:rgba(255,255,255,.4);margin-top:2px;}
-.chat-session-item .cs-badge{background:linear-gradient(135deg,#f7e07a,#d4af37);color:#0b1220;font-size:10px;font-weight:800;padding:2px 7px;border-radius:999px;align-self:flex-start;margin-top:2px;}
+.chat-session-item .cs-badge{background:linear-gradient(135deg,#22c55e,#16a34a);color:#fff;font-size:10px;font-weight:800;padding:2px 7px;border-radius:999px;align-self:flex-start;margin-top:2px;box-shadow:0 2px 6px -2px rgba(34,197,94,.7);}
 .chat-admin-msg{max-width:78%;padding:10px 13px;border-radius:14px;font-size:13px;line-height:1.5;word-break:break-word;overflow-wrap:anywhere;}
 .chat-admin-msg.user{align-self:flex-start;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.12);color:#fff;border-bottom-left-radius:4px;}
 .chat-admin-msg.admin{align-self:flex-end;background:linear-gradient(135deg,#2563eb,#1d4ed8);color:#fff;border-bottom-right-radius:4px;}
@@ -297,6 +328,7 @@ body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:radial-grad
   .tg-info-row{flex-direction:column;align-items:flex-start;gap:4px;padding:11px 14px;}
   .tg-info-row .k{flex:0 0 auto;}
   .tg-info-row .v{text-align:left;font-size:12.5px;}
+  .fin-table th, .fin-table td{padding:10px 12px;font-size:12px;}
 }
 </style>
 </head>
@@ -343,6 +375,14 @@ body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:radial-grad
 
     <nav class="sb-nav">
       <div class="nav-section">
+        <div class="nav-label">Overview</div>
+        <button class="nav-item tab" data-tab="finance" type="button">
+          <span class="ni-icon">💰</span>
+          <span class="ni-text">Finance</span>
+        </button>
+      </div>
+
+      <div class="nav-section">
         <div class="nav-label">Registrations</div>
         <button class="nav-item active tab" data-tab="pending" type="button">
           <span class="ni-icon">⏳</span>
@@ -366,7 +406,7 @@ body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:radial-grad
         <button class="nav-item tab" data-tab="chats" type="button">
           <span class="ni-icon">💬</span>
           <span class="ni-text">Live Chats</span>
-          <span class="ni-badge" id="navChats" style="display:none">0</span>
+          <span class="ni-badge green" id="navChats" style="display:none">0</span>
         </button>
       </div>
 
@@ -428,6 +468,10 @@ body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:radial-grad
           <p id="welcomeLine">Welcome back</p>
         </div>
       </div>
+      <button class="mh-refresh" id="refreshBtn" type="button" title="Refresh current tab">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+        <span>Refresh</span>
+      </button>
     </div>
 
     <div class="stats">
@@ -435,6 +479,10 @@ body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:radial-grad
       <div class="stat s2"><div class="si">⏳</div><div class="n" id="stPending">0</div><div class="l">Pending</div></div>
       <div class="stat s3"><div class="si">✅</div><div class="n" id="stApproved">0</div><div class="l">Approved</div></div>
       <div class="stat s4"><div class="si">❌</div><div class="n" id="stRejected">0</div><div class="l">Rejected</div></div>
+    </div>
+
+    <div class="tab-content" id="tab-finance">
+      <div id="finContent"></div>
     </div>
 
     <div class="tab-content active" id="tab-pending"><div class="list" id="listPending"></div></div>
@@ -697,6 +745,7 @@ const ucRole = document.getElementById('ucRole');
 const sidebar = document.getElementById('sidebar');
 const sbOverlay = document.getElementById('sbOverlay');
 const sidebarToggle = document.getElementById('sidebarToggle');
+const refreshBtn = document.getElementById('refreshBtn');
 
 /* ---------- Password toggles ---------- */
 function wirePwToggles(root){
@@ -859,6 +908,8 @@ function showDash(){
 
   loadTab('pending');
   updateCounts();
+  updateChatBadge();
+  setInterval(updateChatBadge, 20000);
 }
 
 if (state.token) showDash();
@@ -872,17 +923,39 @@ document.querySelectorAll('.tab').forEach(tab => {
     document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
     document.getElementById('tab-' + tab.dataset.tab).classList.add('active');
     currentTab = tab.dataset.tab;
-    if (['pending', 'approved', 'rejected'].includes(currentTab)) loadTab(currentTab);
-    if (currentTab === 'settings') loadSettings();
-    if (currentTab === 'system') loadSystem();
-    if (currentTab === 'admins') loadAdmins();
-    if (currentTab === 'videos') loadVideos();
-    if (currentTab === 'testimonials') loadTestimonials();
-    if (currentTab === 'profile') loadProfile();
-    if (currentTab === 'chats') loadChatSessions();
+    reloadCurrentTab();
     if (window.innerWidth <= 960) toggleSidebar(false);
   });
 });
+
+/* ---------- Refresh button ---------- */
+refreshBtn.addEventListener('click', async () => {
+  refreshBtn.classList.add('spinning');
+  refreshBtn.disabled = true;
+  try {
+    await reloadCurrentTab();
+    await updateCounts();
+    await updateChatBadge();
+    toastMsg('🔄 Refreshed', 'ok');
+  } finally {
+    setTimeout(() => {
+      refreshBtn.classList.remove('spinning');
+      refreshBtn.disabled = false;
+    }, 500);
+  }
+});
+
+async function reloadCurrentTab(){
+  if (['pending', 'approved', 'rejected'].includes(currentTab)) await loadTab(currentTab);
+  else if (currentTab === 'finance') await loadStats();
+  else if (currentTab === 'settings') await loadSettings();
+  else if (currentTab === 'system') await loadSystem();
+  else if (currentTab === 'admins') await loadAdmins();
+  else if (currentTab === 'videos') await loadVideos();
+  else if (currentTab === 'testimonials') await loadTestimonials();
+  else if (currentTab === 'profile') await loadProfile();
+  else if (currentTab === 'chats') await loadChatSessions();
+}
 
 /* ---------- Registrations ---------- */
 async function loadTab(status){
@@ -914,6 +987,18 @@ async function updateCounts(){
     const np = document.getElementById('navPending'); if (np) np.textContent = c1;
     const na = document.getElementById('navApproved'); if (na) na.textContent = c2;
     const nr = document.getElementById('navRejected'); if (nr) nr.textContent = c3;
+  } catch {}
+}
+
+async function updateChatBadge(){
+  try {
+    const res = await fetch('/api/admin-chats?action=unread-count', { headers: authHeaders() });
+    const d = await res.json();
+    const badge = document.getElementById('navChats');
+    if (badge){
+      badge.textContent = d.count || 0;
+      badge.style.display = (d.count > 0) ? 'inline-flex' : 'none';
+    }
   } catch {}
 }
 
@@ -1020,6 +1105,90 @@ async function handleAction(act, id, btn){
     admError('Network Error', 'Could not reach the server. Please try again.');
   } finally {
     btn.disabled = false; btn.textContent = original;
+  }
+}
+
+/* ---------- STATS / FINANCE ---------- */
+async function loadStats(){
+  const box = document.getElementById('finContent');
+  box.innerHTML = '<div class="empty"><div class="icon">⏳</div><p>Loading stats…</p></div>';
+  try {
+    const res = await fetch('/api/admin-stats', { headers: authHeaders() });
+    if (res.status === 401) { logoutBtn.click(); return; }
+    const d = await res.json();
+    if (!res.ok){ box.innerHTML = `<div class="empty"><div class="icon">⚠️</div><p>${esc(d.error || 'Failed to load.')}</p></div>`; return; }
+
+    const fmt = n => 'ETB ' + (Number(n) || 0).toLocaleString('en-US');
+    const num = n => (Number(n) || 0).toLocaleString('en-US');
+
+    const methods = Object.keys(d.byMethod || {});
+    const semesters = Object.keys(d.bySemester || {});
+
+    box.innerHTML = `
+      <div class="fin-grid">
+        <div class="fin-card">
+          <div class="fi">👥</div>
+          <div class="fv">${num(d.totalUsers)}</div>
+          <div class="fl">Total Students</div>
+          <div class="fsub">Approved registrations</div>
+        </div>
+        <div class="fin-card green">
+          <div class="fi">💰</div>
+          <div class="fv">${fmt(d.totalRevenue)}</div>
+          <div class="fl">Total Revenue</div>
+          <div class="fsub">All approved payments</div>
+        </div>
+        <div class="fin-card blue">
+          <div class="fi">📅</div>
+          <div class="fv">${fmt(d.todayRevenue)}</div>
+          <div class="fl">Today</div>
+          <div class="fsub">${num(d.todayUsers)} new students</div>
+        </div>
+        <div class="fin-card purple">
+          <div class="fi">📆</div>
+          <div class="fv">${fmt(d.weekRevenue)}</div>
+          <div class="fl">This Week</div>
+          <div class="fsub">${num(d.weekUsers)} new students</div>
+        </div>
+        <div class="fin-card pink">
+          <div class="fi">🗓️</div>
+          <div class="fv">${fmt(d.monthRevenue)}</div>
+          <div class="fl">This Month</div>
+          <div class="fsub">${num(d.monthUsers)} new students</div>
+        </div>
+        <div class="fin-card">
+          <div class="fi">⏳</div>
+          <div class="fv">${num(d.pending)}</div>
+          <div class="fl">Pending</div>
+          <div class="fsub">${num(d.rejected)} rejected</div>
+        </div>
+      </div>
+
+      <div class="fin-head-title">Revenue by Payment Method</div>
+      <table class="fin-table">
+        <thead><tr><th>Method</th><th style="text-align:right">Students</th><th style="text-align:right">Revenue</th></tr></thead>
+        <tbody>
+          ${methods.length ? methods.map(m => `
+            <tr><td>${esc(m)}</td><td class="cnt">${num(d.byMethod[m].count)}</td><td class="amt">${fmt(d.byMethod[m].revenue)}</td></tr>
+          `).join('') : '<tr><td colspan="3" style="text-align:center;color:rgba(255,255,255,.4);">No data yet</td></tr>'}
+          ${methods.length ? `<tr><td class="total-row">TOTAL</td><td class="cnt total-row">${num(d.totalUsers)}</td><td class="amt total-row">${fmt(d.totalRevenue)}</td></tr>` : ''}
+        </tbody>
+      </table>
+
+      <div class="fin-head-title">Students by Semester</div>
+      <table class="fin-table">
+        <thead><tr><th>Semester</th><th style="text-align:right">Students</th></tr></thead>
+        <tbody>
+          ${semesters.length ? semesters.map(s => `
+            <tr><td>${esc(s)}</td><td class="cnt">${num(d.bySemester[s])}</td></tr>
+          `).join('') : '<tr><td colspan="2" style="text-align:center;color:rgba(255,255,255,.4);">No data yet</td></tr>'}
+        </tbody>
+      </table>
+
+      <p style="margin-top:20px;font-size:11.5px;color:rgba(255,255,255,.4);text-align:right;">Updated ${new Date(d.generated_at).toLocaleString()}</p>
+    `;
+  } catch {
+    box.innerHTML = '<div class="empty"><div class="icon">⚠️</div><p>Network error.</p></div>';
   }
 }
 
@@ -1197,7 +1366,6 @@ async function loadSettings(){
     document.getElementById('setMpesa').value        = s.account_mpesa || '';
     document.getElementById('setContactUser').value  = s.contact_username || '';
     document.getElementById('setContactPhone').value = s.contact_phone || '';
-    admSuccess('Settings Loaded', 'Current fee and accounts are ready to edit.');
   } catch {}
 }
 
@@ -1601,11 +1769,9 @@ async function loadChatSessions(){
     const res = await fetch('/api/admin-chats', { headers: authHeaders() });
     const data = await res.json();
     const sessions = data.sessions || [];
-    const badge = document.getElementById('navChats');
-    const totalUnread = sessions.reduce((s,x)=>s+(x.unread||0),0);
-    if (badge){ badge.textContent = totalUnread; badge.style.display = totalUnread>0?'inline-flex':'none'; }
     if (!sessions.length){
       list.innerHTML = '<div style="padding:20px;text-align:center;color:rgba(255,255,255,.4);font-size:12px;">No conversations yet.</div>';
+      updateChatBadge();
       return;
     }
     list.innerHTML = sessions.map(s => `
@@ -1617,6 +1783,7 @@ async function loadChatSessions(){
       </button>
     `).join('');
     list.querySelectorAll('[data-session]').forEach(b => b.addEventListener('click', () => openChatConversation(b.dataset.session)));
+    updateChatBadge();
   } catch { list.innerHTML = '<div style="padding:20px;text-align:center;color:#f87171;font-size:12px;">Network error.</div>'; }
 }
 
@@ -1649,6 +1816,7 @@ async function loadChatConversation(){
       return `<div class="chat-admin-msg ${m.sender}">${inner}<div class="t">${new Date(m.created_at).toLocaleString()}</div></div>`;
     }).join('');
     if (wasAtBottom || items.length) body.scrollTop = body.scrollHeight;
+    updateChatBadge();
   } catch {}
 }
 
@@ -1692,17 +1860,6 @@ document.getElementById('chatAdminFile')?.addEventListener('change', async () =>
   document.getElementById('chatAdminInput').placeholder = `📎 ${f.name} (ready to send)`;
   document.getElementById('chatAdminFile').value = '';
 });
-
-/* Poll unread count for the badge every 20s */
-setInterval(async () => {
-  if (!state.token) return;
-  try {
-    const res = await fetch('/api/admin-chats?action=unread-count', { headers: authHeaders() });
-    const d = await res.json();
-    const badge = document.getElementById('navChats');
-    if (badge){ badge.textContent = d.count || 0; badge.style.display = (d.count>0)?'inline-flex':'none'; }
-  } catch {}
-}, 20000);
 
 /* ---------- Helpers ---------- */
 function authHeaders(isJson){

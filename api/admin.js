@@ -23,6 +23,7 @@ const ROUTES = {
   videos:       handleVideos,
   testimonials: handleTestimonials,
   chats:        handleChats,
+  stats:        handleStats,
 };
 
 module.exports = async (req, res) => {
@@ -758,4 +759,70 @@ async function handleChats(req, res) {
   }
 
   return json(res, 405, { error: 'Method not allowed' });
+}
+
+/* ============================================================
+   10. STATS / FINANCE
+   ============================================================ */
+async function handleStats(req, res) {
+  if (req.method !== 'GET') return json(res, 405, { error: 'Method not allowed' });
+  const payload = requireAdmin(req);
+  if (!payload) return json(res, 401, { error: 'Unauthorized' });
+
+  const q = await supabaseQuery(
+    'registrations?select=id,status,amount,created_at,approved_at,payment_method,semester,stream'
+  );
+  const rows = q.data || [];
+
+  const now = new Date();
+  const startOfDay   = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+  const startOfWeek  = now.getTime() - 7 * 86400000;
+  const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1).getTime();
+
+  let totalUsers = 0, totalRevenue = 0;
+  let todayUsers = 0, todayRevenue = 0;
+  let weekUsers = 0, weekRevenue = 0;
+  let monthUsers = 0, monthRevenue = 0;
+  let pending = 0, approved = 0, rejected = 0, autoApproved = 0;
+  const byMethod = {};
+  const bySemester = {};
+
+  for (const r of rows) {
+    const amt = parseFloat(r.amount) || 0;
+    const createdMs = r.created_at ? new Date(r.created_at).getTime() : 0;
+
+    if (r.status === 'approved') {
+      approved++;
+      totalUsers++;
+      totalRevenue += amt;
+
+      if (createdMs >= startOfDay)   { todayUsers++; todayRevenue += amt; }
+      if (createdMs >= startOfWeek)  { weekUsers++;  weekRevenue  += amt; }
+      if (createdMs >= startOfMonth) { monthUsers++; monthRevenue += amt; }
+
+      const m = r.payment_method || 'Unknown';
+      byMethod[m] = byMethod[m] || { count: 0, revenue: 0 };
+      byMethod[m].count++;
+      byMethod[m].revenue += amt;
+
+      const s = r.semester || 'Unknown';
+      bySemester[s] = (bySemester[s] || 0) + 1;
+    } else if (r.status === 'pending') {
+      pending++;
+    } else if (r.status === 'rejected') {
+      rejected++;
+    }
+  }
+
+  return json(res, 200, {
+    totalRecords: rows.length,
+    totalUsers, totalRevenue,
+    todayUsers, todayRevenue,
+    weekUsers, weekRevenue,
+    monthUsers, monthRevenue,
+    pending, approved, rejected,
+    byMethod,
+    bySemester,
+    generated_at: new Date().toISOString(),
+  });
 }

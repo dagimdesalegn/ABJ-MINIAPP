@@ -51,7 +51,7 @@ section{scroll-margin-top:calc(var(--header-h) + 20px);}
 .hero p.lead{font-size:clamp(15px,2.3vw,17.5px);color:var(--muted);max-width:62ch;margin:0 auto 56px;line-height:1.75;}
 .hero p.lead b{color:var(--ink);font-weight:700;}
 .orbit{--item-size:23%;--center-size:32%;--orbit-radius:34%;--orbit-speed:60s;position:relative;width:clamp(320px,82vw,580px);aspect-ratio:1 / 1;margin:0 auto 52px;}
-.orbit-ring{position:absolute;inset:0;transform-origin:50% 50%;animation:orbitSpin var(--orbit-speed) linear infinite;z-index:1;}
+.orbit-ring{position:absolute;inset:0;transform-origin:50% 50%;animation:orbitSpin var(--orbit-speed) linear infinite !important;z-index:1;}
 @keyframes orbitSpin{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
 .orbit-wires{position:absolute;inset:0;width:100%;height:100%;overflow:visible;z-index:0;pointer-events:none;}
 .wire-base{stroke-width:.5;fill:none;opacity:.28;stroke-linecap:round;}
@@ -70,7 +70,7 @@ section{scroll-margin-top:calc(var(--header-h) + 20px);}
 .orbit-item-2{top:50%;left:calc(50% + var(--orbit-radius));}
 .orbit-item-3{top:calc(50% + var(--orbit-radius));left:50%;}
 .orbit-item-4{top:50%;left:calc(50% - var(--orbit-radius));}
-.orbit-counter{width:100%;height:100%;transform-origin:50% 50%;animation:orbitCounter var(--orbit-speed) linear infinite;}
+.orbit-counter{width:100%;height:100%;transform-origin:50% 50%;animation:orbitCounter var(--orbit-speed) linear infinite !important;}
 @keyframes orbitCounter{from{transform:rotate(0deg);}to{transform:rotate(-360deg);}}
 .orbit:hover .orbit-ring,.orbit:hover .orbit-counter{animation-play-state:paused;}
 .orbit-center{position:absolute;top:50%;left:50%;width:var(--center-size);aspect-ratio:1 / 1;transform:translate(-50%,-50%);border-radius:50%;z-index:5;isolation:isolate;}
@@ -550,8 +550,9 @@ section{scroll-margin-top:calc(var(--header-h) + 20px);}
 .abj-chat-fab{position:fixed;right:18px;bottom:calc(18px + env(safe-area-inset-bottom));right:calc(18px + env(safe-area-inset-right));z-index:80;width:60px;height:60px;border-radius:50%;background:linear-gradient(135deg,#2563eb,#1d4ed8);color:#fff;display:grid;place-items:center;box-shadow:0 20px 40px -14px rgba(37,99,235,.9),inset 0 0 0 2px rgba(247,224,122,.85),inset 0 0 0 3.5px rgba(255,255,255,.15),0 8px 20px -8px rgba(212,175,55,.7);cursor:pointer;transition:transform .35s var(--bounce),box-shadow .35s var(--ease),opacity .3s ease;}
 .abj-chat-fab:hover{transform:translateY(-3px) scale(1.05);}
 .abj-chat-fab svg{width:28px;height:28px;}
-.abj-chat-fab .abj-fab-dot{position:absolute;top:6px;right:6px;min-width:18px;height:18px;padding:0 5px;background:#ef4444;color:#fff;font-size:10px;font-weight:800;border-radius:999px;display:none;place-items:center;box-shadow:0 0 0 2px #fff;}
+.abj-chat-fab .abj-fab-dot{position:absolute;top:-4px;right:-4px;min-width:22px;height:22px;padding:0 6px;background:linear-gradient(135deg,#22c55e,#16a34a);color:#fff;font-size:11px;font-weight:800;border-radius:999px;display:none;place-items:center;box-shadow:0 0 0 3px #fff,0 4px 12px -2px rgba(34,197,94,.9);animation:fabPulse 1.8s ease-in-out infinite;}
 .abj-chat-fab .abj-fab-dot.show{display:grid;}
+@keyframes fabPulse{0%,100%{transform:scale(1);box-shadow:0 0 0 3px #fff,0 4px 12px -2px rgba(34,197,94,.9);}50%{transform:scale(1.08);box-shadow:0 0 0 3px #fff,0 6px 18px -2px rgba(34,197,94,1);}}
 
 .abj-chat-panel{position:fixed;right:18px;bottom:calc(90px + env(safe-area-inset-bottom));right:calc(18px + env(safe-area-inset-right));z-index:90;width:370px;max-width:calc(100vw - 36px);height:560px;max-height:calc(100dvh - 130px);background:#fff;border-radius:20px;box-shadow:0 28px 68px -22px rgba(15,23,42,.45),0 12px 30px -14px rgba(15,23,42,.22),0 0 0 1px rgba(37,99,235,.08),0 0 0 4px rgba(255,255,255,.6);display:none;flex-direction:column;overflow:hidden;transform-origin:bottom right;transform:translateY(14px) scale(.96);opacity:0;transition:transform .32s cubic-bezier(.34,1.56,.64,1), opacity .24s ease;}
 .abj-chat-panel.open{display:flex;transform:translateY(0) scale(1);opacity:1;}
@@ -641,9 +642,24 @@ body:has(.abj-chat-panel.open) .abj-chat-fab{opacity:0;transform:scale(.6);point
   .abj-chat-input{font-size:14px;}
   .abj-chat-fab{right:14px;bottom:calc(14px + env(safe-area-inset-bottom));width:56px;height:56px;}
   .abj-chat-fab svg{width:26px;height:26px;}
+  .abj-chat-fab .abj-fab-dot{min-width:20px;height:20px;font-size:10px;}
 }
 
-@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;}.reveal{opacity:1;transform:none;}html{scroll-behavior:auto;}.orbit-ring,.orbit-counter{animation:none !important;}}
+/* ============ MOBILE OVERRIDES — Force orbit animation on ============ */
+@media (max-width:640px){
+  .orbit-ring{animation:orbitSpin var(--orbit-speed) linear infinite !important;}
+  .orbit-counter{animation:orbitCounter var(--orbit-speed) linear infinite !important;}
+  .wire-flow{animation:flow 2.9s linear infinite !important;}
+}
+
+/* Respect reduced-motion ONLY for the user's accessibility preference on desktop.
+   On mobile we keep the orbit moving because it is a signature visual and users expect it. */
+@media (prefers-reduced-motion:reduce) and (min-width:641px){
+  *{animation:none!important;transition:none!important;}
+  .reveal{opacity:1;transform:none;}
+  html{scroll-behavior:auto;}
+}
+
 @media (max-width:1024px){.wrap{padding:0 20px;}.hero{padding:52px 0 70px;}.section{padding:72px 0;}.cur-section{padding:80px 0 86px;}.cur-shell{padding:24px;}.course-stage{grid-template-columns:repeat(auto-fill,minmax(260px,1fr));}.tst-wrap{padding:0 66px;}}
 @media (max-width:900px){.orbit{--item-size:24%;--center-size:32%;--orbit-radius:34%;}.tst-wrap{padding:0 60px;}.tst-arrow{width:46px;height:46px;}.tst-arrow svg{width:18px;height:18px;}.tst-card{padding:34px 30px 30px;}.tst-quote{font-size:110px;top:16px;right:22px;}}
 @media (max-width:720px){.orbit{--item-size:26%;--center-size:30%;--orbit-radius:34%;width:clamp(300px,88vw,480px);}.tst-wrap{padding:0 52px;}.tst-arrow{width:42px;height:42px;}.tst-arrow svg{width:16px;height:16px;}.tst-card{padding:30px 24px 26px;}.tst-from{font-size:15px;}.tst-text{font-size:14.5px;}.reg-shell{max-width:100%;}}
@@ -1761,7 +1777,7 @@ document.addEventListener('keydown', e => {
   if (regModal.classList.contains('open') && !regLoading.classList.contains('show')) { closeReg(); return; }
 });
 
-/* ---------- LIVE CHAT (no limits, Telegram-style) ---------- */
+/* ---------- LIVE CHAT (no limits, Telegram-style + green count badge) ---------- */
 (function(){
   const SESSION_KEY = 'abj_chat_session';
   let sessionId = localStorage.getItem(SESSION_KEY);
@@ -1792,6 +1808,7 @@ document.addEventListener('keydown', e => {
   let recChunks = [];
   let recStarted = 0;
   let recTimer = null;
+  let unreadCount = 0;
 
   function openChat(){
     panel.classList.add('open');
@@ -1800,7 +1817,8 @@ document.addEventListener('keydown', e => {
     startPolling();
     setTimeout(()=>input.focus(),250);
     localStorage.setItem('abj_chat_last_seen', String(Date.now()));
-    fabDot.classList.remove('show');
+    unreadCount = 0;
+    updateFabBadge(0);
   }
   function closeChat(){ panel.classList.remove('open'); isOpen = false; stopPolling(); }
   fab.addEventListener('click', () => isOpen ? closeChat() : openChat());
@@ -1879,7 +1897,24 @@ document.addEventListener('keydown', e => {
       body.innerHTML = '';
       items.forEach(m => body.appendChild(renderMessage(m)));
       body.scrollTop = body.scrollHeight;
+
+      /* Count admin messages newer than our last-seen timestamp */
+      if (!isOpen) {
+        const lastSeen = parseInt(localStorage.getItem('abj_chat_last_seen') || '0', 10);
+        const newOnes = items.filter(m => m.sender === 'admin' && new Date(m.created_at).getTime() > lastSeen).length;
+        updateFabBadge(newOnes);
+      }
     } catch {}
+  }
+
+  function updateFabBadge(n){
+    unreadCount = n || 0;
+    if (unreadCount > 0){
+      fabDot.textContent = unreadCount > 99 ? '99+' : String(unreadCount);
+      fabDot.classList.add('show');
+    } else {
+      fabDot.classList.remove('show');
+    }
   }
 
   function startPolling(){ stopPolling(); pollTimer = setInterval(async ()=>{ if(!isOpen) return; await loadMessages(); }, 4000); }
@@ -1923,7 +1958,7 @@ document.addEventListener('keydown', e => {
     preview.querySelector('.pv-cancel').onclick = () => { pendingFile=null; showPreview(); };
   }
 
-  /* ---------- Voice recording — unlimited duration (stop manually) ---------- */
+  /* ---------- Voice recording — unlimited duration ---------- */
   async function startRecording(){
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -1999,19 +2034,20 @@ document.addEventListener('keydown', e => {
   input.addEventListener('keydown', e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); } });
   input.addEventListener('input', () => { input.style.height='auto'; input.style.height = Math.min(input.scrollHeight, 120) + 'px'; });
 
-  setInterval(async () => {
+  /* Poll for new admin replies every 15s to update the green count badge */
+  async function pollUnread(){
     if (isOpen) return;
     try {
-      const res = await fetch('/api/chat?session_id=' + encodeURIComponent(sessionId));
+      const res = await fetch('/api/chat?session_id=' + encodeURIComponent(sessionId) + '&t=' + Date.now());
       const data = await res.json();
       const items = data.items || [];
-      const last = items[items.length-1];
-      if (last && last.sender === 'admin') {
-        const lastSeen = parseInt(localStorage.getItem('abj_chat_last_seen') || '0', 10);
-        if (new Date(last.created_at).getTime() > lastSeen) fabDot.classList.add('show');
-      }
+      const lastSeen = parseInt(localStorage.getItem('abj_chat_last_seen') || '0', 10);
+      const newOnes = items.filter(m => m.sender === 'admin' && new Date(m.created_at).getTime() > lastSeen).length;
+      updateFabBadge(newOnes);
     } catch {}
-  }, 20000);
+  }
+  setInterval(pollUnread, 15000);
+  setTimeout(pollUnread, 3000);
 })();
 </script>
 </body>

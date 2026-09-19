@@ -17,6 +17,7 @@
     { "source": "/api/admin-videos",       "destination": "/api/admin?route=videos" },
     { "source": "/api/admin-testimonials", "destination": "/api/admin?route=testimonials" },
     { "source": "/api/admin-chats",        "destination": "/api/admin?route=chats" },
+    { "source": "/api/admin-stats",        "destination": "/api/admin?route=stats" },
 
     { "source": "/api/settings",     "destination": "/api/admin?route=settings" },
     { "source": "/api/videos",       "destination": "/api/admin?route=videos" },
