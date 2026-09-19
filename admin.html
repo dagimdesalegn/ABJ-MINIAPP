@@ -305,6 +305,31 @@ body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:radial-grad
 .chat-admin-msg .t{font-size:10px;opacity:.6;margin-top:4px;}
 .chat-admin-msg.admin .t{text-align:right;}
 
+/* ============ BRANDED INPUT MODAL (Dark) ============ */
+.abj-input-modal{position:fixed;inset:0;z-index:300;background:rgba(5,9,18,.88);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);display:flex;align-items:center;justify-content:center;padding:16px;opacity:0;visibility:hidden;transition:opacity .3s var(--ease),visibility .3s var(--ease);overflow-y:auto;}
+.abj-input-modal.open{opacity:1;visibility:visible;}
+.abj-input-box{position:relative;width:100%;max-width:440px;background:radial-gradient(420px 220px at 50% -10%,rgba(59,130,246,.28),transparent 70%),linear-gradient(160deg,#0f1a2f 0%,#131f3d 100%);border:1px solid rgba(255,255,255,.14);border-radius:24px;padding:26px 22px 22px;box-shadow:0 50px 100px -40px rgba(0,0,0,.95),0 0 90px -25px rgba(37,99,235,.6),inset 0 1px 0 rgba(255,255,255,.08);transform:translateY(28px) scale(.95);opacity:0;transition:transform .5s var(--bounce),opacity .35s var(--ease);}
+.abj-input-modal.open .abj-input-box{transform:translateY(0) scale(1);opacity:1;}
+.abj-input-box::before{content:'';position:absolute;inset:-2px;border-radius:26px;padding:2px;background:conic-gradient(from 0deg,#f7e07a,#d4af37,#2563eb,#a855f7,#f7e07a);background-size:200% 200%;animation:borderSpin 6s linear infinite;-webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;z-index:-1;}
+.abj-input-close{position:absolute;top:14px;right:14px;width:34px;height:34px;border-radius:10px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);color:#fff;display:grid;place-items:center;font-size:14px;font-weight:800;cursor:pointer;transition:background .2s,transform .3s var(--bounce);z-index:3;}
+.abj-input-close:hover{background:linear-gradient(135deg,#ef4444,#dc2626);transform:rotate(90deg);}
+.abj-input-head{text-align:center;padding:6px 40px 16px;margin-bottom:16px;border-bottom:1px solid rgba(255,255,255,.1);}
+.abj-input-head h3{margin:0 0 5px;font-size:19px;font-weight:800;letter-spacing:-.3px;color:#fff;}
+.abj-input-head p{margin:0;font-size:12.5px;color:rgba(255,255,255,.65);line-height:1.5;font-weight:600;}
+.abj-input-field{width:100%;padding:14px 16px;border-radius:14px;background:rgba(255,255,255,.06);border:1.5px solid rgba(255,255,255,.14);font-size:15px;font-weight:700;color:#fff;outline:none;transition:border-color .25s, box-shadow .25s, background .25s;font-family:inherit;}
+.abj-input-field:focus{border-color:#f7e07a;background:rgba(255,255,255,.1);box-shadow:0 0 0 4px rgba(247,224,122,.12);}
+.abj-input-field::placeholder{color:rgba(255,255,255,.35);font-weight:500;}
+.abj-input-error{color:#f87171;font-size:12px;font-weight:700;margin-top:8px;display:none;}
+.abj-input-error.show{display:block;animation:shake .4s var(--ease);}
+.abj-input-actions{display:flex;gap:8px;margin-top:18px;}
+.abj-input-btn{flex:1;padding:13px 16px;border-radius:13px;font-size:14.5px;font-weight:800;letter-spacing:.3px;display:inline-flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;border:none;font-family:inherit;transition:transform .25s var(--bounce),box-shadow .25s, background .25s;min-height:48px;}
+.abj-input-btn.primary{background:linear-gradient(135deg,#f7e07a,#d4af37);color:#0b1220;box-shadow:0 14px 30px -14px rgba(212,175,55,.95);}
+.abj-input-btn.primary:hover{transform:translateY(-2px);box-shadow:0 20px 40px -14px rgba(212,175,55,1);}
+.abj-input-btn.ghost{background:rgba(255,255,255,.08);color:#fff;border:1px solid rgba(255,255,255,.14);flex:0 0 auto;padding-left:22px;padding-right:22px;}
+.abj-input-btn.ghost:hover{background:rgba(255,255,255,.16);transform:translateY(-2px);}
+.abj-input-btn.danger{background:linear-gradient(135deg,#ef4444,#dc2626);color:#fff;box-shadow:0 14px 30px -14px rgba(239,68,68,.9);}
+.abj-input-btn.danger:hover{transform:translateY(-2px);}
+
 @media (max-width:960px){
   .sidebar{transform:translateX(-100%);}
   .sidebar.show{transform:translateX(0);}
@@ -721,6 +746,34 @@ body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:radial-grad
   </div>
 </div>
 
+<div class="abj-input-modal" id="abjInputModal" role="dialog" aria-modal="true">
+  <div class="abj-input-box">
+    <button class="abj-input-close" id="abjInputClose" type="button" aria-label="Close">✕</button>
+    <div class="abj-input-head">
+      <h3 id="abjInputTitle">Enter value</h3>
+      <p id="abjInputSubtitle"></p>
+    </div>
+    <input class="abj-input-field" id="abjInputField" type="text" autocomplete="off" maxlength="500" />
+    <div class="abj-input-error" id="abjInputError">⚠️ This field is required.</div>
+    <div class="abj-input-actions">
+      <button class="abj-input-btn ghost" id="abjInputCancel" type="button">Cancel</button>
+      <button class="abj-input-btn primary" id="abjInputConfirm" type="button">Confirm</button>
+    </div>
+  </div>
+</div>
+
+<div class="abj-input-modal" id="abjConfirmModal" role="dialog" aria-modal="true">
+  <div class="abj-input-box" style="max-width:400px;text-align:center;">
+    <div style="width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,rgba(247,224,122,.24),rgba(212,175,55,.14));display:grid;place-items:center;margin:6px auto 14px;font-size:30px;box-shadow:inset 0 0 0 2px rgba(247,224,122,.4);" id="abjConfirmIcon">⚠️</div>
+    <h3 id="abjConfirmTitle" style="margin:0 0 8px;font-size:18px;font-weight:800;letter-spacing:-.3px;color:#fff;">Are you sure?</h3>
+    <p id="abjConfirmMsg" style="margin:0 0 20px;font-size:13.5px;color:rgba(255,255,255,.65);line-height:1.6;font-weight:500;">This action cannot be undone.</p>
+    <div class="abj-input-actions">
+      <button class="abj-input-btn ghost" id="abjConfirmCancel" type="button">Cancel</button>
+      <button class="abj-input-btn danger" id="abjConfirmOk" type="button">Confirm</button>
+    </div>
+  </div>
+</div>
+
 <script>
 const state = {
   token: sessionStorage.getItem('abj_admin_token') || '',
@@ -746,6 +799,97 @@ const sidebar = document.getElementById('sidebar');
 const sbOverlay = document.getElementById('sbOverlay');
 const sidebarToggle = document.getElementById('sidebarToggle');
 const refreshBtn = document.getElementById('refreshBtn');
+
+/* ---------- BRANDED PROMPT & CONFIRM ---------- */
+function brandedPrompt(opts){
+  opts = opts || {};
+  return new Promise(resolve => {
+    const modal = document.getElementById('abjInputModal');
+    const titleEl = document.getElementById('abjInputTitle');
+    const subEl = document.getElementById('abjInputSubtitle');
+    const input = document.getElementById('abjInputField');
+    const error = document.getElementById('abjInputError');
+    const confirmBtn = document.getElementById('abjInputConfirm');
+    const cancelBtn = document.getElementById('abjInputCancel');
+    const closeBtn = document.getElementById('abjInputClose');
+
+    titleEl.textContent = opts.title || 'Enter value';
+    subEl.textContent = opts.subtitle || '';
+    input.placeholder = opts.placeholder || '';
+    input.value = opts.value || '';
+    confirmBtn.textContent = opts.confirmLabel || 'Confirm';
+    error.classList.remove('show');
+
+    function done(val){
+      modal.classList.remove('open');
+      document.body.style.overflow = '';
+      confirmBtn.removeEventListener('click', onConfirm);
+      cancelBtn.removeEventListener('click', onCancel);
+      closeBtn.removeEventListener('click', onCancel);
+      input.removeEventListener('keydown', onKey);
+      modal.removeEventListener('click', onBack);
+      resolve(val);
+    }
+    function onConfirm(){
+      const v = input.value.trim();
+      if (!v && !opts.allowEmpty){ error.classList.add('show'); input.focus(); return; }
+      done(v);
+    }
+    function onCancel(){ done(null); }
+    function onKey(e){
+      if (e.key === 'Enter'){ e.preventDefault(); onConfirm(); }
+      else if (e.key === 'Escape'){ e.preventDefault(); onCancel(); }
+    }
+    function onBack(e){ if (e.target === modal) onCancel(); }
+
+    confirmBtn.addEventListener('click', onConfirm);
+    cancelBtn.addEventListener('click', onCancel);
+    closeBtn.addEventListener('click', onCancel);
+    input.addEventListener('keydown', onKey);
+    modal.addEventListener('click', onBack);
+
+    modal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    setTimeout(() => input.focus(), 140);
+  });
+}
+
+function brandedConfirm(opts){
+  opts = opts || {};
+  return new Promise(resolve => {
+    const modal = document.getElementById('abjConfirmModal');
+    const icon = document.getElementById('abjConfirmIcon');
+    const titleEl = document.getElementById('abjConfirmTitle');
+    const msgEl = document.getElementById('abjConfirmMsg');
+    const okBtn = document.getElementById('abjConfirmOk');
+    const cancelBtn = document.getElementById('abjConfirmCancel');
+
+    icon.textContent = opts.icon || '⚠️';
+    titleEl.textContent = opts.title || 'Are you sure?';
+    msgEl.textContent = opts.message || '';
+    okBtn.textContent = opts.confirmLabel || 'Confirm';
+    cancelBtn.textContent = opts.cancelLabel || 'Cancel';
+
+    function done(val){
+      modal.classList.remove('open');
+      document.body.style.overflow = '';
+      okBtn.removeEventListener('click', onOk);
+      cancelBtn.removeEventListener('click', onCancel);
+      modal.removeEventListener('click', onBack);
+      resolve(val);
+    }
+    function onOk(){ done(true); }
+    function onCancel(){ done(false); }
+    function onBack(e){ if (e.target === modal) onCancel(); }
+
+    okBtn.addEventListener('click', onOk);
+    cancelBtn.addEventListener('click', onCancel);
+    modal.addEventListener('click', onBack);
+
+    modal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  });
+}
 
 /* ---------- Password toggles ---------- */
 function wirePwToggles(root){
@@ -1088,7 +1232,14 @@ async function handleAction(act, id, btn){
         ]
       });
     } else {
-      const reason = prompt('Reason for rejection (optional):');
+      const reason = await brandedPrompt({
+        title: 'Reject Registration',
+        subtitle: 'Reason (optional) — the student will see this',
+        placeholder: 'e.g. Payment reference not found',
+        confirmLabel: 'Reject',
+        allowEmpty: true,
+      });
+      if (reason === null) { btn.disabled = false; btn.textContent = original; return; }
       res = await fetch('/api/admin-reject', { method: 'POST', headers: authHeaders(true), body: JSON.stringify({ id, reason: reason || '' }) });
       data = await res.json();
       if (!res.ok) { admError('Rejection Failed', data.error || 'Action failed.'); return; }
@@ -1275,7 +1426,8 @@ async function loadVideos(){
       </div>`).join('');
     box.querySelectorAll('[data-del-vid]').forEach(btn => {
       btn.addEventListener('click', async () => {
-        if (!confirm('Delete this video?')) return;
+        const ok = await brandedConfirm({ icon: '🎬', title: 'Delete this video?', message: 'It will disappear from the home page.', confirmLabel: 'Delete' });
+        if (!ok) return;
         const r = await fetch('/api/admin-videos?id=' + encodeURIComponent(btn.dataset.delVid), { method: 'DELETE', headers: authHeaders() });
         if (r.ok) { admSuccess('Video Removed', 'The lesson was deleted.'); loadVideos(); }
         else admError('Delete Failed', 'Could not remove the video.');
@@ -1322,7 +1474,8 @@ async function loadTestimonials(){
       </div>`).join('');
     box.querySelectorAll('[data-del-tst]').forEach(btn => {
       btn.addEventListener('click', async () => {
-        if (!confirm('Delete this testimonial?')) return;
+        const ok = await brandedConfirm({ icon: '💬', title: 'Delete this testimonial?', message: 'It will no longer be shown on the home page.', confirmLabel: 'Delete' });
+        if (!ok) return;
         const r = await fetch('/api/admin-testimonials?id=' + encodeURIComponent(btn.dataset.delTst), { method: 'DELETE', headers: authHeaders() });
         if (r.ok) { admSuccess('Removed', 'No longer shown on home page.'); loadTestimonials(); }
         else admError('Delete Failed', 'Could not remove.');
@@ -1391,7 +1544,8 @@ document.getElementById('saveSettings').addEventListener('click', async () => {
 });
 
 document.getElementById('resetRateLimits')?.addEventListener('click', async () => {
-  if (!confirm('Clear all rate limits?')) return;
+  const ok = await brandedConfirm({ icon: '🔄', title: 'Clear all rate limits?', message: 'All users can register again immediately.', confirmLabel: 'Clear' });
+  if (!ok) return;
   const btn = document.getElementById('resetRateLimits');
   const orig = btn.textContent;
   btn.disabled = true; btn.textContent = 'Clearing...';
@@ -1471,7 +1625,8 @@ function renderTgCard(s){
     if (s.tg_session) copyToClipboard(s.tg_session, 'Session string copied');
   });
   document.getElementById('tgBtnClear')?.addEventListener('click', async () => {
-    if (!confirm('Clear the Telegram session? Invites will stop working until you reconnect.')) return;
+    const ok = await brandedConfirm({ icon: '🔐', title: 'Clear Telegram session?', message: 'Student invites will stop working until you reconnect.', confirmLabel: 'Clear' });
+    if (!ok) return;
     try {
       const r = await fetch('/api/admin-settings?action=tg-clear', { method: 'POST', headers: authHeaders(true), body: JSON.stringify({}) });
       if (r.ok){ admSuccess('Session Cleared', 'Reconnect to re-enable invites.'); loadSystem(); }
@@ -1523,7 +1678,8 @@ function renderVgCard(s){
     if (s.verify_api_key) copyToClipboard(s.verify_api_key, 'API Key copied');
   });
   document.getElementById('vgBtnClear')?.addEventListener('click', async () => {
-    if (!confirm('Clear Verify.ET settings?')) return;
+    const ok = await brandedConfirm({ icon: '⚙️', title: 'Clear Verify.ET settings?', message: 'Auto-verification will stop until you reconfigure.', confirmLabel: 'Clear' });
+    if (!ok) return;
     try {
       const r = await fetch('/api/admin-settings', { method: 'POST', headers: authHeaders(true), body: JSON.stringify({ verify_api_url: '', verify_api_key: '' }) });
       if (r.ok){ admSuccess('Verify Cleared', 'Configure a new key to re-enable.'); loadSystem(); }
@@ -1721,7 +1877,8 @@ async function loadAdmins(){
     }).join('');
     listBox.querySelectorAll('[data-del]').forEach(btn => {
       btn.addEventListener('click', async () => {
-        if (!confirm('Delete this user?')) return;
+        const ok = await brandedConfirm({ icon: '👤', title: 'Delete this user?', message: 'They will no longer be able to sign in.', confirmLabel: 'Delete' });
+        if (!ok) return;
         const r = await fetch('/api/admin-admins?id=' + encodeURIComponent(btn.dataset.del), { method: 'DELETE', headers: authHeaders() });
         if (r.ok) { admSuccess('User Removed', 'They can no longer sign in.'); loadAdmins(); }
         else admError('Delete Failed', 'Could not remove.');
