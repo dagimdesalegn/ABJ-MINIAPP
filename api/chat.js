@@ -6,7 +6,7 @@ const {
 module.exports = async (req, res) => {
   const ip = getClientIp(req);
 
-  /* ---------- GET: fetch latest 50 messages ---------- */
+  /* ---------- GET: latest 50 messages ---------- */
   if (req.method === 'GET') {
     const allowed = await checkRateLimit(ip, 600);
     if (!allowed) return json(res, 429, { error: 'Too many requests.' });
@@ -22,7 +22,7 @@ module.exports = async (req, res) => {
     return json(res, 200, { items: result.data || [] });
   }
 
-  /* ---------- POST: send a message ---------- */
+  /* ---------- POST: send message ---------- */
   if (req.method === 'POST') {
     const allowed = await checkRateLimit(ip, 300);
     if (!allowed) return json(res, 429, { error: 'Too many messages. Slow down.' });
