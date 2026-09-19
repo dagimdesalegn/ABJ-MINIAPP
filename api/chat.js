@@ -6,33 +6,17 @@ const {
 module.exports = async (req, res) => {
   const ip = getClientIp(req);
 
-  /* ---------- GET: fetch messages ---------- */
+  /* ---------- GET: fetch latest 50 messages ---------- */
   if (req.method === 'GET') {
-    // Very generous — effectively unlimited for normal use
     const allowed = await checkRateLimit(ip, 600);
     if (!allowed) return json(res, 429, { error: 'Too many requests.' });
 
     const sessionId = String(req.query.session_id || '').trim();
     if (!sessionId || sessionId.length > 64) return json(res, 400, { error: 'Invalid session.' });
 
-    // Incremental mode: only fetch messages newer than `after` (ISO timestamp)
-    const after = String(req.query.after || '').trim();
-    // Full mode: fetch recent 50 (default). Pass full=1 to fetch up to 200.
-    const fullMode = String(req.query.full || '') === '1';
-
-    let q = `chat_messages?session_id=eq.${encodeURIComponent(sessionId)}`;
-
-    if (after) {
-      // Validate ISO timestamp
-      const t = Date.parse(after);
-      if (!isNaN(t)) {
-        q += `&created_at=gt.${encodeURIComponent(new Date(t).toISOString())}`;
-      }
-    }
-
-    q += `&order=created_at.asc`;
-    q += `&limit=${fullMode ? 200 : 50}`;
-    q += `&select=id,sender,sender_name,message_type,content,file_url,file_name,created_at`;
+    const q = `chat_messages?session_id=eq.${encodeURIComponent(sessionId)}` +
+              `&order=created_at.asc&limit=50` +
+              `&select=id,sender,sender_name,message_type,content,file_url,file_name,created_at`;
 
     const result = await supabaseQuery(q);
     return json(res, 200, { items: result.data || [] });
@@ -40,7 +24,6 @@ module.exports = async (req, res) => {
 
   /* ---------- POST: send a message ---------- */
   if (req.method === 'POST') {
-    // High ceiling — no practical limit for normal users
     const allowed = await checkRateLimit(ip, 300);
     if (!allowed) return json(res, 429, { error: 'Too many messages. Slow down.' });
 
@@ -51,6 +34,7 @@ module.exports = async (req, res) => {
     const type = ['text','image','pdf','voice'].includes(body.message_type) ? body.message_type : 'text';
     const content = body.content ? String(body.content).slice(0, 8000) : null;
     const registrationId = body.registration_id ? String(body.registration_id).slice(0, 32) : null;
+    const senderName = body.sender_name ? String(body.sender_name).slice(0, 64) : (registrationId || 'Guest');
 
     let fileUrl = null, fileName = null, fileSize = null;
 
@@ -69,7 +53,7 @@ module.exports = async (req, res) => {
       session_id: sessionId,
       registration_id: registrationId,
       sender: 'user',
-      sender_name: registrationId || 'Guest',
+      sender_name: senderName,
       message_type: type,
       content,
       file_url: fileUrl,
