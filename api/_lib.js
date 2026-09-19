@@ -93,12 +93,29 @@ async function getFee() {
   return isNaN(n) ? 10000 : n;
 }
 
+async function getCustomBanks() {
+  const raw = await getSetting('custom_banks', '[]');
+  try {
+    const parsed = JSON.parse(raw);
+    if (!Array.isArray(parsed)) return [];
+    return parsed
+      .filter(b => b && b.name && b.account)
+      .map(b => ({
+        name: String(b.name).trim().slice(0, 40),
+        account: String(b.account).trim().slice(0, 40),
+      }))
+      .slice(0, 20);
+  } catch { return []; }
+}
+
 async function getPublicSettings() {
   const q = await supabaseQuery('app_settings?select=key,value');
   const s = {};
   (q.data || []).forEach(r => { s[r.key] = r.value; });
 
   const feeNum = parseFloat(s.fee);
+  const customBanks = await getCustomBanks();
+
   return {
     fee: isNaN(feeNum) || feeNum <= 0 ? 10000 : feeNum,
     accounts: {
@@ -106,6 +123,7 @@ async function getPublicSettings() {
       CBE: s.account_cbe || '',
       mPesa: s.account_mpesa || '',
     },
+    custom_banks: customBanks,
     contact: {
       username: s.contact_username || '',
       phone: s.contact_phone || '',
@@ -211,7 +229,7 @@ function requireSuper(req) {
 }
 
 /* ============================================================
-   Verify.ET — OPTIMIZED
+   Verify.ET
    ============================================================ */
 function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
 
@@ -227,7 +245,12 @@ async function _pollStatus(statusUrl, apiKey) {
 }
 
 function _interpret(body) {
-  if (!body || typeof body !== 'object') return { result: 'service_error', message: "We couldn't read the bank's response." };
+  if (!body || typeof body !== 'object') {
+    return {
+      result: 'service_error',
+      message: "We couldn't read the bank's response. You can upload a screenshot for manual review.",
+    };
+  }
   const items = body.data;
   const verification = body.verification || {};
   const item = Array.isArray(items) ? (items[0] || {}) : (items && typeof items === 'object' ? items : {});
@@ -238,15 +261,30 @@ function _interpret(body) {
 
   if (pstatus === 'failed' || txStatus === 'failed' || txStatus === 'not_found') {
     if (txStatus === 'not_found' || !item || Object.keys(item).length === 0) {
-      return { result: 'not_found', message: "We couldn't find a payment with that reference." };
+      return {
+        result: 'not_found',
+        message: "We couldn't find a payment with that Transaction ID at the bank. Double-check the ID, or upload a screenshot for manual review.",
+      };
     }
-    return { result: 'failed', message: 'The bank shows this transaction as unsuccessful.' };
+    return {
+      result: 'failed',
+      message: 'The bank reports this transaction as unsuccessful. If you believe this is wrong, upload a screenshot for manual review.',
+    };
   }
-  if (!verified) return { result: 'pending', message: "The bank hasn't finished confirming this payment yet." };
+  if (!verified) {
+    return {
+      result: 'pending',
+      message: "The bank hasn't finished confirming this payment yet. Upload a screenshot to speed up review.",
+    };
+  }
 
   const settle = item.settlementAccountMatch || {};
-  if (settle.ambiguous) return { result: 'mismatch', message: "We couldn't confirm the recipient account." };
-  if (settle.matched === false) return { result: 'mismatch', message: 'Payment was sent to the wrong account.' };
+  if (settle.ambiguous) {
+    return { result: 'mismatch', message: "We couldn't confirm the recipient account. Upload a screenshot for manual review." };
+  }
+  if (settle.matched === false) {
+    return { result: 'mismatch', message: 'This payment was sent to a different account than the one shown. Upload a screenshot for manual review.' };
+  }
 
   const amountRaw = item.amount;
   let amount = null;
@@ -255,7 +293,9 @@ function _interpret(body) {
     const n = parseFloat(cleaned);
     if (!isNaN(n)) amount = n;
   }
-  if (amount == null) return { result: 'service_error', message: "We couldn't read the amount from the receipt." };
+  if (amount == null) {
+    return { result: 'service_error', message: "We couldn't read the amount from the receipt. Upload a screenshot for manual review." };
+  }
 
   return { result: 'success', message: 'Verified', amount, receiver: settle.receiverAccount || item.receiverAccount || null };
 }
@@ -288,32 +328,36 @@ async function verifyPayment(reference, suffix) {
     const r1 = await attempt(10000, 14000);
 
     if (r1.status === 401 || r1.status === 402 || r1.status === 403) {
-      return { result: 'service_error', message: 'Verification service unavailable.' };
+      return { result: 'service_error', message: 'Verification service unavailable. Upload a screenshot for manual review.' };
     }
-    if (r1.status === 409) return { result: 'duplicate', message: 'This transaction reference has already been used.' };
-    if (r1.status === 422) return { result: 'invalid', message: "We couldn't read your transaction details." };
+    if (r1.status === 409) return { result: 'duplicate', message: 'This transaction reference has already been verified.' };
+    if (r1.status === 422) {
+      return {
+        result: 'invalid',
+        message: "We couldn't read your transaction details. Please re-check the ID (CBE needs an 8-digit suffix) or upload a screenshot.",
+      };
+    }
 
     if (r1.status === 429 || r1.status === 503) {
       await sleep(2000);
       const r2 = await attempt(8000, 10000);
       if (r2.status === 200 || r2.status === 202) return await _handleSuccess(r2, cfg);
-      return { result: 'service_error', message: 'Bank service is busy. Please upload a screenshot instead.' };
+      return { result: 'service_error', message: 'Bank service is busy. Please upload a screenshot for manual review.' };
     }
 
     if (r1.status !== 200 && r1.status !== 202) {
-      return { result: 'service_error', message: 'Could not verify your payment. Please upload a screenshot.' };
+      return { result: 'service_error', message: 'Could not verify your payment. Please upload a screenshot for manual review.' };
     }
 
     return await _handleSuccess(r1, cfg);
   } catch (err) {
-    return { result: 'service_error', message: 'Network error reaching the bank. Please upload a screenshot.' };
+    return { result: 'service_error', message: 'Network error reaching the bank. Please upload a screenshot for manual review.' };
   }
 }
 
 async function _handleSuccess(res, cfg) {
   if (res.status === 200) {
-    const interpreted = _interpret(res.body);
-    return interpreted;
+    return _interpret(res.body);
   }
 
   const rid = res.body?.requestId;
@@ -329,10 +373,10 @@ async function _handleSuccess(res, cfg) {
       if (Array.isArray(it)) it = it[0];
       if (!it || typeof it !== 'object') continue;
       if (it.processingStatus === 'completed') return _interpret(it);
-      if (it.processingStatus === 'failed') return { result: 'failed', message: 'The bank shows this transaction as unsuccessful.' };
+      if (it.processingStatus === 'failed') return { result: 'failed', message: 'The bank reports this transaction as unsuccessful. Upload a screenshot for manual review if you believe this is wrong.' };
     }
   }
-  return { result: 'pending', message: 'The bank is still confirming your payment.' };
+  return { result: 'pending', message: 'The bank is still confirming your payment. Upload a screenshot to speed up review.' };
 }
 
 /* ============================================================
@@ -476,7 +520,6 @@ async function createTelegramInvite(linkName) {
   const title = String(linkName || 'ABJ').slice(0, 32);
   const expireDate = Math.floor(Date.now() / 1000) + 7 * 24 * 3600;
 
-  /* ---------- BOT MODE ---------- */
   if (mode === 'bot') {
     if (!cfg.tgBotToken) {
       throw new Error('Bot token not configured. Add it in System tab or switch to Session mode.');
@@ -484,7 +527,6 @@ async function createTelegramInvite(linkName) {
     return await createBotInvite(cfg, { channelId: cfg.tgChannelId, title, expireDate });
   }
 
-  /* ---------- SESSION MODE ---------- */
   if (!cfg.tgApiId || !cfg.tgApiHash || !cfg.tgSession) {
     throw new Error('Telegram API credentials not configured. Set API ID, API Hash, and Session in the admin System tab.');
   }
@@ -622,19 +664,30 @@ const VALID_SEMESTERS = ['First Semester', 'Second Semester'];
 const VALID_STREAMS = ['Social Science', 'Natural Science', 'Pre-Engineering & Computing', 'Other Natural Science'];
 const VALID_METHODS = ['Telebirr', 'CBE', 'mPesa'];
 
-function validateRegistration(input) {
+function validateRegistration(input, extraMethods = []) {
   const { full_name, id_number, semester, stream, gender, payment_method, transaction_ref, transaction_suffix } = input;
+
   if (!full_name || typeof full_name !== 'string' || !NAME_RE.test(full_name.trim())) return 'Invalid full name.';
   if (!id_number || typeof id_number !== 'string' || !ID_RE.test(id_number.trim())) return 'Invalid Student ID. Format: RU0562/15';
   if (!VALID_SEMESTERS.includes(semester)) return 'Invalid semester.';
   if (!VALID_STREAMS.includes(stream)) return 'Invalid stream.';
   if (gender !== 'Male' && gender !== 'Female') return 'Invalid gender.';
-  if (!VALID_METHODS.includes(payment_method)) return 'Invalid payment method.';
-  if (!transaction_ref || typeof transaction_ref !== 'string' || transaction_ref.trim().length < 3) return 'Transaction reference is required.';
-  if (transaction_ref.trim().length > 64) return 'Transaction reference is too long.';
-  if (transaction_suffix != null && transaction_suffix !== '') {
-    if (!/^\d{8}$/.test(String(transaction_suffix))) return 'CBE suffix must be exactly 8 digits.';
+
+  const allMethods = VALID_METHODS.concat(Array.isArray(extraMethods) ? extraMethods : []);
+  if (!allMethods.includes(payment_method)) return 'Invalid payment method.';
+
+  if (!transaction_ref || typeof transaction_ref !== 'string' || transaction_ref.trim().length < 3) return 'Transaction ID is required.';
+  if (transaction_ref.trim().length > 64) return 'Transaction ID is too long.';
+
+  if (payment_method === 'CBE') {
+    if (!transaction_suffix || !/^\d{8}$/.test(String(transaction_suffix).trim())) {
+      return 'CBE requires the 8-digit transaction suffix from your receipt.';
+    }
   }
+  if (transaction_suffix != null && transaction_suffix !== '' && !/^\d{4,10}$/.test(String(transaction_suffix).trim())) {
+    return 'Transaction suffix must be 4–10 digits.';
+  }
+
   return null;
 }
 
@@ -659,7 +712,7 @@ function json(res, status, body) {
 
 module.exports = {
   supabaseQuery, supabaseInsert, supabaseUpdate, supabaseDelete,
-  getSetting, setSetting, getFee, getPublicSettings,
+  getSetting, setSetting, getFee, getPublicSettings, getCustomBanks,
   getConfig, invalidateConfigCache,
   hashPassword, verifyPassword,
   signJWT, verifyJWT, requireAdmin, requireSuper,
