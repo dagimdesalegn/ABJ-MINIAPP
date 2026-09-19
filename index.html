@@ -1137,6 +1137,39 @@ function brandedConfirm(opts){
   });
 }
 
+/* ---------- IMAGE COMPRESSION (shared) ---------- */
+function compressImage(file, maxDim = 1600, quality = 0.82){
+  return new Promise((resolve, reject) => {
+    if (!file.type.startsWith('image/')) return reject(new Error('not an image'));
+    const img = new Image();
+    const reader = new FileReader();
+    reader.onload = () => {
+      img.onload = () => {
+        let { width, height } = img;
+        const ratio = Math.min(maxDim / width, maxDim / height, 1);
+        const w = Math.round(width * ratio);
+        const h = Math.round(height * ratio);
+        const canvas = document.createElement('canvas');
+        canvas.width = w; canvas.height = h;
+        const ctx = canvas.getContext('2d');
+        ctx.fillStyle = '#fff';
+        ctx.fillRect(0, 0, w, h);
+        ctx.drawImage(img, 0, 0, w, h);
+        canvas.toBlob(b => {
+          if (!b) return reject(new Error('compression failed'));
+          resolve(b);
+        }, 'image/jpeg', quality);
+      };
+      img.onerror = reject;
+      img.src = reader.result;
+    };
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+function blobToBase64(blob){ return new Promise((res,rej)=>{ const r=new FileReader(); r.onload=()=>res(r.result); r.onerror=rej; r.readAsDataURL(blob); }); }
+function fileToBase64(file){ return new Promise((res,rej)=>{ const r=new FileReader(); r.onload=()=>res(r.result); r.onerror=rej; r.readAsDataURL(file); }); }
+
 /* ---------- CURRICULUM ---------- */
 const CURRICULUM = {
   first: [
@@ -1738,7 +1771,7 @@ async function copyText(text, okMsg){
 }
 regSuccessRef.addEventListener('click', () => copyText(regSuccessRef.textContent, 'Student ID copied'));
 
-/* ---------- Screenshot upload flow ---------- */
+/* ---------- Screenshot upload flow (WITH COMPRESSION) ---------- */
 let _pendingScreenshotBase64 = null;
 let _pendingScreenshotMime = 'image/jpeg';
 let _pendingScreenshotPublicId = '';
@@ -1759,22 +1792,45 @@ function wireScreenshotUpload(publicId){
   uploadBtn.disabled = true;
   uploadBtn.textContent = 'Upload & Submit';
 
-  fileInput.onchange = () => {
+  fileInput.onchange = async () => {
     const file = fileInput.files?.[0];
     if (!file) return;
     if (!file.type.startsWith('image/')){ statusEl.textContent = '⚠️ Please choose an image file.'; statusEl.style.color = '#dc2626'; return; }
-    if (file.size > 3.5 * 1024 * 1024){ statusEl.textContent = '⚠️ Image too large (max 3.5 MB).'; statusEl.style.color = '#dc2626'; return; }
-    _pendingScreenshotMime = file.type;
-    const reader = new FileReader();
-    reader.onload = () => {
-      _pendingScreenshotBase64 = reader.result;
-      preview.innerHTML = `<img src="${reader.result}" style="width:100%;display:block" alt="Screenshot" />`;
-      preview.style.display = 'block';
-      statusEl.textContent = '✅ Image ready (' + (file.size/1024).toFixed(0) + ' KB)';
-      statusEl.style.color = '#059669';
-      uploadBtn.disabled = false;
-    };
-    reader.readAsDataURL(file);
+
+    try {
+      statusEl.textContent = '⏳ Compressing…';
+      statusEl.style.color = '#64748b';
+      const compressed = await compressImage(file, 1800, 0.85);
+      if (compressed.size > 3.5 * 1024 * 1024) {
+        statusEl.textContent = '⚠️ Image too large even after compression (max 3.5 MB).';
+        statusEl.style.color = '#dc2626';
+        return;
+      }
+      _pendingScreenshotMime = 'image/jpeg';
+      const reader = new FileReader();
+      reader.onload = () => {
+        _pendingScreenshotBase64 = reader.result;
+        preview.innerHTML = `<img src="${reader.result}" style="width:100%;display:block" alt="Screenshot" />`;
+        preview.style.display = 'block';
+        statusEl.textContent = '✅ Image ready (' + (compressed.size/1024).toFixed(0) + ' KB)';
+        statusEl.style.color = '#059669';
+        uploadBtn.disabled = false;
+      };
+      reader.readAsDataURL(compressed);
+    } catch {
+      if (file.size > 3.5 * 1024 * 1024){ statusEl.textContent = '⚠️ Image too large (max 3.5 MB).'; statusEl.style.color = '#dc2626'; return; }
+      _pendingScreenshotMime = file.type;
+      const reader = new FileReader();
+      reader.onload = () => {
+        _pendingScreenshotBase64 = reader.result;
+        preview.innerHTML = `<img src="${reader.result}" style="width:100%;display:block" alt="Screenshot" />`;
+        preview.style.display = 'block';
+        statusEl.textContent = '✅ Image ready (' + (file.size/1024).toFixed(0) + ' KB)';
+        statusEl.style.color = '#059669';
+        uploadBtn.disabled = false;
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   pickBtn.onclick = () => fileInput.click();
@@ -1946,7 +2002,7 @@ document.addEventListener('keydown', e => {
   if (regModal.classList.contains('open') && !regLoading.classList.contains('show')) { closeReg(); return; }
 });
 
-/* ---------- LIVE CHAT (floating bottom-right, NOT full screen) ---------- */
+/* ---------- LIVE CHAT (incremental, compressed images, floating panel) ---------- */
 (function(){
   const SESSION_KEY = 'abj_chat_session';
   let sessionId = localStorage.getItem(SESSION_KEY);
@@ -1978,11 +2034,16 @@ document.addEventListener('keydown', e => {
   let recStarted = 0;
   let recTimer = null;
 
-  /* NO body lock — home page stays scrollable */
+  // Incremental tracking
+  let lastMessageTimestamp = null;
+  let lastMessageCount = 0;
+
   function openChat(){
     panel.classList.add('open');
     isOpen = true;
-    loadMessages();
+    lastMessageTimestamp = null;
+    lastMessageCount = 0;
+    loadMessages(true);
     startPolling();
     setTimeout(()=>input.focus(),250);
     localStorage.setItem('abj_chat_last_seen', String(Date.now()));
@@ -2060,20 +2121,34 @@ document.addEventListener('keydown', e => {
     });
   }
 
-  async function loadMessages(){
+  async function loadMessages(initial = false){
     try {
-      const res = await fetch('/api/chat?session_id=' + encodeURIComponent(sessionId) + '&t=' + Date.now());
+      let url = '/api/chat?session_id=' + encodeURIComponent(sessionId);
+      if (!initial && lastMessageTimestamp) {
+        url += '&after=' + encodeURIComponent(lastMessageTimestamp);
+      }
+      const res = await fetch(url + '&t=' + Date.now());
       const data = await res.json();
       const items = data.items || [];
-      if (!items.length){ renderWelcome(); return; }
-      body.innerHTML = '';
-      items.forEach(m => body.appendChild(renderMessage(m)));
-      body.scrollTop = body.scrollHeight;
+
+      if (initial || !lastMessageCount) {
+        if (!items.length){ renderWelcome(); return; }
+        body.innerHTML = '';
+        items.forEach(m => body.appendChild(renderMessage(m)));
+        body.scrollTop = body.scrollHeight;
+        if (items.length) lastMessageTimestamp = items[items.length-1].created_at;
+        lastMessageCount = items.length;
+      } else if (items.length) {
+        items.forEach(m => body.appendChild(renderMessage(m)));
+        body.scrollTop = body.scrollHeight;
+        lastMessageTimestamp = items[items.length-1].created_at;
+        lastMessageCount += items.length;
+      }
 
       if (!isOpen) {
         const lastSeen = parseInt(localStorage.getItem('abj_chat_last_seen') || '0', 10);
-        const newOnes = items.filter(m => m.sender === 'admin' && new Date(m.created_at).getTime() > lastSeen).length;
-        updateFabBadge(newOnes);
+        const hasNewAdmin = items.some(m => m.sender === 'admin' && new Date(m.created_at).getTime() > lastSeen);
+        if (hasNewAdmin) updateFabBadge(1);
       }
     } catch {}
   }
@@ -2087,7 +2162,7 @@ document.addEventListener('keydown', e => {
     }
   }
 
-  function startPolling(){ stopPolling(); pollTimer = setInterval(async ()=>{ if(!isOpen) return; await loadMessages(); }, 4000); }
+  function startPolling(){ stopPolling(); pollTimer = setInterval(async ()=>{ if(!isOpen) return; await loadMessages(false); }, 4000); }
   function stopPolling(){ if (pollTimer){ clearInterval(pollTimer); pollTimer = null; } }
 
   attach.addEventListener('click', e => { e.stopPropagation(); menu.classList.toggle('show'); });
@@ -2103,9 +2178,22 @@ document.addEventListener('keydown', e => {
 
   imgInput.addEventListener('change', async () => {
     const f = imgInput.files?.[0]; if (!f) return;
-    const b64 = await fileToBase64(f);
-    pendingFile = { type:'image', name:f.name, mime:f.type, base64:b64, size:f.size };
-    showPreview();
+    try {
+      const compressed = await compressImage(f);
+      const b64 = await blobToBase64(compressed);
+      pendingFile = {
+        type: 'image',
+        name: f.name.replace(/\.[^.]+$/, '') + '.jpg',
+        mime: 'image/jpeg',
+        base64: b64,
+        size: compressed.size,
+      };
+      showPreview();
+    } catch {
+      const b64 = await fileToBase64(f);
+      pendingFile = { type:'image', name:f.name, mime:f.type, base64:b64, size:f.size };
+      showPreview();
+    }
     imgInput.value='';
   });
   pdfInput.addEventListener('change', async () => {
@@ -2115,8 +2203,6 @@ document.addEventListener('keydown', e => {
     showPreview();
     pdfInput.value='';
   });
-
-  function fileToBase64(file){ return new Promise((res,rej)=>{ const r=new FileReader(); r.onload=()=>res(r.result); r.onerror=rej; r.readAsDataURL(file); }); }
 
   function showPreview(){
     if (!pendingFile){ preview.classList.remove('show'); preview.innerHTML=''; return; }
@@ -2155,7 +2241,6 @@ document.addEventListener('keydown', e => {
     } catch { alert('Microphone access denied.'); }
   }
   recStop.addEventListener('click', () => { if (mediaRecorder && mediaRecorder.state !== 'inactive') mediaRecorder.stop(); });
-  function blobToBase64(blob){ return new Promise((res,rej)=>{ const r=new FileReader(); r.onload=()=>res(r.result); r.onerror=rej; r.readAsDataURL(blob); }); }
 
   async function sendMessage(){
     const text = input.value.trim();
@@ -2195,7 +2280,7 @@ document.addEventListener('keydown', e => {
 
       const data = await res.json();
       if (!res.ok) { alert(data.error || 'Could not send.'); return; }
-      await loadMessages();
+      await loadMessages(false);
     } catch { alert('Network error.'); }
     finally { sendBtn.disabled = false; }
   }
