@@ -1,24 +1,49 @@
 const {
   supabaseQuery, supabaseInsert,
-  uploadChatMedia, json,
+  uploadChatMedia, checkRateLimit, getClientIp, json,
 } = require('./_lib');
 
 module.exports = async (req, res) => {
-  /* ---------- GET: fetch messages for a session ---------- */
+  const ip = getClientIp(req);
+
+  /* ---------- GET: fetch messages ---------- */
   if (req.method === 'GET') {
+    // Very generous — effectively unlimited for normal use
+    const allowed = await checkRateLimit(ip, 600);
+    if (!allowed) return json(res, 429, { error: 'Too many requests.' });
+
     const sessionId = String(req.query.session_id || '').trim();
     if (!sessionId || sessionId.length > 64) return json(res, 400, { error: 'Invalid session.' });
 
-    const q = await supabaseQuery(
-      `chat_messages?session_id=eq.${encodeURIComponent(sessionId)}` +
-      `&order=created_at.asc&limit=500` +
-      `&select=id,sender,sender_name,message_type,content,file_url,file_name,created_at`
-    );
-    return json(res, 200, { items: q.data || [] });
+    // Incremental mode: only fetch messages newer than `after` (ISO timestamp)
+    const after = String(req.query.after || '').trim();
+    // Full mode: fetch recent 50 (default). Pass full=1 to fetch up to 200.
+    const fullMode = String(req.query.full || '') === '1';
+
+    let q = `chat_messages?session_id=eq.${encodeURIComponent(sessionId)}`;
+
+    if (after) {
+      // Validate ISO timestamp
+      const t = Date.parse(after);
+      if (!isNaN(t)) {
+        q += `&created_at=gt.${encodeURIComponent(new Date(t).toISOString())}`;
+      }
+    }
+
+    q += `&order=created_at.asc`;
+    q += `&limit=${fullMode ? 200 : 50}`;
+    q += `&select=id,sender,sender_name,message_type,content,file_url,file_name,created_at`;
+
+    const result = await supabaseQuery(q);
+    return json(res, 200, { items: result.data || [] });
   }
 
-  /* ---------- POST: send a message (no rate limit) ---------- */
+  /* ---------- POST: send a message ---------- */
   if (req.method === 'POST') {
+    // High ceiling — no practical limit for normal users
+    const allowed = await checkRateLimit(ip, 300);
+    if (!allowed) return json(res, 429, { error: 'Too many messages. Slow down.' });
+
     const body = req.body || {};
     const sessionId = String(body.session_id || '').trim();
     if (!sessionId || sessionId.length > 64) return json(res, 400, { error: 'Invalid session.' });
