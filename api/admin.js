@@ -35,14 +35,11 @@ module.exports = async (req, res) => {
   }
 };
 
-/* ============================================================
-   1. LOGIN
-   ============================================================ */
+/* ============ 1. LOGIN ============ */
 async function bootstrapSuperAdmin() {
   const q = await supabaseQuery('admins?role=eq.super&select=id&limit=1');
   if (q.data && q.data.length) return;
   if (!ADMIN_PASSWORD) return;
-
   await supabaseInsert('admins', {
     username: 'super',
     password_hash: hashPassword(ADMIN_PASSWORD),
@@ -54,7 +51,6 @@ async function bootstrapSuperAdmin() {
 
 async function handleLogin(req, res) {
   if (req.method !== 'POST') return json(res, 405, { error: 'Method not allowed' });
-
   const ip = getClientIp(req);
   const allowed = await checkRateLimit(ip, 60);
   if (!allowed) return json(res, 429, { error: 'Too many attempts.' });
@@ -83,17 +79,10 @@ async function handleLogin(req, res) {
   const role = row.role === 'super' ? 'super' : 'admin';
   const token = signJWT({ role, username: row.username, admin_id: row.id }, 3600 * 4);
 
-  return json(res, 200, {
-    token,
-    role,
-    username: row.username,
-    full_name: row.full_name || '',
-  });
+  return json(res, 200, { token, role, username: row.username, full_name: row.full_name || '' });
 }
 
-/* ============================================================
-   2. LIST
-   ============================================================ */
+/* ============ 2. LIST ============ */
 async function handleList(req, res) {
   if (req.method !== 'GET') return json(res, 405, { error: 'Method not allowed' });
   const payload = requireAdmin(req);
@@ -114,9 +103,7 @@ async function handleList(req, res) {
   return json(res, 200, { items: q.data || [] });
 }
 
-/* ============================================================
-   3. APPROVE
-   ============================================================ */
+/* ============ 3. APPROVE ============ */
 async function handleApprove(req, res) {
   if (req.method !== 'POST') return json(res, 405, { error: 'Method not allowed' });
   const admin = requireAdmin(req);
@@ -128,16 +115,11 @@ async function handleApprove(req, res) {
   const q = await supabaseQuery(`registrations?id=eq.${encodeURIComponent(id)}&select=*`);
   const row = q.data?.[0];
   if (!row) return json(res, 404, { error: 'Registration not found.' });
-  if (row.status !== 'pending') {
-    return json(res, 400, { error: `Already ${row.status}.` });
-  }
+  if (row.status !== 'pending') return json(res, 400, { error: `Already ${row.status}.` });
 
   let invite;
-  try {
-    invite = await createTelegramInvite(`ABJ-${row.public_id}`);
-  } catch (err) {
-    return json(res, 500, { error: 'Failed to create invite link: ' + err.message });
-  }
+  try { invite = await createTelegramInvite(`ABJ-${row.public_id}`); }
+  catch (err) { return json(res, 500, { error: 'Failed to create invite link: ' + err.message }); }
 
   const now = new Date().toISOString();
   const upd = await supabaseUpdate(
@@ -151,19 +133,12 @@ async function handleApprove(req, res) {
       updated_at: now,
     }
   );
-
   if (!upd.ok) return json(res, 500, { error: 'Failed to update registration.' });
 
-  return json(res, 200, {
-    success: true,
-    invite_link: invite.invite_link,
-    public_id: row.public_id,
-  });
+  return json(res, 200, { success: true, invite_link: invite.invite_link, public_id: row.public_id });
 }
 
-/* ============================================================
-   4. REJECT
-   ============================================================ */
+/* ============ 4. REJECT ============ */
 async function handleReject(req, res) {
   if (req.method !== 'POST') return json(res, 405, { error: 'Method not allowed' });
   const admin = requireAdmin(req);
@@ -187,43 +162,28 @@ async function handleReject(req, res) {
       updated_at: now,
     }
   );
-
   if (!upd.ok) return json(res, 500, { error: 'Failed to update.' });
   return json(res, 200, { success: true });
 }
 
-/* ============================================================
-   5. SETTINGS — includes new bot keys
-   ============================================================ */
+/* ============ 5. SETTINGS ============ */
 const SYSTEM_KEYS = [
-  'tg_api_id',
-  'tg_api_hash',
-  'tg_session',
-  'tg_channel_id',
-  'tg_bot_token',
-  'tg_invite_mode',
-  'verify_api_url',
-  'verify_api_key',
+  'tg_api_id', 'tg_api_hash', 'tg_session', 'tg_channel_id',
+  'tg_bot_token', 'tg_invite_mode',
+  'verify_api_url', 'verify_api_key',
 ];
 
 const TEMP_KEYS = [
-  'tg_temp_session',
-  'tg_temp_phone_hash',
-  'tg_temp_phone',
-  'tg_temp_api_id',
-  'tg_temp_api_hash',
+  'tg_temp_session', 'tg_temp_phone_hash', 'tg_temp_phone',
+  'tg_temp_api_id', 'tg_temp_api_hash',
 ];
 
 async function handleSettings(req, res) {
   if (req.method === 'GET' && !req.headers.authorization) {
-    try {
-      const s = await getPublicSettings();
-      return json(res, 200, s);
-    } catch {
+    try { const s = await getPublicSettings(); return json(res, 200, s); }
+    catch {
       return json(res, 200, {
-        fee: 10000,
-        accounts: { Telebirr: '', CBE: '', mPesa: '' },
-        contact: { username: '', phone: '' },
+        fee: 10000, accounts: { Telebirr: '', CBE: '', mPesa: '' }, contact: { username: '', phone: '' },
       });
     }
   }
@@ -241,41 +201,27 @@ async function handleSettings(req, res) {
     const { computeCheck } = require('telegram/Password');
 
     const CLIENT_OPTS = {
-      connectionRetries: 3,
-      useWSS: true,
-      deviceModel: 'ABJ Tutorial',
-      systemVersion: 'Vercel',
-      appVersion: '1.0.0',
+      connectionRetries: 3, useWSS: true,
+      deviceModel: 'ABJ Tutorial', systemVersion: 'Vercel', appVersion: '1.0.0',
     };
 
     if (action === 'tg-start') {
       const { api_id, api_hash, phone, channel_id } = req.body || {};
-      if (!api_id || !api_hash || !phone) {
-        return json(res, 400, { error: 'API ID, API Hash and phone number are required.' });
-      }
-      if (channel_id && String(channel_id).trim()) {
-        await setSetting('tg_channel_id', String(channel_id).trim().slice(0, 64));
-      }
+      if (!api_id || !api_hash || !phone) return json(res, 400, { error: 'API ID, API Hash and phone required.' });
+      if (channel_id && String(channel_id).trim()) await setSetting('tg_channel_id', String(channel_id).trim().slice(0, 64));
       let client;
       try {
-        client = new TelegramClient(
-          new StringSession(''),
-          Number(api_id),
-          String(api_hash),
-          CLIENT_OPTS
-        );
+        client = new TelegramClient(new StringSession(''), Number(api_id), String(api_hash), CLIENT_OPTS);
         await client.connect();
         const result = await client.invoke(new Api.auth.SendCode({
-          phoneNumber: String(phone).trim(),
-          apiId: Number(api_id),
-          apiHash: String(api_hash),
+          phoneNumber: String(phone).trim(), apiId: Number(api_id), apiHash: String(api_hash),
           settings: new Api.CodeSettings({}),
         }));
-        await setSetting('tg_temp_session',    client.session.save());
+        await setSetting('tg_temp_session', client.session.save());
         await setSetting('tg_temp_phone_hash', result.phoneCodeHash);
-        await setSetting('tg_temp_phone',      String(phone).trim());
-        await setSetting('tg_temp_api_id',     String(api_id));
-        await setSetting('tg_temp_api_hash',   String(api_hash));
+        await setSetting('tg_temp_phone', String(phone).trim());
+        await setSetting('tg_temp_api_id', String(api_id));
+        await setSetting('tg_temp_api_hash', String(api_hash));
         try { await client.disconnect(); } catch {}
         return json(res, 200, { ok: true });
       } catch (e) {
@@ -286,44 +232,29 @@ async function handleSettings(req, res) {
 
     if (action === 'tg-verify') {
       const { code } = req.body || {};
-      if (!code) return json(res, 400, { error: 'Verification code is required.' });
-
+      if (!code) return json(res, 400, { error: 'Verification code required.' });
       const tempSession = await getSetting('tg_temp_session', '');
       const phoneHash   = await getSetting('tg_temp_phone_hash', '');
       const phone       = await getSetting('tg_temp_phone', '');
       const apiIdStr    = await getSetting('tg_temp_api_id', '');
       const apiHashStr  = await getSetting('tg_temp_api_hash', '');
-
-      if (!tempSession || !phoneHash || !apiIdStr || !apiHashStr) {
-        return json(res, 400, { error: 'Session expired. Please start again.' });
-      }
+      if (!tempSession || !phoneHash || !apiIdStr || !apiHashStr) return json(res, 400, { error: 'Session expired.' });
 
       let client;
       try {
-        client = new TelegramClient(
-          new StringSession(tempSession),
-          Number(apiIdStr),
-          String(apiHashStr),
-          CLIENT_OPTS
-        );
+        client = new TelegramClient(new StringSession(tempSession), Number(apiIdStr), String(apiHashStr), CLIENT_OPTS);
         await client.connect();
-
         const result = await client.invoke(new Api.auth.SignIn({
-          phoneNumber: phone,
-          phoneCodeHash: phoneHash,
-          phoneCode: String(code).trim(),
+          phoneNumber: phone, phoneCodeHash: phoneHash, phoneCode: String(code).trim(),
         }));
-
         if (result instanceof Api.auth.AuthorizationSignUpRequired) {
           try { await client.disconnect(); } catch {}
-          return json(res, 400, { error: 'This phone number is not registered on Telegram.' });
+          return json(res, 400, { error: 'Phone not registered on Telegram.' });
         }
-
-        await setSetting('tg_session',  client.session.save());
-        await setSetting('tg_api_id',   apiIdStr);
+        await setSetting('tg_session', client.session.save());
+        await setSetting('tg_api_id', apiIdStr);
         await setSetting('tg_api_hash', apiHashStr);
         for (const k of TEMP_KEYS) await setSetting(k, '');
-
         try { await client.disconnect(); } catch {}
         invalidateConfigCache();
         return json(res, 200, { ok: true, needs_2fa: false });
@@ -341,35 +272,23 @@ async function handleSettings(req, res) {
 
     if (action === 'tg-password') {
       const { password } = req.body || {};
-      if (!password) return json(res, 400, { error: '2FA password is required.' });
-
+      if (!password) return json(res, 400, { error: '2FA password required.' });
       const tempSession = await getSetting('tg_temp_session', '');
       const apiIdStr    = await getSetting('tg_temp_api_id', '');
       const apiHashStr  = await getSetting('tg_temp_api_hash', '');
-
-      if (!tempSession || !apiIdStr || !apiHashStr) {
-        return json(res, 400, { error: 'Session expired. Please start again.' });
-      }
+      if (!tempSession || !apiIdStr || !apiHashStr) return json(res, 400, { error: 'Session expired.' });
 
       let client;
       try {
-        client = new TelegramClient(
-          new StringSession(tempSession),
-          Number(apiIdStr),
-          String(apiHashStr),
-          CLIENT_OPTS
-        );
+        client = new TelegramClient(new StringSession(tempSession), Number(apiIdStr), String(apiHashStr), CLIENT_OPTS);
         await client.connect();
-
         const passwordSrpResult = await client.invoke(new Api.account.GetPassword());
         const passwordSrpCheck = await computeCheck(passwordSrpResult, String(password));
         await client.invoke(new Api.auth.CheckPassword({ password: passwordSrpCheck }));
-
-        await setSetting('tg_session',  client.session.save());
-        await setSetting('tg_api_id',   apiIdStr);
+        await setSetting('tg_session', client.session.save());
+        await setSetting('tg_api_id', apiIdStr);
         await setSetting('tg_api_hash', apiHashStr);
         for (const k of TEMP_KEYS) await setSetting(k, '');
-
         try { await client.disconnect(); } catch {}
         invalidateConfigCache();
         return json(res, 200, { ok: true });
@@ -398,16 +317,12 @@ async function handleSettings(req, res) {
   if (req.method === 'GET') {
     const q = await supabaseQuery('app_settings?select=key,value');
     const raw = {};
-    (q.data || []).forEach(r => {
-      if (TEMP_KEYS.includes(r.key)) return;
-      raw[r.key] = r.value;
-    });
+    (q.data || []).forEach(r => { if (TEMP_KEYS.includes(r.key)) return; raw[r.key] = r.value; });
     return json(res, 200, { settings: raw, role: payload.role });
   }
 
   if (req.method === 'POST') {
     if (payload.role !== 'super') return json(res, 403, { error: 'Super admin only.' });
-
     const body = req.body || {};
 
     if (body.fee != null) {
@@ -431,7 +346,6 @@ async function handleSettings(req, res) {
         systemTouched = true;
       }
     }
-
     if (systemTouched) invalidateConfigCache();
 
     if (body.reset_rate_limits === true) {
@@ -444,9 +358,7 @@ async function handleSettings(req, res) {
   return json(res, 405, { error: 'Method not allowed' });
 }
 
-/* ============================================================
-   6. ADMINS
-   ============================================================ */
+/* ============ 6. ADMINS ============ */
 async function handleAdmins(req, res) {
   const action = String(req.query.action || '');
 
@@ -455,9 +367,7 @@ async function handleAdmins(req, res) {
     if (!me) return json(res, 401, { error: 'Unauthorized' });
 
     if (req.method === 'GET') {
-      const q = await supabaseQuery(
-        `admins?id=eq.${encodeURIComponent(me.admin_id)}&select=id,username,full_name,role,created_at`
-      );
+      const q = await supabaseQuery(`admins?id=eq.${encodeURIComponent(me.admin_id)}&select=id,username,full_name,role,created_at`);
       const row = q.data?.[0];
       if (!row) return json(res, 404, { error: 'Profile not found.' });
       return json(res, 200, { profile: row });
@@ -465,64 +375,37 @@ async function handleAdmins(req, res) {
 
     if (req.method === 'POST') {
       const { username, full_name, current_password, new_password } = req.body || {};
-
       const q = await supabaseQuery(`admins?id=eq.${encodeURIComponent(me.admin_id)}&select=*`);
       const row = q.data?.[0];
       if (!row) return json(res, 404, { error: 'Profile not found.' });
 
       const patch = {};
-
       if (username && String(username).trim().toLowerCase() !== row.username) {
         const u = String(username).trim().toLowerCase();
-        if (!/^[a-z0-9_]{3,24}$/.test(u)) {
-          return json(res, 400, { error: 'Username must be 3–24 chars (lowercase a-z, 0-9, _).' });
-        }
+        if (!/^[a-z0-9_]{3,24}$/.test(u)) return json(res, 400, { error: 'Username must be 3–24 chars (lowercase a-z, 0-9, _).' });
         const exists = await supabaseQuery(`admins?username=eq.${encodeURIComponent(u)}&select=id`);
-        if (exists.data && exists.data.length) {
-          return json(res, 409, { error: 'Username already taken.' });
-        }
+        if (exists.data && exists.data.length) return json(res, 409, { error: 'Username already taken.' });
         patch.username = u;
       }
-
-      if (full_name != null) {
-        patch.full_name = String(full_name).trim().slice(0, 64);
-      }
-
+      if (full_name != null) patch.full_name = String(full_name).trim().slice(0, 64);
       if (new_password) {
-        if (!current_password) {
-          return json(res, 400, { error: 'Enter your current password to change it.' });
-        }
-        if (!verifyPassword(String(current_password), row.password_hash)) {
-          return json(res, 401, { error: 'Current password is incorrect.' });
-        }
-        if (String(new_password).length < 6) {
-          return json(res, 400, { error: 'New password must be at least 6 characters.' });
-        }
+        if (!current_password) return json(res, 400, { error: 'Enter current password.' });
+        if (!verifyPassword(String(current_password), row.password_hash)) return json(res, 401, { error: 'Current password incorrect.' });
+        if (String(new_password).length < 6) return json(res, 400, { error: 'New password min 6 chars.' });
         patch.password_hash = hashPassword(String(new_password));
       }
-
-      if (!Object.keys(patch).length) {
-        return json(res, 400, { error: 'Nothing to update.' });
-      }
+      if (!Object.keys(patch).length) return json(res, 400, { error: 'Nothing to update.' });
 
       const upd = await supabaseUpdate(`admins?id=eq.${encodeURIComponent(me.admin_id)}`, patch);
       if (!upd.ok) return json(res, 500, { error: 'Update failed.' });
-
       const updated = upd.data?.[0] || {};
       const reauth = !!patch.username || !!patch.password_hash;
-
       return json(res, 200, {
         success: true,
-        profile: {
-          id: updated.id,
-          username: updated.username,
-          full_name: updated.full_name,
-          role: updated.role,
-        },
+        profile: { id: updated.id, username: updated.username, full_name: updated.full_name, role: updated.role },
         reauth_required: reauth,
       });
     }
-
     return json(res, 405, { error: 'Method not allowed' });
   }
 
@@ -530,9 +413,7 @@ async function handleAdmins(req, res) {
   if (!superAdmin) return json(res, 403, { error: 'Super admin only.' });
 
   if (req.method === 'GET') {
-    const q = await supabaseQuery(
-      'admins?order=role.desc,created_at.desc&select=id,username,full_name,role,created_at'
-    );
+    const q = await supabaseQuery('admins?order=role.desc,created_at.desc&select=id,username,full_name,role,created_at');
     return json(res, 200, { admins: q.data || [] });
   }
 
@@ -542,21 +423,12 @@ async function handleAdmins(req, res) {
     const p = String(password || '');
     const n = String(full_name || '').trim().slice(0, 64);
     const r = role === 'super' ? 'super' : 'admin';
-
-    if (!/^[a-z0-9_]{3,24}$/.test(u)) {
-      return json(res, 400, { error: 'Username must be 3–24 chars (lowercase a-z, 0-9, _).' });
-    }
-    if (p.length < 6) return json(res, 400, { error: 'Password must be at least 6 characters.' });
-
+    if (!/^[a-z0-9_]{3,24}$/.test(u)) return json(res, 400, { error: 'Username must be 3–24 chars.' });
+    if (p.length < 6) return json(res, 400, { error: 'Password min 6 chars.' });
     const exists = await supabaseQuery(`admins?username=eq.${encodeURIComponent(u)}&select=id`);
     if (exists.data && exists.data.length) return json(res, 409, { error: 'Username already exists.' });
-
     const ins = await supabaseInsert('admins', {
-      username: u,
-      password_hash: hashPassword(p),
-      full_name: n || null,
-      role: r,
-      created_by: superAdmin.username,
+      username: u, password_hash: hashPassword(p), full_name: n || null, role: r, created_by: superAdmin.username,
     });
     if (!ins.ok) return json(res, 500, { error: 'Could not create admin.' });
     return json(res, 200, { success: true, admin: ins.data?.[0] });
@@ -565,12 +437,10 @@ async function handleAdmins(req, res) {
   if (req.method === 'DELETE') {
     const id = String(req.query.id || '');
     if (!/^[0-9a-f-]{36}$/.test(id)) return json(res, 400, { error: 'Invalid id.' });
-
     const q = await supabaseQuery(`admins?id=eq.${encodeURIComponent(id)}&select=role,username`);
     const row = q.data?.[0];
     if (!row) return json(res, 404, { error: 'Not found.' });
-    if (row.role === 'super') return json(res, 400, { error: 'Cannot delete a super admin.' });
-
+    if (row.role === 'super') return json(res, 400, { error: 'Cannot delete super admin.' });
     const del = await supabaseDelete(`admins?id=eq.${encodeURIComponent(id)}`);
     if (!del.ok) return json(res, 500, { error: 'Could not delete.' });
     return json(res, 200, { success: true });
@@ -579,15 +449,12 @@ async function handleAdmins(req, res) {
   return json(res, 405, { error: 'Method not allowed' });
 }
 
-/* ============================================================
-   7. VIDEOS
-   ============================================================ */
+/* ============ 7. VIDEOS ============ */
 async function handleVideos(req, res) {
   if (req.method === 'GET' && !req.headers.authorization) {
     const q = await supabaseQuery('videos?order=display_order.asc,created_at.asc&select=id,title,url,tag');
     return json(res, 200, { items: q.data || [] });
   }
-
   const admin = requireSuper(req);
   if (!admin) return json(res, 403, { error: 'Super admin only.' });
 
@@ -595,41 +462,33 @@ async function handleVideos(req, res) {
     const q = await supabaseQuery('videos?order=display_order.asc,created_at.asc&select=id,title,url,tag,display_order,created_at');
     return json(res, 200, { items: q.data || [] });
   }
-
   if (req.method === 'POST') {
     const { title, url, tag } = req.body || {};
-    if (!title || !url) return json(res, 400, { error: 'Title and YouTube URL are required.' });
+    if (!title || !url) return json(res, 400, { error: 'Title and URL required.' });
     if (String(title).length > 200) return json(res, 400, { error: 'Title too long.' });
     if (String(url).length > 500) return json(res, 400, { error: 'URL too long.' });
     const ins = await supabaseInsert('videos', {
-      title: String(title).trim(),
-      url: String(url).trim(),
-      tag: String(tag || 'Lesson').trim().slice(0, 40),
-      created_by: admin.username,
+      title: String(title).trim(), url: String(url).trim(),
+      tag: String(tag || 'Lesson').trim().slice(0, 40), created_by: admin.username,
     });
     if (!ins.ok) return json(res, 500, { error: 'Could not save video.' });
     return json(res, 200, { success: true, item: ins.data?.[0] });
   }
-
   if (req.method === 'DELETE') {
     const id = String(req.query.id || '');
     if (!/^[0-9a-f-]{36}$/.test(id)) return json(res, 400, { error: 'Invalid id.' });
     const del = await supabaseDelete(`videos?id=eq.${encodeURIComponent(id)}`);
     return json(res, del.ok ? 200 : 500, { success: del.ok });
   }
-
   return json(res, 405, { error: 'Method not allowed' });
 }
 
-/* ============================================================
-   8. TESTIMONIALS
-   ============================================================ */
+/* ============ 8. TESTIMONIALS ============ */
 async function handleTestimonials(req, res) {
   if (req.method === 'GET' && !req.headers.authorization) {
     const q = await supabaseQuery('testimonials?order=display_order.asc,created_at.asc&select=id,student_name,subject,text,stars');
     return json(res, 200, { items: q.data || [] });
   }
-
   const admin = requireSuper(req);
   if (!admin) return json(res, 403, { error: 'Super admin only.' });
 
@@ -637,36 +496,29 @@ async function handleTestimonials(req, res) {
     const q = await supabaseQuery('testimonials?order=display_order.asc,created_at.asc&select=id,student_name,subject,text,stars,created_at');
     return json(res, 200, { items: q.data || [] });
   }
-
   if (req.method === 'POST') {
     const { student_name, subject, text, stars } = req.body || {};
-    if (!student_name || !subject || !text) return json(res, 400, { error: 'Name, subject, and text are required.' });
-    if (String(text).length > 1000) return json(res, 400, { error: 'Text too long (max 1000 chars).' });
+    if (!student_name || !subject || !text) return json(res, 400, { error: 'All fields required.' });
+    if (String(text).length > 1000) return json(res, 400, { error: 'Text too long.' });
     const starVal = Math.min(5, Math.max(1, parseInt(stars, 10) || 5));
     const ins = await supabaseInsert('testimonials', {
       student_name: String(student_name).trim().slice(0, 64),
       subject: String(subject).trim().slice(0, 64),
-      text: String(text).trim(),
-      stars: starVal,
-      created_by: admin.username,
+      text: String(text).trim(), stars: starVal, created_by: admin.username,
     });
-    if (!ins.ok) return json(res, 500, { error: 'Could not save testimonial.' });
+    if (!ins.ok) return json(res, 500, { error: 'Could not save.' });
     return json(res, 200, { success: true, item: ins.data?.[0] });
   }
-
   if (req.method === 'DELETE') {
     const id = String(req.query.id || '');
     if (!/^[0-9a-f-]{36}$/.test(id)) return json(res, 400, { error: 'Invalid id.' });
     const del = await supabaseDelete(`testimonials?id=eq.${encodeURIComponent(id)}`);
     return json(res, del.ok ? 200 : 500, { success: del.ok });
   }
-
   return json(res, 405, { error: 'Method not allowed' });
 }
 
-/* ============================================================
-   9. CHATS
-   ============================================================ */
+/* ============ 9. CHATS (with sender_name) ============ */
 async function handleChats(req, res) {
   const admin = requireAdmin(req);
   if (!admin) return json(res, 401, { error: 'Unauthorized' });
@@ -683,7 +535,6 @@ async function handleChats(req, res) {
         `&select=id,sender,sender_name,message_type,content,file_url,file_name,is_read,created_at`
       );
       const items = (q.data || []).slice().reverse();
-
       await supabaseUpdate(
         `chat_messages?session_id=eq.${encodeURIComponent(sessionId)}&sender=eq.user&is_read=eq.false`,
         { is_read: true }
@@ -693,7 +544,7 @@ async function handleChats(req, res) {
 
     const q = await supabaseQuery(
       `chat_messages?order=created_at.desc&limit=300` +
-      `&select=session_id,registration_id,sender,content,message_type,is_read,created_at,file_name`
+      `&select=session_id,registration_id,sender_name,sender,content,message_type,is_read,created_at,file_name`
     );
     const rows = q.data || [];
     const seen = new Map();
@@ -702,6 +553,7 @@ async function handleChats(req, res) {
         seen.set(r.session_id, {
           session_id: r.session_id,
           registration_id: r.registration_id,
+          sender_name: r.sender_name,
           last_message: r.message_type === 'text' ? (r.content || '') : `[${r.message_type}]`,
           last_sender: r.sender,
           last_at: r.created_at,
@@ -715,9 +567,7 @@ async function handleChats(req, res) {
   }
 
   if (req.method === 'GET' && action === 'unread-count') {
-    const q = await supabaseQuery(
-      `chat_messages?sender=eq.user&is_read=eq.false&select=session_id`
-    );
+    const q = await supabaseQuery(`chat_messages?sender=eq.user&is_read=eq.false&select=session_id`);
     const rows = q.data || [];
     const sessions = new Set(rows.map(r => r.session_id));
     return json(res, 200, { count: rows.length, sessions: sessions.size });
@@ -732,7 +582,6 @@ async function handleChats(req, res) {
     const content = body.content ? String(body.content).slice(0, 4000) : null;
 
     let fileUrl = null, fileName = null, fileSize = null;
-
     if (type !== 'text') {
       if (!body.file_base64) return json(res, 400, { error: 'Missing file data.' });
       fileName = body.file_name ? String(body.file_name).slice(0, 100) : (type + '.bin');
@@ -749,11 +598,7 @@ async function handleChats(req, res) {
       sender: 'admin',
       sender_name: admin.full_name || admin.username,
       message_type: type,
-      content,
-      file_url: fileUrl,
-      file_name: fileName,
-      file_size: fileSize,
-      is_read: true,
+      content, file_url: fileUrl, file_name: fileName, file_size: fileSize, is_read: true,
     });
     if (!ins.ok) return json(res, 500, { error: 'Could not save reply.' });
     return json(res, 200, { success: true, item: ins.data?.[0] });
@@ -762,22 +607,18 @@ async function handleChats(req, res) {
   return json(res, 405, { error: 'Method not allowed' });
 }
 
-/* ============================================================
-   10. STATS / FINANCE
-   ============================================================ */
+/* ============ 10. STATS ============ */
 async function handleStats(req, res) {
   if (req.method !== 'GET') return json(res, 405, { error: 'Method not allowed' });
   const payload = requireAdmin(req);
   if (!payload) return json(res, 401, { error: 'Unauthorized' });
 
-  const q = await supabaseQuery(
-    'registrations?select=id,status,amount,created_at,approved_at,payment_method,semester,stream'
-  );
+  const q = await supabaseQuery('registrations?select=id,status,amount,created_at,approved_at,payment_method,semester,stream');
   const rows = q.data || [];
 
   const now = new Date();
-  const startOfDay   = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
-  const startOfWeek  = now.getTime() - 7 * 86400000;
+  const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+  const startOfWeek = now.getTime() - 7 * 86400000;
   const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1).getTime();
 
   let totalUsers = 0, totalRevenue = 0;
@@ -785,45 +626,30 @@ async function handleStats(req, res) {
   let weekUsers = 0, weekRevenue = 0;
   let monthUsers = 0, monthRevenue = 0;
   let pending = 0, approved = 0, rejected = 0;
-  const byMethod = {};
-  const bySemester = {};
+  const byMethod = {}, bySemester = {};
 
   for (const r of rows) {
     const amt = parseFloat(r.amount) || 0;
     const createdMs = r.created_at ? new Date(r.created_at).getTime() : 0;
 
     if (r.status === 'approved') {
-      approved++;
-      totalUsers++;
-      totalRevenue += amt;
-
+      approved++; totalUsers++; totalRevenue += amt;
       if (createdMs >= startOfDay)   { todayUsers++; todayRevenue += amt; }
-      if (createdMs >= startOfWeek)  { weekUsers++;  weekRevenue  += amt; }
+      if (createdMs >= startOfWeek)  { weekUsers++; weekRevenue += amt; }
       if (createdMs >= startOfMonth) { monthUsers++; monthRevenue += amt; }
-
       const m = r.payment_method || 'Unknown';
       byMethod[m] = byMethod[m] || { count: 0, revenue: 0 };
-      byMethod[m].count++;
-      byMethod[m].revenue += amt;
-
+      byMethod[m].count++; byMethod[m].revenue += amt;
       const s = r.semester || 'Unknown';
       bySemester[s] = (bySemester[s] || 0) + 1;
-    } else if (r.status === 'pending') {
-      pending++;
-    } else if (r.status === 'rejected') {
-      rejected++;
-    }
+    } else if (r.status === 'pending') { pending++; }
+    else if (r.status === 'rejected') { rejected++; }
   }
 
   return json(res, 200, {
-    totalRecords: rows.length,
-    totalUsers, totalRevenue,
-    todayUsers, todayRevenue,
-    weekUsers, weekRevenue,
-    monthUsers, monthRevenue,
-    pending, approved, rejected,
-    byMethod,
-    bySemester,
+    totalRecords: rows.length, totalUsers, totalRevenue,
+    todayUsers, todayRevenue, weekUsers, weekRevenue, monthUsers, monthRevenue,
+    pending, approved, rejected, byMethod, bySemester,
     generated_at: new Date().toISOString(),
   });
 }
