@@ -20,7 +20,6 @@ body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:radial-grad
 @keyframes orbA{0%,100%{transform:translate(0,0) scale(1);}50%{transform:translate(60px,40px) scale(1.15);}}
 @keyframes orbB{0%,100%{transform:translate(0,0) scale(1);}50%{transform:translate(-50px,-30px) scale(1.1);}}
 
-/* ============ LOGIN ============ */
 #loginView{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:20px;padding-top:calc(20px + env(safe-area-inset-top));padding-bottom:calc(20px + env(safe-area-inset-bottom));overflow-y:auto;z-index:5;}
 .login-card{position:relative;width:100%;max-width:440px;margin:auto;padding:44px 36px 36px;border-radius:28px;background:linear-gradient(135deg,rgba(255,255,255,.09),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.14);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);box-shadow:0 40px 90px -30px rgba(0,0,0,.85),0 0 80px -30px rgba(59,130,246,.55),inset 0 1px 0 rgba(255,255,255,.08);animation:loginIn .7s var(--bounce) both;}
 @keyframes loginIn{from{opacity:0;transform:translateY(20px) scale(.96);}to{opacity:1;transform:none;}}
@@ -54,7 +53,6 @@ body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:radial-grad
 .pw-toggle:hover{background:rgba(255,255,255,.14);color:#fff;}
 .pw-toggle svg{width:18px;height:18px;display:block;pointer-events:none;}
 
-/* ============ DASHBOARD ============ */
 #dashView{position:relative;z-index:2;min-height:100vh;display:none;}
 #dashView.active{display:block;}
 
@@ -114,7 +112,6 @@ body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:radial-grad
 .tab-content.active{display:block;animation:fadeUp .4s var(--ease) both;}
 @keyframes fadeUp{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:none;}}
 
-/* ============ COMPACT REGISTRATION LIST ============ */
 .list{display:grid;gap:12px;}
 .reg-row{display:flex;align-items:center;gap:14px;padding:16px 18px;border-radius:16px;background:linear-gradient(135deg,rgba(255,255,255,.06),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.1);transition:border-color .3s,box-shadow .3s,transform .3s var(--bounce);}
 .reg-row:hover{border-color:rgba(247,224,122,.35);box-shadow:0 14px 34px -22px rgba(212,175,55,.7);transform:translateY(-2px);}
@@ -149,7 +146,6 @@ body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:radial-grad
 .btn-add{background:linear-gradient(135deg,#2563eb,#1d4ed8);color:#fff;padding:13px 24px;font-size:13.5px;box-shadow:0 14px 30px -14px rgba(37,99,235,.9);display:inline-flex;align-items:center;gap:8px;}
 .btn-add:hover{transform:translateY(-2px);}
 
-/* ============ FINANCE ============ */
 .fin-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-bottom:22px;}
 .fin-card{position:relative;padding:20px 22px;border-radius:18px;background:linear-gradient(135deg,rgba(255,255,255,.07),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.1);overflow:hidden;transition:transform .35s var(--bounce),border-color .3s,box-shadow .3s;}
 .fin-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--c1,#f7e07a),var(--c2,#d4af37));opacity:.9;}
@@ -175,7 +171,6 @@ body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:radial-grad
 .fin-table td.cnt{text-align:right;font-family:monospace;color:rgba(255,255,255,.85);}
 .fin-table td.total-row{color:#f7e07a;font-weight:800;font-size:14px;background:rgba(247,224,122,.06);}
 
-/* ============ CONTENT / FORM PAGES ============ */
 .page-toolbar{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:20px;}
 .page-toolbar h2{margin:0;font-size:16px;font-weight:800;letter-spacing:-.2px;color:#fff;}
 .page-toolbar p{margin:4px 0 0;font-size:12px;font-weight:600;color:rgba(255,255,255,.5);}
@@ -189,7 +184,6 @@ body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:radial-grad
 .super-pill{display:inline-block;margin-left:8px;padding:3px 9px;border-radius:999px;font-size:9.5px;font-weight:800;letter-spacing:1.1px;text-transform:uppercase;background:linear-gradient(135deg,#f7e07a,#d4af37);color:#0b1220;}
 .admin-pill{display:inline-block;margin-left:8px;padding:3px 9px;border-radius:999px;font-size:9.5px;font-weight:800;letter-spacing:1.1px;text-transform:uppercase;background:rgba(255,255,255,.1);color:#cbd5e1;border:1px solid rgba(255,255,255,.15);}
 
-/* ============ PROFILE CARD ============ */
 .profile-wrap{display:grid;place-items:center;padding:10px 0;}
 .profile-card{position:relative;width:100%;max-width:460px;padding:36px 30px 30px;border-radius:26px;background:radial-gradient(420px 220px at 50% -10%,rgba(59,130,246,.28),transparent 70%),linear-gradient(160deg,rgba(255,255,255,.08),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.14);box-shadow:0 40px 90px -40px rgba(0,0,0,.9),inset 0 1px 0 rgba(255,255,255,.08);text-align:center;overflow:hidden;}
 .profile-card::before{content:'';position:absolute;inset:-2px;border-radius:28px;padding:2px;background:conic-gradient(from 0deg,#f7e07a,#d4af37,#2563eb,#a855f7,#f7e07a);background-size:200% 200%;animation:borderSpin 8s linear infinite;-webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;z-index:-1;opacity:.85;}
@@ -204,7 +198,6 @@ body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:radial-grad
 .pc-actions{margin-top:24px;display:flex;gap:10px;}
 .pc-actions .btn{flex:1;}
 
-/* ============ SETTINGS LIST ============ */
 .set-list{display:grid;gap:12px;max-width:680px;}
 .set-row{display:flex;justify-content:space-between;align-items:center;gap:14px;padding:16px 20px;border-radius:16px;background:linear-gradient(135deg,rgba(255,255,255,.05),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.1);transition:border-color .25s;}
 .set-row:hover{border-color:rgba(247,224,122,.25);}
@@ -212,7 +205,6 @@ body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:radial-grad
 .set-row .sk{font-size:10.5px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:rgba(255,255,255,.5);}
 .set-row .sv{font-size:14.5px;font-weight:800;color:#fff;margin-top:5px;overflow-wrap:anywhere;font-family:monospace;letter-spacing:.3px;}
 
-/* ============ SYSTEM CARDS ============ */
 .tg-card{padding:24px 26px;border-radius:20px;background:linear-gradient(135deg,rgba(255,255,255,.06),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.1);position:relative;overflow:hidden;max-width:680px;transition:border-color .3s,box-shadow .3s;margin-bottom:18px;}
 .tg-card.ok{border-color:rgba(52,211,153,.45);box-shadow:0 18px 40px -20px rgba(16,185,129,.55),0 0 0 1px rgba(52,211,153,.15);}
 .tg-card.bad{border-color:rgba(248,113,113,.35);}
@@ -236,7 +228,6 @@ body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:radial-grad
 .sys-hr{border:none;border-top:1px solid rgba(255,255,255,.08);margin:22px 0;}
 .sys-title{margin:6px 0 12px;font-size:14px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--gold-1);}
 
-/* ---------- INVITE MODE TOGGLE ---------- */
 .mode-toggle{display:grid;grid-template-columns:1fr 1fr;gap:12px;max-width:680px;}
 .mode-btn{position:relative;display:flex;flex-direction:column;align-items:center;gap:8px;padding:22px 16px;border-radius:16px;background:linear-gradient(135deg,rgba(255,255,255,.05),rgba(255,255,255,.02));border:2px solid rgba(255,255,255,.12);cursor:pointer;font-family:inherit;color:rgba(255,255,255,.75);font-weight:800;transition:all .3s var(--bounce);text-align:center;}
 .mode-btn:hover{transform:translateY(-3px);border-color:rgba(247,224,122,.35);}
@@ -248,7 +239,6 @@ body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:radial-grad
 .mode-status{margin-top:14px;padding:12px 14px;border-radius:12px;font-size:12.5px;font-weight:700;line-height:1.55;max-width:680px;display:none;}
 .mode-status.show{display:block;}
 
-/* ---------- LIVE CHATS (drill-down) ---------- */
 #chatAdminView{display:block;}
 
 .chat-panel-label{font-size:11px;font-weight:800;letter-spacing:1.3px;text-transform:uppercase;color:rgba(255,255,255,.55);padding:6px 10px;}
@@ -351,13 +341,11 @@ body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:radial-grad
 .chat-admin-msg .t{font-size:10px;opacity:.6;margin-top:4px;}
 .chat-admin-msg.admin .t{text-align:right;}
 
-/* ============ TOAST ============ */
 .toast{position:fixed;top:20px;right:20px;padding:15px 22px;border-radius:14px;font-weight:800;font-size:13.5px;color:#fff;box-shadow:0 20px 44px -14px rgba(0,0,0,.6);transform:translateY(-140%);transition:transform .4s var(--bounce);z-index:400;}
 .toast.show{transform:translateY(0);}
 .toast.ok{background:linear-gradient(135deg,#10b981,#059669);}
 .toast.err{background:linear-gradient(135deg,#ef4444,#dc2626);}
 
-/* ============ RESULT MODAL ============ */
 .adm-modal{position:fixed;inset:0;z-index:250;background:rgba(5,9,18,.85);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);display:flex;align-items:center;justify-content:center;padding:18px;opacity:0;visibility:hidden;transition:opacity .35s var(--bounce),visibility .35s;overflow-y:auto;}
 .adm-modal.open{opacity:1;visibility:visible;}
 .adm-box{position:relative;width:100%;max-width:440px;max-height:calc(100dvh - 36px);overflow-y:auto;background:radial-gradient(420px 220px at 50% -10%,rgba(59,130,246,.30),transparent 70%),linear-gradient(160deg,#0f1a2f 0%,#131f3d 100%);border:1px solid rgba(255,255,255,.14);border-radius:26px;padding:26px 24px 24px;text-align:center;color:#fff;box-shadow:0 50px 100px -40px rgba(0,0,0,.95),0 0 90px -25px rgba(37,99,235,.55),inset 0 1px 0 rgba(255,255,255,.08);transform:translateY(28px) scale(.94);opacity:0;transition:transform .55s var(--bounce),opacity .4s;}
@@ -383,7 +371,6 @@ body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:radial-grad
 .adm-actions{display:flex;gap:10px;margin-top:22px;flex-wrap:wrap;}
 .adm-actions .btn{flex:1;min-width:130px;padding:14px 18px;font-size:13.5px;border-radius:12px;display:inline-flex;align-items:center;justify-content:center;gap:8px;}
 
-/* ============ GENERIC SHEET MODAL ============ */
 .abj-sheet{position:fixed;inset:0;z-index:300;background:rgba(5,9,18,.88);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);display:flex;align-items:center;justify-content:center;padding:16px;padding-top:calc(16px + env(safe-area-inset-top));padding-bottom:calc(16px + env(safe-area-inset-bottom));opacity:0;visibility:hidden;transition:opacity .3s var(--ease),visibility .3s var(--ease);overflow-y:auto;}
 .abj-sheet.open{opacity:1;visibility:visible;}
 .abj-sheet-box{position:relative;width:100%;max-width:540px;max-height:calc(100dvh - 32px);overflow-y:auto;background:radial-gradient(460px 240px at 50% -10%,rgba(59,130,246,.26),transparent 70%),linear-gradient(160deg,#0f1a2f 0%,#131f3d 100%);border:1px solid rgba(255,255,255,.14);border-radius:24px;padding:26px 24px 22px;box-shadow:0 50px 100px -40px rgba(0,0,0,.95),0 0 90px -25px rgba(37,99,235,.55),inset 0 1px 0 rgba(255,255,255,.08);transform:translateY(28px) scale(.95);opacity:0;transition:transform .5s var(--bounce),opacity .35s var(--ease);}
@@ -408,7 +395,6 @@ body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:radial-grad
 .sheet-actions{display:flex;gap:10px;margin-top:20px;flex-wrap:wrap;}
 .sheet-actions .btn{flex:1;min-width:120px;padding:14px 18px;font-size:13.5px;}
 
-/* registration detail inside sheet */
 .det-hero{display:flex;align-items:center;gap:14px;padding:16px;border-radius:16px;background:linear-gradient(135deg,rgba(247,224,122,.14),rgba(212,175,55,.05));border:1px solid rgba(247,224,122,.28);}
 .det-hero .dh-av{flex:0 0 52px;width:52px;height:52px;border-radius:15px;display:grid;place-items:center;font-size:19px;font-weight:800;color:#0b1220;background:linear-gradient(135deg,#f7e07a,#d4af37);}
 .det-hero .dh-info{min-width:0;flex:1;}
@@ -425,7 +411,6 @@ body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:radial-grad
 .det-note.err{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.32);color:#f87171;}
 .det-note.ok{background:rgba(52,211,153,.1);border:1px solid rgba(52,211,153,.32);color:#34d399;}
 
-/* ============ BRANDED INPUT / CONFIRM MODALS ============ */
 .abj-input-modal{position:fixed;inset:0;z-index:320;background:rgba(5,9,18,.88);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);display:flex;align-items:center;justify-content:center;padding:16px;opacity:0;visibility:hidden;transition:opacity .3s var(--ease),visibility .3s var(--ease);overflow-y:auto;}
 .abj-input-modal.open{opacity:1;visibility:visible;}
 .abj-input-box{position:relative;width:100%;max-width:440px;background:radial-gradient(420px 220px at 50% -10%,rgba(59,130,246,.28),transparent 70%),linear-gradient(160deg,#0f1a2f 0%,#131f3d 100%);border:1px solid rgba(255,255,255,.14);border-radius:24px;padding:26px 22px 22px;box-shadow:0 50px 100px -40px rgba(0,0,0,.95),0 0 90px -25px rgba(37,99,235,.6),inset 0 1px 0 rgba(255,255,255,.08);transform:translateY(28px) scale(.95);opacity:0;transition:transform .5s var(--bounce),opacity .35s var(--ease);}
@@ -450,7 +435,6 @@ body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:radial-grad
 .abj-input-btn.danger{background:linear-gradient(135deg,#ef4444,#dc2626);color:#fff;box-shadow:0 14px 30px -14px rgba(239,68,68,.9);}
 .abj-input-btn.danger:hover{transform:translateY(-2px);}
 
-/* ============ TELEGRAM WIZARD ============ */
 .tg-wiz{position:fixed;inset:0;z-index:360;background:rgba(5,9,18,.9);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);display:flex;align-items:center;justify-content:center;padding:16px;padding-top:calc(16px + env(safe-area-inset-top));padding-bottom:calc(16px + env(safe-area-inset-bottom));opacity:0;visibility:hidden;transition:opacity .3s,visibility .3s;overflow-y:auto;}
 .tg-wiz.open{opacity:1;visibility:visible;}
 .tg-wiz-box{position:relative;width:100%;max-width:440px;max-height:calc(100dvh - 32px);overflow-y:auto;background:radial-gradient(400px 200px at 50% -10%,rgba(59,130,246,.3),transparent 70%),linear-gradient(160deg,#0f1a2f 0%,#131f3d 100%);border:1px solid rgba(255,255,255,.14);border-radius:26px;padding:32px 26px 26px;color:#fff;box-shadow:0 50px 100px -40px rgba(0,0,0,.95),0 0 90px -25px rgba(37,99,235,.55);transform:translateY(24px) scale(.95);opacity:0;transition:transform .5s var(--bounce),opacity .35s;}
@@ -487,12 +471,10 @@ body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:radial-grad
 .sb-overlay{position:fixed;inset:0;background:rgba(5,9,18,.7);z-index:35;opacity:0;visibility:hidden;transition:opacity .3s,visibility .3s;}
 .sb-overlay.show{opacity:1;visibility:visible;}
 
-/* ============ RESPONSIVE ============ */
 @media (max-width:960px){
   .sidebar{transform:translateX(-100%);}
   .sidebar.show{transform:translateX(0);}
   .main{margin-left:0;padding:0 18px 48px;}
-
   .main-head{position:fixed;top:0;left:0;right:0;z-index:30;margin:0;padding:calc(10px + env(safe-area-inset-top)) 14px 10px;background:linear-gradient(180deg,rgba(11,18,32,.94),rgba(15,26,47,.88));backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,.09);box-shadow:0 10px 30px -20px rgba(0,0,0,.9);flex-wrap:nowrap;}
   .mh-menu{display:grid;}
   .mh-title h1{font-size:17px;}
@@ -501,20 +483,16 @@ body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:radial-grad
   .mh-refresh span{display:none;}
   .mh-refresh svg{width:18px;height:18px;}
   .page-anchor{height:78px;}
-
   .tg-badge{position:static;margin-bottom:12px;display:inline-flex;}
   .tg-card-head{padding-right:0;}
   .tg-info-row{flex-direction:column;align-items:flex-start;gap:4px;padding:11px 14px;}
   .tg-info-row .k{flex:0 0 auto;}
   .tg-info-row .v{text-align:left;font-size:12.5px;}
   .fin-table th, .fin-table td{padding:10px 12px;font-size:12px;}
-
   .chat-sessions-panel{max-height:none;}
   .chat-conv-body{max-height:none;min-height:60vh;}
 }
-@media (max-width:600px){
-  .mode-toggle{grid-template-columns:1fr;}
-}
+@media (max-width:600px){.mode-toggle{grid-template-columns:1fr;}}
 @media (max-width:520px){
   .login-card{padding:32px 22px 26px;border-radius:22px;}
   .login-logo-ring{width:96px;height:96px;}
@@ -687,17 +665,13 @@ body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:radial-grad
     <div class="tab-content" id="tab-approved"><div class="list" id="listApproved"></div></div>
     <div class="tab-content" id="tab-rejected"><div class="list" id="listRejected"></div></div>
 
-    <!-- LIVE CHATS (drill-down) -->
+    <!-- LIVE CHATS -->
     <div class="tab-content" id="tab-chats">
       <div id="chatAdminView">
-
-        <!-- Sessions list view -->
         <div class="chat-sessions-panel" id="chatSessionsPanel">
           <div class="chat-panel-label">Conversations</div>
           <div id="chatSessionsList"></div>
         </div>
-
-        <!-- Conversation view -->
         <div class="chat-conv-panel" id="chatConvPanel" style="display:none;">
           <div id="chatConvHead" class="chat-conv-head">
             <button id="chatBackBtn" class="chat-back-btn" type="button" aria-label="Back to conversations">←</button>
@@ -714,7 +688,6 @@ body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:radial-grad
           </div>
           <input type="file" id="chatAdminFile" style="display:none" />
         </div>
-
       </div>
     </div>
 
@@ -757,6 +730,19 @@ body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:radial-grad
         <button class="btn btn-add" id="editSettingsBtn" type="button">✏️ Edit Settings</button>
       </div>
       <div class="set-list" id="settingsList"></div>
+
+      <!-- CUSTOM BANKS SECTION -->
+      <div style="margin-top:26px;max-width:680px;">
+        <div class="page-toolbar" style="margin-bottom:14px;">
+          <div>
+            <h2 style="font-size:15px;">🏦 Additional Bank Accounts</h2>
+            <p style="font-size:12px;">Extra bank accounts shown to students on the registration form.</p>
+          </div>
+          <button class="btn btn-add" id="addCustomBankBtn" type="button">＋ Add Bank</button>
+        </div>
+        <div class="set-list" id="customBankList"></div>
+      </div>
+
       <div style="margin-top:20px;max-width:680px;">
         <button class="btn btn-ghost" id="resetRateLimits" type="button" style="padding:14px 22px;font-size:13.5px;">🔄 Reset Rate Limits</button>
       </div>
@@ -1440,10 +1426,12 @@ function openRegDetail(r, status){
     <div class="det-pair"><div class="k">Gender</div><div class="v">${esc(r.gender || '—')}</div></div>
     <div class="det-pair"><div class="k">Payment Method</div><div class="v">${esc(r.payment_method || '—')}</div></div>
     <div class="det-pair"><div class="k">Amount</div><div class="v mono">ETB ${Number(r.amount || 0).toLocaleString()}</div></div>
-    <div class="det-pair"><div class="k">Reference</div><div class="v mono">${esc(r.transaction_ref || '—')}</div></div>
+    <div class="det-pair"><div class="k">Transaction ID</div><div class="v mono">${esc(r.transaction_ref || '—')}</div></div>
+    ${r.transaction_suffix ? `<div class="det-pair"><div class="k">Suffix</div><div class="v mono">${esc(r.transaction_suffix)}</div></div>` : ''}
     <div class="det-pair"><div class="k">Submitted</div><div class="v">${esc(created)}</div></div>
     ${r.status === 'approved' ? `<div class="det-pair"><div class="k">Approved</div><div class="v">${esc(approved)}</div></div>` : ''}
     <div class="det-pair"><div class="k">Public ID</div><div class="v mono">${esc(r.public_id || '—')}</div></div>
+    ${r.receiver_account ? `<div class="det-pair"><div class="k">Receiver</div><div class="v mono">${esc(r.receiver_account)}</div></div>` : ''}
   </div>`;
 
   if (r.verify_error && r.status === 'pending'){
@@ -1875,9 +1863,10 @@ document.getElementById('addTstBtn').addEventListener('click', () => {
 });
 
 /* =========================================================
-   SETTINGS
+   SETTINGS  (with Custom Banks)
    ========================================================= */
 let currentSettings = {};
+let currentCustomBanks = [];
 
 async function loadSettings(){
   const list = document.getElementById('settingsList');
@@ -1888,7 +1877,10 @@ async function loadSettings(){
     if (!res.ok) { list.innerHTML = '<div class="empty"><div class="icon">⚠️</div><p>Could not load settings.</p></div>'; return; }
     const s = data.settings || {};
     currentSettings = s;
+    try { currentCustomBanks = JSON.parse(s.custom_banks || '[]'); } catch { currentCustomBanks = []; }
+    if (!Array.isArray(currentCustomBanks)) currentCustomBanks = [];
     renderSettingsList(s);
+    renderCustomBankList();
   } catch {
     list.innerHTML = '<div class="empty"><div class="icon">⚠️</div><p>Network error.</p></div>';
   }
@@ -1912,6 +1904,85 @@ function renderSettingsList(s){
       </div>
     </div>`).join('');
 }
+
+/* ---------- CUSTOM BANKS ---------- */
+function renderCustomBankList(){
+  const box = document.getElementById('customBankList');
+  if (!box) return;
+  if (!currentCustomBanks.length){
+    box.innerHTML = '<div class="empty" style="padding:28px 20px;"><div class="icon" style="font-size:36px;">🏦</div><p style="font-size:13px;">No extra bank accounts yet. Click “Add Bank” to add one.</p></div>';
+    return;
+  }
+  box.innerHTML = currentCustomBanks.map((b, i) => `
+    <div class="set-row">
+      <div class="sl">
+        <div class="sk">${esc(b.name)}</div>
+        <div class="sv">${esc(b.account)}</div>
+      </div>
+      <div style="display:flex;gap:6px;flex:0 0 auto;">
+        <button class="btn btn-ghost" data-edit-bank="${i}" style="padding:9px 14px;font-size:12px;">Edit</button>
+        <button class="btn btn-danger" data-del-bank="${i}" style="padding:9px 14px;font-size:12px;">Delete</button>
+      </div>
+    </div>`).join('');
+
+  box.querySelectorAll('[data-edit-bank]').forEach(btn => {
+    btn.addEventListener('click', () => openBankEditor(Number(btn.dataset.editBank)));
+  });
+  box.querySelectorAll('[data-del-bank]').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const i = Number(btn.dataset.delBank);
+      const ok = await brandedConfirm({ icon: '🏦', title: 'Delete this bank account?', message: 'Students will no longer see it.', confirmLabel: 'Delete' });
+      if (!ok) return;
+      currentCustomBanks.splice(i, 1);
+      await saveCustomBanks();
+    });
+  });
+}
+
+function openBankEditor(index){
+  const editing = Number.isInteger(index) && index >= 0;
+  const b = editing ? currentCustomBanks[index] : { name: '', account: '' };
+  const body = `
+    <div class="field"><label>Bank Name</label><input type="text" id="cbName" placeholder="e.g. Awash, Dashen, CBE Birr" maxlength="40" value="${esc(b.name)}" /></div>
+    <div class="field"><label>Account Number</label><input type="text" id="cbAccount" placeholder="e.g. 0132012345678" maxlength="40" value="${esc(b.account)}" /></div>
+    <div class="sheet-actions">
+      <button class="btn btn-ghost" id="cbCancel" type="button">Cancel</button>
+      <button class="btn btn-gold" id="cbSave" type="button">${editing ? 'Save' : '＋ Add Bank'}</button>
+    </div>`;
+  openSheet({ title: editing ? 'Edit Bank Account' : 'Add Bank Account', subtitle: 'Shown to students on the registration form', body, maxWidth: '460px' });
+
+  document.getElementById('cbCancel').addEventListener('click', closeSheet);
+  document.getElementById('cbSave').addEventListener('click', async (e) => {
+    const name = document.getElementById('cbName').value.trim();
+    const account = document.getElementById('cbAccount').value.trim();
+    if (!name || !account) { admError('Missing Fields', 'Both name and account number are required.'); return; }
+    const btn = e.currentTarget; const orig = btn.textContent;
+    btn.disabled = true; btn.textContent = 'Saving...';
+    try {
+      if (editing) currentCustomBanks[index] = { name, account };
+      else currentCustomBanks.push({ name, account });
+      await saveCustomBanks();
+      closeSheet();
+    } finally {
+      btn.disabled = false; btn.textContent = orig;
+    }
+  });
+}
+
+async function saveCustomBanks(){
+  try {
+    const res = await fetch('/api/admin-settings', {
+      method: 'POST', headers: authHeaders(true),
+      body: JSON.stringify({ custom_banks: currentCustomBanks }),
+    });
+    const data = await res.json();
+    if (!res.ok){ admError('Save Failed', data.error || 'Could not save.'); return; }
+    admSuccess('Bank Accounts Updated', 'Changes are live on the registration form.');
+    renderCustomBankList();
+  } catch { admError('Network Error', 'Could not reach server.'); }
+}
+
+document.getElementById('addCustomBankBtn')?.addEventListener('click', () => openBankEditor(-1));
 
 document.getElementById('editSettingsBtn').addEventListener('click', () => {
   const s = currentSettings || {};
