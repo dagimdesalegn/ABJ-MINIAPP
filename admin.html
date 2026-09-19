@@ -1611,7 +1611,6 @@ async function renderBotCard(s){
     return;
   }
 
-  // Has token — fetch bot info
   card.classList.add('bad');
   card.innerHTML = `
     <div class="tg-badge bad"><span class="dot"></span> Checking…</div>
@@ -1622,7 +1621,7 @@ async function renderBotCard(s){
 
   let info = { configured: true, valid: false, error: 'Unknown' };
   try {
-    const res = await fetch('/api/admin-bot-info', { headers: authHeaders() });
+    const res = await fetch('/api/admin-settings?action=bot-info', { headers: authHeaders() });
     info = await res.json();
   } catch {}
 
