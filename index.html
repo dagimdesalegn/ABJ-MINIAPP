@@ -122,18 +122,183 @@ section{scroll-margin-top:calc(var(--header-h) + 20px);}
 .cur-section{position:relative;padding:90px 0 96px;background:linear-gradient(180deg,#ffffff 0%,#f7faff 100%);overflow:hidden;}
 .cur-section::before{content:'';position:absolute;inset:0;pointer-events:none;background-image:radial-gradient(circle, rgba(37,99,235,.10) 1px, transparent 1px);background-size:30px 30px;mask-image:radial-gradient(circle at 50% 42%, black 20%, transparent 72%);-webkit-mask-image:radial-gradient(circle at 50% 42%, black 20%, transparent 72%);}
 .cur-shell{position:relative;z-index:2;background:#fff;border:1px solid var(--line);border-radius:32px;padding:30px;box-shadow:0 40px 90px -55px rgba(15,23,42,.55);}
-.sem-switch{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:28px;}
-.sem-btn{position:relative;display:flex;align-items:center;gap:18px;padding:20px 24px;border-radius:22px;background:linear-gradient(135deg,#ffffff,#f8fbff);text-align:left;transition:transform .4s var(--bounce);overflow:hidden;min-height:84px;isolation:isolate;}
-.sem-btn::before{content:'';position:absolute;inset:0;border-radius:22px;padding:2px;background:linear-gradient(135deg,#dbeafe,#e0e7ff,#f3e8ff);-webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;z-index:1;}
-.sem-btn::after{content:'';position:absolute;inset:2px;border-radius:20px;background:linear-gradient(135deg,#ffffff,#f8fbff);z-index:0;}
+
+/* ============ SEMESTER SWITCH — REDESIGNED ============ */
+.sem-switch{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
+  margin-bottom:26px;
+}
+.sem-btn{
+  position:relative;
+  display:flex;
+  align-items:center;
+  gap:14px;
+  padding:18px 20px;
+  border-radius:22px;
+  background:linear-gradient(135deg,#ffffff 0%,#f8fbff 100%);
+  text-align:left;
+  transition:transform .4s var(--bounce), box-shadow .35s var(--ease);
+  overflow:hidden;
+  min-height:88px;
+  isolation:isolate;
+  cursor:pointer;
+  box-shadow:0 4px 14px -10px rgba(15,23,42,.18);
+}
+.sem-btn::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  border-radius:22px;
+  padding:2px;
+  background:linear-gradient(135deg,#dbeafe,#e0e7ff,#f3e8ff);
+  -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor;
+  mask-composite:exclude;
+  z-index:1;
+  transition:background .4s var(--ease);
+}
+.sem-btn::after{
+  content:'';
+  position:absolute;
+  inset:2px;
+  border-radius:20px;
+  background:linear-gradient(135deg,#ffffff,#f8fbff);
+  z-index:0;
+  transition:background .4s var(--ease);
+}
 .sem-btn > *{position:relative;z-index:2;}
-.sem-btn:hover{transform:translateY(-3px);}
+.sem-btn:hover{
+  transform:translateY(-3px);
+  box-shadow:0 18px 34px -20px rgba(37,99,235,.5);
+}
+.sem-btn.active{
+  transform:translateY(-2px);
+  box-shadow:0 20px 38px -20px rgba(37,99,235,.75);
+}
 .sem-btn.active::before{background:linear-gradient(135deg,#2563eb,#6366f1,#a855f7);}
-.sem-num{flex:0 0 auto;font-size:34px;font-weight:800;letter-spacing:-2.5px;line-height:1;color:#cbd5e1;}
-.sem-btn.active .sem-num{background:linear-gradient(135deg,#2563eb,#6366f1);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;transform:scale(1.08);}
-.sem-name{font-weight:800;font-size:16px;color:var(--ink);}
+.sem-btn.active::after{background:linear-gradient(135deg,#eff6ff,#e0e7ff);}
+
+.sem-icon{
+  flex:0 0 46px;
+  width:46px;
+  height:46px;
+  border-radius:14px;
+  display:grid;
+  place-items:center;
+  font-size:22px;
+  line-height:1;
+  background:linear-gradient(135deg,#eaf1ff,#dbeafe);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.75), 0 6px 14px -8px rgba(37,99,235,.35);
+  transition:transform .4s var(--bounce), background .3s, box-shadow .3s;
+}
+.sem-btn.active .sem-icon{
+  background:linear-gradient(135deg,#2563eb,#6366f1);
+  transform:scale(1.06) rotate(-4deg);
+  box-shadow:0 10px 20px -8px rgba(37,99,235,.75), inset 0 1px 0 rgba(255,255,255,.25);
+}
+.sem-icon-inner{display:block;filter:drop-shadow(0 1px 1px rgba(0,0,0,.15));}
+.sem-btn.active .sem-icon-inner{filter:drop-shadow(0 1px 1px rgba(0,0,0,.4));}
+
+.sem-info{
+  flex:1;
+  min-width:0;
+  display:flex;
+  flex-direction:column;
+  line-height:1.2;
+}
+.sem-name{
+  font-weight:800;
+  font-size:15px;
+  color:var(--ink);
+  letter-spacing:-.2px;
+  transition:color .3s;
+  word-break:break-word;
+}
 .sem-btn.active .sem-name{color:#1d4ed8;}
-.sem-sub{font-size:12px;color:var(--muted);margin-top:3px;font-weight:600;}
+.sem-sub{
+  font-size:11px;
+  color:var(--muted);
+  margin-top:5px;
+  font-weight:700;
+  letter-spacing:.2px;
+  display:flex;
+  align-items:center;
+  gap:5px;
+  line-height:1.3;
+  word-break:break-word;
+}
+.sem-sub::before{
+  content:'';
+  flex:0 0 5px;
+  width:5px;
+  height:5px;
+  border-radius:50%;
+  background:currentColor;
+  opacity:.6;
+}
+.sem-btn.active .sem-sub{color:#4338ca;}
+
+.sem-check{
+  position:absolute;
+  top:10px;
+  right:10px;
+  width:22px;
+  height:22px;
+  border-radius:50%;
+  background:linear-gradient(135deg,#2563eb,#6366f1);
+  color:#fff;
+  display:grid;
+  place-items:center;
+  font-size:11px;
+  font-weight:800;
+  opacity:0;
+  transform:scale(.5) rotate(-90deg);
+  transition:opacity .35s, transform .5s var(--bounce);
+  box-shadow:0 6px 14px -4px rgba(37,99,235,.75), inset 0 1px 0 rgba(255,255,255,.3);
+  z-index:3;
+}
+.sem-btn.active .sem-check{
+  opacity:1;
+  transform:scale(1) rotate(0deg);
+}
+
+@media (max-width:640px){
+  .sem-switch{
+    grid-template-columns:1fr;
+    gap:10px;
+    margin-bottom:20px;
+  }
+  .sem-btn{
+    padding:14px 16px;
+    min-height:74px;
+    border-radius:18px;
+    gap:12px;
+  }
+  .sem-btn::before{border-radius:18px;}
+  .sem-btn::after{border-radius:16px;}
+  .sem-icon{
+    flex:0 0 42px;
+    width:42px;
+    height:42px;
+    font-size:20px;
+    border-radius:12px;
+  }
+  .sem-name{font-size:14px;}
+  .sem-sub{font-size:10.5px;margin-top:4px;}
+  .sem-check{width:20px;height:20px;font-size:10px;top:8px;right:8px;}
+}
+
+@media (max-width:380px){
+  .sem-btn{padding:12px 14px;gap:10px;min-height:68px;}
+  .sem-icon{flex:0 0 38px;width:38px;height:38px;font-size:18px;border-radius:11px;}
+  .sem-name{font-size:13.5px;}
+  .sem-sub{font-size:10px;}
+}
+/* ============ /SEMESTER SWITCH ============ */
+
 .stream-rail{display:flex;gap:12px;overflow-x:auto;padding:6px 6px 16px;margin-bottom:24px;scrollbar-width:thin;-webkit-overflow-scrolling:touch;scroll-snap-type:x proximity;}
 .stream-rail::-webkit-scrollbar{height:5px;}
 .stream-rail::-webkit-scrollbar-thumb{background:#d3dcea;border-radius:999px;}
@@ -239,7 +404,6 @@ section{scroll-margin-top:calc(var(--header-h) + 20px);}
 .cta-btn .tg-ic{width:24px;height:24px;flex:0 0 24px;display:grid;place-items:center;color:#f7e07a;}
 .cta-btn .tg-ic svg{width:24px;height:24px;}
 
-/* CTA STATUS BADGE */
 .cta-status-badge{display:none;margin-top:18px;align-items:center;gap:10px;padding:10px 18px;border-radius:999px;background:rgba(34,197,94,.14);border:1px solid rgba(34,197,94,.45);color:#22c55e;font-weight:800;font-size:12.5px;letter-spacing:.4px;width:fit-content;margin-left:auto;margin-right:auto;}
 .cta-status-badge.show{display:inline-flex;}
 .cta-status-badge .dot{width:8px;height:8px;border-radius:50%;background:#22c55e;box-shadow:0 0 8px #22c55e;animation:livePulse 2s infinite;}
@@ -284,7 +448,6 @@ section{scroll-margin-top:calc(var(--header-h) + 20px);}
 .pl-title{color:#fff;font-size:13px;font-weight:700;line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
 .pl-tag{display:inline-block;color:rgba(255,255,255,.5);font-size:10px;font-weight:800;letter-spacing:1px;text-transform:uppercase;margin-top:5px;background:rgba(255,255,255,.06);padding:2px 8px;border-radius:999px;}
 
-/* REG MODAL */
 .reg-modal{position:fixed;inset:0;z-index:150;background:rgba(5,9,18,.86);backdrop-filter:blur(20px);display:flex;align-items:center;justify-content:center;padding:14px;opacity:0;visibility:hidden;transition:opacity .35s;overflow-y:auto;}
 .reg-modal.open{opacity:1;visibility:visible;}
 .reg-shell{position:relative;width:100%;max-width:460px;max-height:calc(100dvh - 28px);overflow-y:auto;background:linear-gradient(160deg,#ffffff 0%,#f8fbff 100%);border-radius:24px;padding:22px 22px 24px;box-shadow:0 50px 100px -40px rgba(0,0,0,.9);transform:translateY(28px) scale(.96);opacity:0;transition:transform .5s var(--bounce),opacity .35s;}
@@ -334,7 +497,6 @@ section{scroll-margin-top:calc(var(--header-h) + 20px);}
 .reg-success .ref{display:inline-block;margin-top:12px;padding:9px 16px;border-radius:10px;background:#f8fbff;border:1px dashed var(--blue);color:var(--blue);font-size:14px;font-weight:800;letter-spacing:1.2px;cursor:pointer;}
 .ref-hint{margin-top:8px;font-size:11.5px;font-weight:700;color:var(--muted);text-align:center;}
 
-/* STS MODAL */
 .sts-modal{position:fixed;inset:0;z-index:160;background:rgba(5,9,18,.86);backdrop-filter:blur(20px);display:flex;align-items:center;justify-content:center;padding:16px;opacity:0;visibility:hidden;transition:opacity .35s;overflow-y:auto;}
 .sts-modal.open{opacity:1;visibility:visible;}
 .sts-shell{position:relative;width:100%;max-width:470px;max-height:calc(100dvh - 32px);overflow-y:auto;background:linear-gradient(160deg,#ffffff 0%,#f8fbff 100%);border-radius:24px;padding:24px 22px 22px;transform:translateY(28px) scale(.96);opacity:0;transition:transform .5s var(--bounce),opacity .35s;}
@@ -372,7 +534,6 @@ section{scroll-margin-top:calc(var(--header-h) + 20px);}
 .sts-loading{text-align:center;padding:40px 10px;}
 .sts-spinner{display:inline-block;width:46px;height:46px;border-radius:50%;border:3px solid rgba(37,99,235,.18);border-top-color:#2563eb;border-right-color:#a855f7;animation:spin 1s linear infinite;}
 
-/* LOADING */
 .loading-screen{position:fixed;inset:0;z-index:180;background:linear-gradient(160deg,#0b1220 0%,#131f3d 100%);display:none;flex-direction:column;align-items:center;justify-content:center;padding:24px;text-align:center;}
 .loading-screen.show{display:flex;}
 .rl-logo-ring{position:relative;width:96px;height:96px;display:grid;place-items:center;margin-bottom:18px;}
@@ -382,7 +543,6 @@ section{scroll-margin-top:calc(var(--header-h) + 20px);}
 .rl-text{color:#fff;font-size:15px;font-weight:800;margin-bottom:6px;}
 .rl-sub{color:rgba(255,255,255,.7);font-size:12px;font-weight:600;max-width:260px;}
 
-/* ERROR MODAL */
 .err-modal{position:fixed;inset:0;z-index:200;background:rgba(5,9,18,.72);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;visibility:hidden;transition:opacity .3s;}
 .err-modal.open{opacity:1;visibility:visible;}
 .err-box{background:#fff;border-radius:22px;padding:28px 24px 22px;max-width:380px;width:100%;text-align:center;transform:translateY(20px) scale(.94);opacity:0;transition:transform .4s var(--bounce);}
@@ -395,7 +555,6 @@ section{scroll-margin-top:calc(var(--header-h) + 20px);}
 .err-btn.primary{background:linear-gradient(135deg,#2563eb,#1d4ed8);color:#fff;}
 .err-btn.ghost{background:#f8fafc;color:var(--ink);border:2px solid var(--line);}
 
-/* CHOICE MODAL */
 .choice-modal{position:fixed;inset:0;z-index:170;background:rgba(5,9,18,.85);backdrop-filter:blur(20px);display:flex;align-items:center;justify-content:center;padding:16px;opacity:0;visibility:hidden;transition:opacity .35s;overflow-y:auto;}
 .choice-modal.open{opacity:1;visibility:visible;}
 .choice-box{position:relative;width:100%;max-width:440px;background:linear-gradient(160deg,#fff 0%,#f8fbff 100%);border-radius:24px;padding:26px 20px 20px;transform:translateY(28px) scale(.95);opacity:0;transition:transform .5s var(--bounce),opacity .35s;}
@@ -417,7 +576,6 @@ section{scroll-margin-top:calc(var(--header-h) + 20px);}
 .co-arrow{flex:0 0 22px;width:22px;height:22px;display:grid;place-items:center;color:var(--muted);}
 .co-arrow svg{width:17px;height:17px;}
 
-/* BRANDED PROMPT */
 .abj-input-modal{position:fixed;inset:0;z-index:175;background:rgba(5,9,18,.85);backdrop-filter:blur(20px);display:flex;align-items:center;justify-content:center;padding:16px;opacity:0;visibility:hidden;transition:opacity .3s;}
 .abj-input-modal.open{opacity:1;visibility:visible;}
 .abj-input-box{position:relative;width:100%;max-width:420px;background:linear-gradient(160deg,#fff 0%,#f8fbff 100%);border-radius:24px;padding:26px 22px 20px;transform:translateY(28px) scale(.95);opacity:0;transition:transform .5s var(--bounce),opacity .35s;}
@@ -445,7 +603,6 @@ section{scroll-margin-top:calc(var(--header-h) + 20px);}
 .abj-confirm-box h3{margin:0 0 8px;font-size:18px;font-weight:800;color:var(--ink);}
 .abj-confirm-box p{margin:0 0 20px;font-size:13.5px;color:var(--muted);}
 
-/* CHAT WIDGET */
 .abj-chat-fab{position:fixed;right:18px;bottom:18px;z-index:80;width:60px;height:60px;border-radius:50%;background:linear-gradient(135deg,#2563eb,#1d4ed8);color:#fff;display:grid;place-items:center;box-shadow:0 20px 40px -14px rgba(37,99,235,.9),inset 0 0 0 2px rgba(247,224,122,.85);cursor:pointer;transition:transform .35s var(--bounce),opacity .3s;}
 .abj-chat-fab:hover{transform:translateY(-3px) scale(1.05);}
 .abj-chat-fab svg{width:28px;height:28px;}
@@ -582,10 +739,28 @@ body:has(.abj-chat-panel.open) .abj-chat-fab{opacity:0;transform:scale(.6);point
     <div class="wrap">
       <div class="section-head"><span class="eyebrow">Curriculum</span><h2>What You'll Study</h2><p>Complete course lists for both semesters. Tap any course to see chapters, credit hours, exam breakdown, and a demo video.</p></div>
       <div class="cur-shell">
+
+        <!-- ===== SEMESTER SWITCH (redesigned) ===== -->
         <div class="sem-switch" id="semSwitch">
-          <button class="sem-btn active" data-sem="first" type="button"><span class="sem-num">01</span><span class="sem-info"><span class="sem-name">First Semester</span><span class="sem-sub">Foundation · 2 streams</span></span></button>
-          <button class="sem-btn" data-sem="second" type="button"><span class="sem-num">02</span><span class="sem-info"><span class="sem-name">Second Semester</span><span class="sem-sub">Specialization · 3 streams</span></span></button>
+          <button class="sem-btn active" data-sem="first" type="button">
+            <span class="sem-icon"><span class="sem-icon-inner">📘</span></span>
+            <span class="sem-info">
+              <span class="sem-name">First Semester</span>
+              <span class="sem-sub">Foundation · 2 streams</span>
+            </span>
+            <span class="sem-check">✓</span>
+          </button>
+          <button class="sem-btn" data-sem="second" type="button">
+            <span class="sem-icon"><span class="sem-icon-inner">📗</span></span>
+            <span class="sem-info">
+              <span class="sem-name">Second Semester</span>
+              <span class="sem-sub">Specialization · 3 streams</span>
+            </span>
+            <span class="sem-check">✓</span>
+          </button>
         </div>
+        <!-- ===== /SEMESTER SWITCH ===== -->
+
         <div class="stream-rail" id="streamRail"></div>
         <div class="course-stage" id="courseStage"></div>
       </div>
@@ -1723,7 +1898,7 @@ document.addEventListener('keydown', e => {
   if (regModal.classList.contains('open') && !regLoading.classList.contains('show')) { closeReg(); return; }
 });
 
-/* ---------- LIVE CHAT (with dedup fix) ---------- */
+/* ---------- LIVE CHAT ---------- */
 (function(){
   const SESSION_KEY = 'abj_chat_session';
   const GUEST_KEY = 'abj_chat_guest_name';
@@ -1771,7 +1946,6 @@ document.addEventListener('keydown', e => {
   let recStarted = 0;
   let recTimer = null;
 
-  // Dedup
   const renderedIds = new Set();
   let isFetching = false;
 
@@ -1977,7 +2151,6 @@ document.addEventListener('keydown', e => {
       const data = await res.json();
       if (!res.ok) { alert(data.error || 'Could not send.'); return; }
 
-      // Append the new message immediately (no full re-fetch)
       if (data.item){
         const el = renderMessage(data.item);
         if (el) { body.appendChild(el); body.scrollTop = body.scrollHeight; }
