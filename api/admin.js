@@ -10,9 +10,6 @@ const {
   json, ADMIN_PASSWORD,
 } = require('./_lib');
 
-/* ============================================================
-   ROUTER
-   ============================================================ */
 const ROUTES = {
   login:        handleLogin,
   list:         handleList,
@@ -118,7 +115,7 @@ async function handleList(req, res) {
 }
 
 /* ============================================================
-   3. APPROVE — now uses mutex-protected invite
+   3. APPROVE
    ============================================================ */
 async function handleApprove(req, res) {
   if (req.method !== 'POST') return json(res, 405, { error: 'Method not allowed' });
@@ -196,13 +193,15 @@ async function handleReject(req, res) {
 }
 
 /* ============================================================
-   5. SETTINGS
+   5. SETTINGS — includes new bot keys
    ============================================================ */
 const SYSTEM_KEYS = [
   'tg_api_id',
   'tg_api_hash',
   'tg_session',
   'tg_channel_id',
+  'tg_bot_token',
+  'tg_invite_mode',
   'verify_api_url',
   'verify_api_key',
 ];
@@ -666,7 +665,7 @@ async function handleTestimonials(req, res) {
 }
 
 /* ============================================================
-   9. CHATS — optimized for faster admin UI (limit 100 not 500)
+   9. CHATS
    ============================================================ */
 async function handleChats(req, res) {
   const admin = requireAdmin(req);
@@ -678,13 +677,11 @@ async function handleChats(req, res) {
     const sessionId = String(req.query.session_id || '').trim();
 
     if (sessionId) {
-      // Fetch latest 100 messages (was 500)
       const q = await supabaseQuery(
         `chat_messages?session_id=eq.${encodeURIComponent(sessionId)}` +
         `&order=created_at.desc&limit=100` +
         `&select=id,sender,sender_name,message_type,content,file_url,file_name,is_read,created_at`
       );
-      // Reverse to chronological order
       const items = (q.data || []).slice().reverse();
 
       await supabaseUpdate(
@@ -694,7 +691,6 @@ async function handleChats(req, res) {
       return json(res, 200, { items });
     }
 
-    // Session list — fetch 300 most recent for grouping
     const q = await supabaseQuery(
       `chat_messages?order=created_at.desc&limit=300` +
       `&select=session_id,registration_id,sender,content,message_type,is_read,created_at,file_name`
