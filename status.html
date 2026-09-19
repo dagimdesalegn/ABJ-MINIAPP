@@ -20,7 +20,7 @@ body{margin:0;font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:li
 label{display:block;font-size:11.5px;font-weight:800;letter-spacing:1.3px;text-transform:uppercase;color:var(--muted);margin-bottom:8px;}
 input{width:100%;padding:14px 16px;border-radius:14px;background:#f8fbff;border:2px solid var(--line);font-size:15px;font-weight:700;color:var(--ink);outline:none;transition:border-color .2s,box-shadow .2s;letter-spacing:.6px;text-transform:uppercase;}
 input:focus{border-color:var(--blue);background:#fff;box-shadow:0 0 0 4px rgba(37,99,235,.12);}
-button{margin-top:14px;width:100%;padding:15px 20px;border-radius:14px;font-size:15px;font-weight:800;letter-spacing:.3px;color:#fff;background:linear-gradient(135deg,#2563eb,#1d4ed8);box-shadow:0 14px 30px -14px rgba(37,99,235,.9);cursor:pointer;border:none;transition:transform .25s var(--bounce),box-shadow .25s;}
+button{margin-top:14px;width:100%;padding:15px 20px;border-radius:14px;font-size:15px;font-weight:800;letter-spacing:.3px;color:#fff;background:linear-gradient(135deg,#2563eb,#1d4ed8);box-shadow:0 14px 30px -14px rgba(37,99,235,.9);cursor:pointer;border:none;transition:transform .25s var(--bounce),box-shadow .25s;font-family:inherit;}
 button:hover{transform:translateY(-2px);box-shadow:0 20px 40px -14px rgba(37,99,235,1);}
 button:disabled{opacity:.6;cursor:not-allowed;transform:none;}
 .result{margin-top:22px;padding:20px;border-radius:16px;display:none;}
@@ -38,6 +38,10 @@ button:disabled{opacity:.6;cursor:not-allowed;transform:none;}
 .result .row span:last-child{font-weight:800;}
 .invite-btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;margin-top:16px;width:100%;padding:16px 22px;border-radius:14px;background:linear-gradient(135deg,#f7e07a,#d4af37);color:#0b1220;font-weight:800;font-size:15px;text-decoration:none;box-shadow:0 14px 30px -14px rgba(212,175,55,.95);transition:transform .25s var(--bounce);}
 .invite-btn:hover{transform:translateY(-2px);}
+.warn{margin-top:14px;padding:14px 16px;border-radius:14px;background:linear-gradient(135deg,#fff8e1,#fde9a8);border:2px solid rgba(212,175,55,.55);}
+.warn strong{display:block;font-size:12.5px;font-weight:800;color:#8a6516;margin-bottom:6px;}
+.warn ul{margin:0;padding-left:18px;list-style:disc;}
+.warn li{font-size:12.5px;color:#4a3a10;line-height:1.6;font-weight:600;margin-bottom:3px;}
 .back{display:inline-flex;align-items:center;gap:6px;margin-top:20px;color:var(--muted);font-weight:700;font-size:13px;text-decoration:none;}
 .back:hover{color:var(--blue);}
 </style>
@@ -46,13 +50,10 @@ button:disabled{opacity:.6;cursor:not-allowed;transform:none;}
 <div class="card">
   <div class="head">
     <div class="logo"><img src="logo.jpg" alt="ABJ" /></div>
-    <div>
-      <h1>Check Registration Status</h1>
-      <p>ABJ Tutorial</p>
-    </div>
+    <div><h1>Check Registration Status</h1><p>ABJ Tutorial</p></div>
   </div>
-  <label for="regId">Your Registration ID</label>
-  <input id="regId" type="text" placeholder="ABJ-XXXXXXXXXX" autocomplete="off" maxlength="20" />
+  <label for="regId">Your Student ID</label>
+  <input id="regId" type="text" placeholder="RU0562/15" autocomplete="off" maxlength="20" />
   <button id="checkBtn" type="button">Check Status</button>
   <div class="result" id="result"></div>
   <a class="back" href="/">← Back to home</a>
@@ -69,7 +70,7 @@ btn.addEventListener('click', check);
 
 async function check(){
   const id = input.value.trim();
-  if (!/^ABJ-[A-Z0-9]{8,16}$/i.test(id)) { showError('Please enter a valid ABJ ID.'); return; }
+  if (id.length < 3) { showError('Please enter a valid Student ID.'); return; }
   btn.disabled = true; btn.textContent = 'Checking...';
   out.classList.remove('show');
   try {
@@ -87,17 +88,18 @@ async function check(){
 function render(d){
   const cls = d.status === 'approved' ? 'approved' : d.status === 'rejected' ? 'rejected' : 'pending';
   const icon = d.status === 'approved' ? '✅' : d.status === 'rejected' ? '❌' : '⏳';
-  const title = d.status === 'approved' ? 'Approved' : d.status === 'rejected' ? 'Rejected' : 'Under Review';
+  const title = d.status === 'approved' ? "You're In! 🎉" : d.status === 'rejected' ? 'Rejected' : 'Under Review';
   let html = `<h3>${icon} ${title}</h3>`;
   if (d.status === 'pending') html += `<p>Your payment is being reviewed. We'll approve it soon.</p>`;
   if (d.status === 'rejected' && d.rejection_reason) html += `<p>${esc(d.rejection_reason)}</p>`;
+  html += `<div class="row"><span>Registration ID</span><span>${esc(d.id_number || d.public_id)}</span></div>`;
   html += `<div class="row"><span>Name</span><span>${esc(d.full_name)}</span></div>`;
   html += `<div class="row"><span>Semester</span><span>${esc(d.semester)}</span></div>`;
   html += `<div class="row"><span>Stream</span><span>${esc(d.stream)}</span></div>`;
   html += `<div class="row"><span>Submitted</span><span>${new Date(d.created_at).toLocaleDateString()}</span></div>`;
   if (d.status === 'approved' && d.invite_link){
-    html += `<p style="margin-top:12px;font-weight:700;">🎉 You're in! Tap below to join — <b>the link works only once</b>.</p>`;
-    html += `<a class="invite-btn" href="${esc(d.invite_link)}" target="_blank" rel="noopener">🌟 Join Main Channel</a>`;
+    html += `<div class="warn"><strong>⚠️ One-time invite link</strong><ul><li>Works <b>only once</b>, expires in <b>7 days</b>.</li><li><b>Never share</b> — anyone with the link uses your seat.</li></ul></div>`;
+    html += `<a class="invite-btn" href="${esc(d.invite_link)}" target="_blank" rel="noopener">🌟 Join the Channel Now</a>`;
   }
   out.className = 'result show ' + cls;
   out.innerHTML = html;
@@ -107,9 +109,7 @@ function showError(msg){
   out.className = 'result show error';
   out.innerHTML = `<h3>⚠️ Error</h3><p>${esc(msg)}</p>`;
 }
-function esc(s){
-  return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-}
+function esc(s){ return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
 </script>
 </body>
 </html>

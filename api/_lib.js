@@ -341,9 +341,8 @@ async function verifyPayment(reference, suffix) {
 }
 
 /* ============================================================
-   Telegram one-time invite links — reads from DB via getConfig()
+   Telegram one-time invite links
    ============================================================ */
-
 async function createInviteViaUser(cfg, { channelId, title, expireDate }) {
   const { TelegramClient, Api } = require('telegram');
   const { StringSession } = require('telegram/sessions');
@@ -448,6 +447,45 @@ async function uploadScreenshotToStorage(publicId, base64Data, mimeType) {
 }
 
 /* ============================================================
+   Chat media upload → Supabase Storage (chat/ prefix)
+   ============================================================ */
+async function uploadChatMedia(sessionId, base64Data, mimeType, fileName) {
+  if (!SUPABASE_URL || !SUPABASE_SERVICE_KEY) return { ok: false, error: 'Storage not configured.' };
+  const safe = String(sessionId).replace(/[^A-Za-z0-9_-]/g, '').slice(0, 40);
+  const ext = (fileName && fileName.split('.').pop()) ||
+              (mimeType || 'image/jpeg').split('/')[1]?.replace('jpeg', 'jpg') || 'bin';
+  const path = `chat/${safe}-${Date.now()}.${ext}`;
+
+  let buffer;
+  try {
+    buffer = Buffer.from(String(base64Data).replace(/^data:[^,]+,/, ''), 'base64');
+  } catch { return { ok: false, error: 'Invalid file data.' }; }
+
+  if (buffer.length > 4 * 1024 * 1024) return { ok: false, error: 'File too large (max 4 MB).' };
+
+  const res = await fetch(`${SUPABASE_URL}/storage/v1/object/screenshots/${path}`, {
+    method: 'POST',
+    headers: {
+      apikey: SUPABASE_SERVICE_KEY,
+      Authorization: `Bearer ${SUPABASE_SERVICE_KEY}`,
+      'Content-Type': mimeType || 'application/octet-stream',
+      'x-upsert': 'true',
+    },
+    body: buffer,
+  });
+
+  if (!res.ok) {
+    const t = await res.text();
+    return { ok: false, error: 'Upload failed: ' + t.slice(0, 120) };
+  }
+  return { ok: true, url: `${SUPABASE_URL}/storage/v1/object/public/screenshots/${path}` };
+}
+
+function randomSessionId() {
+  return 'chat-' + crypto.randomBytes(12).toString('hex');
+}
+
+/* ============================================================
    Rate limiting
    ============================================================ */
 async function checkRateLimit(ip, maxPerHour = 10) {
@@ -519,7 +557,7 @@ module.exports = {
   getConfig, invalidateConfigCache,
   hashPassword, verifyPassword,
   signJWT, verifyJWT, requireAdmin, requireSuper,
-  verifyPayment, createTelegramInvite, uploadScreenshotToStorage,
+  verifyPayment, createTelegramInvite, uploadScreenshotToStorage, uploadChatMedia, randomSessionId,
   checkRateLimit, validateRegistration, randomPublicId,
   getClientIp, json,
   ADMIN_PASSWORD,

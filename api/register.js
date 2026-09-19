@@ -1,6 +1,6 @@
 const {
-  supabaseQuery, supabaseInsert, verifyPayment, createTelegramInvite,
-  checkRateLimit, validateRegistration, randomPublicId,
+  supabaseQuery, supabaseInsert, supabaseDelete, verifyPayment, createTelegramInvite,
+  checkRateLimit, validateRegistration,
   getClientIp, getFee, json,
 } = require('./_lib');
 
@@ -22,25 +22,41 @@ module.exports = async (req, res) => {
 
   const ref = String(transaction_ref).trim();
   const suffix = transaction_suffix ? String(transaction_suffix).trim() : null;
+  const rawId = id_number.trim().toUpperCase().replace(/\s+/g, '');
+  const public_id = rawId.replace(/\//g, '-');
 
-  /* 1. Reference uniqueness */
-  const existing = await supabaseQuery(
+  const existingUni = await supabaseQuery(
+    `registrations?public_id=eq.${encodeURIComponent(public_id)}&select=public_id,status,transaction_ref`
+  );
+  if (existingUni.ok && existingUni.data && existingUni.data.length > 0) {
+    const prev = existingUni.data[0];
+    if (prev.status === 'pending' || prev.status === 'approved') {
+      return json(res, 409, {
+        error: 'This Student ID is already registered. Use "Check My Status" to see your registration.',
+        code: 'already_registered',
+        public_id: prev.public_id,
+      });
+    }
+    if (prev.status === 'rejected') {
+      await supabaseDelete(`registrations?public_id=eq.${encodeURIComponent(prev.public_id)}`);
+    }
+  }
+
+  const existingRef = await supabaseQuery(
     `registrations?transaction_ref=eq.${encodeURIComponent(ref)}&select=public_id`
   );
-  if (existing.ok && existing.data && existing.data.length > 0) {
+  if (existingRef.ok && existingRef.data && existingRef.data.length > 0) {
     return json(res, 409, { error: 'This transaction reference has already been used.' });
   }
 
-  /* 2. Verify with Verify.ET */
   const verify = await verifyPayment(ref, suffix);
   const result = verify.result;
-  const public_id = randomPublicId();
 
   const baseRecord = {
     public_id,
     full_name: full_name.trim().split(/\s+/)
       .map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(' '),
-    id_number: id_number.trim().toUpperCase().replace(/\s+/g, ''),
+    id_number: rawId,
     semester, stream, gender,
     payment_method,
     transaction_ref: ref,
@@ -51,7 +67,6 @@ module.exports = async (req, res) => {
     verify_response: verify,
   };
 
-  /* ---------- CASE A — HARD FAILURES: reject outright ---------- */
   if (result === 'failed' || result === 'mismatch' || result === 'duplicate' || result === 'invalid') {
     await supabaseInsert('registrations', {
       ...baseRecord,
@@ -67,7 +82,6 @@ module.exports = async (req, res) => {
     });
   }
 
-  /* ---------- CASE B — SUCCESS: auto-approve + create invite ---------- */
   if (result === 'success') {
     const expected = await getFee();
     const received = parseFloat(verify.amount);
@@ -88,7 +102,6 @@ module.exports = async (req, res) => {
       });
     }
 
-    /* Try to auto-create invite */
     let invite = null, inviteErr = null;
     try {
       invite = await createTelegramInvite(`ABJ-${public_id}`);
@@ -119,6 +132,7 @@ module.exports = async (req, res) => {
     return json(res, 200, {
       success: true,
       public_id,
+      id_number: rawId,
       status: record.status,
       auto_approved: true,
       invite_link: invite ? invite.invite_link : null,
@@ -128,7 +142,6 @@ module.exports = async (req, res) => {
     });
   }
 
-  /* ---------- CASE C — PENDING / SERVICE ERROR: needs screenshot ---------- */
   const needsScreenshot = ['pending', 'service_error', 'not_found'].includes(result);
 
   await supabaseInsert('registrations', {
@@ -142,6 +155,7 @@ module.exports = async (req, res) => {
   return json(res, 200, {
     success: true,
     public_id,
+    id_number: rawId,
     status: 'pending',
     needs_screenshot: needsScreenshot,
     verify_message: verify.message || null,

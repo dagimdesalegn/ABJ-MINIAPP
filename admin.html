@@ -13,7 +13,6 @@
 html,body{margin:0;padding:0;overflow-x:hidden;}
 body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:radial-gradient(1200px 800px at 10% -10%,#1e3a8a 0%,rgba(30,58,138,0) 50%),radial-gradient(900px 700px at 100% 110%,#4c1d95 0%,rgba(76,29,149,0) 55%),linear-gradient(135deg,#0b1220 0%,#0f1a2f 45%,#131f3d 100%);color:#fff;min-height:100vh;-webkit-font-smoothing:antialiased;}
 
-/* Floating ambient orbs */
 .ambient{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;}
 .ambient::before,.ambient::after{content:'';position:absolute;border-radius:50%;filter:blur(90px);opacity:.35;}
 .ambient::before{width:500px;height:500px;background:radial-gradient(circle,#3b82f6,transparent 70%);top:-180px;left:-120px;animation:orbA 22s ease-in-out infinite;}
@@ -21,9 +20,6 @@ body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:radial-grad
 @keyframes orbA{0%,100%{transform:translate(0,0) scale(1);}50%{transform:translate(60px,40px) scale(1.15);}}
 @keyframes orbB{0%,100%{transform:translate(0,0) scale(1);}50%{transform:translate(-50px,-30px) scale(1.1);}}
 
-/* ============================================================
-   LOGIN
-   ============================================================ */
 #loginView{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:20px;padding-top:calc(20px + env(safe-area-inset-top));padding-bottom:calc(20px + env(safe-area-inset-bottom));overflow-y:auto;z-index:5;}
 .login-card{position:relative;width:100%;max-width:440px;margin:auto;padding:44px 36px 36px;border-radius:28px;background:linear-gradient(135deg,rgba(255,255,255,.09),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.14);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);box-shadow:0 40px 90px -30px rgba(0,0,0,.85),0 0 80px -30px rgba(59,130,246,.55),inset 0 1px 0 rgba(255,255,255,.08);animation:loginIn .7s var(--bounce) both;}
 @keyframes loginIn{from{opacity:0;transform:translateY(20px) scale(.96);}to{opacity:1;transform:none;}}
@@ -42,7 +38,7 @@ body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:radial-grad
 .login-input{width:100%;padding:15px 18px;border-radius:14px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.16);color:#fff;font-size:15px;font-weight:600;outline:none;transition:all .3s var(--ease);margin-bottom:16px;font-family:inherit;}
 .login-input:focus{border-color:var(--gold-1);background:rgba(255,255,255,.13);box-shadow:0 0 0 4px rgba(247,224,122,.12),0 0 30px -10px rgba(247,224,122,.5);}
 .login-input::placeholder{color:rgba(255,255,255,.4);}
-.login-btn{position:relative;width:100%;padding:17px;border-radius:14px;font-size:15.5px;font-weight:800;letter-spacing:.4px;color:#0b1220;background:linear-gradient(135deg,#f7e07a 0%,#d4af37 45%,#8a6516 100%);background-size:200% 200%;border:none;cursor:pointer;box-shadow:0 20px 44px -16px rgba(212,175,55,1),inset 0 1px 0 rgba(255,255,255,.4);transition:transform .3s var(--bounce),box-shadow .35s var(--ease),background-position .6s var(--ease);overflow:hidden;margin-top:6px;}
+.login-btn{position:relative;width:100%;padding:17px;border-radius:14px;font-size:15.5px;font-weight:800;letter-spacing:.4px;color:#0b1220;background:linear-gradient(135deg,#f7e07a 0%,#d4af37 45%,#8a6516 100%);background-size:200% 200%;border:none;cursor:pointer;box-shadow:0 20px 44px -16px rgba(212,175,55,1),inset 0 1px 0 rgba(255,255,255,.4);transition:transform .3s var(--bounce),box-shadow .35s var(--ease),background-position .6s var(--ease);overflow:hidden;margin-top:6px;font-family:inherit;}
 .login-btn::after{content:'';position:absolute;top:0;left:-60%;width:50%;height:100%;background:linear-gradient(120deg,transparent,rgba(255,255,255,.55),transparent);transform:skewX(-22deg);animation:sheen 4s ease-in-out infinite;}
 @keyframes sheen{0%,75%{left:-60%;}100%{left:130%;}}
 .login-btn:hover:not(:disabled){transform:translateY(-3px);background-position:100% 50%;box-shadow:0 28px 60px -16px rgba(212,175,55,1),inset 0 1px 0 rgba(255,255,255,.45);}
@@ -57,9 +53,6 @@ body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:radial-grad
 .pw-toggle:hover{background:rgba(255,255,255,.14);color:#fff;}
 .pw-toggle svg{width:18px;height:18px;display:block;pointer-events:none;}
 
-/* ============================================================
-   DASHBOARD LAYOUT
-   ============================================================ */
 #dashView{position:relative;z-index:2;min-height:100vh;display:none;}
 #dashView.active{display:block;}
 
@@ -108,7 +101,6 @@ body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:radial-grad
 .mh-title h1{margin:0;font-size:clamp(20px,2.6vw,26px);font-weight:800;letter-spacing:-.6px;background:linear-gradient(100deg,#ffffff 30%,#fde9a8 60%,#a5b4fc 90%);background-size:200% auto;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:shineText 6s linear infinite;line-height:1.2;}
 .mh-title p{margin:5px 0 0;font-size:12px;font-weight:700;letter-spacing:1.3px;text-transform:uppercase;color:rgba(255,255,255,.55);}
 
-/* Stats */
 .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:28px;}
 .stat{position:relative;padding:22px 20px;border-radius:18px;background:linear-gradient(135deg,rgba(255,255,255,.07),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.1);overflow:hidden;transition:transform .35s var(--bounce),border-color .3s,box-shadow .3s;}
 .stat::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--c1,#f7e07a),var(--c2,#d4af37));opacity:.85;}
@@ -121,7 +113,6 @@ body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:radial-grad
 .stat .n{font-size:32px;font-weight:800;letter-spacing:-1.4px;line-height:1;background:linear-gradient(135deg,var(--c1),var(--c2));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}
 .stat .l{margin-top:10px;font-size:11px;font-weight:800;letter-spacing:1.3px;text-transform:uppercase;color:rgba(255,255,255,.6);}
 
-/* Tab content */
 .tab-content{display:none;}
 .tab-content.active{display:block;animation:fadeUp .4s var(--ease) both;}
 @keyframes fadeUp{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:none;}}
@@ -147,7 +138,6 @@ body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:radial-grad
 .empty{text-align:center;padding:70px 24px;color:rgba(255,255,255,.5);border:2px dashed rgba(255,255,255,.15);border-radius:20px;background:rgba(255,255,255,.02);}
 .empty .icon{font-size:54px;margin-bottom:16px;opacity:.6;}
 
-/* Buttons */
 .btn{padding:12px 22px;border-radius:12px;font-weight:800;font-size:13.5px;letter-spacing:.3px;cursor:pointer;border:none;transition:transform .25s var(--bounce),box-shadow .25s var(--ease),background .25s var(--ease);font-family:inherit;}
 .btn-ghost{background:rgba(255,255,255,.08);color:#fff;border:1px solid rgba(255,255,255,.14);}
 .btn-ghost:hover{background:rgba(255,255,255,.18);transform:translateY(-2px);}
@@ -162,7 +152,6 @@ body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:radial-grad
 .btn-add{background:linear-gradient(135deg,#2563eb,#1d4ed8);color:#fff;padding:14px 26px;font-size:14px;box-shadow:0 14px 30px -14px rgba(37,99,235,.9);}
 .btn-add:hover{transform:translateY(-2px);}
 
-/* Forms */
 .settings{display:grid;gap:18px;max-width:640px;}
 .field{display:flex;flex-direction:column;gap:8px;}
 .field label{font-size:11.5px;font-weight:800;letter-spacing:1.3px;text-transform:uppercase;color:rgba(255,255,255,.6);}
@@ -173,7 +162,6 @@ body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:radial-grad
 .field .pw-wrap{margin-bottom:0;}
 .sys-hr{border:none;border-top:1px solid rgba(255,255,255,.08);margin:14px 0;}
 
-/* Admin rows */
 .admin-list{display:grid;gap:12px;margin-top:24px;}
 .admin-row{display:flex;justify-content:space-between;align-items:center;gap:14px;padding:16px 20px;border-radius:16px;background:linear-gradient(135deg,rgba(255,255,255,.05),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.1);transition:border-color .25s;}
 .admin-row:hover{border-color:rgba(247,224,122,.25);}
@@ -183,13 +171,11 @@ body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:radial-grad
 .super-pill{display:inline-block;margin-left:8px;padding:3px 9px;border-radius:999px;font-size:9.5px;font-weight:800;letter-spacing:1.1px;text-transform:uppercase;background:linear-gradient(135deg,#f7e07a,#d4af37);color:#0b1220;}
 .admin-pill{display:inline-block;margin-left:8px;padding:3px 9px;border-radius:999px;font-size:9.5px;font-weight:800;letter-spacing:1.1px;text-transform:uppercase;background:rgba(255,255,255,.1);color:#cbd5e1;border:1px solid rgba(255,255,255,.15);}
 
-/* Toast */
 .toast{position:fixed;top:20px;right:20px;padding:15px 22px;border-radius:14px;font-weight:800;font-size:13.5px;color:#fff;box-shadow:0 20px 44px -14px rgba(0,0,0,.6);transform:translateY(-140%);transition:transform .4s var(--bounce);z-index:200;}
 .toast.show{transform:translateY(0);}
 .toast.ok{background:linear-gradient(135deg,#10b981,#059669);}
 .toast.err{background:linear-gradient(135deg,#ef4444,#dc2626);}
 
-/* Branded modal */
 .adm-modal{position:fixed;inset:0;z-index:250;background:rgba(5,9,18,.85);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);display:flex;align-items:center;justify-content:center;padding:18px;opacity:0;visibility:hidden;transition:opacity .35s var(--bounce),visibility .35s;overflow-y:auto;}
 .adm-modal.open{opacity:1;visibility:visible;}
 .adm-box{position:relative;width:100%;max-width:440px;max-height:calc(100dvh - 36px);overflow-y:auto;background:radial-gradient(420px 220px at 50% -10%,rgba(59,130,246,.30),transparent 70%),linear-gradient(160deg,#0f1a2f 0%,#131f3d 100%);border:1px solid rgba(255,255,255,.14);border-radius:26px;padding:26px 24px 24px;text-align:center;color:#fff;box-shadow:0 50px 100px -40px rgba(0,0,0,.95),0 0 90px -25px rgba(37,99,235,.55),inset 0 1px 0 rgba(255,255,255,.08);transform:translateY(28px) scale(.94);opacity:0;transition:transform .55s var(--bounce),opacity .4s;}
@@ -215,7 +201,6 @@ body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:radial-grad
 .adm-actions{display:flex;gap:10px;margin-top:22px;flex-wrap:wrap;}
 .adm-actions .btn{flex:1;min-width:130px;padding:14px 18px;font-size:13.5px;border-radius:12px;display:inline-flex;align-items:center;justify-content:center;gap:8px;}
 
-/* Telegram + Verify cards */
 .tg-card{padding:24px 26px;border-radius:20px;background:linear-gradient(135deg,rgba(255,255,255,.06),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.1);position:relative;overflow:hidden;max-width:640px;transition:border-color .3s,box-shadow .3s;}
 .tg-card.ok{border-color:rgba(52,211,153,.45);box-shadow:0 18px 40px -20px rgba(16,185,129,.55),0 0 0 1px rgba(52,211,153,.15);}
 .tg-card.bad{border-color:rgba(248,113,113,.35);}
@@ -236,7 +221,6 @@ body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:radial-grad
 .tg-actions{display:flex;gap:8px;margin-top:18px;flex-wrap:wrap;}
 .tg-actions .btn{flex:1;min-width:130px;padding:12px 16px;font-size:13px;}
 
-/* Telegram wizard */
 .tg-wiz{position:fixed;inset:0;z-index:260;background:rgba(5,9,18,.9);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);display:flex;align-items:center;justify-content:center;padding:16px;padding-top:calc(16px + env(safe-area-inset-top));padding-bottom:calc(16px + env(safe-area-inset-bottom));opacity:0;visibility:hidden;transition:opacity .3s,visibility .3s;overflow-y:auto;}
 .tg-wiz.open{opacity:1;visibility:visible;}
 .tg-wiz-box{position:relative;width:100%;max-width:440px;max-height:calc(100dvh - 32px);overflow-y:auto;background:radial-gradient(400px 200px at 50% -10%,rgba(59,130,246,.3),transparent 70%),linear-gradient(160deg,#0f1a2f 0%,#131f3d 100%);border:1px solid rgba(255,255,255,.14);border-radius:26px;padding:32px 26px 26px;color:#fff;box-shadow:0 50px 100px -40px rgba(0,0,0,.95),0 0 90px -25px rgba(37,99,235,.55);transform:translateY(24px) scale(.95);opacity:0;transition:transform .5s var(--bounce),opacity .35s;}
@@ -270,11 +254,26 @@ body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:radial-grad
 .tg-note{font-size:12px;color:#93c5fd;background:rgba(59,130,246,.08);border:1px solid rgba(59,130,246,.3);padding:12px 14px;border-radius:10px;line-height:1.55;margin-bottom:14px;}
 .tg-note b{color:#bfdbfe;}
 
-/* Sidebar overlay (mobile) */
 .sb-overlay{position:fixed;inset:0;background:rgba(5,9,18,.7);z-index:35;opacity:0;visibility:hidden;transition:opacity .3s,visibility .3s;}
 .sb-overlay.show{opacity:1;visibility:visible;}
 
-/* Responsive */
+/* ---------- LIVE CHATS ---------- */
+.chat-session-item{display:flex;flex-direction:column;gap:4px;padding:11px 12px;border-radius:12px;background:transparent;border:none;cursor:pointer;text-align:left;width:100%;color:rgba(255,255,255,.8);font-family:inherit;transition:background .2s;margin-bottom:4px;}
+.chat-session-item:hover{background:rgba(255,255,255,.06);}
+.chat-session-item.active{background:linear-gradient(135deg,rgba(247,224,122,.18),rgba(212,175,55,.08));color:#fff;}
+.chat-session-item .cs-id{font-size:12.5px;font-weight:800;letter-spacing:-.1px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.chat-session-item .cs-last{font-size:11px;color:rgba(255,255,255,.5);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.chat-session-item .cs-time{font-size:10px;color:rgba(255,255,255,.4);margin-top:2px;}
+.chat-session-item .cs-badge{background:linear-gradient(135deg,#f7e07a,#d4af37);color:#0b1220;font-size:10px;font-weight:800;padding:2px 7px;border-radius:999px;align-self:flex-start;margin-top:2px;}
+.chat-admin-msg{max-width:78%;padding:10px 13px;border-radius:14px;font-size:13px;line-height:1.5;word-break:break-word;overflow-wrap:anywhere;}
+.chat-admin-msg.user{align-self:flex-start;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.12);color:#fff;border-bottom-left-radius:4px;}
+.chat-admin-msg.admin{align-self:flex-end;background:linear-gradient(135deg,#2563eb,#1d4ed8);color:#fff;border-bottom-right-radius:4px;}
+.chat-admin-msg img{max-width:200px;border-radius:8px;display:block;cursor:pointer;}
+.chat-admin-msg audio{max-width:220px;display:block;}
+.chat-admin-msg a{color:#f7e07a;text-decoration:underline;font-weight:700;font-size:12px;}
+.chat-admin-msg .t{font-size:10px;opacity:.6;margin-top:4px;}
+.chat-admin-msg.admin .t{text-align:right;}
+
 @media (max-width:960px){
   .sidebar{transform:translateX(-100%);}
   .sidebar.show{transform:translateX(0);}
@@ -285,6 +284,7 @@ body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:radial-grad
   .stat .n{font-size:24px;}
   .tg-badge{position:static;margin-bottom:12px;display:inline-flex;}
   .tg-card-head{padding-right:0;}
+  #chatAdminView{grid-template-columns:1fr !important;}
 }
 @media (max-width:520px){
   .login-card{padding:32px 22px 26px;border-radius:22px;}
@@ -304,9 +304,6 @@ body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:radial-grad
 
 <div class="ambient" aria-hidden="true"></div>
 
-<!-- ============================================================
-     LOGIN
-     ============================================================ -->
 <div id="loginView">
   <div class="login-card">
     <div class="login-logo-ring">
@@ -331,9 +328,6 @@ body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:radial-grad
   </div>
 </div>
 
-<!-- ============================================================
-     DASHBOARD
-     ============================================================ -->
 <div id="dashView">
 
   <div class="sb-overlay" id="sbOverlay"></div>
@@ -364,6 +358,15 @@ body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:radial-grad
           <span class="ni-icon">❌</span>
           <span class="ni-text">Rejected</span>
           <span class="ni-badge" id="navRejected">0</span>
+        </button>
+      </div>
+
+      <div class="nav-section">
+        <div class="nav-label">Support</div>
+        <button class="nav-item tab" data-tab="chats" type="button">
+          <span class="ni-icon">💬</span>
+          <span class="ni-text">Live Chats</span>
+          <span class="ni-badge" id="navChats" style="display:none">0</span>
         </button>
       </div>
 
@@ -437,6 +440,27 @@ body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:radial-grad
     <div class="tab-content active" id="tab-pending"><div class="list" id="listPending"></div></div>
     <div class="tab-content" id="tab-approved"><div class="list" id="listApproved"></div></div>
     <div class="tab-content" id="tab-rejected"><div class="list" id="listRejected"></div></div>
+
+    <div class="tab-content" id="tab-chats">
+      <div id="chatAdminView" style="display:grid;grid-template-columns:300px 1fr;gap:14px;min-height:60vh;">
+        <div class="chat-sessions-panel" style="background:linear-gradient(135deg,rgba(255,255,255,.06),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.1);border-radius:18px;padding:12px;overflow-y:auto;max-height:70vh;">
+          <div style="font-size:11px;font-weight:800;letter-spacing:1.3px;text-transform:uppercase;color:rgba(255,255,255,.55);padding:6px 10px;">Conversations</div>
+          <div id="chatSessionsList"></div>
+        </div>
+        <div class="chat-conv-panel" style="background:linear-gradient(135deg,rgba(255,255,255,.06),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.1);border-radius:18px;display:flex;flex-direction:column;overflow:hidden;">
+          <div id="chatConvHead" style="padding:14px 18px;border-bottom:1px solid rgba(255,255,255,.08);font-weight:800;font-size:14px;display:flex;justify-content:space-between;align-items:center;">
+            <span>Select a conversation</span>
+          </div>
+          <div id="chatConvBody" style="flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px;min-height:280px;max-height:52vh;background:rgba(0,0,0,.15);"></div>
+          <div style="border-top:1px solid rgba(255,255,255,.08);padding:10px;display:flex;gap:8px;align-items:flex-end;">
+            <button id="chatAdminAttach" type="button" style="width:38px;height:38px;border-radius:10px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);color:#fff;cursor:pointer;">📎</button>
+            <textarea id="chatAdminInput" placeholder="Reply…" style="flex:1;min-height:38px;max-height:120px;padding:9px 12px;border-radius:12px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);color:#fff;font-family:inherit;font-size:13.5px;resize:none;outline:none;"></textarea>
+            <button id="chatAdminSend" type="button" class="btn btn-gold" style="padding:0 18px;height:38px;">Send</button>
+          </div>
+          <input type="file" id="chatAdminFile" style="display:none" />
+        </div>
+      </div>
+    </div>
 
     <div class="tab-content" id="tab-profile">
       <div class="settings">
@@ -568,7 +592,6 @@ body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:radial-grad
 
 <div class="toast" id="toast"></div>
 
-<!-- ============ TELEGRAM WIZARD ============ -->
 <div class="tg-wiz" id="tgWiz" role="dialog" aria-modal="true" aria-label="Telegram setup">
   <div class="tg-wiz-box">
     <button class="tg-wiz-close" id="tgWizClose" type="button" aria-label="Close">✕</button>
@@ -631,7 +654,6 @@ body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:radial-grad
   </div>
 </div>
 
-<!-- ============ RESULT MODAL ============ -->
 <div class="adm-modal" id="admModal" role="dialog" aria-modal="true" aria-label="Result">
   <div class="adm-box">
     <div class="adm-brand">
@@ -857,6 +879,7 @@ document.querySelectorAll('.tab').forEach(tab => {
     if (currentTab === 'videos') loadVideos();
     if (currentTab === 'testimonials') loadTestimonials();
     if (currentTab === 'profile') loadProfile();
+    if (currentTab === 'chats') loadChatSessions();
     if (window.innerWidth <= 960) toggleSidebar(false);
   });
 });
@@ -932,7 +955,7 @@ function render(box, status, items){
 
     return `<div class="item">
       <div class="item-head">
-        <div><div class="item-name">${esc(r.full_name)}</div><div class="item-sub">${esc(r.public_id)}</div></div>
+        <div><div class="item-name">${esc(r.full_name)}</div><div class="item-sub">${esc(r.id_number || r.public_id)}</div></div>
         <div style="display:flex;flex-wrap:wrap;gap:4px;">
           <span class="pill ${r.status}">${r.status}</span>${autoTag}${verifTag}
         </div>
@@ -1565,6 +1588,121 @@ document.getElementById('addAdminBtn').addEventListener('click', async () => {
   } catch { admError('Network Error', 'Could not reach the server.'); }
   finally { btn.disabled = false; btn.textContent = orig; }
 });
+
+/* ---------- LIVE CHATS ---------- */
+let currentChatSession = null;
+let chatPollTimer = null;
+let chatAdminPendingFile = null;
+
+async function loadChatSessions(){
+  const list = document.getElementById('chatSessionsList');
+  list.innerHTML = '<div style="padding:16px;text-align:center;color:rgba(255,255,255,.4);font-size:12px;">Loading…</div>';
+  try {
+    const res = await fetch('/api/admin-chats', { headers: authHeaders() });
+    const data = await res.json();
+    const sessions = data.sessions || [];
+    const badge = document.getElementById('navChats');
+    const totalUnread = sessions.reduce((s,x)=>s+(x.unread||0),0);
+    if (badge){ badge.textContent = totalUnread; badge.style.display = totalUnread>0?'inline-flex':'none'; }
+    if (!sessions.length){
+      list.innerHTML = '<div style="padding:20px;text-align:center;color:rgba(255,255,255,.4);font-size:12px;">No conversations yet.</div>';
+      return;
+    }
+    list.innerHTML = sessions.map(s => `
+      <button class="chat-session-item ${s.session_id===currentChatSession?'active':''}" data-session="${esc(s.session_id)}">
+        <div class="cs-id">${esc(s.registration_id || 'Guest visitor')}</div>
+        <div class="cs-last">${s.last_sender==='admin'?'You: ':''}${esc((s.last_message||'').slice(0,60))}</div>
+        <div class="cs-time">${new Date(s.last_at).toLocaleString()}</div>
+        ${s.unread?`<div class="cs-badge">${s.unread} new</div>`:''}
+      </button>
+    `).join('');
+    list.querySelectorAll('[data-session]').forEach(b => b.addEventListener('click', () => openChatConversation(b.dataset.session)));
+  } catch { list.innerHTML = '<div style="padding:20px;text-align:center;color:#f87171;font-size:12px;">Network error.</div>'; }
+}
+
+async function openChatConversation(sessionId){
+  currentChatSession = sessionId;
+  document.querySelectorAll('.chat-session-item').forEach(el => el.classList.toggle('active', el.dataset.session===sessionId));
+  await loadChatConversation();
+  if (chatPollTimer) clearInterval(chatPollTimer);
+  chatPollTimer = setInterval(loadChatConversation, 5000);
+}
+
+async function loadChatConversation(){
+  if (!currentChatSession) return;
+  const body = document.getElementById('chatConvBody');
+  try {
+    const res = await fetch('/api/admin-chats?session_id=' + encodeURIComponent(currentChatSession), { headers: authHeaders() });
+    const data = await res.json();
+    const items = data.items || [];
+    const head = document.getElementById('chatConvHead');
+    const regId = items.find(m => m.sender==='user' && m.sender_name && m.sender_name!=='Guest')?.sender_name || currentChatSession;
+    head.innerHTML = `<span>💬 ${esc(regId)}</span><span style="font-size:11px;color:rgba(255,255,255,.5);font-weight:600;">${items.length} messages</span>`;
+    if (!items.length){ body.innerHTML = '<div style="color:rgba(255,255,255,.4);text-align:center;padding:30px;font-size:13px;">No messages yet.</div>'; return; }
+    const wasAtBottom = body.scrollHeight - body.scrollTop - body.clientHeight < 60;
+    body.innerHTML = items.map(m => {
+      let inner = '';
+      if (m.message_type==='image' && m.file_url) inner = `<img src="${esc(m.file_url)}" onclick="window.open('${esc(m.file_url)}','_blank')">`;
+      else if (m.message_type==='pdf' && m.file_url) inner = `<a href="${esc(m.file_url)}" target="_blank">📄 ${esc(m.file_name||'document.pdf')}</a>`;
+      else if (m.message_type==='voice' && m.file_url) inner = `<audio controls src="${esc(m.file_url)}"></audio>`;
+      else inner = esc(m.content||'');
+      return `<div class="chat-admin-msg ${m.sender}">${inner}<div class="t">${new Date(m.created_at).toLocaleString()}</div></div>`;
+    }).join('');
+    if (wasAtBottom || items.length) body.scrollTop = body.scrollHeight;
+  } catch {}
+}
+
+document.getElementById('chatAdminSend')?.addEventListener('click', async () => {
+  if (!currentChatSession) return alert('Select a conversation first.');
+  const input = document.getElementById('chatAdminInput');
+  const text = input.value.trim();
+  if (!text && !chatAdminPendingFile) return;
+  const btn = document.getElementById('chatAdminSend');
+  btn.disabled = true; btn.textContent = '…';
+  try {
+    const payload = {
+      session_id: currentChatSession,
+      message_type: chatAdminPendingFile ? chatAdminPendingFile.type : 'text',
+      content: text || null,
+    };
+    if (chatAdminPendingFile){
+      payload.file_base64 = chatAdminPendingFile.base64;
+      payload.file_name = chatAdminPendingFile.name;
+      payload.mime_type = chatAdminPendingFile.mime;
+    }
+    input.value = ''; chatAdminPendingFile = null;
+    document.getElementById('chatAdminInput').placeholder = 'Reply…';
+    const res = await fetch('/api/admin-chats', { method:'POST', headers: authHeaders(true), body: JSON.stringify(payload) });
+    const data = await res.json();
+    if (!res.ok){ admError('Send Failed', data.error||'Could not send.'); return; }
+    await loadChatConversation();
+    loadChatSessions();
+  } finally { btn.disabled = false; btn.textContent = 'Send'; }
+});
+document.getElementById('chatAdminInput')?.addEventListener('keydown', e => {
+  if (e.key==='Enter' && !e.shiftKey){ e.preventDefault(); document.getElementById('chatAdminSend').click(); }
+});
+document.getElementById('chatAdminAttach')?.addEventListener('click', () => document.getElementById('chatAdminFile').click());
+document.getElementById('chatAdminFile')?.addEventListener('change', async () => {
+  const f = document.getElementById('chatAdminFile').files?.[0]; if (!f) return;
+  if (f.size > 4*1024*1024) return alert('File too large (max 4 MB).');
+  const b64 = await new Promise((res,rej)=>{ const r=new FileReader(); r.onload=()=>res(r.result); r.onerror=rej; r.readAsDataURL(f); });
+  const type = f.type.startsWith('image/') ? 'image' : f.type==='application/pdf' ? 'pdf' : 'pdf';
+  chatAdminPendingFile = { type, name:f.name, mime:f.type, base64:b64 };
+  document.getElementById('chatAdminInput').placeholder = `📎 ${f.name} (ready to send)`;
+  document.getElementById('chatAdminFile').value = '';
+});
+
+/* Poll unread count for the badge every 20s */
+setInterval(async () => {
+  if (!state.token) return;
+  try {
+    const res = await fetch('/api/admin-chats?action=unread-count', { headers: authHeaders() });
+    const d = await res.json();
+    const badge = document.getElementById('navChats');
+    if (badge){ badge.textContent = d.count || 0; badge.style.display = (d.count>0)?'inline-flex':'none'; }
+  } catch {}
+}, 20000);
 
 /* ---------- Helpers ---------- */
 function authHeaders(isJson){

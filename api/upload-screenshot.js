@@ -15,11 +15,14 @@ module.exports = async (req, res) => {
     return json(res, 400, { error: 'Missing public_id or screenshot.' });
   }
 
-  const id = String(public_id).trim();
-  if (!/^ABJ-[A-Z0-9]{8,16}$/i.test(id)) return json(res, 400, { error: 'Invalid registration ID.' });
+  const id = String(public_id).trim().toUpperCase();
+  if (id.length < 3 || id.length > 32 || !/^[A-Z0-9\-\/]+$/.test(id)) {
+    return json(res, 400, { error: 'Invalid registration ID.' });
+  }
+  const publicIdNorm = id.replace(/\s+/g, '').replace(/\//g, '-');
 
   const q = await supabaseQuery(
-    `registrations?public_id=eq.${encodeURIComponent(id.toUpperCase())}&select=id,status,screenshot_url`
+    `registrations?public_id=eq.${encodeURIComponent(publicIdNorm)}&select=id,status,screenshot_url`
   );
   const row = q.data?.[0];
   if (!row) return json(res, 404, { error: 'Registration not found.' });
@@ -27,7 +30,7 @@ module.exports = async (req, res) => {
     return json(res, 400, { error: `Registration already ${row.status}.` });
   }
 
-  const up = await uploadScreenshotToStorage(id.toUpperCase(), screenshot_base64, mime_type);
+  const up = await uploadScreenshotToStorage(publicIdNorm, screenshot_base64, mime_type);
   if (!up.ok) return json(res, 500, { error: up.error || 'Upload failed.' });
 
   const upd = await supabaseUpdate(
