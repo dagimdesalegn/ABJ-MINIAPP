@@ -118,7 +118,7 @@ async function handleList(req, res) {
 }
 
 /* ============================================================
-   3. APPROVE
+   3. APPROVE — now uses mutex-protected invite
    ============================================================ */
 async function handleApprove(req, res) {
   if (req.method !== 'POST') return json(res, 405, { error: 'Method not allowed' });
@@ -666,7 +666,7 @@ async function handleTestimonials(req, res) {
 }
 
 /* ============================================================
-   9. CHATS
+   9. CHATS — optimized for faster admin UI (limit 100 not 500)
    ============================================================ */
 async function handleChats(req, res) {
   const admin = requireAdmin(req);
@@ -678,20 +678,25 @@ async function handleChats(req, res) {
     const sessionId = String(req.query.session_id || '').trim();
 
     if (sessionId) {
+      // Fetch latest 100 messages (was 500)
       const q = await supabaseQuery(
         `chat_messages?session_id=eq.${encodeURIComponent(sessionId)}` +
-        `&order=created_at.asc&limit=500` +
+        `&order=created_at.desc&limit=100` +
         `&select=id,sender,sender_name,message_type,content,file_url,file_name,is_read,created_at`
       );
+      // Reverse to chronological order
+      const items = (q.data || []).slice().reverse();
+
       await supabaseUpdate(
         `chat_messages?session_id=eq.${encodeURIComponent(sessionId)}&sender=eq.user&is_read=eq.false`,
         { is_read: true }
       );
-      return json(res, 200, { items: q.data || [] });
+      return json(res, 200, { items });
     }
 
+    // Session list — fetch 300 most recent for grouping
     const q = await supabaseQuery(
-      `chat_messages?order=created_at.desc&limit=500` +
+      `chat_messages?order=created_at.desc&limit=300` +
       `&select=session_id,registration_id,sender,content,message_type,is_read,created_at,file_name`
     );
     const rows = q.data || [];
@@ -783,7 +788,7 @@ async function handleStats(req, res) {
   let todayUsers = 0, todayRevenue = 0;
   let weekUsers = 0, weekRevenue = 0;
   let monthUsers = 0, monthRevenue = 0;
-  let pending = 0, approved = 0, rejected = 0, autoApproved = 0;
+  let pending = 0, approved = 0, rejected = 0;
   const byMethod = {};
   const bySemester = {};
 
