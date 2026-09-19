@@ -115,8 +115,7 @@ async function getPublicSettings() {
 }
 
 /* ============================================================
-   DYNAMIC CONFIG — reads Telegram + Verify settings from DB
-   Cached for 60 seconds per warm instance
+   DYNAMIC CONFIG
    ============================================================ */
 let _configCache = null;
 let _configCacheTime = 0;
@@ -461,7 +460,7 @@ async function uploadChatMedia(sessionId, base64Data, mimeType, fileName) {
     buffer = Buffer.from(String(base64Data).replace(/^data:[^,]+,/, ''), 'base64');
   } catch { return { ok: false, error: 'Invalid file data.' }; }
 
-  if (buffer.length > 4 * 1024 * 1024) return { ok: false, error: 'File too large (max 4 MB).' };
+  if (buffer.length > 50 * 1024 * 1024) return { ok: false, error: 'File too large.' };
 
   const res = await fetch(`${SUPABASE_URL}/storage/v1/object/screenshots/${path}`, {
     method: 'POST',
@@ -486,7 +485,7 @@ function randomSessionId() {
 }
 
 /* ============================================================
-   Rate limiting
+   Rate limiting (only for register / status / screenshot — chat is unlimited)
    ============================================================ */
 async function checkRateLimit(ip, maxPerHour = 10) {
   if (!ip || ip === 'unknown') return true;

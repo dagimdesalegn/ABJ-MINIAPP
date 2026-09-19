@@ -1,36 +1,30 @@
 const {
   supabaseQuery, supabaseInsert,
-  uploadChatMedia, checkRateLimit, getClientIp, json,
+  uploadChatMedia, json,
 } = require('./_lib');
 
 module.exports = async (req, res) => {
-  const ip = getClientIp(req);
-
+  /* ---------- GET: fetch messages for a session ---------- */
   if (req.method === 'GET') {
-    const allowed = await checkRateLimit(ip, 120);
-    if (!allowed) return json(res, 429, { error: 'Too many requests.' });
-
     const sessionId = String(req.query.session_id || '').trim();
     if (!sessionId || sessionId.length > 64) return json(res, 400, { error: 'Invalid session.' });
 
     const q = await supabaseQuery(
       `chat_messages?session_id=eq.${encodeURIComponent(sessionId)}` +
-      `&order=created_at.asc&limit=200` +
+      `&order=created_at.asc&limit=500` +
       `&select=id,sender,sender_name,message_type,content,file_url,file_name,created_at`
     );
     return json(res, 200, { items: q.data || [] });
   }
 
+  /* ---------- POST: send a message (no rate limit) ---------- */
   if (req.method === 'POST') {
-    const allowed = await checkRateLimit(ip, 60);
-    if (!allowed) return json(res, 429, { error: 'Too many messages. Slow down.' });
-
     const body = req.body || {};
     const sessionId = String(body.session_id || '').trim();
     if (!sessionId || sessionId.length > 64) return json(res, 400, { error: 'Invalid session.' });
 
     const type = ['text','image','pdf','voice'].includes(body.message_type) ? body.message_type : 'text';
-    const content = body.content ? String(body.content).slice(0, 4000) : null;
+    const content = body.content ? String(body.content).slice(0, 8000) : null;
     const registrationId = body.registration_id ? String(body.registration_id).slice(0, 32) : null;
 
     let fileUrl = null, fileName = null, fileSize = null;
