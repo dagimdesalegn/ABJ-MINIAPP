@@ -1,6 +1,6 @@
 const {
   supabaseQuery, supabaseInsert, supabaseDelete, verifyPayment, createTelegramInvite,
-  checkRateLimit, validateRegistration,
+  checkRateLimit, validateRegistration, getPublicSettings,
   getClientIp, getFee, json,
 } = require('./_lib');
 
@@ -8,12 +8,19 @@ module.exports = async (req, res) => {
   if (req.method !== 'POST') return json(res, 405, { error: 'Method not allowed' });
 
   const ip = getClientIp(req);
-  // Raised from 5 → 20/hr to accommodate dorm NAT
   const allowed = await checkRateLimit(ip, 20);
   if (!allowed) return json(res, 429, { error: 'Too many attempts from this network. Please try again in an hour.' });
 
   const body = req.body || {};
-  const validationError = validateRegistration(body);
+
+  // Accept custom bank names configured by admin
+  let extraMethods = [];
+  try {
+    const pub = await getPublicSettings();
+    extraMethods = (pub.custom_banks || []).map(b => b.name);
+  } catch {}
+
+  const validationError = validateRegistration(body, extraMethods);
   if (validationError) return json(res, 400, { error: validationError });
 
   const {
@@ -26,7 +33,7 @@ module.exports = async (req, res) => {
   const rawId = id_number.trim().toUpperCase().replace(/\s+/g, '');
   const public_id = rawId.replace(/\//g, '-');
 
-  /* 1. Check if this UNIVERSITY ID already registered */
+  /* 1. Duplicate Student ID check */
   const existingUni = await supabaseQuery(
     `registrations?public_id=eq.${encodeURIComponent(public_id)}&select=public_id,status`
   );
@@ -39,13 +46,12 @@ module.exports = async (req, res) => {
         public_id: prev.public_id,
       });
     }
-    // rejected → allow re-registration: remove old record first
     if (prev.status === 'rejected') {
       await supabaseDelete(`registrations?public_id=eq.${encodeURIComponent(prev.public_id)}`);
     }
   }
 
-  /* 2. Reference uniqueness */
+  /* 2. Reference uniqueness across all registrations */
   const existingRef = await supabaseQuery(
     `registrations?transaction_ref=eq.${encodeURIComponent(ref)}&select=public_id`
   );
@@ -72,40 +78,40 @@ module.exports = async (req, res) => {
     verify_response: verify,
   };
 
-  /* ---------- CASE A — HARD FAILURES ---------- */
-  if (result === 'failed' || result === 'mismatch' || result === 'duplicate' || result === 'invalid') {
+  /* ---------- CASE A — DUPLICATE reference: hard reject ---------- */
+  if (result === 'duplicate') {
     const ins = await supabaseInsert('registrations', {
       ...baseRecord,
       amount: 0,
       status: 'rejected',
       verification_status: 'auto_failed',
       auto_approved: false,
-      rejection_reason: verify.message || 'Automated payment verification failed.',
+      rejection_reason: verify.message || 'This transaction reference has already been verified.',
     });
-    // If insert failed due to duplicate ref (race condition), report cleanly
     if (!ins.ok && ins.status === 409) {
       return json(res, 409, { error: 'This transaction reference has already been used.' });
     }
     return json(res, 400, {
-      error: verify.message || 'Payment could not be verified.',
-      code: result,
+      error: verify.message || 'This transaction reference has already been used.',
+      code: 'duplicate',
     });
   }
 
-  /* ---------- CASE B — SUCCESS: auto-approve ---------- */
+  /* ---------- CASE B — VERIFIED SUCCESS: auto-approve ---------- */
   if (result === 'success') {
     const expected = await getFee();
     const received = parseFloat(verify.amount);
 
     if (Math.abs(received - expected) > 0.01) {
       const diff = Math.abs(received - expected);
+      const reason = `Payment amount does not match. Received ETB ${received.toLocaleString()}, required exactly ETB ${expected.toLocaleString()} (${received < expected ? 'short by' : 'over by'} ETB ${diff.toLocaleString()}).`;
       const ins = await supabaseInsert('registrations', {
         ...baseRecord,
         amount: received,
         status: 'rejected',
         verification_status: 'auto_failed',
         auto_approved: false,
-        rejection_reason: `Payment amount does not match. Received ETB ${received.toLocaleString()}, required exactly ETB ${expected.toLocaleString()} (${received < expected ? 'short by' : 'over by'} ETB ${diff.toLocaleString()}).`,
+        rejection_reason: reason,
       });
       if (!ins.ok && ins.status === 409) {
         return json(res, 409, { error: 'This transaction reference has already been used.' });
@@ -116,7 +122,6 @@ module.exports = async (req, res) => {
       });
     }
 
-    /* Try to auto-create invite. This is now mutex-protected, so concurrent registrations queue. */
     let invite = null, inviteErr = null;
     try {
       invite = await createTelegramInvite(`ABJ-${public_id}`);
@@ -159,8 +164,13 @@ module.exports = async (req, res) => {
     });
   }
 
-  /* ---------- CASE C — PENDING / SERVICE ERROR ---------- */
-  const needsScreenshot = ['pending', 'service_error', 'not_found'].includes(result);
+  /* ---------- CASE C — NOT RECOGNIZED / NEEDS SCREENSHOT ---------- *
+   * not_found | failed | mismatch | invalid | pending | service_error
+   * → Save as PENDING + needs_manual and REQUIRE a screenshot upload.
+   * ------------------------------------------------------------------ */
+  const needsScreenshot = [
+    'pending', 'service_error', 'not_found', 'failed', 'mismatch', 'invalid',
+  ].includes(result);
 
   const ins = await supabaseInsert('registrations', {
     ...baseRecord,
@@ -182,7 +192,7 @@ module.exports = async (req, res) => {
     needs_screenshot: needsScreenshot,
     verify_message: verify.message || null,
     message: needsScreenshot
-      ? 'Automated verification could not confirm your payment. Please upload a screenshot.'
+      ? 'Automated verification could not confirm your payment. Please upload a screenshot to complete your registration.'
       : 'Registration received. Awaiting manual review.',
   });
 };
