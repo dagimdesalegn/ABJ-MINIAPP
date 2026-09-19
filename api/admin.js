@@ -24,7 +24,6 @@ const ROUTES = {
   testimonials: handleTestimonials,
   chats:        handleChats,
   stats:        handleStats,
-  'bot-info':   handleBotInfo,
 };
 
 module.exports = async (req, res) => {
@@ -197,7 +196,7 @@ async function handleReject(req, res) {
 }
 
 /* ============================================================
-   5. SETTINGS
+   5. SETTINGS — with bot-info handled inline
    ============================================================ */
 const SYSTEM_KEYS = [
   'tg_api_id',
@@ -236,6 +235,45 @@ async function handleSettings(req, res) {
   if (!payload) return json(res, 401, { error: 'Unauthorized' });
 
   const action = String(req.query.action || '');
+
+  /* ---------- GET: bot info via admin-settings route ---------- */
+  if (req.method === 'GET' && action === 'bot-info') {
+    const cfg = await getConfig();
+    if (!cfg.tgBotToken) {
+      return json(res, 200, { configured: false, valid: false, error: 'No token saved' });
+    }
+    try {
+      const r = await fetch(`https://api.telegram.org/bot${cfg.tgBotToken.trim()}/getMe`, {
+        signal: AbortSignal.timeout(6000),
+      });
+      const text = await r.text();
+      let data = null;
+      try { data = text ? JSON.parse(text) : null; } catch {}
+
+      if (!r.ok || !data || !data.ok) {
+        return json(res, 200, {
+          configured: true,
+          valid: false,
+          error: (data && data.description) || ('HTTP ' + r.status),
+        });
+      }
+      return json(res, 200, {
+        configured: true,
+        valid: true,
+        id: data.result.id,
+        name: data.result.first_name,
+        username: data.result.username,
+        can_join_groups: !!data.result.can_join_groups,
+        can_read_all_group_messages: !!data.result.can_read_all_group_messages,
+      });
+    } catch (e) {
+      return json(res, 200, {
+        configured: true,
+        valid: false,
+        error: 'Network error — could not reach Telegram API',
+      });
+    }
+  }
 
   if (req.method === 'POST' && action.startsWith('tg-')) {
     if (payload.role !== 'super') return json(res, 403, { error: 'Super admin only.' });
@@ -830,51 +868,4 @@ async function handleStats(req, res) {
     bySemester,
     generated_at: new Date().toISOString(),
   });
-}
-
-/* ============================================================
-   11. BOT INFO — fetches bot name/username from Telegram
-   ============================================================ */
-async function handleBotInfo(req, res) {
-  if (req.method !== 'GET') return json(res, 405, { error: 'Method not allowed' });
-  const admin = requireAdmin(req);
-  if (!admin) return json(res, 401, { error: 'Unauthorized' });
-
-  const cfg = await getConfig();
-  if (!cfg.tgBotToken) {
-    return json(res, 200, { configured: false });
-  }
-
-  try {
-    const r = await fetch(`https://api.telegram.org/bot${cfg.tgBotToken}/getMe`, {
-      signal: AbortSignal.timeout(6000),
-    });
-    const text = await r.text();
-    let data = null;
-    try { data = text ? JSON.parse(text) : null; } catch {}
-
-    if (!r.ok || !data || !data.ok) {
-      return json(res, 200, {
-        configured: true,
-        valid: false,
-        error: (data && data.description) || 'Invalid token',
-      });
-    }
-
-    return json(res, 200, {
-      configured: true,
-      valid: true,
-      id: data.result.id,
-      name: data.result.first_name,
-      username: data.result.username,
-      can_join_groups: !!data.result.can_join_groups,
-      can_read_all_group_messages: !!data.result.can_read_all_group_messages,
-    });
-  } catch (e) {
-    return json(res, 200, {
-      configured: true,
-      valid: false,
-      error: 'Could not reach Telegram — check internet',
-    });
-  }
 }
