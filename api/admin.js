@@ -110,8 +110,8 @@ async function handleList(req, res) {
   const q = await supabaseQuery(
     `registrations?status=eq.${status}&order=created_at.desc&limit=200` +
     `&select=id,public_id,full_name,id_number,semester,stream,gender,payment_method,` +
-    `transaction_ref,amount,status,invite_link,approved_at,rejection_reason,created_at,` +
-    `auto_approved,verification_status,screenshot_url,verify_error`
+    `transaction_ref,transaction_suffix,amount,status,invite_link,approved_at,rejection_reason,created_at,` +
+    `auto_approved,verification_status,screenshot_url,verify_error,receiver_account`
   );
 
   return json(res, 200, { items: q.data || [] });
@@ -196,7 +196,7 @@ async function handleReject(req, res) {
 }
 
 /* ============================================================
-   5. SETTINGS — with bot-info handled inline
+   5. SETTINGS — includes custom_banks
    ============================================================ */
 const SYSTEM_KEYS = [
   'tg_api_id',
@@ -226,6 +226,7 @@ async function handleSettings(req, res) {
       return json(res, 200, {
         fee: 10000,
         accounts: { Telebirr: '', CBE: '', mPesa: '' },
+        custom_banks: [],
         contact: { username: '', phone: '' },
       });
     }
@@ -236,7 +237,7 @@ async function handleSettings(req, res) {
 
   const action = String(req.query.action || '');
 
-  /* ---------- GET: bot info via admin-settings route ---------- */
+  /* ---------- bot-info ---------- */
   if (req.method === 'GET' && action === 'bot-info') {
     const cfg = await getConfig();
     if (!cfg.tgBotToken) {
@@ -435,6 +436,14 @@ async function handleSettings(req, res) {
       invalidateConfigCache();
       return json(res, 200, { ok: true });
     }
+
+    if (action === 'tg-finalize') {
+      const { channel_id } = req.body || {};
+      if (!channel_id) return json(res, 400, { error: 'Channel ID is required.' });
+      await setSetting('tg_channel_id', String(channel_id).trim().slice(0, 64));
+      invalidateConfigCache();
+      return json(res, 200, { ok: true });
+    }
   }
 
   if (req.method === 'GET') {
@@ -462,6 +471,19 @@ async function handleSettings(req, res) {
     if (body.account_mpesa    != null) await setSetting('account_mpesa',    String(body.account_mpesa).slice(0, 32));
     if (body.contact_username != null) await setSetting('contact_username', String(body.contact_username).slice(0, 64));
     if (body.contact_phone    != null) await setSetting('contact_phone',    String(body.contact_phone).slice(0, 32));
+
+    /* ---------- Custom banks ---------- */
+    if (body.custom_banks != null) {
+      const arr = Array.isArray(body.custom_banks) ? body.custom_banks : [];
+      const cleaned = arr
+        .map(b => ({
+          name: String((b && b.name) || '').trim().slice(0, 40),
+          account: String((b && b.account) || '').trim().slice(0, 40),
+        }))
+        .filter(b => b.name && b.account)
+        .slice(0, 20);
+      await setSetting('custom_banks', JSON.stringify(cleaned));
+    }
 
     let systemTouched = false;
     for (const key of SYSTEM_KEYS) {
